@@ -1,0 +1,22 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+	body {
+		@apply text-black bg-white;
+	}
+
+	html,
+	body,
+	#fullheight {
+		min-height: 100% !important;
+		height: 100%;
+	}
+}
+
+@layer utilities {
+	.hover-scale {
+		@apply hover:scale-110 transition-transform duration-150 ease-in-out;
+	}
+}
