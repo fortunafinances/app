@@ -6,8 +6,10 @@ function App() {
 	return (
 		<Router>
 			<Routes>
-				<Route path="/" element={<UnauthenticatedHomepage/>} />
-				<Route path=":userId" element={<ApplicationLayout />} />
+				<Route path="/" element={<UnauthenticatedHomepage />} />
+				<Route path="app">
+					<Route path=":userId" element={<ApplicationLayout />} />
+				</Route>
 			</Routes>
 		</Router>
 	);
