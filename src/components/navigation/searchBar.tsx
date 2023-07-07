@@ -1,10 +1,11 @@
 export default function SearchBar() {
+
 	return (
-		<form>
+		<form className="grow">
 			<input
 				type="text"
 				placeholder="Search"
-				className="w-full rounded-xl border-none"
+				className="input input-bordered"
 			></input>
 		</form>
 	);
