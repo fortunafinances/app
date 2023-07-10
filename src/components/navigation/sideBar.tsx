@@ -1,75 +1,57 @@
-import { Listbox, Transition } from "@headlessui/react";
-import { HiChevronUpDown, HiCheck } from "react-icons/hi2";
-import { Fragment, useState } from "react";
 import { Link } from "react-router-dom";
+import Dropdown from "../dropdown";
+import {
+	AiOutlineArrowLeft,
+	AiOutlineArrowRight,
+	AiOutlineCopyrightCircle,
+} from "react-icons/ai";
+import { useState } from "react";
+import { twMerge } from "tailwind-merge";
 
 const people = [
 	{ id: 1, name: "Brokerage", unavailable: false },
 	{ id: 2, name: "College Fund", unavailable: false },
+	{ id: 3, name: "Extremely Super Duper Long Name Fund", unavailable: false },
 ];
 
 export default function SideBar() {
-	const [selected, setSelected] = useState(people[0]);
+	const [collapsed, setCollapsed] = useState(false);
 
 	return (
-		<div className="w-64 bg-red-100 flex flex-col justify-between">
-			<div className="flex flex-col">
-				<h2 className="mx-1 text-xl">Accounts</h2>
-				<Listbox value={selected} onChange={setSelected}>
-					<div className="relative mt-1 mx-3">
-						<Listbox.Button className="relative w-full cursor-default rounded-lg bg-white py-2 pl-3 pr-10 text-left shadow-md focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 sm:text-sm">
-							<span className="block truncate">{selected.name}</span>
-							<span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
-								<HiChevronUpDown
-									className="h-5 w-5 text-gray-400"
-									aria-hidden="true"
-								/>
-							</span>
-						</Listbox.Button>
-						<Transition
-							as={Fragment}
-							leave="transition ease-in duration-100"
-							leaveFrom="opacity-100"
-							leaveTo="opacity-0"
-						>
-							<Listbox.Options className="absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
-								{people.map((person, personIdx) => (
-									<Listbox.Option
-										key={personIdx}
-										className={({ active }) =>
-											`relative cursor-default select-none py-2 pl-10 pr-4 ${
-												active ? "bg-amber-100 text-amber-900" : "text-gray-900"
-											}`
-										}
-										value={person}
-									>
-										{({ selected }) => (
-											<>
-												<span
-													className={`block truncate ${
-														selected ? "font-medium" : "font-normal"
-													}`}
-												>
-													{person.name}
-												</span>
-												{selected ? (
-													<span className="absolute inset-y-0 left-0 flex items-center pl-3 text-amber-600">
-														<HiCheck className="h-5 w-5" aria-hidden="true" />
-													</span>
-												) : null}
-											</>
-										)}
-									</Listbox.Option>
-								))}
-							</Listbox.Options>
-						</Transition>
-					</div>
-				</Listbox>
-			</div>
-			<div className="flex flex-row justify-between text-xs px-1">
-				<Link to="/about">About Fortuna</Link>
-				<Link to="/privacy">Privacy Policy</Link>
-				<Link to="/contact">Contact Us</Link>
+		<div className="relative h-full">
+			<div
+				className={twMerge(
+					"h-full bg-gray-800 text-white flex flex-col justify-between",
+					collapsed ? "w-16" : "w-64"
+				)}
+			>
+				<div className={twMerge("flex flex-col", collapsed && "text-vertical")}>
+					{!collapsed && <h2 className="mx-1 text-xl">Accounts</h2>}
+					<Dropdown data={people} />
+				</div>
+				<button
+					onClick={() => setCollapsed(!collapsed)}
+					className="absolute right-0 bg-gray-200 text-black w-fit py-4 rounded-l-md top-[50%] -translate-y-[50%]"
+				>
+					{collapsed ? (
+						<AiOutlineArrowRight size={20} />
+					) : (
+						<AiOutlineArrowLeft size={20} />
+					)}
+				</button>
+				<div className="flex flex-col items-center gap-2 p-1 text-xs">
+					{!collapsed && (
+						<div className="flex flex-row justify-between w-full [&>*]:hover-scale">
+							<Link to="/about">About Fortuna</Link>
+							<Link to="/privacy">Privacy Policy</Link>
+							<Link to="/contact">Contact Us</Link>
+						</div>
+					)}
+					<p className="flex flex-row items-center gap-1">
+						<AiOutlineCopyrightCircle size={collapsed ? 14 : 18} />{" "}
+						{!collapsed && 2023} Fortuna
+					</p>
+				</div>
 			</div>
 		</div>
 	);
