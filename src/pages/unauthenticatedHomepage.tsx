@@ -111,7 +111,7 @@ export default function UnauthenticatedHomepage() {
           </ul>
         </div>
       </div>
-      <div className="h-[15vh] bg-gradient-to-b from-[#f0ecd8] to-white"></div>
+      <div className="h-[5vh] bg-gradient-to-b from-[#f0ecd8] to-white"></div>
       <footer className="footer pb-8 bg-white text-neutral-conten flex flex-row justify-center gap-20">
         <div>
           <a className="link link-hover">About</a>
