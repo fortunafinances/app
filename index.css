@@ -3,20 +3,26 @@
 @tailwind utilities;
 
 @layer base {
+	html,
 	body {
 		@apply text-black bg-white;
-	}
-
-	html,
-	body,
-	#fullheight {
 		min-height: 100% !important;
 		height: 100%;
+		overflow: hidden;
 	}
 }
 
 @layer utilities {
-	.hover-scale {
+	.hover-scale-110 {
 		@apply hover:scale-110 transition-transform duration-150 ease-in-out;
+	}
+
+	.hover-scale-105 {
+		@apply hover:scale-105 transition-transform duration-150 ease-in-out;
+	}
+
+	.text-vertical {
+		writing-mode: vertical-rl;
+		text-orientation: upright;
 	}
 }
