@@ -7,7 +7,7 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Buy />} />
+        <Route path="/Buy" element={<Buy />} />
         <Route path="app">
           <Route path=":userId" element={<ApplicationLayout />} />
         </Route>

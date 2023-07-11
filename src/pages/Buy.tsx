@@ -1,10 +1,65 @@
+import Select from "react-select";
+import { useState } from "react";
+import { twMerge } from "tailwind-merge";
+
 export default function Buy() {
+  const aquaticCreatures = [
+    { label: "Shark", value: "Shark" },
+    { label: "Dolphin", value: "Dolphin" },
+    { label: "Whale", value: "Whale" },
+    { label: "Octopus", value: "Octopus" },
+    { label: "Crab", value: "Crab" },
+    { label: "Lobster", value: "Lobster" },
+  ];
+
+  const [marketState, setMarketState] = useState(true);
+
   return (
     <div className="h-screen flex">
       <div className="bg-success w-[35%]">
         <div className="text-success-content font-semibold ml-5 mt-5">
           <h1 className="text-4xl">BUY</h1>
           <p className="text-xl">Account Name</p>
+        </div>
+        <div className="m-4 mt-6 flex flex-col gap-3">
+          <h1 className="font-semibold text-xl">Symbol</h1>
+          <Select options={aquaticCreatures} />
+        </div>
+        <div className="m-4 mt-6 flex flex-col gap-3">
+          <h1 className="font-semibold text-xl">Quantity</h1>
+          <input
+            type="number"
+            min={1}
+            step={1}
+            placeholder="Stock Amount"
+            className="input rounded-sm h-9"
+          />
+        </div>
+        <div className="flex flex-row justify-evenly font-semibold [&>button]:w-full px-4 h-10 [&>button]:border border-[#666666] rounded-sm">
+          <button
+            onClick={() => {
+              setMarketState(true);
+            }}
+            className={marketState ? "bg-[#e6e6e6] shadow-lg" : "bg-white"}
+          >
+            Market
+          </button>
+          <button
+            onClick={() => {
+              setMarketState(false);
+            }}
+            className={!marketState ? "bg-[#e6e6e6] shadow-lg" : "bg-white"}
+          >
+            Limit
+          </button>
+        </div>
+        <div className="m-4 mt-6 flex flex-row gap-3 font-semibold text-xl">
+          <h1>Total Price</h1>
+          <h1>$1234</h1>
+        </div>
+        <div className="flex flex-row justify-end px-4 gap-4 text-xl">
+          <button className="">Cancel</button>
+          <button className="text-success-content">Submit</button>
         </div>
       </div>
       <div className="flex-1 flex overflow-hidden">
