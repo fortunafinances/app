@@ -1,6 +1,6 @@
 import { useAuth0 } from "@auth0/auth0-react";
 
-const LoginBtn = () => {
+const SigninBtn = () => {
     const { loginWithRedirect, isAuthenticated } = useAuth0();
     return (
         !isAuthenticated && (
@@ -11,4 +11,4 @@ const LoginBtn = () => {
     )
 }
 
-export default LoginBtn
+export default SigninBtn
