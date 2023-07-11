@@ -40,7 +40,6 @@ export default function UnauthenticatedHomepage() {
                   </a>
                 </label>
               </div>
-
               <div>
                 <hr
                   style={{
@@ -74,7 +73,6 @@ export default function UnauthenticatedHomepage() {
           />
         </button>
       </div>
-
       <div className="flex flex-row w-full bg-[#f0ecd8] text-left ">
         <div className="grid flex-grow card rounded-box max-w-[60%]  p-7">
           <p className="text-4xl font-bold p-1">

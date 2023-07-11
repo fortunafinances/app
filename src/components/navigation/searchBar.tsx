@@ -1,11 +1,11 @@
 export default function SearchBar() {
 
 	return (
-		<form className="grow">
+		<form className="form-control grow mx-2">
 			<input
 				type="text"
 				placeholder="Search"
-				className="input input-bordered"
+				className="input focus-within:border-blue-400"
 			></input>
 		</form>
 	);
