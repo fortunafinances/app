@@ -1,13 +1,18 @@
 import MaterialReactTable, { MRT_ColumnDef } from "material-react-table";
 import { useMemo } from "react";
 import { gql, useQuery } from "@apollo/client";
+import { formatCentsToDollars } from "../../utilities/currency";
 
 export type Order = {
 	ticker: string;
 	name: string;
-	quantity: number;
-	price: string;
+	stockQuantity: number;
+	price: number;
 	value: string;
+};
+
+type HoldingsQuery = {
+	holdings: Order[];
 };
 
 const GET_HOLDINGS = gql`
@@ -16,12 +21,13 @@ const GET_HOLDINGS = gql`
 			ticker
 			price
 			stockQuantity
+			name
 		}
 	}
 `;
 
 export default function Table() {
-	const { loading, error, data } = useQuery<Order[]>(GET_HOLDINGS);
+	const { loading, error, data } = useQuery<HoldingsQuery>(GET_HOLDINGS);
 
 	const columns = useMemo<MRT_ColumnDef<Order>[]>(
 		() => [
@@ -34,15 +40,26 @@ export default function Table() {
 				header: "Name",
 			},
 			{
-				accessorKey: "quantity",
+				accessorKey: "stockQuantity",
 				header: "Quantity",
 			},
 			{
-				accessorKey: "price",
+				accessorFn: (row) => `${formatCentsToDollars(row.price)}`,
+				id: "price",
+				sortingFn: (a, b) => {
+					return a.original.price - b.original.price;
+				},
 				header: "Price",
 			},
 			{
-				accessorFn: (row) => `${row.quantity * parseInt(row.price)}`,
+				accessorFn: (row) =>
+					`${formatCentsToDollars(row.stockQuantity * row.price)}`,
+				sortingFn: (a, b) => {
+					return (
+						a.original.price * a.original.stockQuantity -
+						b.original.price * b.original.stockQuantity
+					);
+				},
 				id: "value",
 				header: "Value",
 			},
@@ -53,13 +70,10 @@ export default function Table() {
 	if (loading) return <>loading...</>;
 	if (error) return <>error!</>;
 
-	console.log(data);
-	console.log(error);
-
 	return (
 		<MaterialReactTable
 			columns={columns}
-			data={data!}
+			data={data!.holdings}
 			enableColumnActions={false}
 			enableColumnFilters={true}
 			enablePagination={true}
@@ -68,7 +82,7 @@ export default function Table() {
 			enableTopToolbar={true}
 			muiTableBodyRowProps={{ hover: false }}
 			initialState={{
-				columnOrder: ["ticker", "name", "quantity", "price", "value"],
+				columnOrder: ["ticker", "name", "stockQuantity", "price", "value"],
 			}}
 			muiTableProps={{
 				sx: {
