@@ -10,7 +10,7 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route index path="/" element={<UnauthenticatedHomepage />} />
+        <Route index path="/" element={<Buy />} />
         <Route path="/app">
           <Route path=":userId" element={<ApplicationLayout />}>
             <Route index element={<Overview />} />
