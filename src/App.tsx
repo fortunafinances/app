@@ -1,18 +1,19 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import ApplicationLayout from "./components/layout/application";
-import UnauthenticatedHomepage from "./pages/unauthenticatedHomepage";
+// import UnauthenticatedHomepage from "./pages/unauthenticatedHomepage";
+import Buy from "./pages/Buy";
 
 function App() {
-	return (
-		<Router>
-			<Routes>
-				<Route path="/" element={<UnauthenticatedHomepage />} />
-				<Route path="app">
-					<Route path=":userId" element={<ApplicationLayout />} />
-				</Route>
-			</Routes>
-		</Router>
-	);
+  return (
+    <Router>
+      <Routes>
+        <Route path="/" element={<Buy />} />
+        <Route path="app">
+          <Route path=":userId" element={<ApplicationLayout />} />
+        </Route>
+      </Routes>
+    </Router>
+  );
 }
 
 export default App;
