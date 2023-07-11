@@ -1,6 +1,7 @@
 import { BsStopwatch, BsChevronCompactDown } from "react-icons/bs";
 import { LiaHandshakeSolid } from "react-icons/lia";
 import { BiPopsicle } from "react-icons/bi";
+import LoginBtn from "./loginBtn";
 
 export default function UnauthenticatedHomepage() {
   return (
@@ -53,7 +54,8 @@ export default function UnauthenticatedHomepage() {
                 <a className="link link-hover "> Sign up</a>
               </div>
               <div className="form-control mt-6">
-                <button className="btn btn-neutral text-white">Sign in</button>
+                <LoginBtn/>
+                {/* <button className="btn btn-neutral text-white">Sign in</button> */}
               </div>
             </div>
           </div>
