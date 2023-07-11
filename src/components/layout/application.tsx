@@ -1,15 +1,16 @@
 import { Outlet } from "react-router-dom";
-import MainNavbar from "../navigation/mainNavbar";
+import Header from "../navigation/header";
 import SideBar from "../navigation/sideBar";
+import AppNavigation from "../navigation/appNavigation";
 
 export default function ApplicationLayout() {
 	return (
 		<div className="flex flex-col h-screen">
-			<MainNavbar />
+			<Header />
 			<div className="flex flex-row grow">
 				<SideBar />
 				<div className="flex flex-col grow">
-					<nav className="bg-gray-200 h-8">Navbar</nav>
+					<AppNavigation />
 					<main>
 						<Outlet />
 					</main>
