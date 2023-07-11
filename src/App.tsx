@@ -6,6 +6,7 @@ import {
 } from "react-router-dom";
 import ApplicationLayout from "./components/layout/application";
 import UnauthenticatedHomepage from "./pages/unauthenticatedHomepage";
+// import Buy from "./pages/Buy";
 import Overview from "./pages/application views/overview";
 import Holdings from "./pages/application views/holdings";
 import NoMatch from "./components/utility/noMatch";
