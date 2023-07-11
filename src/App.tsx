@@ -5,15 +5,16 @@ import Buy from "./pages/Buy";
 import Overview from "./pages/application views/overview";
 import Holdings from "./pages/application views/holdings";
 import NoMatch from "./components/noMatch";
+import UnauthenticatedHomepage from "./pages/unauthenticatedHomepage";
 
 function App() {
   return (
     <Router>
       <Routes>
-        <Route index path="/" element={<Buy />} />
+        <Route index element={<UnauthenticatedHomepage />} />
+        <Route path="/buy" element={<Buy />} />
         <Route path="/app">
-          <Route path=":userId" element={<ApplicationLayout />}>
-            <Route index element={<Overview />} />
+          <Route path=":userId" element={<ApplicationLayout />} />
             <Route path="overview" element={<Overview />} />
             <Route path="holdings" element={<Holdings />} />
             <Route path="*" element={<NoMatch />} />
