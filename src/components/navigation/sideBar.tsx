@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import Dropdown from "../dropdown";
+import Dropdown from "../input/dropdown";
 import {
 	AiOutlineArrowLeft,
 	AiOutlineArrowRight,
@@ -42,9 +42,9 @@ export default function SideBar() {
 				<div className="flex flex-col items-center gap-2 p-1 text-xs">
 					{!collapsed && (
 						<div className="flex flex-row justify-between w-full [&>*]:hover-scale">
-							<Link to="/about">About Fortuna</Link>
-							<Link to="/privacy">Privacy Policy</Link>
-							<Link to="/contact">Contact Us</Link>
+							<Link to="/about" className="hover:underline">About Fortuna</Link>
+							<Link to="/privacy" className="hover:underline">Privacy Policy</Link>
+							<Link to="/contact" className="hover:underline">Contact Us</Link>
 						</div>
 					)}
 					<p className="flex flex-row items-center gap-1">
