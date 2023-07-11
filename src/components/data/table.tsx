@@ -1,93 +1,75 @@
 import MaterialReactTable, { MRT_ColumnDef } from "material-react-table";
 import { useMemo } from "react";
+import { gql, useQuery } from "@apollo/client";
 
-type Person = {
-	firstName: string;
-	lastName: string;
-	address: string;
-	city: string;
-	state: string;
+export type Order = {
+	ticker: string;
+	name: string;
+	quantity: number;
+	price: string;
+	value: string;
 };
 
-const data = [
-	{
-		firstName: "Dylan",
-		lastName: "Murray",
-		address: "261 Erdman Ford",
-		city: "East Daphne",
-		state: "Kentucky",
-	},
-	{
-		firstName: "Raquel",
-		lastName: "Kohler",
-		address: "769 Dominic Grove",
-		city: "Columbus",
-		state: "Ohio",
-	},
-	{
-		firstName: "Ervin",
-		lastName: "Reinger",
-		address: "566 Brakus Inlet",
-		city: "South Linda",
-		state: "West Virginia",
-	},
-	{
-		firstName: "Brittany",
-		lastName: "McCullough",
-		address: "722 Emie Stream",
-		city: "Lincoln",
-		state: "Nebraska",
-	},
-	{
-		firstName: "Branson",
-		lastName: "Frami",
-		address: "32188 Larkin Turnpike",
-		city: "Charleston",
-		state: "South Carolina",
-	},
-];
-
+const GET_HOLDINGS = gql`
+	query GetOrders {
+		holdings {
+			ticker
+			price
+			quantity
+		}
+	}
+`;
 
 export default function Table() {
-	const columns = useMemo<MRT_ColumnDef<Person>[]>(
-		//column definitions...
+	const { loading, error, data } = useQuery<Order[]>(GET_HOLDINGS);
+
+	const columns = useMemo<MRT_ColumnDef<Order>[]>(
 		() => [
 			{
-				accessorKey: "firstName",
-				header: "First Name",
+				accessorKey: "ticker",
+				header: "Symbol",
 			},
 			{
-				accessorKey: "lastName",
-				header: "Last Name",
+				accessorKey: "name",
+				header: "Name",
 			},
 			{
-				accessorKey: "address",
-				header: "Address",
+				accessorKey: "quantity",
+				header: "Quantity",
 			},
 			{
-				accessorKey: "city",
-				header: "City",
+				accessorKey: "price",
+				header: "Price",
 			},
 			{
-				accessorKey: "state",
-				header: "State",
+				accessorFn: (row) => `${row.quantity * parseInt(row.price)}`,
+				id: "value",
+				header: "Value",
 			},
 		],
 		[]
-		//end
 	);
+
+	if (loading) return <>loading...</>;
+	if (error) return <>error!</>;
+
+	console.log(data);
+	console.log(error);
 
 	return (
 		<MaterialReactTable
 			columns={columns}
-			data={data}
+			data={data!}
 			enableColumnActions={false}
-			enableColumnFilters={false}
-			enablePagination={false}
-			enableSorting={false}
+			enableColumnFilters={true}
+			enablePagination={true}
+			enableSorting={true}
 			enableBottomToolbar={false}
-			enableTopToolbar={false}
+			enableTopToolbar={true}
 			muiTableBodyRowProps={{ hover: false }}
+			initialState={{
+				columnOrder: ["ticker", "name", "quantity", "price", "value"],
+			}}
 			muiTableProps={{
 				sx: {
 					border: "1px solid rgba(81, 81, 81, 1)",
