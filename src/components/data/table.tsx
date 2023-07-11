@@ -15,7 +15,7 @@ const GET_HOLDINGS = gql`
 		holdings {
 			ticker
 			price
-			quantity
+			stockQuantity
 		}
 	}
 `;
