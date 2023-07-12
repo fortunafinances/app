@@ -68,11 +68,11 @@ export default function Buy() {
 					<h1>Total Price</h1>
 					<h1>$1234</h1>
 				</div>
-				<div className="flex flex-row justify-end px-4 gap-4 text-xl [&>button]:border [&>button]:rounded-xl [&>button]:px-3 [&>button]:py-1 [&>button]:border-4 [&>button]:font-bold">
+				<div className="flex flex-row justify-end px-4 gap-4 text-xl [&>button]:rounded-xl [&>button]:px-3 [&>button]:py-1 [&>button]:border-4 [&>button]:font-bold">
 					<button className="border-[#920000] text-[#920000] bg-[#F9E5E5] hover:shadow-xl shadow-[#920000]">
 						Cancel
 					</button>
-					<button className="border-success-content text-success-content bg-[#E3FDDC] hover:shadow-xl shadow-succes-content">
+					<button className="border-success-content text-success-content bg-[#E3FDDC] hover:shadow-xl shadow-success-content">
 						Submit
 					</button>
 				</div>

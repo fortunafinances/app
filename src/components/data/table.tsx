@@ -1,65 +1,20 @@
 import MaterialReactTable, { MRT_ColumnDef } from "material-react-table";
-import { useMemo } from "react";
-import { gql, useQuery } from "@apollo/client";
-import { formatCentsToDollars } from "../../utilities/currency";
+import { DocumentNode, useQuery } from "@apollo/client";
 
+interface TableProps<DataType extends object> {
+	QUERY: DocumentNode;
+	columnData: MRT_ColumnDef<DataType>[];
+}
 
+export default function Table<DataType extends object>({
+	QUERY,
+	columnData,
+}: TableProps<DataType>) {
+	type HoldingsQuery = {
+		holdings: DataType[];
+	};
 
-type HoldingsQuery = {
-	holdings: Order[];
-};
-
-const GET_HOLDINGS = gql`
-	query GetOrders {
-		holdings {
-			ticker
-			price
-			stockQuantity
-			name
-		}
-	}
-`;
-
-export default function Table() {
-	const { loading, error, data } = useQuery<HoldingsQuery>(GET_HOLDINGS);
-
-	const columns = useMemo<MRT_ColumnDef<Order>[]>(
-		() => [
-			{
-				accessorKey: "ticker",
-				header: "Symbol",
-			},
-			{
-				accessorKey: "name",
-				header: "Name",
-			},
-			{
-				accessorKey: "stockQuantity",
-				header: "Quantity",
-			},
-			{
-				accessorFn: (row) => `${formatCentsToDollars(row.price)}`,
-				id: "price",
-				sortingFn: (a, b) => {
-					return a.original.price - b.original.price;
-				},
-				header: "Price",
-			},
-			{
-				accessorFn: (row) =>
-					`${formatCentsToDollars(row.stockQuantity * row.price)}`,
-				sortingFn: (a, b) => {
-					return (
-						a.original.price * a.original.stockQuantity -
-						b.original.price * b.original.stockQuantity
-					);
-				},
-				id: "value",
-				header: "Value",
-			},
-		],
-		[]
-	);
+	const { loading, error, data } = useQuery<HoldingsQuery>(QUERY);
 
 	if (loading)
 		return (
@@ -69,7 +24,7 @@ export default function Table() {
 
 	return (
 		<MaterialReactTable
-			columns={columns}
+			columns={columnData}
 			data={data!.holdings}
 			enableColumnActions={false}
 			enableColumnFilters={true}
