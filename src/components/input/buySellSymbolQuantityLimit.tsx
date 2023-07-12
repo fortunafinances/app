@@ -1,5 +1,5 @@
 import Select from "react-select";
-import { useState } from "react";
+import { KeyboardEventHandler, useState } from "react";
 import { BiDollar } from "react-icons/bi";
 
 export default function SymbolQuantityLimit() {
@@ -14,7 +14,7 @@ export default function SymbolQuantityLimit() {
 
   const [marketState, setMarketState] = useState(true);
 
-  const preventMinus = (e) => {
+  const preventMinus = (e: any) => {
     if (e.code === "Minus") {
       e.preventDefault();
     }
