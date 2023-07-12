@@ -26,7 +26,7 @@
 		text-orientation: upright;
 	}
 
-																																																																.absolute-center {
-																																																																	@apply relative top-[50%] left-[50%] -translate-y-[50%] -translate-x-[50%]
-																																																																}
+	.absolute-center {
+		@apply relative top-[50%] left-[50%] -translate-y-[50%] -translate-x-[50%];
+	}
 }

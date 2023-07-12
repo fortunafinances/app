@@ -11,7 +11,7 @@ export default function ApplicationLayout() {
 				<SideBar />
 				<div className="flex flex-col grow">
 					<AppNavigation />
-					<main className="relative">
+					<main className="relative h-full">
 						<Outlet />
 					</main>
 				</div>
