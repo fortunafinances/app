@@ -1,8 +1,8 @@
 import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-  Navigate,
+	BrowserRouter as Router,
+	Routes,
+	Route,
+	Navigate,
 } from "react-router-dom";
 import ApplicationLayout from "./components/layout/application";
 import Overview from "./pages/application views/overview";
@@ -13,6 +13,7 @@ import { ApolloClient, InMemoryCache, ApolloProvider } from "@apollo/client";
 import Activity from "./pages/application views/activity";
 import EditUser from "./pages/editUser";
 import Buy from "./pages/Buy";
+import Callback from "./pages/callback";
 
 const client = new ApolloClient({
 	uri: "http://localhost:5000/graphql",
@@ -39,6 +40,7 @@ export default function App() {
 						<Route path=":userId" element={<EditUser />} />
 					</Route>
 					<Route path="/buy" element={<Buy />} />
+					<Route path="/callback" element={<Callback />} />
 				</Routes>
 			</Router>
 		</ApolloProvider>
