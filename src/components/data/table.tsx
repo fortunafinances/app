@@ -3,13 +3,7 @@ import { useMemo } from "react";
 import { gql, useQuery } from "@apollo/client";
 import { formatCentsToDollars } from "../../utilities/currency";
 
-export type Order = {
-	ticker: string;
-	name: string;
-	stockQuantity: number;
-	price: number;
-	value: string;
-};
+
 
 type HoldingsQuery = {
 	holdings: Order[];
