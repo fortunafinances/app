@@ -33,9 +33,11 @@ export default function Table<DataType extends object>({
 			enableBottomToolbar={false}
 			enableTopToolbar={false}
 			muiTableBodyRowProps={{ hover: false }}
-			initialState={{
-				columnOrder: ["ticker", "name", "stockQuantity", "price", "value"],
-			}}
+			initialState={
+				{
+					// columnOrder: ["ticker", "name", "stockQuantity", "price", "value"],
+				}
+			}
 			muiTableProps={{
 				sx: {
 					border: "1px solid rgba(81, 81, 81, 1)",

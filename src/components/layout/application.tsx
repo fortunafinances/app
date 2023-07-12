@@ -5,7 +5,7 @@ import AppNavigation from "../navigation/appNavigation";
 
 export default function ApplicationLayout() {
 	return (
-		<div className="flex flex-col h-screen overflow-hidden">
+		<div className="flex flex-col h-screen">
 			<Header />
 			<div className="flex flex-row grow">
 				<SideBar />
