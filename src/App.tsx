@@ -12,6 +12,7 @@ import NoMatch from "./components/utility/noMatch";
 import { ApolloClient, InMemoryCache, ApolloProvider } from "@apollo/client";
 import Activity from "./pages/application views/activity";
 import EditUser from "./pages/editUser";
+import Buy from "./pages/Buy";
 
 const client = new ApolloClient({
 	uri: "http://localhost:5000/graphql",
@@ -37,6 +38,7 @@ export default function App() {
 					<Route path="/edit">
 						<Route path=":userId" element={<EditUser />} />
 					</Route>
+					<Route path="/buy" element={<Buy />} />
 				</Routes>
 			</Router>
 		</ApolloProvider>

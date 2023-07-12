@@ -67,7 +67,10 @@ export default function Table() {
 		[]
 	);
 
-	if (loading) return <>loading...</>;
+	if (loading)
+		return (
+			<span className="loading loading-infinity loading-lg absolute-center"></span>
+		);
 	if (error) return <>error!</>;
 
 	return (
@@ -79,7 +82,7 @@ export default function Table() {
 			enablePagination={true}
 			enableSorting={true}
 			enableBottomToolbar={false}
-			enableTopToolbar={true}
+			enableTopToolbar={false}
 			muiTableBodyRowProps={{ hover: false }}
 			initialState={{
 				columnOrder: ["ticker", "name", "stockQuantity", "price", "value"],

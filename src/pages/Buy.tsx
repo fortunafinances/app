@@ -1,6 +1,5 @@
 import Select from "react-select";
 import { useState } from "react";
-import { twMerge } from "tailwind-merge";
 
 export default function Buy() {
   const aquaticCreatures = [
