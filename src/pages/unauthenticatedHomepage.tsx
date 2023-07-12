@@ -1,7 +1,6 @@
 import { BsStopwatch, BsChevronCompactDown } from "react-icons/bs";
 import { LiaHandshakeSolid } from "react-icons/lia";
 import { BiPopsicle } from "react-icons/bi";
-import { Link } from "react-router-dom";
 
 export default function UnauthenticatedHomepage() {
   return (
