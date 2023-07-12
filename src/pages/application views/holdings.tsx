@@ -55,8 +55,6 @@ export default function Holdings() {
 		[]
 	);
 	return (
-		<div className="w-[700px]">
 			<Table QUERY={GET_HOLDINGS} columnData={cols} />
-		</div>
 	);
 }

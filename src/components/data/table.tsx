@@ -33,11 +33,12 @@ export default function Table<DataType extends object>({
 			enableBottomToolbar={false}
 			enableTopToolbar={false}
 			muiTableBodyRowProps={{ hover: false }}
-			initialState={
-				{
-					// columnOrder: ["ticker", "name", "stockQuantity", "price", "value"],
-				}
-			}
+			enableColumnResizing={true}
+			defaultColumn={{
+				minSize: 20, //allow columns to get smaller than default
+				maxSize: 9001, //allow columns to get larger than default
+				size: 70, //make columns wider by default
+			}}
 			muiTableProps={{
 				sx: {
 					border: "1px solid rgba(81, 81, 81, 1)",
