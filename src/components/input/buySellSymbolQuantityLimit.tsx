@@ -14,6 +14,12 @@ export default function SymbolQuantityLimit() {
 
   const [marketState, setMarketState] = useState(true);
 
+  const preventMinus = (e) => {
+    if (e.code === "Minus") {
+      e.preventDefault();
+    }
+  };
+
   return (
     <div>
       <div className="m-4 mt-6 flex flex-col gap-3">
@@ -34,7 +40,8 @@ export default function SymbolQuantityLimit() {
           min={1}
           step={1}
           placeholder="Stock Amount"
-          className="input rounded-sm h-9 w-full border-[1px] rounded-[3px] border-[#cccccc] focus:ring-blue-500 focus:border-blue-500 focus:border-[2px] !outline-none"
+          onKeyDown={preventMinus}
+          className="input h-9 w-full border-[1px] rounded-[3px] border-[#cccccc] focus:ring-blue-500 focus:border-blue-500 focus:border-[2px] !outline-none"
         />
         {/* </div> */}
       </div>
@@ -43,9 +50,7 @@ export default function SymbolQuantityLimit() {
           onClick={() => {
             setMarketState(true);
           }}
-          className={
-            marketState ? "bg-[#e6e6e6] shadow-lg shadow-inner" : "bg-white"
-          }
+          className={marketState ? "bg-[#e6e6e6] shadow-inner" : "bg-white"}
         >
           Market
         </button>
@@ -53,9 +58,7 @@ export default function SymbolQuantityLimit() {
           onClick={() => {
             setMarketState(false);
           }}
-          className={
-            !marketState ? "bg-[#e6e6e6] shadow-lg shadow-inner" : "bg-white"
-          }
+          className={!marketState ? "bg-[#e6e6e6] shadow-inner" : "bg-white"}
         >
           Limit
         </button>
@@ -72,20 +75,21 @@ export default function SymbolQuantityLimit() {
               min={0}
               step="0.01"
               placeholder="Price"
+              onKeyDown={preventMinus}
               className="input h-9 w-full border-[1px] rounded-[3px] border-[#cccccc] focus:ring-blue-500 focus:border-blue-500 focus:border-[2px] !outline-none"
             />
           </div>
         </span>
       ) : null}
       <div className="m-4 mt-6 flex flex-row gap-3 font-semibold text-xl">
-        <h1>Total Price</h1>
+        <h1>Total Price:</h1>
         <h1>$1234</h1>
       </div>
       <div className="flex flex-row justify-end m-4 gap-4 text-xl [&>button]:rounded-xl [&>button]:px-3 [&>button]:py-1 [&>button]:border-4 [&>button]:font-bold">
-        <button className="border-[#920000] text-[#920000] bg-[#F9E5E5] hover:shadow-xl shadow-[#920000]">
+        <button className="border-[#920000] text-[#920000] bg-[#F9E5E5] hover:shadow-xl shadow-[#920000] hover:bg-[#920000] hover:text-[#f9e5e5]">
           Cancel
         </button>
-        <button className="border-success-content text-success-content bg-[#E3FDDC] hover:shadow-xl shadow-succes-content">
+        <button className="border-success-content text-success-content bg-[#E3FDDC] hover:shadow-xl shadow-succes-content hover:bg-success-content hover:text-[#e3fddc]">
           Submit
         </button>
       </div>
