@@ -27,7 +27,6 @@ export default function Table<DataType extends object>({
 		for (let i = 0; i < 200; i++) {
 			holdingsData.push(data[i % 4]);
 		}
-		console.log(holdingsData);
 		return holdingsData;
 	};
 
@@ -44,12 +43,15 @@ export default function Table<DataType extends object>({
 			enableTopToolbar={false}
 			muiTableBodyRowProps={{ hover: false }}
 			enableColumnResizing={true}
+			rowCount={42}
 			defaultColumn={{
 				minSize: 20, //allow columns to get smaller than default
 				maxSize: 9001, //allow columns to get larger than default
 				size: 70, //make columns wider by default
 			}}
-			muiTableContainerProps={{ sx: { maxHeight: "80.2vh" } }}
+			muiTableContainerProps={{
+				sx: { maxHeight: "100%", overflowY: "scroll" },
+			}}
 			muiTableProps={{
 				sx: {
 					border: "1px solid rgba(81, 81, 81, 1)",

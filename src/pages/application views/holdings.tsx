@@ -30,6 +30,7 @@ export default function Holdings() {
 			{
 				accessorKey: "stockQuantity",
 				header: "Quantity",
+				size: 50,
 			},
 			{
 				accessorFn: (row) => `${formatCentsToDollars(row.price)}`,
@@ -55,7 +56,8 @@ export default function Holdings() {
 		[]
 	);
 	return (
-		<div className="">
+		<div className="h-full w-full overflow-y-scroll">
+			{/* <div className="bg-red-500 h-full w-full"></div> <-- Testing content sizing*/}
 			<Table QUERY={GET_HOLDINGS} columnData={cols} />
 		</div>
 	);

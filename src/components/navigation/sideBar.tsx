@@ -27,7 +27,7 @@ export default function SideBar() {
 			>
 				{!collapsed && (
 					<div className="flex flex-col">
-						<h2 className="mx-1 text-xl">Accounts</h2>
+						<h2 className="mx-3 mt-1 text-xl">Accounts</h2>
 						<Dropdown data={people} />
 					</div>
 				)}
