@@ -12,9 +12,10 @@ import NoMatch from "./components/utility/noMatch";
 import { ApolloClient, InMemoryCache, ApolloProvider } from "@apollo/client";
 import Activity from "./pages/application views/activity";
 import EditUser from "./pages/editUser";
-import Buy from "./pages/buy";
+import Buy from "./pages/Buy";
 import Sell from "./pages/sell";
 import StockInfo from "./components/input/buySellStockInfo";
+import TransferIn from "./pages/transferIn";
 
 const client = new ApolloClient({
   uri: "http://localhost:5000/graphql",
@@ -43,6 +44,7 @@ export default function App() {
           <Route path="/buy" element={<Buy />} />
           <Route path="/sell" element={<Sell />} />
           <Route path="/buySellStockInfo" element={<StockInfo />} />
+          <Route path="/transferIn" element={<TransferIn />} />
         </Routes>
       </Router>
     </ApolloProvider>
