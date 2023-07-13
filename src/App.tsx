@@ -12,7 +12,7 @@ import NoMatch from "./components/utility/noMatch";
 import { ApolloClient, InMemoryCache, ApolloProvider } from "@apollo/client";
 import Activity from "./pages/application views/activity";
 import EditUser from "./pages/editUser";
-import Buy from "./pages/Buy";
+import Buy from "./pages/buy";
 import Sell from "./pages/sell";
 import StockInfo from "./components/input/buySellStockInfo";
 
