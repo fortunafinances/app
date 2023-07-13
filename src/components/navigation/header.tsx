@@ -1,12 +1,12 @@
 import { Link, useParams } from "react-router-dom";
-import SearchBar from "./searchBar";
+import SearchBar from "../input/searchBar";
 import { CgProfile } from "react-icons/cg";
 
 export default function Header() {
 	const { userId } = useParams();
 
 	return (
-		<header className="flex items-center w-screen bg-gray-200 h-16">
+		<header className="flex items-center w-full bg-gray-200 h-16">
 			<div className="flex items-center h-full text-3xl mx-2">
 				<h1>
 					<b>
@@ -33,7 +33,9 @@ export default function Header() {
 									Edit profile
 								</Link>
 							</div>
-							<Link to="/" className="btn btn-outline btn-secondary">Log Out</Link>
+							<Link to="/" className="btn btn-outline btn-secondary">
+								Log Out
+							</Link>
 						</div>
 					</div>
 				</div>
