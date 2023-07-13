@@ -1,16 +1,21 @@
 import auth0 from 'auth0-js';
-import { CgLaptop } from 'react-icons/cg';
 
+// WebAuth will redirect user to the login page
 const auth0Client = new auth0.WebAuth({
+    // feed in the data
     domain: "dev-wpc8kymxzmepqxl5.us.auth0.com",
     clientID: "OxQxuofsPZXSFzTqbVtKgErT2xrl3VfZ",
     redirectUri: "http://localhost:4040/callback",
     responseType: 'token id_token',
-    scope: 'openid email',
+    scope: 'openid email', // what we want the token to include
 });
 
 export function login() {
     auth0Client.authorize();
+}
+
+export function signup() {
+    auth0Client.authorize({ screen_hint: 'signup' });
 }
 
 export function handleAuthentication() {
