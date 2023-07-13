@@ -1,91 +1,56 @@
 import MaterialReactTable, { MRT_ColumnDef } from "material-react-table";
-import { useMemo } from "react";
-import { gql, useQuery } from "@apollo/client";
-import { formatCentsToDollars } from "../../utilities/currency";
+import { DocumentNode, useQuery } from "@apollo/client";
 
-export type Order = {
-	ticker: string;
-	name: string;
-	stockQuantity: number;
-	price: number;
-	value: string;
-};
+interface TableProps<DataType extends object> {
+	QUERY: DocumentNode;
+	columnData: MRT_ColumnDef<DataType>[];
+}
 
-type HoldingsQuery = {
-	holdings: Order[];
-};
+export default function Table<DataType extends object>({
+	QUERY,
+	columnData,
+}: TableProps<DataType>) {
+	type HoldingsQuery = {
+		holdings: DataType[];
+	};
 
-const GET_HOLDINGS = gql`
-	query GetOrders {
-		holdings {
-			ticker
-			price
-			stockQuantity
-			name
-		}
-	}
-`;
-
-export default function Table() {
-	const { loading, error, data } = useQuery<HoldingsQuery>(GET_HOLDINGS);
-
-	const columns = useMemo<MRT_ColumnDef<Order>[]>(
-		() => [
-			{
-				accessorKey: "ticker",
-				header: "Symbol",
-			},
-			{
-				accessorKey: "name",
-				header: "Name",
-			},
-			{
-				accessorKey: "stockQuantity",
-				header: "Quantity",
-			},
-			{
-				accessorFn: (row) => `${formatCentsToDollars(row.price)}`,
-				id: "price",
-				sortingFn: (a, b) => {
-					return a.original.price - b.original.price;
-				},
-				header: "Price",
-			},
-			{
-				accessorFn: (row) =>
-					`${formatCentsToDollars(row.stockQuantity * row.price)}`,
-				sortingFn: (a, b) => {
-					return (
-						a.original.price * a.original.stockQuantity -
-						b.original.price * b.original.stockQuantity
-					);
-				},
-				id: "value",
-				header: "Value",
-			},
-		],
-		[]
-	);
+	const { loading, error, data } = useQuery<HoldingsQuery>(QUERY);
 
 	if (loading)
 		return (
-			<span className="loading loading-infinity loading-lg absolute-center"></span>
+			<span className="loading loading-infinity w-[5em] absolute-center"></span>
 		);
 	if (error) return <>error!</>;
 
+	const getHoldingsData = (data: DataType[]) => {
+		const holdingsData: DataType[] = [];
+		for (let i = 0; i < 200; i++) {
+			holdingsData.push(data[i % 4]);
+		}
+		return holdingsData;
+	};
+
 	return (
 		<MaterialReactTable
-			columns={columns}
-			data={data!.holdings}
+			columns={columnData}
+			data={getHoldingsData(data!.holdings)}
 			enableColumnActions={false}
 			enableColumnFilters={true}
 			enablePagination={true}
 			enableSorting={true}
-			enableBottomToolbar={false}
+			enableBottomToolbar={true}
+			enableStickyFooter
 			enableTopToolbar={false}
 			muiTableBodyRowProps={{ hover: false }}
-			initialState={{
-				columnOrder: ["ticker", "name", "stockQuantity", "price", "value"],
+			enableColumnResizing={true}
+			rowCount={42}
+			defaultColumn={{
+				minSize: 20, //allow columns to get smaller than default
+				maxSize: 9001, //allow columns to get larger than default
+				size: 70, //make columns wider by default
+			}}
+			muiTableContainerProps={{
+				sx: { maxHeight: "100%", overflowY: "scroll" },
 			}}
 			muiTableProps={{
 				sx: {

@@ -19,6 +19,7 @@ export function signup() {
 }
 
 export function handleAuthentication() {
+   
     auth0Client.parseHash((err, authResult) => {
         if (authResult && authResult.accessToken && authResult.idToken) {
             // Save the tokens to local storage

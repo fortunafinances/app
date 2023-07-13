@@ -17,7 +17,7 @@ const Dropdown = ({ data }: DropdownProps) => {
 	};
 
 	return (
-		<div className="dropdown m-2 text-black">
+		<div className="dropdown m-2 text-black" title={selected.name + " Account"}>
 			<label
 				tabIndex={0}
 				className="btn normal-case bg-base-200 w-full text-[1.1em] flex flex-row flex-nowrap justify-between"

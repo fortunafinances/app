@@ -15,6 +15,7 @@ import EditUser from "./pages/editUser";
 import Buy from "./pages/Buy";
 import Callback from "./pages/callback";
 import Sell from "./pages/sell";
+import StockInfo from "./components/input/buySellStockInfo";
 
 const client = new ApolloClient({
   uri: "http://localhost:5000/graphql",
@@ -43,6 +44,7 @@ export default function App() {
 					<Route path="/buy" element={<Buy />} />
 					<Route path="/sell" element={<Sell />} />
 					<Route path="/callback" element={<Callback />} />
+          <Route path="/buySellStockInfo" element={<StockInfo />} />
 				</Routes>
 			</Router>
 		</ApolloProvider>
