@@ -19,14 +19,37 @@ export function signup() {
 }
 
 export function handleAuthentication() {
-   
+    let aToken ;
     auth0Client.parseHash((err, authResult) => {
         if (authResult && authResult.accessToken && authResult.idToken) {
             // Save the tokens to local storage
             localStorage.setItem('access_token', authResult.accessToken);
             localStorage.setItem('id_token', authResult.idToken);
+            aToken = authResult.accessToken;
         } else if (err) {
             console.log(err);
         }
     });
+
+    const token = localStorage.getItem('access_token');
+    
+    fetch('http://127.0.0.1:5000/api/users', {
+        
+        headers: new Headers({
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          })
+    })
+        .then(response => response.json())
+        .then(response => {
+            console.log(response.status) // should output 200
+          })
+        .then(data => {
+            console.log("handle the response data" + data)
+            
+        })
+        .catch(error => {
+            // handle the error
+        });
+        console.log("ACCESS TKN = " + token)
 }
