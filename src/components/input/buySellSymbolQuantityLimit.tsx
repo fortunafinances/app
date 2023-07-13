@@ -77,10 +77,10 @@ export default function SymbolQuantityLimit() {
           step={1}
           placeholder="Stock Amount"
           onKeyDown={preventMinus}
-          onChange={e => {
-            setQuantity(Number(e.target.value))
-            setTotalPrice(quantity*)}
-          }
+          // onChange={e => {
+          //   setQuantity(Number(e.target.value))
+          //   setTotalPrice(quantity*)}
+          // }
           className="input h-9 w-full border-[1px] rounded-[3px] border-[#cccccc] focus:ring-blue-500 focus:border-blue-500 focus:border-[2px] !outline-none"
         />
         {/* </div> */}
@@ -123,7 +123,7 @@ export default function SymbolQuantityLimit() {
       ) : null}
       <div className="m-4 mt-6 flex flex-row gap-3 font-semibold text-xl">
         <h1>Total Price:</h1>
-        <h1>${totalPrice}</h1>
+        {/* <h1>${totalPrice}</h1> */}
       </div>
       <div className="flex flex-row justify-end m-4 gap-4 text-xl [&>button]:rounded-xl [&>button]:px-3 [&>button]:py-1 [&>button]:border-4 [&>button]:font-bold">
         <button className="border-[#920000] text-[#920000] bg-[#F9E5E5] hover:shadow-xl shadow-[#920000] hover:bg-[#920000] hover:text-[#f9e5e5]">
