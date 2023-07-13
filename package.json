@@ -28,6 +28,7 @@
   "devDependencies": {
     "@types/auth0-js": "^9.21.0",
     "@types/node": "^20.4.1",
+    "@esbuild/win32-ia32": "^0.18.11",
     "@types/react": "^18.2.14",
     "@types/react-dom": "^18.2.6",
     "@typescript-eslint/eslint-plugin": "^6.0.0",

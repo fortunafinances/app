@@ -14,10 +14,11 @@ import Activity from "./pages/application views/activity";
 import EditUser from "./pages/editUser";
 import Buy from "./pages/Buy";
 import Callback from "./pages/callback";
+import Sell from "./pages/sell";
 
 const client = new ApolloClient({
-	uri: "http://localhost:5000/graphql",
-	cache: new InMemoryCache(),
+  uri: "http://localhost:5000/graphql",
+  cache: new InMemoryCache(),
 });
 
 export default function App() {
@@ -40,7 +41,6 @@ export default function App() {
 						<Route path=":userId" element={<EditUser />} />
 					</Route>
 					<Route path="/buy" element={<Buy />} />
-					<Route path="/callback" element={<Callback />} />
 				</Routes>
 			</Router>
 		</ApolloProvider>
