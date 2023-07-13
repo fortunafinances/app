@@ -41,6 +41,8 @@ export default function App() {
 						<Route path=":userId" element={<EditUser />} />
 					</Route>
 					<Route path="/buy" element={<Buy />} />
+					<Route path="/sell" element={<Sell />} />
+					<Route path="/callback" element={<Callback />} />
 				</Routes>
 			</Router>
 		</ApolloProvider>

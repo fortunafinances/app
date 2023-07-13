@@ -1,15 +1,16 @@
 import React, { useEffect } from 'react';
 // import { Redirect } from 'react-router-dom';
+import { login, handleAuthentication } from "../auth"
 
 const Callback = () => {
   useEffect(() => {
+    console.log("callback...");
     // Handle the callback logic here
     // e.g., retrieve user information, set up user session
-
+    handleAuthentication();
     // Simulate a loading state
     setTimeout(() => {
       // Redirect the user to a desired page
-      // Replace '/dashboard' with the actual URL you want to redirect to
       window.location.href = '/buy';
     }, 2000); // Adjust the delay as needed
   }, []);

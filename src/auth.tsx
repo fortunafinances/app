@@ -1,4 +1,5 @@
 import auth0 from 'auth0-js';
+import { CgLaptop } from 'react-icons/cg';
 
 const auth0Client = new auth0.WebAuth({
     domain: "dev-wpc8kymxzmepqxl5.us.auth0.com",
@@ -18,7 +19,6 @@ export function handleAuthentication() {
             // Save the tokens to local storage
             localStorage.setItem('access_token', authResult.accessToken);
             localStorage.setItem('id_token', authResult.idToken);
-            window.location.href = '/buy';
         } else if (err) {
             console.log(err);
         }
