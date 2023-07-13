@@ -1,9 +1,12 @@
-import { Link, useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 import SearchBar from "../input/searchBar";
 import { CgProfile } from "react-icons/cg";
+import { userAccountSelector } from "../../redux/reducers/userAccount";
+import { useAppSelector } from "../../utilities/hooks";
 
 export default function Header() {
-	const { userId } = useParams();
+	const userAccount = useAppSelector(userAccountSelector);
+	const username = userAccount.user.name;
 
 	return (
 		<header className="flex items-center w-full bg-gray-200 h-16">
@@ -17,7 +20,7 @@ export default function Header() {
 			</div>
 			<SearchBar />
 			<div className="flex flex-row gap-3 items-center text-2xl mx-3">
-				<h3>Welcome, {userId}</h3>
+				<h3>Welcome, {username}</h3>
 				<div className="dropdown dropdown-end">
 					<label tabIndex={0} className="cursor-pointer">
 						<CgProfile size={40} />
@@ -28,8 +31,8 @@ export default function Header() {
 					>
 						<div className="card-body">
 							<div className="flex flex-row justify-between items-center">
-								<h3 className="card-title">{userId}</h3>
-								<Link to={`/edit/${userId}`} className="w-fit">
+								<h3 className="card-title">{username}</h3>
+								<Link to={`/edit/${username}`} className="w-fit">
 									Edit profile
 								</Link>
 							</div>

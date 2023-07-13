@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { handleAuthentication } from "../auth"
+import { handleAuthentication } from "../utilities/auth";
 
 const Callback = () => {
   useEffect(() => {
