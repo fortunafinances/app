@@ -8,7 +8,7 @@ export interface User {
 }
 
 export interface Account {
-	id: string;
+	id: number;
 	name: string;
 }
 
@@ -26,11 +26,11 @@ const initialState: UserAccount = {
 	},
 	accounts: [
 		{
-			id: "defaultAccount",
+			id: 1,
 			name: "Brokerage",
 		},
 		{
-			id: "defaultAccount2",
+			id: 2,
 			name: "College Fund",
 		},
 	],
