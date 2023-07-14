@@ -7,7 +7,7 @@ import {
 } from "react-icons/ai";
 import { twMerge } from "tailwind-merge";
 import { useReactiveVar } from "@apollo/client/react/hooks/useReactiveVar";
-import { accounts, sidebarClosed } from "../../utilities/cache";
+import { accounts, sidebarClosed } from "../../utilities/reactiveVariables";
 
 export default function SideBar() {
 	const collapsed = useReactiveVar(sidebarClosed);

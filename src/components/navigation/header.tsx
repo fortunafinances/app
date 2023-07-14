@@ -3,7 +3,7 @@ import SearchBar from "../input/searchBar";
 import { CgProfile } from "react-icons/cg";
 import { userAccountSelector } from "../../redux/reducers/userAccount";
 import { useAppSelector } from "../../utilities/hooks";
-import { accounts, currentAccountId } from "../../utilities/cache";
+import { accounts, currentAccountId } from "../../utilities/reactiveVariables";
 import { useReactiveVar } from "@apollo/client/react/hooks/useReactiveVar";
 
 export default function Header() {
@@ -13,7 +13,7 @@ export default function Header() {
 	const currentAccountNumber = useReactiveVar(currentAccountId);
 	const accountData = useReactiveVar(accounts);
 
-	const currentAccont = accountData.find(
+	const currentAccount = accountData.find(
 		(item) => item.id === currentAccountNumber
 	);
 
@@ -24,7 +24,7 @@ export default function Header() {
 					<b>
 						<Link to="/">Fortuna</Link>&nbsp;/&nbsp;
 					</b>
-					{currentAccont!.name} Account
+					{currentAccount!.name} Account
 				</h1>
 			</div>
 			<SearchBar />

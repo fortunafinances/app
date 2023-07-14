@@ -1,6 +1,6 @@
 import { useReactiveVar } from "@apollo/client/react/hooks/useReactiveVar";
 import { BsChevronDown } from "react-icons/bs";
-import { accounts, currentAccountId } from "../../utilities/cache";
+import { accounts, currentAccountId } from "../../utilities/reactiveVariables";
 
 interface DropdownProps {
 	data: { id: number; name: string }[];
