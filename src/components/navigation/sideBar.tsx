@@ -12,8 +12,6 @@ import { accounts, sidebarClosed } from "../../utilities/reactiveVariables";
 export default function SideBar() {
 	const collapsed = useReactiveVar(sidebarClosed);
 
-	const accountData = useReactiveVar(accounts);
-
 	return (
 		<div className="relative h-full">
 			<div
@@ -25,7 +23,7 @@ export default function SideBar() {
 				{!collapsed && (
 					<div className="flex flex-col">
 						<h2 className="mx-3 mt-1 text-xl">Accounts</h2>
-						<Dropdown data={accountData} />
+						<Dropdown data={accounts} />
 					</div>
 				)}
 				<button

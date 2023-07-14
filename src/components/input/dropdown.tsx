@@ -1,16 +1,15 @@
 import { useReactiveVar } from "@apollo/client/react/hooks/useReactiveVar";
 import { BsChevronDown } from "react-icons/bs";
-import { accounts, currentAccountId } from "../../utilities/reactiveVariables";
+import { currentAccountId } from "../../utilities/reactiveVariables";
 
 interface DropdownProps {
 	data: { id: number; name: string }[];
 }
 
 const Dropdown = ({ data }: DropdownProps) => {
-	const accountData = useReactiveVar(accounts);
 	const currentAccountNumber = useReactiveVar(currentAccountId);
 
-	const currentAccount = accountData.find((a) => a.id === currentAccountNumber);
+	const currentAccount = data.find((a) => a.id === currentAccountNumber);
 
 	const handleClick = (index: number) => {
 		const elem = document.activeElement;

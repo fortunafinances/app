@@ -11,9 +11,8 @@ export default function Header() {
 	const username = userAccount.user.name;
 
 	const currentAccountNumber = useReactiveVar(currentAccountId);
-	const accountData = useReactiveVar(accounts);
 
-	const currentAccount = accountData.find(
+	const currentAccount = accounts.find(
 		(item) => item.id === currentAccountNumber
 	);
 
@@ -22,7 +21,10 @@ export default function Header() {
 			<div className="flex items-center h-full text-3xl mx-2">
 				<h1>
 					<b>
-						<Link to="/">Fortuna</Link>&nbsp;/&nbsp;
+						<Link to="/" className="hover-scale-110">
+							Fortuna
+						</Link>
+						&nbsp;/&nbsp;
 					</b>
 					{currentAccount!.name} Account
 				</h1>
