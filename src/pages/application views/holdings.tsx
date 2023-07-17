@@ -7,7 +7,7 @@ import { useMemo } from "react";
 
 const GET_HOLDINGS = gql`
 	query GetOrders {
-		holdings {
+		holdings(input: { accId: 1 }) {
 			ticker
 			price
 			stockQuantity

@@ -22,10 +22,12 @@ export default function Table<DataType extends object>({
 		);
 	if (error) return <>error!</>;
 
+	console.log(data);
+
 	const getHoldingsData = (data: DataType[]) => {
 		const holdingsData: DataType[] = [];
 		for (let i = 0; i < 200; i++) {
-			holdingsData.push(data[i % 4]);
+			holdingsData.push(data[i % data.length]);
 		}
 		return holdingsData;
 	};
@@ -45,9 +47,9 @@ export default function Table<DataType extends object>({
 			enableColumnResizing={true}
 			layoutMode="grid"
 			defaultColumn={{
-				minSize: 10, //allow columns to get smaller than default
-				maxSize: 100, //allow columns to get larger than default
-				size: 60, //make columns wider by default
+				minSize: 10,
+				maxSize: 100,
+				size: 60,
 			}}
 			initialState={{
 				showColumnFilters: true,
