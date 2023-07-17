@@ -10,7 +10,6 @@ import { useReactiveVar } from "@apollo/client/react/hooks/useReactiveVar";
 
 export default function Header() {
 	const userAccount = useReactiveVar(userId);
-
 	const currentAccountNumber = useReactiveVar(currentAccountId);
 
 	const currentAccount = accounts.find(
