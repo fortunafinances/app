@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Select from "react-select";
 import { BiDollar } from "react-icons/bi";
 
@@ -39,7 +39,7 @@ export default function TransferIn() {
     if (transfer != "") {
       checkBetween();
     }
-  }, [transfer]);
+  }, [transfer, checkBetween]);
 
   return (
     <div>
