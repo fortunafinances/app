@@ -67,7 +67,7 @@ export default function SymbolQuantityLimit() {
       getCurrPrice();
       setTotalPrice(quantity * stockPrice);
     }
-  }, [quantity, stockName, totalPrice]);
+  }, [quantity, stockName, getCurrPrice]);
 
   if (loading) return <>Loading</>;
   if (error) return <>{error}</>;
