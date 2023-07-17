@@ -1,13 +1,27 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
+import { twMerge } from "tailwind-merge";
 
-const navItems = ["Overview", "Holdings", "Activity"];
+const navItems = ["overview", "holdings", "orders", "activity"];
 
 export default function AppNavigation() {
-	return <nav className="bg-gray-800 h-8 text-white">{navItems.map((item, i) => {
-		return (
-			<Link key={i} to={item.toLowerCase()}>
-				<p className="inline-block px-3 py-2">{item}</p>
-			</Link>
-		);
-	})}</nav>;
+	const path = useLocation().pathname;
+	const currentPage = path.split("/")[path.split("/").length - 1];
+	return (
+		<nav className="bg-gray-800 border-l-2 border-gray-200 text-white">
+			{navItems.map((item, i) => {
+				return (
+					<Link key={i} to={item}>
+						<p
+							className={twMerge(
+								"inline-block px-3 py-2 capitalize underline-offset-4",
+								item === currentPage && "underline font-semibold"
+							)}
+						>
+							{item}
+						</p>
+					</Link>
+				);
+			})}
+		</nav>
+	);
 }
