@@ -1,14 +1,16 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Popup from "reactjs-popup";
 import Select from "react-select";
 import Dropdown from "../components/input/dropdown";
 import { BiDollar } from "react-icons/bi";
+import { Link } from "react-router-dom";
+import { HiSwitchHorizontal } from "react-icons/hi";
 
 export default function TransferIn() {
-  const people = [
-    { id: 1, name: "Brokerage", unavailable: false },
-    { id: 2, name: "College Fund", unavailable: false },
-    { id: 3, name: "Extremely Super Duper Long Name Fund", unavailable: false },
+  const transferType = [
+    { label: "In", value: "IN" },
+    { label: "Out", value: "OUT" },
+    { label: "Between", value: "BETWEEN" },
   ];
 
   const aquaticCreatures = [
@@ -26,6 +28,23 @@ export default function TransferIn() {
     }
   };
 
+  const [transfer, setTransfer] = useState("");
+  const [between, setBetween] = useState(false);
+
+  function checkBetween() {
+    if (transfer === "BETWEEN") {
+      setBetween(true);
+    } else {
+      setBetween(false);
+    }
+  }
+
+  useEffect(() => {
+    if (transfer != "") {
+      checkBetween();
+    }
+  }, [transfer]);
+
   return (
     <div>
       {/* Open the modal using ID.showModal() method */}
@@ -33,24 +52,62 @@ export default function TransferIn() {
         className="btn text-primary bg-[#EDEDFE]"
         onClick={() => window.my_modal_1.showModal()}
       >
-        Transfer In
+        Transfer
       </button>
       <dialog id="my_modal_1" className="modal">
         <form
           method="dialog"
           className="modal-box bg-[#EDEDFE] flex flex-col gap-3 text-primary overflow-y-visible"
         >
-          <h1 className="font-bold text-4xl">TRANSFER IN</h1>
-          {/* Account */}
-          <h2 className="font-medium text-2xl">Account</h2>
+          <h1 className="font-bold text-4xl">TRANSFER {transfer}</h1>
+          <h2 className="font-medium text-2xl">Transfer Type</h2>
           <Select
             menuPortalTarget={document.getElementById("my_modal_1")}
-            options={aquaticCreatures}
+            options={transferType}
+            onChange={(e) => {
+              setTransfer(e!.value);
+              checkBetween();
+            }}
             theme={(theme) => ({
               ...theme,
               borderRadius: 3,
             })}
           />
+          {!between ? (
+            <div>
+              <h2 className="font-medium text-2xl">Account</h2>
+              <Select
+                menuPortalTarget={document.getElementById("my_modal_1")}
+                options={aquaticCreatures}
+                theme={(theme) => ({
+                  ...theme,
+                  borderRadius: 3,
+                })}
+              />
+            </div>
+          ) : (
+            <div>
+              <h2 className="font-medium text-2xl">From Account</h2>
+              <Select
+                menuPortalTarget={document.getElementById("my_modal_1")}
+                options={aquaticCreatures}
+                theme={(theme) => ({
+                  ...theme,
+                  borderRadius: 3,
+                })}
+              />
+              <h2 className="font-medium text-2xl">To Account</h2>
+              <Select
+                menuPortalTarget={document.getElementById("my_modal_1")}
+                options={aquaticCreatures}
+                theme={(theme) => ({
+                  ...theme,
+                  borderRadius: 3,
+                })}
+              />
+            </div>
+          )}
+
           {/* Amount */}
           <h2 className="font-medium text-2xl">Amount</h2>
           <div className="relative">
