@@ -1,10 +1,7 @@
 import { MRT_ColumnDef } from "material-react-table";
 import Table from "../../components/data/table";
 import { gql } from "@apollo/client";
-import {
-	filterPriceRange,
-	formatCentsToDollars,
-} from "../../utilities/currency";
+import { filterRange, formatCentsToDollars } from "../../utilities/currency";
 import { Holding } from "../../utilities/types";
 import { useMemo } from "react";
 
@@ -47,7 +44,7 @@ export default function Holdings() {
 					return a.original.price - b.original.price;
 				},
 				filterFn: (row, _columnIds, filterValue: number[]) =>
-					filterPriceRange(row.original.price, _columnIds, filterValue),
+					filterRange(row.original.price, _columnIds, filterValue),
 			},
 			{
 				header: "Value",
@@ -63,7 +60,7 @@ export default function Holdings() {
 					);
 				},
 				filterFn: (row, _columnIds, filterValue: number[]) =>
-					filterPriceRange(
+					filterRange(
 						row.original.price * row.original.stockQuantity,
 						_columnIds,
 						filterValue

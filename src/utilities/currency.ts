@@ -7,7 +7,7 @@ export const formatCentsToDollars = (currency: number) => {
 	return formatter.format(currency / 100);
 };
 
-export function filterPriceRange(
+export function filterRange(
 	fieldValue: number,
 	_columnIds: string,
 	filterValue: number[]
