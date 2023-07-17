@@ -1,8 +1,8 @@
 import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-  Navigate,
+	BrowserRouter as Router,
+	Routes,
+	Route,
+	Navigate,
 } from "react-router-dom";
 import ApplicationLayout from "./components/layout/application";
 import Overview from "./pages/application views/overview";
@@ -17,11 +17,12 @@ import Callback from "./pages/callback";
 import Sell from "./pages/sell";
 import StockInfo from "./components/input/buySellStockInfo";
 import cache from "./utilities/cache";
+import Orders from "./pages/application views/orders";
 import TransferIn from "./pages/transferIn";
 
 const client = new ApolloClient({
-  uri: "http://localhost:5000/graphql",
-  cache,
+	uri: "http://localhost:5000/graphql",
+	cache,
 });
 
 export default function App() {
@@ -35,6 +36,7 @@ export default function App() {
             <Route path="overview" element={<Overview />} />
             <Route path="holdings" element={<Holdings />} />
             <Route path="activity" element={<Activity />} />
+						<Route path="orders" element={<Orders />} />
             <Route path="*" element={<NoMatch />} />
           </Route>
           <Route path="/editProfile" element={<EditUser />} />

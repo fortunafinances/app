@@ -1,7 +1,7 @@
 import { Link, useLocation } from "react-router-dom";
 import { twMerge } from "tailwind-merge";
 
-const navItems = ["overview", "holdings", "activity"];
+const navItems = ["overview", "holdings", "orders", "activity"];
 
 export default function AppNavigation() {
 	const path = useLocation().pathname;
