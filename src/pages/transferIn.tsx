@@ -38,7 +38,7 @@ export default function TransferIn() {
       <dialog id="my_modal_1" className="modal">
         <form
           method="dialog"
-          className="modal-box bg-[#EDEDFE] flex flex-col gap-3 text-primary"
+          className="modal-box bg-[#EDEDFE] flex flex-col gap-3 text-primary overflow-y-visible"
         >
           <h1 className="font-bold text-4xl">TRANSFER IN</h1>
           {/* Account */}
@@ -66,7 +66,7 @@ export default function TransferIn() {
               className="input h-9 w-full border-[1px] rounded-[3px] border-[#cccccc] focus:ring-blue-500 focus:border-blue-500 focus:border-[2px] !outline-none"
             />
           </div>
-          {/* Discard and Submit buttons */}
+          {/* Discard and Submit */}
           <div className="modal-action [&>button]:border-2">
             {/* if there is a button in form, it will close the modal */}
             <button className="btn border-[#920000] text-[#920000] bg-[#F9E5E5] hover:shadow-xl shadow-[#920000] hover:bg-[#920000] hover:text-[#f9e5e5]">
