@@ -2,7 +2,7 @@ import { MRT_ColumnDef } from "material-react-table";
 import Table from "../../components/data/table";
 import { gql } from "@apollo/client";
 import { formatCentsToDollars } from "../../utilities/currency";
-import { Order } from "../../types";
+import { Order } from "../../utilities/types";
 import { useMemo } from "react";
 
 const GET_HOLDINGS = gql`
