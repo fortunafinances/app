@@ -70,7 +70,7 @@ export default function Holdings() {
 		[]
 	);
 	return (
-		<div className="h-full w-full overflow-y-clip">
+		<div className="h-full w-full">
 			<Table QUERY={GET_HOLDINGS} columnData={cols} />
 		</div>
 	);
