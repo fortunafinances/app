@@ -38,7 +38,7 @@ export default function SideBar() {
 				</button>
 				<div className="flex flex-col items-center gap-2 p-1 text-xs">
 					{!collapsed && (
-						<div className="flex flex-row justify-between w-full [&>*]:hover-scale">
+						<div className="flex flex-row justify-between w-full">
 							<Link to="/about" className="hover:underline">
 								About Fortuna
 							</Link>

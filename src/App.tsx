@@ -16,8 +16,6 @@ import Buy from "./pages/Buy";
 import Callback from "./pages/callback";
 import Sell from "./pages/sell";
 import StockInfo from "./components/input/buySellStockInfo";
-import { store } from "./redux/store";
-import { Provider } from "react-redux";
 import cache from "./utilities/cache";
 
 const client = new ApolloClient({
@@ -27,26 +25,24 @@ const client = new ApolloClient({
 
 export default function App() {
 	return (
-		<Provider store={store}>
-			<ApolloProvider client={client}>
-				<Router>
-					<Routes>
-						<Route index element={<UnauthenticatedHomepage />} />
-						<Route path="/app" element={<ApplicationLayout />}>
-							<Route index element={<Navigate to="overview" replace />} />
-							<Route path="overview" element={<Overview />} />
-							<Route path="holdings" element={<Holdings />} />
-							<Route path="activity" element={<Activity />} />
-							<Route path="*" element={<NoMatch />} />
-						</Route>
-						<Route path="/editProfile" element={<EditUser />} />
-						<Route path="/buy" element={<Buy />} />
-						<Route path="/sell" element={<Sell />} />
-						<Route path="/callback" element={<Callback />} />
-						<Route path="/buySellStockInfo" element={<StockInfo />} />
-					</Routes>
-				</Router>
-			</ApolloProvider>
-		</Provider>
+		<ApolloProvider client={client}>
+			<Router>
+				<Routes>
+					<Route index element={<UnauthenticatedHomepage />} />
+					<Route path="/app" element={<ApplicationLayout />}>
+						<Route index element={<Navigate to="overview" replace />} />
+						<Route path="overview" element={<Overview />} />
+						<Route path="holdings" element={<Holdings />} />
+						<Route path="activity" element={<Activity />} />
+						<Route path="*" element={<NoMatch />} />
+					</Route>
+					<Route path="/editProfile" element={<EditUser />} />
+					<Route path="/buy" element={<Buy />} />
+					<Route path="/sell" element={<Sell />} />
+					<Route path="/callback" element={<Callback />} />
+					<Route path="/buySellStockInfo" element={<StockInfo />} />
+				</Routes>
+			</Router>
+		</ApolloProvider>
 	);
 }

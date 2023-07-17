@@ -2,7 +2,10 @@ import { makeVarPersisted } from "./hooks";
 
 export const sidebarClosed = makeVarPersisted("sidebarClosed", false);
 export const currentAccountId = makeVarPersisted("currentAccountId", 1);
-export const userId = makeVarPersisted("userId", "1");
+export const userId = makeVarPersisted("user", {
+	userId: 1,
+	username: "Nolan Gelinas",
+});
 
 export const accounts = [
 	{
