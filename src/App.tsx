@@ -15,7 +15,7 @@ import EditUser from "./pages/editUser";
 import Buy from "./pages/Buy";
 import Sell from "./pages/sell";
 import StockInfo from "./components/input/buySellStockInfo";
-import TransferIn from "./pages/transferIn";
+import TransferIn from "./components/popup/transferIn";
 
 const client = new ApolloClient({
   uri: "http://localhost:5000/graphql",
