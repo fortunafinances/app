@@ -1,8 +1,9 @@
 import Select from "react-select";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { BiDollar } from "react-icons/bi";
 import { gql, useQuery } from "@apollo/client";
 import { Stock } from "../../types";
+import { formatCentsToDollars } from "c:/Users/linliu7/fortuna/fsi-23-bos-front-end/src/utilities/currency";
 
 interface StockData {
   stocks: Stock[];
@@ -33,14 +34,14 @@ export default function SymbolQuantityLimit() {
     return ret;
   };
 
-  const aquaticCreatures = [
-    { label: "Shark", value: "Shark" },
-    { label: "Dolphin", value: "Dolphin" },
-    { label: "Whale", value: "Whale" },
-    { label: "Octopus", value: "Octopus" },
-    { label: "Crab", value: "Crab" },
-    { label: "Lobster", value: "Lobster" },
-  ];
+  // const aquaticCreatures = [
+  //   { label: "Shark", value: "Shark" },
+  //   { label: "Dolphin", value: "Dolphin" },
+  //   { label: "Whale", value: "Whale" },
+  //   { label: "Octopus", value: "Octopus" },
+  //   { label: "Crab", value: "Crab" },
+  //   { label: "Lobster", value: "Lobster" },
+  // ];
 
   const [marketState, setMarketState] = useState(true);
 
@@ -50,11 +51,26 @@ export default function SymbolQuantityLimit() {
     }
   };
 
+  const [quantity, setQuantity] = useState(0);
+  const [stockName, setStockName] = useState("");
+  const [stockPrice, setStockPrice] = useState(0);
+  const [totalPrice, setTotalPrice] = useState(0);
+
+  function getCurrPrice() {
+    const stock = data!.stocks.find((element) => element.ticker === stockName);
+    const price = stock!.currPrice;
+    setStockPrice(price);
+  }
+
+  useEffect(() => {
+    if (quantity != 0 || stockName != "") {
+      getCurrPrice();
+      setTotalPrice(quantity * stockPrice);
+    }
+  }, [quantity, stockName]);
+
   if (loading) return <>Loading</>;
   if (error) return <>{error}</>;
-
-  const [quantity, setQuantity] = useState(0);
-  const [totalPrice, setTotalPrice] = useState(0);
 
   return (
     <div>
@@ -62,6 +78,9 @@ export default function SymbolQuantityLimit() {
         <h1 className="font-semibold text-xl">Symbol</h1>
         <Select
           options={makeDropdownData(data!.stocks)}
+          onChange={(options) => {
+            setStockName(String(options?.value));
+          }}
           theme={(theme) => ({
             ...theme,
             borderRadius: 3,
@@ -70,21 +89,21 @@ export default function SymbolQuantityLimit() {
       </div>
       <div className="m-4 mt-6 flex flex-col gap-3">
         <h1 className="font-semibold text-xl">Quantity</h1>
-        {/* <div className="border-[1px] rounded-[3px] border-[#cccccc] "> */}
-        <input
-          type="number"
-          min={1}
-          step={1}
-          placeholder="Stock Amount"
-          onKeyDown={preventMinus}
-          // onChange={e => {
-          //   setQuantity(Number(e.target.value))
-          //   setTotalPrice(quantity*)}
-          // }
-          className="input h-9 w-full border-[1px] rounded-[3px] border-[#cccccc] focus:ring-blue-500 focus:border-blue-500 focus:border-[2px] !outline-none"
-        />
-        {/* </div> */}
+        <div className="border-[0px] rounded-[3px] border-[#cccccc] ">
+          <input
+            type="number"
+            min={1}
+            step={1}
+            placeholder="Stock Amount"
+            onKeyDown={preventMinus}
+            onChange={(e) => {
+              setQuantity(Number(e.target.value));
+            }}
+            className="input h-9 w-full border-[1px] rounded-[3px] border-[#cccccc] focus:ring-blue-500 focus:border-blue-500 focus:border-[2px] !outline-none"
+          />
+        </div>
       </div>
+      {/* market limit toggle buttons */}
       <div className="flex flex-row justify-evenly font-semibold [&>button]:w-full px-4 h-10 [&>button]:border border-[#cccccc] rounded-sm">
         <button
           onClick={() => {
@@ -123,8 +142,12 @@ export default function SymbolQuantityLimit() {
       ) : null}
       <div className="m-4 mt-6 flex flex-row gap-3 font-semibold text-xl">
         <h1>Total Price:</h1>
-        {/* <h1>${totalPrice}</h1> */}
+        <h1>
+          {quantity} x {formatCentsToDollars(stockPrice)} ={" "}
+          {formatCentsToDollars(totalPrice)}
+        </h1>
       </div>
+      {/* cancel and submit buttons */}
       <div className="flex flex-row justify-end m-4 gap-4 text-xl [&>button]:rounded-xl [&>button]:px-3 [&>button]:py-1 [&>button]:border-4 [&>button]:font-bold">
         <button className="border-[#920000] text-[#920000] bg-[#F9E5E5] hover:shadow-xl shadow-[#920000] hover:bg-[#920000] hover:text-[#f9e5e5]">
           Cancel
