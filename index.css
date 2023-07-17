@@ -7,8 +7,6 @@
 	html,
 	body {
 		@apply text-black bg-white;
-		/* min-height: 100% !important;
-		height: 100%; */
 	}
 }
 

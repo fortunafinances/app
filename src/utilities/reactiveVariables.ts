@@ -13,5 +13,5 @@ export const accounts = [
 		id: 2,
 		name: "College Fund",
 	},
-	{ id: 3, name: "Extremely Super Duper Long Name Fund" },
+	{ id: 3, name: "Extremely Super Duper Long-Named Fund" },
 ];
