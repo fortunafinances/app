@@ -43,11 +43,14 @@ export default function Table<DataType extends object>({
 			enableTopToolbar={false}
 			muiTableBodyRowProps={{ hover: false }}
 			enableColumnResizing={true}
-			rowCount={42}
+			layoutMode="grid"
 			defaultColumn={{
 				minSize: 10, //allow columns to get smaller than default
 				maxSize: 100, //allow columns to get larger than default
 				size: 60, //make columns wider by default
+			}}
+			initialState={{
+				showColumnFilters: true,
 			}}
 			muiTableBodyProps={{
 				sx: () => ({
@@ -56,8 +59,19 @@ export default function Table<DataType extends object>({
 					},
 				}),
 			}}
-			muiTableContainerProps={{
-				sx: { maxHeight: "100%", overflowY: "scroll" },
+			muiTableContainerProps={({ table }) => ({
+				sx: {
+					height: `calc(100% - ${table.refs.topToolbarRef.current?.offsetHeight}px - ${table.refs.bottomToolbarRef.current?.offsetHeight}px)`,
+					maxHeight: "680px",
+					overflowY: "auto",
+				},
+			})}
+			muiTablePaperProps={{
+				sx: {
+					height: "100%",
+					maxWidth: "100%",
+					m: "auto",
+				},
 			}}
 			muiTableProps={{
 				sx: {
@@ -67,11 +81,19 @@ export default function Table<DataType extends object>({
 			muiTableHeadCellProps={{
 				sx: {
 					border: "1px solid rgba(81, 81, 81, 1)",
+					"& .MuiFormControl-root ": {
+						overflowX: "hidden",
+					},
 				},
 			}}
 			muiTableBodyCellProps={{
 				sx: {
 					border: "1px solid rgba(81, 81, 81, 1)",
+				},
+			}}
+			muiTableHeadCellFilterTextFieldProps={{
+				sx: {
+					minWidth: "5px",
 				},
 			}}
 		/>

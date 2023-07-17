@@ -1,4 +1,4 @@
-export type Order = {
+export type Holding = {
 	ticker: string;
 	name: string;
 	stockQuantity: number;
