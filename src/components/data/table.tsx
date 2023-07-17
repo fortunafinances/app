@@ -45,9 +45,16 @@ export default function Table<DataType extends object>({
 			enableColumnResizing={true}
 			rowCount={42}
 			defaultColumn={{
-				minSize: 20, //allow columns to get smaller than default
-				maxSize: 9001, //allow columns to get larger than default
-				size: 70, //make columns wider by default
+				minSize: 10, //allow columns to get smaller than default
+				maxSize: 100, //allow columns to get larger than default
+				size: 60, //make columns wider by default
+			}}
+			muiTableBodyProps={{
+				sx: () => ({
+					"& tr:nth-of-type(odd)": {
+						backgroundColor: "#ddd",
+					},
+				}),
 			}}
 			muiTableContainerProps={{
 				sx: { maxHeight: "100%", overflowY: "scroll" },

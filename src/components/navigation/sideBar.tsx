@@ -5,17 +5,12 @@ import {
 	AiOutlineArrowRight,
 	AiOutlineCopyrightCircle,
 } from "react-icons/ai";
-import { useState } from "react";
 import { twMerge } from "tailwind-merge";
-
-const people = [
-	{ id: 1, name: "Brokerage", unavailable: false },
-	{ id: 2, name: "College Fund", unavailable: false },
-	{ id: 3, name: "Extremely Super Duper Long Name Fund", unavailable: false },
-];
+import { useReactiveVar } from "@apollo/client/react/hooks/useReactiveVar";
+import { accounts, sidebarClosed } from "../../utilities/reactiveVariables";
 
 export default function SideBar() {
-	const [collapsed, setCollapsed] = useState(false);
+	const collapsed = useReactiveVar(sidebarClosed);
 
 	return (
 		<div className="relative h-full">
@@ -28,11 +23,11 @@ export default function SideBar() {
 				{!collapsed && (
 					<div className="flex flex-col">
 						<h2 className="mx-3 mt-1 text-xl">Accounts</h2>
-						<Dropdown data={people} />
+						<Dropdown data={accounts} />
 					</div>
 				)}
 				<button
-					onClick={() => setCollapsed(!collapsed)}
+					onClick={() => sidebarClosed(!collapsed)}
 					className="absolute right-0 bg-gray-200 text-black w-fit py-4 rounded-l-md top-[50%] -translate-y-[50%]"
 				>
 					{collapsed ? (
@@ -43,7 +38,7 @@ export default function SideBar() {
 				</button>
 				<div className="flex flex-col items-center gap-2 p-1 text-xs">
 					{!collapsed && (
-						<div className="flex flex-row justify-between w-full [&>*]:hover-scale">
+						<div className="flex flex-row justify-between w-full">
 							<Link to="/about" className="hover:underline">
 								About Fortuna
 							</Link>

@@ -1,10 +1,6 @@
 import React, { useEffect, useState } from "react";
-import Popup from "reactjs-popup";
 import Select from "react-select";
-import Dropdown from "../components/input/dropdown";
 import { BiDollar } from "react-icons/bi";
-import { Link } from "react-router-dom";
-import { HiSwitchHorizontal } from "react-icons/hi";
 
 export default function TransferIn() {
   const transferType = [

@@ -2,7 +2,7 @@ import Select from "react-select";
 import { useEffect, useState } from "react";
 import { BiDollar } from "react-icons/bi";
 import { gql, useQuery } from "@apollo/client";
-import { Stock } from "../../types";
+import { Stock } from "../../utilities/types";
 import { formatCentsToDollars } from "c:/Users/linliu7/fortuna/fsi-23-bos-front-end/src/utilities/currency";
 
 interface StockData {
