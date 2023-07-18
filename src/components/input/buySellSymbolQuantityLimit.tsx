@@ -57,8 +57,6 @@ export default function SymbolQuantityLimit() {
     }
   }, [quantity, stockName]);
 
-  console.log(error);
-
   if (loading) return <>Loading</>;
   if (error) return <p>{error.message}</p>;
 
