@@ -1,19 +1,9 @@
-import { gql } from "@apollo/client";
+import { gql, useQuery } from "@apollo/client";
 import Table from "../../components/data/table";
 import { useMemo } from "react";
 import { MRT_ColumnDef } from "material-react-table";
 import { Activity } from "../../utilities/types";
-
-const GET_ACTIVITIES = gql`
-	query Activity {
-		activity(input: { accId: 1 }) {
-			date
-			type
-			description
-			amount
-		}
-	}
-`;
+import { filterRange, formatCentsToDollars } from "../../utilities/currency";
 
 export default function Activity() {
 	const cols = useMemo<MRT_ColumnDef<Activity>[]>(
@@ -27,51 +17,51 @@ export default function Activity() {
 				accessorKey: "type",
 			},
 			{
-				header: "Quantity",
-				accessorKey: "stockQuantity",
-				size: 55,
-				filterFn: "between",
-				filterVariant: "range",
+				header: "Description",
+				accessorKey: "description",
+				size: 110,
 			},
 			{
-				header: "Price",
-				id: "price",
+				header: "Amount",
+				id: "amount",
 				filterVariant: "range",
 				size: 55,
-				accessorFn: (row) => `${formatCentsToDollars(row.price)}`,
+				accessorFn: (row) => `${formatCentsToDollars(row.amount)}`,
 				sortingFn: (a, b) => {
-					return a.original.price - b.original.price;
+					return a.original.amount - b.original.amount;
 				},
 				filterFn: (row, _columnIds, filterValue: number[]) =>
-					filterRange(row.original.price, _columnIds, filterValue),
-			},
-			{
-				header: "Value",
-				id: "value",
-				filterVariant: "range",
-				size: 55,
-				accessorFn: (row) =>
-					`${formatCentsToDollars(row.stockQuantity * row.price)}`,
-				sortingFn: (a, b) => {
-					return (
-						a.original.price * a.original.stockQuantity -
-						b.original.price * b.original.stockQuantity
-					);
-				},
-				filterFn: (row, _columnIds, filterValue: number[]) =>
-					filterRange(
-						row.original.price * row.original.stockQuantity,
-						_columnIds,
-						filterValue
-					),
+					filterRange(row.original.amount, _columnIds, filterValue),
 			},
 		],
 		[]
 	);
 
+	type ActivitiesQuery = {
+		activity: Activity[];
+	};
+
+	const GET_ACTIVITIES = gql`
+		query Activity {
+			activity(input: { accId: 1 }) {
+				date
+				type
+				description
+				amount
+			}
+		}
+	`;
+
+	const { loading, error, data } = useQuery<ActivitiesQuery>(GET_ACTIVITIES);
+
 	return (
 		<div className="h-full w-full overflow-y-clip">
-			<Table QUERY={GET_ACTIVITIES} columnData={cols} />
+			<Table
+				loading={loading}
+				error={error}
+				data={data?.activity ?? []}
+				columnData={cols}
+			/>
 		</div>
 	);
 }
