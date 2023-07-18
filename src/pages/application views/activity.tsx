@@ -2,7 +2,7 @@ import { gql, useQuery } from "@apollo/client";
 import Table from "../../components/data/table";
 import { useMemo } from "react";
 import { MRT_ColumnDef } from "material-react-table";
-import { Activity } from "../../utilities/types";
+import { Activity, GraphQLReturnData } from "../../utilities/types";
 import { filterRange, formatCentsToDollars } from "../../utilities/currency";
 
 export default function Activity() {
@@ -38,7 +38,7 @@ export default function Activity() {
 	);
 
 	type ActivitiesQuery = {
-		activity: Activity[];
+		activity: Activity[] & GraphQLReturnData;
 	};
 
 	const GET_ACTIVITIES = gql`
@@ -59,7 +59,7 @@ export default function Activity() {
 			<Table
 				loading={loading}
 				error={error}
-				data={data?.activity ?? []}
+				data={data?.activity}
 				columnData={cols}
 			/>
 		</div>

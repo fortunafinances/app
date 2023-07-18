@@ -2,7 +2,7 @@ import { MRT_ColumnDef } from "material-react-table";
 import Table from "../../components/data/table";
 import { gql, useQuery } from "@apollo/client";
 import { filterRange, formatCentsToDollars } from "../../utilities/currency";
-import { Holding } from "../../utilities/types";
+import { GraphQLReturnData, Holding } from "../../utilities/types";
 import { useMemo } from "react";
 
 export default function Holdings() {
@@ -59,9 +59,9 @@ export default function Holdings() {
 		[]
 	);
 
-	type HoldingsQuery = {
-		holdings: Holding[];
-	};
+	interface HoldingsQuery {
+		holdings: Holding[] & GraphQLReturnData;
+	}
 
 	const GET_HOLDINGS = gql`
 		query GetOrders {
@@ -81,7 +81,7 @@ export default function Holdings() {
 			<Table
 				loading={loading}
 				error={error}
-				data={data?.holdings ?? []}
+				data={data?.holdings}
 				columnData={cols}
 			/>
 		</div>

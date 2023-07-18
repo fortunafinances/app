@@ -1,14 +1,15 @@
 import MaterialReactTable, { MRT_ColumnDef } from "material-react-table";
 import { ApolloError } from "@apollo/client";
+import { GraphQLReturnData } from "../../utilities/types";
 
-interface TableProps<DataType extends object> {
+interface TableProps<DataType extends GraphQLReturnData> {
 	loading: boolean;
 	error: ApolloError | undefined;
-	data: DataType[];
+	data: (DataType[] & { __typename: string }) | undefined;
 	columnData: MRT_ColumnDef<DataType>[];
 }
 
-export default function Table<DataType extends object>({
+export default function Table<DataType extends GraphQLReturnData>({
 	loading,
 	error,
 	data,
@@ -31,7 +32,7 @@ export default function Table<DataType extends object>({
 	return (
 		<MaterialReactTable
 			columns={columnData}
-			data={generateExtraData(data)}
+			data={generateExtraData(data!)}
 			enableColumnActions={false}
 			enableColumnFilters={true}
 			enablePagination={true}
@@ -42,6 +43,26 @@ export default function Table<DataType extends object>({
 			muiTableBodyRowProps={{ hover: false }}
 			enableColumnResizing={true}
 			layoutMode="grid"
+			enableRowActions
+			renderRowActions={({ row }) => {
+				if (row.original.__typename === "Holding")
+					return (
+						<div className="flex flex-nowrap gap-2 w-full justify-evenly">
+							<button className="btn btn-primary">Buy</button>
+							<button className="btn btn-secondary">Sell</button>
+						</div>
+					);
+				else {
+					return <></>;
+				}
+			}}
+			positionActionsColumn="last"
+			displayColumnDefOptions={{
+				"mrt-row-actions": {
+					header: "Trade", //change header text
+					size: 50, //make actions column wider
+				},
+			}}
 			defaultColumn={{
 				minSize: 10,
 				maxSize: 100,
