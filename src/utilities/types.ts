@@ -1,3 +1,8 @@
+export type Token = {
+	accessToken: string;
+	idToken: string;
+};
+
 export type GraphQLReturnData = {
 	__typename: string;
 };

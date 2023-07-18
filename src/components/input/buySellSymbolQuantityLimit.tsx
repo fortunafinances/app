@@ -47,15 +47,15 @@ export default function SymbolQuantityLimit() {
   const [totalPrice, setTotalPrice] = useState(0);
 
   useEffect(() => {
-    if (quantity != 0 || stockName != "") {
-      const stock = data!.stocks.find(
-        (element) => element.ticker === stockName
-      );
-      const price = stock!.currPrice;
-      setStockPrice(price);
-      setTotalPrice(quantity * stockPrice);
-    }
-  }, [quantity, stockName]);
+		if (quantity != 0 || stockName != "") {
+			const stock = data!.stocks.find(
+				(element) => element.ticker === stockName
+			);
+			const price = stock!.currPrice;
+			setStockPrice(price);
+			setTotalPrice(quantity * stockPrice);
+		}
+	}, [data, quantity, stockName, stockPrice]);
 
   if (loading) return <>Loading</>;
   if (error) return <p>{error.message}</p>;
