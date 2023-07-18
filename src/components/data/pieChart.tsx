@@ -5,7 +5,7 @@ import { useState } from "react";
 Chart.register(ArcElement);
 
 export default function PieChart() {
-	const [data, setData] = useState({
+	const [data] = useState({
 		labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
 		datasets: [
 			{

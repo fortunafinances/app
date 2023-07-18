@@ -18,7 +18,7 @@ export default function Overview() {
 				<DataComponent title="Investments" cents={mockData.investmentTotal} />
 				<DataComponent title="Cash" cents={mockData.cash} />
 			</DataContainer>
-			<DataContainer className="h-full max-w-[50%] p-3">
+			<DataContainer className="h-full max-w-[50%] p-3 flex flex-row justify-around">
 				<PieChart />
 			</DataContainer>
 		</div>
