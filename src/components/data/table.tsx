@@ -1,41 +1,37 @@
 import MaterialReactTable, { MRT_ColumnDef } from "material-react-table";
-import { DocumentNode, useQuery } from "@apollo/client";
+import { ApolloError } from "@apollo/client";
 
 interface TableProps<DataType extends object> {
-	QUERY: DocumentNode;
+	loading: boolean;
+	error: ApolloError | undefined;
+	data: DataType[];
 	columnData: MRT_ColumnDef<DataType>[];
 }
 
 export default function Table<DataType extends object>({
-	QUERY,
+	loading,
+	error,
+	data,
 	columnData,
 }: TableProps<DataType>) {
-	type HoldingsQuery = {
-		holdings: DataType[];
-	};
-
-	const { loading, error, data } = useQuery<HoldingsQuery>(QUERY);
-
 	if (loading)
 		return (
 			<span className="loading loading-infinity w-[5em] absolute-center"></span>
 		);
 	if (error) return <>error!</>;
 
-	console.log(data);
-
-	const getHoldingsData = (data: DataType[]) => {
-		const holdingsData: DataType[] = [];
+	const generateExtraData = (data: DataType[]) => {
+		const ret: DataType[] = [];
 		for (let i = 0; i < 200; i++) {
-			holdingsData.push(data[i % data.length]);
+			ret.push(data[i % data.length]);
 		}
-		return holdingsData;
+		return ret;
 	};
 
 	return (
 		<MaterialReactTable
 			columns={columnData}
-			data={getHoldingsData(data!.holdings)}
+			data={generateExtraData(data)}
 			enableColumnActions={false}
 			enableColumnFilters={true}
 			enablePagination={true}
