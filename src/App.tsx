@@ -12,13 +12,13 @@ import NoMatch from "./components/utility/noMatch";
 import { ApolloClient, ApolloProvider } from "@apollo/client";
 import Activity from "./pages/application views/activity";
 import EditUser from "./pages/editUser";
-import Buy from "./pages/Buy";
+
 import Callback from "./pages/callback";
-import Sell from "./pages/sell";
-import StockInfo from "./components/input/buySellStockInfo";
+import Trade from "./components/layout/trade";
 import cache from "./utilities/cache";
 import Orders from "./pages/application views/orders";
 import TransferIn from "./components/popup/transferIn";
+import TransferSuccessful from "./components/popup/transferSuccessful";
 
 const client = new ApolloClient({
   uri: "http://localhost:5000/graphql",
@@ -40,11 +40,13 @@ export default function App() {
             <Route path="*" element={<NoMatch />} />
           </Route>
           <Route path="/editProfile" element={<EditUser />} />
-          <Route path="/buy" element={<Buy />} />
-          <Route path="/sell" element={<Sell />} />
+          <Route path="/trade" element={<Trade />} />
           <Route path="/callback" element={<Callback />} />
-          <Route path="/buySellStockInfo" element={<StockInfo />} />
           <Route path="/transferIn" element={<TransferIn />} />
+          <Route
+            path="/transferNotification"
+            element={<TransferSuccessful />}
+          />
         </Routes>
       </Router>
     </ApolloProvider>
