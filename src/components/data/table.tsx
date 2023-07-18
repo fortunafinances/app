@@ -1,6 +1,7 @@
 import MaterialReactTable, { MRT_ColumnDef } from "material-react-table";
 import { ApolloError } from "@apollo/client";
 import { GraphQLReturnData } from "../../utilities/types";
+import DataContainer from "../container/dataContainer";
 
 interface TableProps<DataType extends GraphQLReturnData> {
 	loading: boolean;
@@ -19,7 +20,12 @@ export default function Table<DataType extends GraphQLReturnData>({
 		return (
 			<span className="loading loading-infinity w-[5em] absolute-center"></span>
 		);
-	if (error) return <>error!</>;
+	if (error)
+		return (
+			<DataContainer className="m-2 p-2 w-fit absolute-center bg-red-600 text-white text-3xl">
+				<h2>{error.message}</h2>
+			</DataContainer>
+		);
 
 	const generateExtraData = (data: DataType[]) => {
 		const ret: DataType[] = [];

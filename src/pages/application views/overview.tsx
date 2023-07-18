@@ -1,4 +1,5 @@
 import DataContainer from "../../components/container/dataContainer";
+import PieChart from "../../components/data/pieChart";
 import { formatCentsToDollars } from "../../utilities/currency";
 
 export default function Overview() {
@@ -8,7 +9,7 @@ export default function Overview() {
 	};
 
 	return (
-		<div className="p-3">
+		<div className="p-3 flex flex-col gap-3">
 			<DataContainer className="font-semibold px-3 flex flex-row justify-left gap-20">
 				<DataComponent
 					title="Net Worth"
@@ -16,6 +17,9 @@ export default function Overview() {
 				/>
 				<DataComponent title="Investments" cents={mockData.investmentTotal} />
 				<DataComponent title="Cash" cents={mockData.cash} />
+			</DataContainer>
+			<DataContainer className="h-full max-w-[50%] p-3 flex flex-row justify-around">
+				<PieChart />
 			</DataContainer>
 		</div>
 	);
