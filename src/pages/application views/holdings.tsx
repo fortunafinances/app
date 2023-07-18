@@ -1,7 +1,7 @@
 import { MRT_ColumnDef } from "material-react-table";
 import Table from "../../components/data/table";
 import { gql, useQuery } from "@apollo/client";
-import { filterRange, formatCentsToDollars } from "../../utilities/currency";
+import { filterRange, formatDollars } from "../../utilities/currency";
 import { GraphQLReturnData, Holding } from "../../utilities/types";
 import { useMemo } from "react";
 
@@ -28,7 +28,7 @@ export default function Holdings() {
 				id: "price",
 				filterVariant: "range",
 				size: 55,
-				accessorFn: (row) => `${formatCentsToDollars(row.price)}`,
+				accessorFn: (row) => `${formatDollars(row.price)}`,
 				sortingFn: (a, b) => {
 					return a.original.price - b.original.price;
 				},
@@ -40,8 +40,7 @@ export default function Holdings() {
 				id: "value",
 				filterVariant: "range",
 				size: 55,
-				accessorFn: (row) =>
-					`${formatCentsToDollars(row.stockQuantity * row.price)}`,
+				accessorFn: (row) => `${formatDollars(row.stockQuantity * row.price)}`,
 				sortingFn: (a, b) => {
 					return (
 						a.original.price * a.original.stockQuantity -

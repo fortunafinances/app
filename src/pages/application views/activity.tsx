@@ -3,7 +3,7 @@ import Table from "../../components/data/table";
 import { useMemo } from "react";
 import { MRT_ColumnDef } from "material-react-table";
 import { Activity, GraphQLReturnData } from "../../utilities/types";
-import { filterRange, formatCentsToDollars } from "../../utilities/currency";
+import { filterRange, formatDollars } from "../../utilities/currency";
 
 export default function Activity() {
 	const cols = useMemo<MRT_ColumnDef<Activity>[]>(
@@ -26,7 +26,7 @@ export default function Activity() {
 				id: "amount",
 				filterVariant: "range",
 				size: 55,
-				accessorFn: (row) => `${formatCentsToDollars(row.amount)}`,
+				accessorFn: (row) => `${formatDollars(row.amount)}`,
 				sortingFn: (a, b) => {
 					return a.original.amount - b.original.amount;
 				},

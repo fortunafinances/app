@@ -1,6 +1,6 @@
 import DataContainer from "../../components/container/dataContainer";
 import PieChart from "../../components/data/pieChart";
-import { formatCentsToDollars } from "../../utilities/currency";
+import { formatDollars } from "../../utilities/currency";
 
 export default function Overview() {
 	const mockData = {
@@ -34,7 +34,7 @@ const DataComponent = ({ title, cents }: DataComponentProps) => {
 	return (
 		<div className="flex flex-col">
 			<p>{title}</p>
-			<p className="text-lg">{formatCentsToDollars(cents)}</p>
+			<p className="text-lg">{formatDollars(cents)}</p>
 		</div>
 	);
 };
