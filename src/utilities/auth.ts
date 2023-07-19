@@ -18,10 +18,10 @@ const auth0Client = new auth0.WebAuth({
     domain: "dev-wpc8kymxzmepqxl5.us.auth0.com",
     clientID: "OxQxuofsPZXSFzTqbVtKgErT2xrl3VfZ",
     audience:
-        "http://127.0.0.1:5000/api/users",
+        "http://127.0.0.1:5000/",
     redirectUri: "http://localhost:4040/callback",
     responseType: 'token id_token',
-    scope: 'openid email sub nickname profile read:user', // what we want the token to include
+    scope: 'openid email sub nickname profile offline_access read:user', // what we want the token to include
 });
 
 export function login() {
