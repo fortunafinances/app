@@ -14,10 +14,11 @@ interface DecodedToken {
 // WebAuth will redirect user to the login page
 const auth0Client = new auth0.WebAuth({
     // feed in the data
+    // https://dev-wpc8kymxzmepqxl5.us.auth0.com/api/v2/
     domain: "dev-wpc8kymxzmepqxl5.us.auth0.com",
     clientID: "OxQxuofsPZXSFzTqbVtKgErT2xrl3VfZ",
     audience:
-        "https://dev-wpc8kymxzmepqxl5.us.auth0.com/api/v2/",
+        "http://127.0.0.1:5000/api/users",
     redirectUri: "http://localhost:4040/callback",
     responseType: 'token id_token',
     scope: 'openid email sub nickname profile read:user', // what we want the token to include
@@ -29,6 +30,9 @@ export function login() {
 
 export function signup() {
     auth0Client.authorize({ screen_hint: 'signup' });
+}
+export function logout() {
+    auth0Client.logout();
 }
 
 export function handleAuthentication() {
@@ -48,12 +52,39 @@ export function handleAuthentication() {
     printDecodedToken(itoken); //just to check the info in itoken
 
     // send access token to backend
-    fetchApiFromBackend(atoken, "/api/private");
+    fetchApiFromBackend(atoken, "api/private");
 
     console.log("ACCESS TKN = " + atoken)
 }
 
-// function that will print out the info id token contains
+
+// function that send the token to the backend,
+// ask for permission to access a specific endpoint
+function fetchApiFromBackend(token, endpoint) {
+    // https://dev-wpc8kymxzmepqxl5.us.auth0.com
+    // http://127.0.0.1:5000
+    fetch(`http://127.0.0.1:5000/${endpoint}`, {
+
+        headers: new Headers({
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+        })
+    })
+        .then(response => response.json())
+        .then(response => {
+            console.log("Response from the api", response)
+            console.log(response.status) // should output 200
+        })
+        .then(data => {
+            console.log("handle the response data " + data)
+
+        })
+        .catch(error => {
+            console.log("error in fetching --- " + error)
+        });
+}
+
+/** function that will print out the info id token contains */
 function printDecodedToken(token) {
     if (token) {
         const decodedToken = jwtDecode(token) as DecodedToken;
@@ -67,27 +98,4 @@ function printDecodedToken(token) {
             console.log('Token is still valid');
         }
     }
-}
-
-// function that send the token to the backend,
-// ask for permission to access a specific endpoint
-function fetchApiFromBackend(token, endpoint) {
-    fetch(`http://127.0.0.1:5000/${endpoint}`, {
-
-        headers: new Headers({
-            'Authorization': `Bearer ${token}`,
-            'Content-Type': 'application/json'
-        })
-    })
-        .then(response => response.json())
-        .then(response => {
-            console.log(response.status) // should output 200
-        })
-        .then(data => {
-            console.log("handle the response data " + data)
-
-        })
-        .catch(error => {
-            console.log("error in fetching " + error)
-        });
 }
