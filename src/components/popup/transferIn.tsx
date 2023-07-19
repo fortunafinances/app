@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import Select from "react-select";
 import { BiDollar } from "react-icons/bi";
+import TransferSuccessful from "./transferSuccessful";
 
 export default function TransferIn() {
   const transferType = [
@@ -42,14 +43,6 @@ export default function TransferIn() {
   }, [transfer]);
 
   return (
-    // <div>
-    //   // {/* Open the modal using ID.showModal() method */}
-    //   <button
-    //     className="btn text-primary bg-[#EDEDFE]"
-    //     onClick={() => window.my_modal_1.showModal()}
-    //   >
-    //     Transfer
-    //   </button>
     <dialog id="my_modal_1" className="modal">
       <form
         method="dialog"
@@ -126,9 +119,11 @@ export default function TransferIn() {
           <button className="btn border-[#920000] text-[#920000] bg-[#F9E5E5] hover:shadow-xl shadow-[#920000] hover:bg-[#920000] hover:text-[#f9e5e5]">
             Discard
           </button>
-          <button className="btn border-success-content text-success-content bg-[#E3FDDC] hover:shadow-xl shadow-succes-content hover:bg-success-content hover:text-[#e3fddc]">
-            Submit
-          </button>
+          <div>
+            <button className="btn border-success-content text-success-content bg-[#E3FDDC] hover:shadow-xl shadow-succes-content hover:bg-success-content hover:text-[#e3fddc]">
+              Submit
+            </button>
+          </div>
         </div>
       </form>
     </dialog>
