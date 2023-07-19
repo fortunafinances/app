@@ -10,8 +10,8 @@ const Callback = () => {
     // Simulate a loading state
     setTimeout(() => {
       // Redirect the user to a desired page
-      window.location.href = '/';
-    }, 20000000); // Adjust the delay as needed
+      window.location.href = '/app';
+    }, 1000); // Adjust the delay as needed
   }, []);
 
   return (
