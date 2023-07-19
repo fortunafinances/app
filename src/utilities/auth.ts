@@ -33,8 +33,10 @@ export function signup() {
 }
 export function signout() {
     auth0Client.logout({
-        returnTo: "http://localhost:4040/"
+        returnTo: "http://localhost:4040/",
+        clientID: "OxQxuofsPZXSFzTqbVtKgErT2xrl3VfZ"
     });
+    console.log("Sign out")
 }
 
 export function handleAuthentication() {
@@ -58,7 +60,6 @@ export function handleAuthentication() {
 
     console.log("ACCESS TKN = " + atoken)
 }
-
 
 // function that send the token to the backend,
 // ask for permission to access a specific endpoint
