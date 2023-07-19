@@ -1,64 +1,88 @@
 import { MRT_ColumnDef } from "material-react-table";
 import Table from "../../components/data/table";
-import { gql } from "@apollo/client";
-import { formatCentsToDollars } from "../../utilities/currency";
-import { Order } from "../../types";
+import { gql, useQuery } from "@apollo/client";
+import { filterRange, formatDollars } from "../../utilities/currency";
+import { GraphQLReturnData, Holding } from "../../utilities/types";
 import { useMemo } from "react";
 
-const GET_HOLDINGS = gql`
-	query GetOrders {
-		holdings {
-			ticker
-			price
-			stockQuantity
-			name
-		}
-	}
-`;
-
 export default function Holdings() {
-	const cols = useMemo<MRT_ColumnDef<Order>[]>(
+	const cols = useMemo<MRT_ColumnDef<Holding>[]>(
 		() => [
 			{
-				accessorKey: "ticker",
 				header: "Symbol",
+				accessorKey: "ticker",
 			},
 			{
-				accessorKey: "name",
 				header: "Name",
+				accessorKey: "name",
 			},
 			{
-				accessorKey: "stockQuantity",
 				header: "Quantity",
-				size: 50,
+				accessorKey: "stockQuantity",
+				size: 55,
+				filterFn: "between",
+				filterVariant: "range",
 			},
 			{
-				accessorFn: (row) => `${formatCentsToDollars(row.price)}`,
+				header: "Price",
 				id: "price",
+				filterVariant: "range",
+				size: 55,
+				accessorFn: (row) => `${formatDollars(row.price)}`,
 				sortingFn: (a, b) => {
 					return a.original.price - b.original.price;
 				},
-				header: "Price",
+				filterFn: (row, _columnIds, filterValue: number[]) =>
+					filterRange(row.original.price, _columnIds, filterValue),
 			},
 			{
-				accessorFn: (row) =>
-					`${formatCentsToDollars(row.stockQuantity * row.price)}`,
+				header: "Value",
+				id: "value",
+				filterVariant: "range",
+				size: 55,
+				accessorFn: (row) => `${formatDollars(row.stockQuantity * row.price)}`,
 				sortingFn: (a, b) => {
 					return (
 						a.original.price * a.original.stockQuantity -
 						b.original.price * b.original.stockQuantity
 					);
 				},
-				id: "value",
-				header: "Value",
+				filterFn: (row, _columnIds, filterValue: number[]) =>
+					filterRange(
+						row.original.price * row.original.stockQuantity,
+						_columnIds,
+						filterValue
+					),
 			},
 		],
 		[]
 	);
+
+	interface HoldingsQuery {
+		holdings: Holding[] & GraphQLReturnData;
+	}
+
+	const GET_HOLDINGS = gql`
+		query GetOrders {
+			holdings(input: { accId: 1 }) {
+				ticker
+				price
+				stockQuantity
+				name
+			}
+		}
+	`;
+
+	const { loading, error, data } = useQuery<HoldingsQuery>(GET_HOLDINGS);
+
 	return (
-		<div className="h-full w-full overflow-y-scroll">
-			{/* <div className="bg-red-500 h-full w-full"></div> <-- Testing content sizing*/}
-			<Table QUERY={GET_HOLDINGS} columnData={cols} />
+		<div className="h-full w-full overflow-y-clip">
+			<Table
+				loading={loading}
+				error={error}
+				data={data?.holdings}
+				columnData={cols}
+			/>
 		</div>
 	);
 }

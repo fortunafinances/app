@@ -15,9 +15,7 @@ export default function Buy() {
           </div>
           <Link to={"/sell"}>
             <div className="absolute top-0 right-10 text-xl flex flex-row items-center">
-              <div className="">
-                <HiSwitchHorizontal />
-              </div>
+              <HiSwitchHorizontal />
               <div className="text-[#920000] font-medium ">SELL</div>
             </div>
           </Link>
