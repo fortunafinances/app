@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import SearchBar from "../input/searchBar";
 import { CgProfile } from "react-icons/cg";
 import {
@@ -9,6 +9,7 @@ import {
 import { useReactiveVar } from "@apollo/client/react/hooks/useReactiveVar";
 
 export default function Header() {
+	const navigate = useNavigate();
 	const userAccount = useReactiveVar(userId);
 	const currentAccountNumber = useReactiveVar(currentAccountId);
 
@@ -16,16 +17,19 @@ export default function Header() {
 		(item) => item.id === currentAccountNumber
 	);
 
+	const logOut = () => {
+		userId(null);
+		localStorage.removeItem("id_token");
+		localStorage.removeItem("access_token");
+		navigate("/");
+	};
+
 	return (
 		<header className="flex items-center w-full bg-gray-200 py-2">
 			<div className="flex items-center h-full text-3xl mx-2">
 				<h1 className="hidden lg:inline">
 					<b>
-						<Link to="/">
-							<span className="hover-scale-helper hover:scale-110">
-								Fortuna
-							</span>
-						</Link>
+						<Link to="/">Fortuna</Link>
 						&nbsp;/&nbsp;
 					</b>
 					{currentAccount!.name} Account
@@ -33,7 +37,7 @@ export default function Header() {
 			</div>
 			<SearchBar />
 			<div className="flex flex-row gap-3 items-center text-2xl mx-3">
-				<h3 className="hidden lg:inline">Welcome, {userAccount.username}</h3>
+				<h3 className="hidden lg:inline">Welcome, {userAccount?.username}</h3>
 				<div className="dropdown dropdown-end">
 					<label tabIndex={0} className="cursor-pointer">
 						<CgProfile size={40} />
@@ -44,14 +48,17 @@ export default function Header() {
 					>
 						<div className="card-body">
 							<div className="flex flex-row justify-between items-center">
-								<h3 className="card-title">{userAccount.username}</h3>
+								<h3 className="card-title">{userAccount?.username}</h3>
 								<Link to={`/editProfile`} className="w-fit">
 									Edit profile
 								</Link>
 							</div>
-							<Link to="/" className="btn btn-outline btn-secondary">
+							<button
+								className="btn btn-outline btn-secondary"
+								onClick={logOut}
+							>
 								Log Out
-							</Link>
+							</button>
 						</div>
 					</div>
 				</div>

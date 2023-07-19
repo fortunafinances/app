@@ -10,11 +10,11 @@ export default function Holdings() {
 		() => [
 			{
 				header: "Symbol",
-				accessorKey: "ticker",
+				accessorKey: "stock.ticker",
 			},
 			{
 				header: "Name",
-				accessorKey: "name",
+				accessorKey: "stock.name",
 			},
 			{
 				header: "Quantity",
@@ -24,32 +24,33 @@ export default function Holdings() {
 				filterVariant: "range",
 			},
 			{
-				header: "Price",
-				id: "price",
+				header: "stock.currPrice",
+				id: "stock.currPrice",
 				filterVariant: "range",
 				size: 55,
-				accessorFn: (row) => `${formatDollars(row.price)}`,
+				accessorFn: (row) => `${formatDollars(row.stock.currPrice)}`,
 				sortingFn: (a, b) => {
-					return a.original.price - b.original.price;
+					return a.original.stock.currPrice - b.original.stock.currPrice;
 				},
 				filterFn: (row, _columnIds, filterValue: number[]) =>
-					filterRange(row.original.price, _columnIds, filterValue),
+					filterRange(row.original.stock.currPrice, _columnIds, filterValue),
 			},
 			{
 				header: "Value",
 				id: "value",
 				filterVariant: "range",
 				size: 55,
-				accessorFn: (row) => `${formatDollars(row.stockQuantity * row.price)}`,
+				accessorFn: (row) =>
+					`${formatDollars(row.stockQuantity * row.stock.currPrice)}`,
 				sortingFn: (a, b) => {
 					return (
-						a.original.price * a.original.stockQuantity -
-						b.original.price * b.original.stockQuantity
+						a.original.stock.currPrice * a.original.stockQuantity -
+						b.original.stock.currPrice * b.original.stockQuantity
 					);
 				},
 				filterFn: (row, _columnIds, filterValue: number[]) =>
 					filterRange(
-						row.original.price * row.original.stockQuantity,
+						row.original.stock.currPrice * row.original.stockQuantity,
 						_columnIds,
 						filterValue
 					),
@@ -63,12 +64,14 @@ export default function Holdings() {
 	}
 
 	const GET_HOLDINGS = gql`
-		query GetOrders {
+		query Holdings {
 			holdings(input: { accId: 1 }) {
-				ticker
-				price
 				stockQuantity
-				name
+				stock {
+					ticker
+					name
+					currPrice
+				}
 			}
 		}
 	`;

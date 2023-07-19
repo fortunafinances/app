@@ -1,15 +1,4 @@
 import auth0 from 'auth0-js';
-import jwtDecode from 'jwt-decode';
-
-
-interface DecodedToken {
-    email: string;
-    sub: string;
-    nickname: string;
-    profile: string;
-    exp: number;
-    // add other claims as needed
-}
 
 // WebAuth will redirect user to the login page
 const auth0Client = new auth0.WebAuth({
@@ -25,14 +14,16 @@ const auth0Client = new auth0.WebAuth({
 });
 
 export function login() {
-    auth0Client.authorize();
+	auth0Client.authorize();
 }
 
 export function signup() {
     auth0Client.authorize({ screen_hint: 'signup' });
 }
-export function logout() {
-    auth0Client.logout();
+export function signout() {
+    auth0Client.logout({
+        returnTo: "http://localhost:4040/"
+    });
 }
 
 export function handleAuthentication() {
@@ -68,7 +59,7 @@ function fetchApiFromBackend(token, endpoint) {
         headers: new Headers({
             'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/json'
-        })
+          })
     })
         .then(response => response.json())
         .then(response => {
@@ -76,14 +67,14 @@ function fetchApiFromBackend(token, endpoint) {
             console.log(response.status) // should output 200
         })
         .then(data => {
-            console.log("handle the response data " + data)
-
+            console.log("handle the response data" + data)
+            
         })
         .catch(error => {
             console.log("error in fetching --- " + error)
         });
+    console.log("ACCESS TKN = " + atoken)
 }
-
 /** function that will print out the info id token contains */
 function printDecodedToken(token) {
     if (token) {
@@ -98,4 +89,4 @@ function printDecodedToken(token) {
             console.log('Token is still valid');
         }
     }
-}
+    

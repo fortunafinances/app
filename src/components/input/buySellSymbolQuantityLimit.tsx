@@ -4,6 +4,7 @@ import { BiDollar } from "react-icons/bi";
 import { gql, useQuery } from "@apollo/client";
 import { Stock } from "../../utilities/types";
 import { formatDollars } from "../../utilities/currency";
+import { preventMinus } from "../../utilities/common";
 
 interface StockData {
 	stocks: Stock[];
@@ -34,19 +35,13 @@ export default function SymbolQuantityLimit() {
 		return ret;
 	};
 
-	const preventMinus = (e: React.KeyboardEvent<HTMLInputElement>) => {
-		if (e.code === "Minus") {
-			e.preventDefault();
-		}
-	};
-
 	const [marketState, setMarketState] = useState(true);
 	const [quantity, setQuantity] = useState(0);
 	const [stockName, setStockName] = useState("");
 	const [stockPrice, setStockPrice] = useState(0);
 	const [totalPrice, setTotalPrice] = useState(0);
 
-	useEffect(() => {
+  useEffect(() => {
 		if (quantity != 0 || stockName != "") {
 			const stock = data!.stocks.find(
 				(element) => element.ticker === stockName
@@ -55,7 +50,7 @@ export default function SymbolQuantityLimit() {
 			setStockPrice(price);
 			setTotalPrice(quantity * stockPrice);
 		}
-	}, [quantity, stockName]);
+	}, [data, quantity, stockName, stockPrice]);
 
 	if (loading) return <>Loading</>;
 	if (error) return <p>{error.message}</p>;
