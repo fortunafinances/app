@@ -25,12 +25,13 @@ const auth0Client = new auth0.WebAuth({
 });
 
 export function login() {
-	auth0Client.authorize();
+    auth0Client.authorize();
 }
 
 export function signup() {
     auth0Client.authorize({ screen_hint: 'signup' });
 }
+
 export function signout() {
     auth0Client.logout({
         returnTo: "http://localhost:4040/",
@@ -53,12 +54,15 @@ export function handleAuthentication() {
     const atoken = localStorage.getItem('access_token');
     const itoken = localStorage.getItem('id_token');
 
-    printDecodedToken(itoken); //just to check the info in itoken
+    //just to check the info in itoken
+    printDecodedToken(itoken);
 
     // send access token to backend
-    fetchApiFromBackend(atoken, "api/private");
+    fetchApiFromBackend(atoken, "userinfo");
 
-    console.log("ACCESS TKN = " + atoken)
+    const sub = localStorage.getItem('sub');
+    sendUserData(sub);
+
 }
 
 // function that send the token to the backend,
@@ -66,26 +70,45 @@ export function handleAuthentication() {
 function fetchApiFromBackend(token, endpoint) {
     // https://dev-wpc8kymxzmepqxl5.us.auth0.com
     // http://127.0.0.1:5000
-    fetch(`http://127.0.0.1:5000/${endpoint}`, {
+    fetch(`https://dev-wpc8kymxzmepqxl5.us.auth0.com/${endpoint}`, {
 
         headers: new Headers({
             'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/json'
-          })
+        })
     })
         .then(response => response.json())
         .then(response => {
             console.log("Response from the api", response)
-            console.log(response.status) // should output 200
-        })
-        .then(data => {
-            console.log("handle the response data" + data)
-            
+            console.log(response.sub)
+
+            // store sub to local storage
+            localStorage.setItem('sub', response.sub);
+
+            // should output 200
+            console.log(response.status)
+
         })
         .catch(error => {
             console.log("error in fetching --- " + error)
         });
-    console.log("ACCESS TKN = " + token)
+    console.log("\nACCESS TOKEN = " + token)
+}
+
+// sending user data to backend (aka sub)
+function sendUserData(data) {
+    return fetch(`http://localhost:5000/addUser`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+    })
+        .then((response) => response.json())
+        .then((response) => {
+            console.log("Sending data to backend... ", response)
+        })
+        .catch((error) => console.log(error));
 }
 
 /** function that will print out the info id token contains */
