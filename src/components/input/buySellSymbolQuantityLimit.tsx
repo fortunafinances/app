@@ -3,7 +3,8 @@ import { useEffect, useState } from "react";
 import { BiDollar } from "react-icons/bi";
 import { gql, useQuery } from "@apollo/client";
 import { Stock } from "../../utilities/types";
-import { formatCentsToDollars } from "../../utilities/currency";
+import { formatDollars } from "../../utilities/currency";
+import { preventMinus } from "../../utilities/common";
 
 interface StockData {
 	stocks: Stock[];
@@ -34,35 +35,25 @@ export default function SymbolQuantityLimit() {
 		return ret;
 	};
 
-	const preventMinus = (e: React.KeyboardEvent<HTMLInputElement>) => {
-		if (e.code === "Minus") {
-			e.preventDefault();
-		}
-	};
-
 	const [marketState, setMarketState] = useState(true);
 	const [quantity, setQuantity] = useState(0);
 	const [stockName, setStockName] = useState("");
 	const [stockPrice, setStockPrice] = useState(0);
 	const [totalPrice, setTotalPrice] = useState(0);
 
-	useEffect(() => {
-		function getCurrPrice() {
+  useEffect(() => {
+		if (quantity != 0 || stockName != "") {
 			const stock = data!.stocks.find(
 				(element) => element.ticker === stockName
 			);
 			const price = stock!.currPrice;
 			setStockPrice(price);
-		}
-
-		if (quantity != 0 || stockName != "") {
-			getCurrPrice();
 			setTotalPrice(quantity * stockPrice);
 		}
-	}, [data, quantity, stockName, stockPrice, totalPrice]);
+	}, [data, quantity, stockName, stockPrice]);
 
 	if (loading) return <>Loading</>;
-	if (error) return <>{error}</>;
+	if (error) return <p>{error.message}</p>;
 
 	return (
 		<div>
@@ -135,8 +126,7 @@ export default function SymbolQuantityLimit() {
 			<div className="m-4 mt-6 flex flex-row gap-3 font-semibold text-xl">
 				<h1>Total Price:</h1>
 				<h1>
-					{quantity} x {formatCentsToDollars(stockPrice)} ={" "}
-					{formatCentsToDollars(totalPrice)}
+					{quantity} x {formatDollars(stockPrice)} = {formatDollars(totalPrice)}
 				</h1>
 			</div>
 			{/* cancel and submit buttons */}

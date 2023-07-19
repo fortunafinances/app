@@ -11,21 +11,19 @@ const auth0Client = new auth0.WebAuth({
 });
 
 export function login() {
-    auth0Client.authorize();
+	auth0Client.authorize();
 }
 
 export function signup() {
-    auth0Client.authorize({ screen_hint: 'signup' });
+	auth0Client.authorize({ screen_hint: "signup" });
 }
 
 export function handleAuthentication() {
-    let aToken ;
     auth0Client.parseHash((err, authResult) => {
         if (authResult && authResult.accessToken && authResult.idToken) {
             // Save the tokens to local storage
             localStorage.setItem('access_token', authResult.accessToken);
             localStorage.setItem('id_token', authResult.idToken);
-            aToken = authResult.accessToken;
         } else if (err) {
             console.log(err);
         }
@@ -42,14 +40,14 @@ export function handleAuthentication() {
     })
         .then(response => response.json())
         .then(response => {
-            console.log(response.status) // should output 200
+            console.log((response as Response).status) // should output 200
           })
         .then(data => {
             console.log("handle the response data" + data)
             
         })
         .catch(error => {
-            // handle the error
+            console.error(error)
         });
         console.log("ACCESS TKN = " + token)
 }

@@ -1,31 +1,20 @@
 import { MRT_ColumnDef } from "material-react-table";
 import Table from "../../components/data/table";
-import { gql } from "@apollo/client";
-import { filterRange, formatCentsToDollars } from "../../utilities/currency";
-import { Holding } from "../../utilities/types";
+import { gql, useQuery } from "@apollo/client";
+import { filterRange, formatDollars } from "../../utilities/currency";
+import { GraphQLReturnData, Holding } from "../../utilities/types";
 import { useMemo } from "react";
-
-const GET_HOLDINGS = gql`
-	query GetOrders {
-		holdings(input: { accId: 1 }) {
-			ticker
-			price
-			stockQuantity
-			name
-		}
-	}
-`;
 
 export default function Holdings() {
 	const cols = useMemo<MRT_ColumnDef<Holding>[]>(
 		() => [
 			{
 				header: "Symbol",
-				accessorKey: "ticker",
+				accessorKey: "stock.ticker",
 			},
 			{
 				header: "Name",
-				accessorKey: "name",
+				accessorKey: "stock.name",
 			},
 			{
 				header: "Quantity",
@@ -35,16 +24,16 @@ export default function Holdings() {
 				filterVariant: "range",
 			},
 			{
-				header: "Price",
-				id: "price",
+				header: "stock.currPrice",
+				id: "stock.currPrice",
 				filterVariant: "range",
 				size: 55,
-				accessorFn: (row) => `${formatCentsToDollars(row.price)}`,
+				accessorFn: (row) => `${formatDollars(row.stock.currPrice)}`,
 				sortingFn: (a, b) => {
-					return a.original.price - b.original.price;
+					return a.original.stock.currPrice - b.original.stock.currPrice;
 				},
 				filterFn: (row, _columnIds, filterValue: number[]) =>
-					filterRange(row.original.price, _columnIds, filterValue),
+					filterRange(row.original.stock.currPrice, _columnIds, filterValue),
 			},
 			{
 				header: "Value",
@@ -52,16 +41,16 @@ export default function Holdings() {
 				filterVariant: "range",
 				size: 55,
 				accessorFn: (row) =>
-					`${formatCentsToDollars(row.stockQuantity * row.price)}`,
+					`${formatDollars(row.stockQuantity * row.stock.currPrice)}`,
 				sortingFn: (a, b) => {
 					return (
-						a.original.price * a.original.stockQuantity -
-						b.original.price * b.original.stockQuantity
+						a.original.stock.currPrice * a.original.stockQuantity -
+						b.original.stock.currPrice * b.original.stockQuantity
 					);
 				},
 				filterFn: (row, _columnIds, filterValue: number[]) =>
 					filterRange(
-						row.original.price * row.original.stockQuantity,
+						row.original.stock.currPrice * row.original.stockQuantity,
 						_columnIds,
 						filterValue
 					),
@@ -69,9 +58,34 @@ export default function Holdings() {
 		],
 		[]
 	);
+
+	interface HoldingsQuery {
+		holdings: Holding[] & GraphQLReturnData;
+	}
+
+	const GET_HOLDINGS = gql`
+		query Holdings {
+			holdings(input: { accId: 1 }) {
+				stockQuantity
+				stock {
+					ticker
+					name
+					currPrice
+				}
+			}
+		}
+	`;
+
+	const { loading, error, data } = useQuery<HoldingsQuery>(GET_HOLDINGS);
+
 	return (
 		<div className="h-full w-full overflow-y-clip">
-			<Table QUERY={GET_HOLDINGS} columnData={cols} />
+			<Table
+				loading={loading}
+				error={error}
+				data={data?.holdings}
+				columnData={cols}
+			/>
 		</div>
 	);
 }
