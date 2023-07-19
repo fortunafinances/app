@@ -29,7 +29,9 @@ export default function AppNavigation() {
         <button
           className="btn text-primary bg-[#EDEDFE] min-h-[2rem] h-[1rem] mr-3"
           onClick={() => {
-            (document.getElementById("my_modal_1")! as HTMLDialogElement).showModal();
+            (
+							document.getElementById("transfer_modal")! as HTMLDialogElement
+						).showModal();
           }}
         >
           Transfer

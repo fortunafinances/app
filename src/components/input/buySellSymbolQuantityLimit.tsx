@@ -46,7 +46,7 @@ export default function SymbolQuantityLimit() {
 	const [stockPrice, setStockPrice] = useState(0);
 	const [totalPrice, setTotalPrice] = useState(0);
 
-	useEffect(() => {
+  useEffect(() => {
 		if (quantity != 0 || stockName != "") {
 			const stock = data!.stocks.find(
 				(element) => element.ticker === stockName
