@@ -1,4 +1,15 @@
 import auth0 from 'auth0-js';
+import jwtDecode from 'jwt-decode';
+
+interface DecodedToken {
+    openid: string;
+    email: string;
+    sub: string;
+    nickname: string;
+    profile: string;
+    exp: number;
+    // add other claims as needed
+}
 
 // WebAuth will redirect user to the login page
 const auth0Client = new auth0.WebAuth({
@@ -73,8 +84,9 @@ function fetchApiFromBackend(token, endpoint) {
         .catch(error => {
             console.log("error in fetching --- " + error)
         });
-    console.log("ACCESS TKN = " + atoken)
+    console.log("ACCESS TKN = " + token)
 }
+
 /** function that will print out the info id token contains */
 function printDecodedToken(token) {
     if (token) {
@@ -89,4 +101,4 @@ function printDecodedToken(token) {
             console.log('Token is still valid');
         }
     }
-    
+}
