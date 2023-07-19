@@ -1,9 +1,14 @@
 import { makeVarPersisted } from "./hooks";
 
+type User = {
+	userId: number;
+	username: string;
+};
+
 export const sidebarClosed = makeVarPersisted("sidebarClosed", false);
 export const currentAccountId = makeVarPersisted("currentAccountId", 1);
-export const userId = makeVarPersisted("user", {
-	userId: 1,
+export const userId = makeVarPersisted<User | null>("user", {
+	userId: 0,
 	username: "Nolan Gelinas",
 });
 

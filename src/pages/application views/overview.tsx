@@ -55,7 +55,7 @@ export default function Overview() {
 				/>
 				<DataComponent title="Cash" dollars={data?.displayBar.cash ?? 0} />
 			</DataContainer>
-			<DataContainer className="h-full max-w-[50%] p-3 flex flex-row justify-around">
+			<DataContainer className="h-full md:max-w-[50%] max-w-full p-3 flex flex-row justify-around">
 				<PieChart />
 			</DataContainer>
 		</div>
