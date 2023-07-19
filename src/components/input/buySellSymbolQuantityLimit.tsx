@@ -55,7 +55,7 @@ export default function SymbolQuantityLimit() {
 			setStockPrice(price);
 			setTotalPrice(quantity * stockPrice);
 		}
-	}, [quantity, stockName]);
+	}, [data, quantity, stockName, stockPrice]);
 
 	if (loading) return <>Loading</>;
 	if (error) return <p>{error.message}</p>;
