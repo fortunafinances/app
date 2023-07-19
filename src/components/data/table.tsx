@@ -6,7 +6,7 @@ import DataContainer from "../container/dataContainer";
 interface TableProps<DataType extends GraphQLReturnData> {
 	loading: boolean;
 	error: ApolloError | undefined;
-	data: (DataType[] & { __typename: string }) | undefined;
+	data: (DataType[] & GraphQLReturnData) | undefined;
 	columnData: MRT_ColumnDef<DataType>[];
 }
 
@@ -53,7 +53,7 @@ export default function Table<DataType extends GraphQLReturnData>({
 			renderRowActions={({ row }) => {
 				if (row.original.__typename === "Holding")
 					return (
-						<div className="flex flex-nowrap gap-2 w-full justify-evenly">
+						<div className="flex flex-nowrap gap-2 w-full justify-evenly [&>button]:min-h-0 [&>button]:h-8">
 							<button className="btn btn-primary">Buy</button>
 							<button className="btn btn-secondary">Sell</button>
 						</div>

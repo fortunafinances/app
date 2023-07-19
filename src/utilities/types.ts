@@ -2,12 +2,14 @@ export type GraphQLReturnData = {
 	__typename: string;
 };
 
-export interface Holding extends GraphQLReturnData {
+export interface Stock {
 	ticker: string;
+	currPrice: number;
 	name: string;
+}
+export interface Holding extends GraphQLReturnData {
 	stockQuantity: number;
-	price: number;
-	value: string;
+	stock: Stock;
 }
 
 export interface Activity extends GraphQLReturnData {
@@ -17,7 +19,3 @@ export interface Activity extends GraphQLReturnData {
 	amount: number;
 }
 
-export interface Stock {
-	ticker: string;
-	currPrice: number;
-}
