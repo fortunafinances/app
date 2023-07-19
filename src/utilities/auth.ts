@@ -40,14 +40,14 @@ export function handleAuthentication() {
     })
         .then(response => response.json())
         .then(response => {
-            console.log(response.status) // should output 200
+            console.log((response as Response).status) // should output 200
           })
         .then(data => {
             console.log("handle the response data" + data)
             
         })
         .catch(error => {
-            // handle the error
+            console.error(error)
         });
         console.log("ACCESS TKN = " + token)
 }

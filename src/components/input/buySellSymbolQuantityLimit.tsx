@@ -4,6 +4,7 @@ import { BiDollar } from "react-icons/bi";
 import { gql, useQuery } from "@apollo/client";
 import { Stock } from "../../utilities/types";
 import { formatDollars } from "../../utilities/currency";
+import { preventMinus } from "../../utilities/common";
 
 interface StockData {
 	stocks: Stock[];
@@ -32,12 +33,6 @@ export default function SymbolQuantityLimit() {
 			ret.push({ label: item.ticker, value: item.ticker });
 		});
 		return ret;
-	};
-
-	const preventMinus = (e: React.KeyboardEvent<HTMLInputElement>) => {
-		if (e.code === "Minus") {
-			e.preventDefault();
-		}
 	};
 
 	const [marketState, setMarketState] = useState(true);
