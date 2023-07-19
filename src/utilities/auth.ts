@@ -4,9 +4,10 @@ import jwtDecode from 'jwt-decode';
 
 interface DecodedToken {
     email: string;
-    exp: number;
-    name: string;
+    sub: string;
+    nickname: string;
     profile: string;
+    exp: number;
     // add other claims as needed
 }
 
@@ -17,7 +18,7 @@ const auth0Client = new auth0.WebAuth({
     clientID: "OxQxuofsPZXSFzTqbVtKgErT2xrl3VfZ",
     redirectUri: "http://localhost:4040/callback",
     responseType: 'token id_token',
-    scope: 'openid email profile', // what we want the token to include
+    scope: 'openid email sub nickname profile', // what we want the token to include
 });
 
 export function login() {
@@ -29,26 +30,24 @@ export function signup() {
 }
 
 export function handleAuthentication() {
-    let aToken;
     auth0Client.parseHash((err, authResult) => {
         if (authResult && authResult.accessToken && authResult.idToken) {
             // Save the tokens to local storage
             localStorage.setItem('access_token', authResult.accessToken);
             localStorage.setItem('id_token', authResult.idToken);
-            aToken = authResult.accessToken;
         } else if (err) {
             console.log(err);
         }
     });
 
-    const token = localStorage.getItem('access_token');
+    const atoken = localStorage.getItem('access_token');
     const itoken = localStorage.getItem('id_token');
     if (itoken) {
         const decodedToken = jwtDecode(itoken) as DecodedToken;
 
-        console.log(`User email: ${decodedToken.email}`);
-        console.log(`User name: ${decodedToken.name}`);
-        console.log(`User profile: ${decodedToken.profile}`);
+        console.log(`\nUser email: ${decodedToken.email}`);
+        console.log(`User nickname: ${decodedToken.nickname}`);
+        console.log(`User sub: ${decodedToken.sub}`);
         if (decodedToken.exp < Date.now() / 1000) {
             console.log('Token has expired');
         } else {
@@ -60,7 +59,7 @@ export function handleAuthentication() {
     fetch('http://127.0.0.1:5000/api/users', {
 
         headers: new Headers({
-            'Authorization': `Bearer ${token}`,
+            'Authorization': `Bearer ${atoken}`,
             'Content-Type': 'application/json'
         })
     })
@@ -75,5 +74,5 @@ export function handleAuthentication() {
         .catch(error => {
             // handle the error
         });
-    console.log("ACCESS TKN = " + token)
+    console.log("ACCESS TKN = " + atoken)
 }
