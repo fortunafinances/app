@@ -11,7 +11,9 @@ export interface TradeProps {
 
 export default function Trade() {
   const { state } = useLocation();
-  const [buy, setBuy] = useState(false);
+  //if true, BUY screen
+  //if false, SELL screen
+  const [buy, setBuy] = useState(true);
   const [header, setHeader] = useState("BUY");
   const [switchButton, setSwitchButton] = useState("SELL");
 

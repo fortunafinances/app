@@ -1,9 +1,15 @@
 import { useState } from "react";
 
 export default function TransferSuccessful() {
-  const [showAlert, setShowAlert] = useState(true);
-  const message = "Your transfer was successful";
-  const buttonName = "View Transactions";
+  const [showAlert, setShowAlert] = useState(true); //if true: transfer success; false: order success
+  const [messageType, setMessageType] = useState(true);
+  const [message, setMessage] = useState("Your transfer was successful.");
+  const [buttonName, setButtonName] = useState("View Transactions");
+
+  if (messageType === false) {
+    setMessage("Your order has been placed.");
+    setButtonName("View Orders");
+  }
 
   return (
     <div className="h-screen flex items-center justify-center">
