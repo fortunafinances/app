@@ -1,9 +1,10 @@
 import Select from "react-select";
 import { useEffect, useState } from "react";
 import { BiDollar } from "react-icons/bi";
-import { gql, useQuery } from "@apollo/client";
+import { gql, useQuery, useReactiveVar } from "@apollo/client";
 import { Stock } from "../../../utilities/types";
 import { formatCentsToDollars } from "../../../utilities/currency";
+import { symbol } from "../../../utilities/reactiveVariables";
 
 interface StockData {
   stocks: Stock[];
@@ -22,12 +23,11 @@ const GET_STOCK_NAMES = gql`
     }
   }
 `;
-export interface TradeProps {
-  symbol: string;
-}
 
-export default function SymbolQuantityLimit({ symbol }: TradeProps) {
+export default function SymbolQuantityLimit() {
   const { loading, error, data } = useQuery<StockData>(GET_STOCK_NAMES);
+
+  const symbolName = useReactiveVar(symbol);
 
   const makeDropdownData = (data: Stock[]) => {
     const ret: DropdownData[] = [];
@@ -45,20 +45,19 @@ export default function SymbolQuantityLimit({ symbol }: TradeProps) {
 
   const [marketState, setMarketState] = useState(true);
   const [quantity, setQuantity] = useState(0);
-  const [stockName, setStockName] = useState("");
   const [stockPrice, setStockPrice] = useState(0);
   const [totalPrice, setTotalPrice] = useState(0);
 
   useEffect(() => {
-    if (quantity != 0 || stockName != "") {
+    if (symbolName !== "" && symbolName !== "Select...") {
       const stock = data!.stocks.find(
-        (element) => element.ticker === stockName
+        (element) => element.ticker === symbolName
       );
       const price = stock!.currPrice;
       setStockPrice(price);
       setTotalPrice(quantity * stockPrice);
     }
-  }, [quantity, stockName]);
+  }, [quantity, symbolName, stockPrice]);
 
   if (loading) return <>Loading</>;
   if (error) return <p>{error.message}</p>;
@@ -70,8 +69,9 @@ export default function SymbolQuantityLimit({ symbol }: TradeProps) {
         <Select
           options={makeDropdownData(data!.stocks)}
           onChange={(options) => {
-            setStockName(String(options?.value));
+            symbol(String(options?.value));
           }}
+          value={{ value: symbolName, label: symbolName }}
           theme={(theme) => ({
             ...theme,
             borderRadius: 3,
@@ -85,7 +85,6 @@ export default function SymbolQuantityLimit({ symbol }: TradeProps) {
             type="number"
             min={1}
             step={1}
-            placeholder="Stock Amount"
             onKeyDown={preventMinus}
             onChange={(e) => {
               setQuantity(Number(e.target.value));

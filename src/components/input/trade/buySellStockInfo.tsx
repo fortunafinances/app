@@ -1,14 +1,17 @@
 import { AiFillCaretDown } from "react-icons/ai";
+import { useReactiveVar } from "@apollo/client";
+import { symbol } from "../../../utilities/reactiveVariables";
+import { useState } from "react";
+import { twMerge } from "tailwind-merge";
 
-interface Props {
-  symbol: string;
-}
-
-export default function StockInfo({ symbol }: Props) {
+export default function StockInfo() {
   const company = "Apple";
   const price = 191.34;
   const dollarChange = 1.12;
   const percentChange = 0.58;
+  const ticker = "APPL";
+
+  const symbolName = useReactiveVar(symbol);
 
   return (
     <div className="flex-1 overflow-y-scroll">
@@ -17,10 +20,10 @@ export default function StockInfo({ symbol }: Props) {
         <div className="flex justify-between md:flex-row lg:gap-20 m-6">
           <div className="flex flex-col gap-5">
             <h1 className="text-6xl font-semibold">{company}</h1>
-            <h2 className="text-4xl text-[#929292]">{symbol}</h2>
+            <h2 className="text-4xl text-[#929292]">{ticker}</h2>
           </div>
           <div className="flex flex-col gap-6">
-            <h1 className="text-6xl text-primary font-medium">${price}</h1>
+            <h1 className="text-6xl text-primary font-medium">${ticker}</h1>
             <div className="flex flex-row text-primary font-semibold text-xl items-center">
               <div>
                 <AiFillCaretDown />
