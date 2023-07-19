@@ -45,12 +45,37 @@ export function handleAuthentication() {
     const atoken = localStorage.getItem('access_token');
     const itoken = localStorage.getItem('id_token');
 
-    printDecodedToken(itoken);
+    printDecodedToken(itoken); //just to check the info in itoken
 
-    fetch('http://127.0.0.1:5000/api/private', {
+    // send access token to backend
+    fetchApiFromBackend(atoken, "/api/private");
+
+    console.log("ACCESS TKN = " + atoken)
+}
+
+// function that will print out the info id token contains
+function printDecodedToken(token) {
+    if (token) {
+        const decodedToken = jwtDecode(token) as DecodedToken;
+
+        console.log(`\nUser email: ${decodedToken.email}`);
+        console.log(`User nickname: ${decodedToken.nickname}`);
+        console.log(`User sub: ${decodedToken.sub}`);
+        if (decodedToken.exp < Date.now() / 1000) {
+            console.log('Token has expired');
+        } else {
+            console.log('Token is still valid');
+        }
+    }
+}
+
+// function that send the token to the backend,
+// ask for permission to access a specific endpoint
+function fetchApiFromBackend(token, endpoint) {
+    fetch(`http://127.0.0.1:5000/${endpoint}`, {
 
         headers: new Headers({
-            'Authorization': `Bearer ${atoken}`,
+            'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/json'
         })
     })
@@ -63,23 +88,6 @@ export function handleAuthentication() {
 
         })
         .catch(error => {
-            // handle the error
+            console.log("error in fetching " + error)
         });
-    console.log("ACCESS TKN = " + atoken)
-}
-
-// function that will print out the info id token contains
-function printDecodedToken(itoken) {
-    if (itoken) {
-        const decodedToken = jwtDecode(itoken) as DecodedToken;
-
-        console.log(`\nUser email: ${decodedToken.email}`);
-        console.log(`User nickname: ${decodedToken.nickname}`);
-        console.log(`User sub: ${decodedToken.sub}`);
-        if (decodedToken.exp < Date.now() / 1000) {
-            console.log('Token has expired');
-        } else {
-            console.log('Token is still valid');
-        }
-    }
 }
