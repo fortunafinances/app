@@ -9,9 +9,9 @@ export default function ApplicationLayout() {
 			<Header />
 			<div className="flex flex-row grow h-full">
 				<SideBar />
-				<div className="flex flex-col grow h-full overflow-y-auto">
+				<div className="flex flex-col grow h-full">
 					<AppNavigation />
-					<main className="relative h-full">
+					<main className="relative h-full overflow-y-auto">
 						<Outlet />
 					</main>
 				</div>
