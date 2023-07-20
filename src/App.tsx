@@ -43,10 +43,7 @@ export default function App() {
           <Route path="/editProfile" element={<EditUser />} />
           <Route path="/callback" element={<Callback />} />
           <Route path="/transferIn" element={<TransferIn />} />
-          <Route
-            path="/transferNotification"
-            element={<TransferSuccessful />}
-          />
+          <Route path="/successNotification" element={<TransferSuccessful />} />
           <Route path="/errorNotification" element={<ErrorNotification />} />
         </Routes>
       </Router>
