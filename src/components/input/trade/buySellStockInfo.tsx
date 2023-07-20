@@ -71,7 +71,7 @@ export default function StockInfo() {
 					</div>
 				</div>
 				{/* Graph */}
-				<div className="h-[50vh] w-[90%] border-4 border-primary m-[5%]"></div>
+				{/* <div className="h-[50vh] w-[90%] border-4 border-primary m-[5%]"></div> */}
 				<div className="m-6 flex flex-col gap-3">
 					{/* About the Company */}
 					<div className="text-4xl font-medium ">About {company}</div>
