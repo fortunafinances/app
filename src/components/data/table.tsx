@@ -32,27 +32,20 @@ export default function Table<DataType extends GraphQLReturnData>({
 			</DataContainer>
 		);
 
-	const generateExtraData = (data: DataType[]) => {
-		const ret: DataType[] = [];
-		for (let i = 0; i < 200; i++) {
-			ret.push(data[i % data.length]);
-		}
-		return ret;
-	};
-
 	return (
 		<AutoSizer>
 			{({ height, width }: Size) => (
 				<div style={{ height, width }} className="overflow-y-auto">
 					<MaterialReactTable
 						columns={columnData}
-						data={generateExtraData(data!)}
+						data={data!}
 						enableColumnActions={false}
 						enableColumnFilters={true}
 						enablePagination={true}
 						enableSorting={true}
 						enableBottomToolbar={true}
-						enableStickyFooter
+						enableStickyHeader={true}
+						enableStickyFooter={true}
 						enableTopToolbar={false}
 						muiTableBodyRowProps={{ hover: false }}
 						enableColumnResizing={true}
@@ -116,13 +109,6 @@ export default function Table<DataType extends GraphQLReturnData>({
 								overflowY: "auto",
 							},
 						})}
-						muiTablePaperProps={{
-							sx: {
-								height: "100%",
-								maxWidth: "100%",
-								m: "auto",
-							},
-						}}
 						muiTableProps={{
 							sx: {
 								border: "1px solid rgba(81, 81, 81, 1)",
