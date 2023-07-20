@@ -84,8 +84,8 @@ function fetchApiFromBackend(token: string, endpoint: string) {
 			console.log("Response from the api", response);
 			console.log(res.sub);
 
-            // store sub to local storage
-            localStorage.setItem('userId', response.sub);
+			// store sub to local storage
+			localStorage.setItem("userId", res.sub);
 
 			// should output 200
 			console.log(res.status);
@@ -97,19 +97,19 @@ function fetchApiFromBackend(token: string, endpoint: string) {
 }
 
 // sending user data to backend (aka sub)
-function sendUserData(data) {
-    return fetch(`http://localhost:5000/add_user`, {
-        method: 'POST',
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-    })
-        .then((response) => response.json())
-        .then((response) => {
-            console.log("Sending data to backend... ", response)
-        })
-        .catch((error) => console.log(error));
+function sendUserData(data: string) {
+	return fetch(`http://localhost:5000/add_user`, {
+		method: "POST",
+		headers: {
+			"Content-Type": "application/json",
+		},
+		body: JSON.stringify(data),
+	})
+		.then((response) => response.json())
+		.then((response) => {
+			console.log("Sending data to backend... ", response);
+		})
+		.catch((error) => console.log(error));
 }
 
 /** function that will print out the info id token contains */
