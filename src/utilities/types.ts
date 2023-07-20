@@ -27,3 +27,12 @@ export interface Activity extends GraphQLReturnData {
 	amount: number;
 }
 
+export enum OrderType {
+	Market = "Market",
+	Limit = "Limit",
+}
+
+export enum OrderSide {
+	Buy = "Buy",
+	Sell = "Sell",
+}

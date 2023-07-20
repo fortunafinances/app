@@ -69,7 +69,7 @@ export default function Table<DataType extends GraphQLReturnData>({
 								const holding = row.original as unknown as Holding &
 									GraphQLReturnData;
 								return (
-									<div className="flex flex-nowrap gap-2 w-full justify-evenly [&>button]:min-h-0 [&>button]:h-8">
+									<div className="flex flex-col flex-nowrap gap-2 w-full justify-evenly [&>button]:min-h-0 [&>button]:h-8">
 										<button
 											className="btn btn-primary"
 											onClick={() => {
@@ -98,7 +98,7 @@ export default function Table<DataType extends GraphQLReturnData>({
 						displayColumnDefOptions={{
 							"mrt-row-actions": {
 								header: "Trade", //change header text
-								size: 50, //make actions column wider
+								size: 30, //make actions column wider
 							},
 						}}
 						muiTableBodyProps={{

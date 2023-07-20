@@ -11,7 +11,7 @@ type DropdownProps = {
 	value: number;
 };
 
-export default function TransferIn() {
+export default function Transfer() {
 	const navigate = useNavigate();
 	const MAKE_TRANSFER = gql`
 		mutation InsertTransfer(
@@ -29,9 +29,19 @@ export default function TransferIn() {
 
 	const [makeTransfer, { data, loading, error }] = useMutation(MAKE_TRANSFER);
 
+	const [fromAccount, setFromAccount] = useState<number | null>(null);
+	const [toAccount, setToAccount] = useState<number | null>(null);
+	const [amount, setAmount] = useState(0);
+	const [transfer, setTransfer] = useState("");
+	const [between, setBetween] = useState(false);
+
 	const handleSubmit = () => {
 		makeTransfer({
-			variables: { sendAccId: 1, receiveAccId: 2, transferAmt: 100 },
+			variables: {
+				sendAccId: fromAccount,
+				receiveAccId: toAccount,
+				transferAmt: amount,
+			},
 		}).catch((err) => {
 			console.error(err);
 		});
@@ -49,11 +59,9 @@ export default function TransferIn() {
 		accounts.map((account) => {
 			ret.push({ label: account.name, value: account.id });
 		});
+
 		return ret;
 	};
-
-	const [transfer, setTransfer] = useState("");
-	const [between, setBetween] = useState(false);
 
 	const checkBetween = useCallback(() => {
 		if (transfer === "BETWEEN") {
@@ -103,17 +111,26 @@ export default function TransferIn() {
 					</div>
 				) : (
 					<div>
-						<h2 className="font-medium text-2xl">From Account</h2>
+						<label htmlFor="sourceAcct" className="font-medium text-2xl">
+							From Account
+						</label>
 						<Select
+							id="sourceAcct"
 							menuPortalTarget={document.getElementById("transfer_modal")}
 							options={createDropdownItems()}
 							theme={(theme) => ({
 								...theme,
 								borderRadius: 3,
 							})}
+							onChange={(e) => {
+								setFromAccount(Number(e!.valueOf()));
+							}}
 						/>
-						<h2 className="font-medium text-2xl">To Account</h2>
+						<label htmlFor="destAcct" className="font-medium text-2xl">
+							To Account
+						</label>
 						<Select
+							id="destAcct"
 							menuPortalTarget={document.getElementById("transfer_modal")}
 							options={createDropdownItems()}
 							theme={(theme) => ({
@@ -121,6 +138,9 @@ export default function TransferIn() {
 								primary: "black",
 								borderRadius: 3,
 							})}
+							onChange={(e) => {
+								setToAccount(Number(e!.valueOf()));
+							}}
 						/>
 					</div>
 				)}
@@ -136,6 +156,9 @@ export default function TransferIn() {
 						min={0}
 						step="0.01"
 						placeholder="Price"
+						onChange={(e) => {
+							setAmount(Number(e.target.value));
+						}}
 						onKeyDown={preventMinus}
 						className="input h-9 w-full border-[1px] rounded-[3px] border-[#cccccc] focus:ring-blue-500 focus:border-blue-500 focus:border-[2px] !outline-none"
 					/>

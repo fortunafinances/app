@@ -50,7 +50,7 @@ export default function StockInfo() {
 	const description = data?.oneStock.description;
 
 	return (
-		<div className="flex-1 overflow-y-scroll">
+		<div className="flex-1 overflow-y-auto">
 			<div className="flex flex-col">
 				{/* heading: Company name, symbol, stock price */}
 				<div className="flex justify-between md:flex-row lg:gap-20 m-6">
