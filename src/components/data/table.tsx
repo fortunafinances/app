@@ -1,7 +1,9 @@
 import MaterialReactTable, { MRT_ColumnDef } from "material-react-table";
 import { ApolloError } from "@apollo/client";
-import { GraphQLReturnData } from "../../utilities/types";
+import { GraphQLReturnData, Holding } from "../../utilities/types";
 import DataContainer from "../container/dataContainer";
+import { symbol } from "../../utilities/reactiveVariables";
+import { useNavigate } from "react-router-dom";
 
 interface TableProps<DataType extends GraphQLReturnData> {
 	loading: boolean;
@@ -16,6 +18,8 @@ export default function Table<DataType extends GraphQLReturnData>({
 	data,
 	columnData,
 }: TableProps<DataType>) {
+	const navigate = useNavigate();
+
 	if (loading)
 		return (
 			<span className="loading loading-infinity w-[5em] absolute-center"></span>
@@ -51,14 +55,32 @@ export default function Table<DataType extends GraphQLReturnData>({
 			layoutMode="grid"
 			enableRowActions
 			renderRowActions={({ row }) => {
-				if (row.original.__typename === "Holding")
+				if (row.original.__typename === "Holding") {
+					const holding = row.original as unknown as Holding &
+						GraphQLReturnData;
 					return (
 						<div className="flex flex-nowrap gap-2 w-full justify-evenly [&>button]:min-h-0 [&>button]:h-8">
-							<button className="btn btn-primary">Buy</button>
-							<button className="btn btn-secondary">Sell</button>
+							<button
+								className="btn btn-primary"
+								onClick={() => {
+									symbol(holding.stock.ticker);
+									navigate("/app/trade", { state: { tradeType: true } });
+								}}
+							>
+								Buy
+							</button>
+							<button
+								className="btn btn-secondary"
+								onClick={() => {
+									symbol(holding.stock.ticker);
+									navigate("/app/trade", { state: { tradeType: false } });
+								}}
+							>
+								Sell
+							</button>
 						</div>
 					);
-				else {
+				} else {
 					return <></>;
 				}
 			}}

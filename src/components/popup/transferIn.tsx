@@ -4,47 +4,39 @@ import { BiDollar } from "react-icons/bi";
 import { preventMinus } from "../../utilities/common";
 
 export default function TransferIn() {
-	const transferType = [
-		{ label: "In", value: "IN" },
-		{ label: "Out", value: "OUT" },
-		{ label: "Between", value: "BETWEEN" },
-	];
+  const transferType = [
+    { label: "In", value: "IN" },
+    { label: "Out", value: "OUT" },
+    { label: "Between", value: "BETWEEN" },
+  ];
 
-	const aquaticCreatures = [
-		{ label: "Shark", value: "Shark" },
-		{ label: "Dolphin", value: "Dolphin" },
-		{ label: "Whale", value: "Whale" },
-		{ label: "Octopus", value: "Octopus" },
-		{ label: "Crab", value: "Crab" },
-		{ label: "Lobster", value: "Lobster" },
-	];
+  const aquaticCreatures = [
+    { label: "Shark", value: "Shark" },
+    { label: "Dolphin", value: "Dolphin" },
+    { label: "Whale", value: "Whale" },
+    { label: "Octopus", value: "Octopus" },
+    { label: "Crab", value: "Crab" },
+    { label: "Lobster", value: "Lobster" },
+  ];
 
-	const [transfer, setTransfer] = useState("");
-	const [between, setBetween] = useState(false);
+  const [transfer, setTransfer] = useState("");
+  const [between, setBetween] = useState(false);
 
-	const checkBetween = useCallback(() => {
-		if (transfer === "BETWEEN") {
-			setBetween(true);
-		} else {
-			setBetween(false);
-		}
-	}, [transfer]);
+  const checkBetween = useCallback(() => {
+    if (transfer === "BETWEEN") {
+      setBetween(true);
+    } else {
+      setBetween(false);
+    }
+  }, [transfer]);
 
-	useEffect(() => {
-		if (transfer !== "") {
-			checkBetween();
-		}
-	}, [checkBetween, transfer]);
+  useEffect(() => {
+    if (transfer !== "") {
+      checkBetween();
+    }
+  }, [checkBetween, transfer]);
 
-	return (
-		// <div>
-		//   // {/* Open the modal using ID.showModal() method */}
-		//   <button
-		//     className="btn text-primary bg-[#EDEDFE]"
-		//     onClick={() => window.transfer_modal.showModal()}
-		//   >
-		//     Transfer
-		//   </button>
+  return (
 		<dialog id="transfer_modal" className="modal">
 			<form
 				method="dialog"
