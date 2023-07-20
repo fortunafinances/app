@@ -54,14 +54,14 @@ export async function handleAuthentication() {
 		}
 	});
 
-	const atoken = localStorage.getItem("access_token");
-	const itoken = localStorage.getItem("id_token");
+	const aToken = localStorage.getItem("access_token");
+	const iToken = localStorage.getItem("id_token");
 
-	//just to check the info in itoken
-	printDecodedToken(itoken!);
+	//just to check the info in iToken
+	printDecodedToken(iToken!);
 
 	// send access token to backend
-	fetchApiFromBackend(atoken!, "userinfo");
+	fetchApiFromBackend(aToken!, "userinfo");
 
 	const sub = localStorage.getItem("sub");
 	await sendUserData(sub!);
