@@ -85,6 +85,7 @@ export default function Holdings() {
 				error={error}
 				data={data?.holdings}
 				columnData={cols}
+				sorting={[{ id: "stock.ticker", desc: false }]}
 			/>
 		</div>
 	);

@@ -4,13 +4,16 @@ import { useMemo } from "react";
 import { MRT_ColumnDef } from "material-react-table";
 import { Activity, GraphQLReturnData } from "../../utilities/types";
 import { filterRange, formatDollars } from "../../utilities/currency";
+import { formatDate } from "../../utilities/common";
 
 export default function Activity() {
 	const cols = useMemo<MRT_ColumnDef<Activity>[]>(
 		() => [
 			{
 				header: "Date",
-				accessorKey: "date",
+				id: "date",
+				accessorFn: (row) => `${formatDate(row.date)}`,
+				sortingFn: "datetime",
 			},
 			{
 				header: "Type",
@@ -61,6 +64,8 @@ export default function Activity() {
 				error={error}
 				data={data?.activity}
 				columnData={cols}
+				enableRowActions={false}
+				sorting={[{ id: "date", desc: true }]}
 			/>
 		</div>
 	);

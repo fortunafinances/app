@@ -11,6 +11,8 @@ interface TableProps<DataType extends GraphQLReturnData> {
 	error: ApolloError | undefined;
 	data: (DataType[] & GraphQLReturnData) | undefined;
 	columnData: MRT_ColumnDef<DataType>[];
+	enableRowActions?: boolean;
+	sorting?: { id: string; desc: boolean }[];
 }
 
 export default function Table<DataType extends GraphQLReturnData>({
@@ -18,6 +20,8 @@ export default function Table<DataType extends GraphQLReturnData>({
 	error,
 	data,
 	columnData,
+	enableRowActions,
+	sorting,
 }: TableProps<DataType>) {
 	const navigate = useNavigate();
 
@@ -50,7 +54,16 @@ export default function Table<DataType extends GraphQLReturnData>({
 						muiTableBodyRowProps={{ hover: false }}
 						enableColumnResizing={true}
 						layoutMode="grid"
-						enableRowActions
+						defaultColumn={{
+							minSize: 10,
+							maxSize: 100,
+							size: 60,
+						}}
+						initialState={{
+							showColumnFilters: true,
+							sorting: sorting ?? [],
+						}}
+						enableRowActions={enableRowActions ?? true}
 						renderRowActions={({ row }) => {
 							if (row.original.__typename === "Holding") {
 								const holding = row.original as unknown as Holding &
@@ -87,14 +100,6 @@ export default function Table<DataType extends GraphQLReturnData>({
 								header: "Trade", //change header text
 								size: 50, //make actions column wider
 							},
-						}}
-						defaultColumn={{
-							minSize: 10,
-							maxSize: 100,
-							size: 60,
-						}}
-						initialState={{
-							showColumnFilters: true,
 						}}
 						muiTableBodyProps={{
 							sx: () => ({
