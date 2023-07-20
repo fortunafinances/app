@@ -2,41 +2,55 @@ import { useCallback, useEffect, useState } from "react";
 import Select from "react-select";
 import { BiDollar } from "react-icons/bi";
 import { preventMinus } from "../../utilities/common";
+import { accounts } from "../../utilities/reactiveVariables";
+
+type DropdownProps = {
+	label: string;
+	value: number;
+};
 
 export default function TransferIn() {
-  const transferType = [
-    { label: "In", value: "IN" },
-    { label: "Out", value: "OUT" },
-    { label: "Between", value: "BETWEEN" },
-  ];
+	const transferType = [
+		{ label: "In", value: "IN" },
+		{ label: "Out", value: "OUT" },
+		{ label: "Between", value: "BETWEEN" },
+	];
 
-  const aquaticCreatures = [
-    { label: "Shark", value: "Shark" },
-    { label: "Dolphin", value: "Dolphin" },
-    { label: "Whale", value: "Whale" },
-    { label: "Octopus", value: "Octopus" },
-    { label: "Crab", value: "Crab" },
-    { label: "Lobster", value: "Lobster" },
-  ];
+	const aquaticCreatures = [
+		{ label: "Shark", value: "Shark" },
+		{ label: "Dolphin", value: "Dolphin" },
+		{ label: "Whale", value: "Whale" },
+		{ label: "Octopus", value: "Octopus" },
+		{ label: "Crab", value: "Crab" },
+		{ label: "Lobster", value: "Lobster" },
+	];
 
-  const [transfer, setTransfer] = useState("");
-  const [between, setBetween] = useState(false);
+	const createDropdownItems = () => {
+		const ret: DropdownProps[] = [];
+		accounts.map((account) => {
+			ret.push({ label: account.name, value: account.id });
+		});
+		return ret;
+	};
 
-  const checkBetween = useCallback(() => {
-    if (transfer === "BETWEEN") {
-      setBetween(true);
-    } else {
-      setBetween(false);
-    }
-  }, [transfer]);
+	const [transfer, setTransfer] = useState("");
+	const [between, setBetween] = useState(false);
 
-  useEffect(() => {
-    if (transfer !== "") {
-      checkBetween();
-    }
-  }, [checkBetween, transfer]);
+	const checkBetween = useCallback(() => {
+		if (transfer === "BETWEEN") {
+			setBetween(true);
+		} else {
+			setBetween(false);
+		}
+	}, [transfer]);
 
-  return (
+	useEffect(() => {
+		if (transfer !== "") {
+			checkBetween();
+		}
+	}, [checkBetween, transfer]);
+
+	return (
 		<dialog id="transfer_modal" className="modal">
 			<form
 				method="dialog"
@@ -61,7 +75,7 @@ export default function TransferIn() {
 						<h2 className="font-medium text-2xl">Account</h2>
 						<Select
 							menuPortalTarget={document.getElementById("transfer_modal")}
-							options={aquaticCreatures}
+							options={createDropdownItems()}
 							theme={(theme) => ({
 								...theme,
 								borderRadius: 3,
@@ -73,7 +87,7 @@ export default function TransferIn() {
 						<h2 className="font-medium text-2xl">From Account</h2>
 						<Select
 							menuPortalTarget={document.getElementById("transfer_modal")}
-							options={aquaticCreatures}
+							options={createDropdownItems()}
 							theme={(theme) => ({
 								...theme,
 								borderRadius: 3,
@@ -82,7 +96,7 @@ export default function TransferIn() {
 						<h2 className="font-medium text-2xl">To Account</h2>
 						<Select
 							menuPortalTarget={document.getElementById("transfer_modal")}
-							options={aquaticCreatures}
+							options={createDropdownItems()}
 							theme={(theme) => ({
 								...theme,
 								primary: "black",

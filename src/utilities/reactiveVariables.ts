@@ -9,20 +9,20 @@ type User = {
 export const sidebarClosed = makeVarPersisted("sidebarClosed", false);
 export const currentAccountId = makeVarPersisted("currentAccountId", 1);
 export const userId = makeVarPersisted<User | null>("user", {
-  userId: 0,
+  userId: 1,
   username: "Nolan Gelinas",
 });
 
 export const symbol = makeVar("");
 
 export const accounts = [
-  {
-    id: 1,
-    name: "Brokerage",
-  },
-  {
-    id: 2,
-    name: "College Fund",
-  },
-  { id: 3, name: "Extremely Super Duper Long-Named Fund" },
+	{
+		id: 1,
+		name: "Brokerage",
+	},
+	{
+		id: 2,
+		name: "Retirement",
+	},
+	{ id: 3, name: "College Fund" },
 ];

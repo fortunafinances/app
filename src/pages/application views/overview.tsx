@@ -1,17 +1,8 @@
-import { gql, useQuery } from "@apollo/client";
+import { gql, useQuery, useReactiveVar } from "@apollo/client";
 import DataContainer from "../../components/container/dataContainer";
 import PieChart from "../../components/data/pieChart";
 import { formatDollars } from "../../utilities/currency";
-
-const GET_OVERVIEW = gql`
-	query DisplayBar {
-		displayBar(input: { accId: 1 }) {
-			total
-			invest
-			cash
-		}
-	}
-`;
+import { currentAccountId } from "../../utilities/reactiveVariables";
 
 type DisplayBar = {
 	displayBar: {
@@ -22,7 +13,21 @@ type DisplayBar = {
 };
 
 export default function Overview() {
-	const { loading, error, data } = useQuery<DisplayBar>(GET_OVERVIEW);
+	const accountId = useReactiveVar(currentAccountId);
+
+	const GET_OVERVIEW = gql`
+		query DisplayBar($accId: Int!) {
+			displayBar(input: { accId: $accId }) {
+				total
+				invest
+				cash
+			}
+		}
+	`;
+
+	const { loading, error, data } = useQuery<DisplayBar>(GET_OVERVIEW, {
+		variables: { accId: accountId },
+	});
 
 	type DataComponentProps = {
 		title: string;
