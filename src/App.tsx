@@ -47,6 +47,7 @@ export default function App() {
             path="/transferNotification"
             element={<TransferSuccessful />}
           />
+          <Route path="/errorNotification" element={<ErrorNotification />} />
         </Routes>
       </Router>
     </ApolloProvider>
