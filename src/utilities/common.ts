@@ -14,7 +14,6 @@ export const percentChange = (curr: number, prev: number): string => {
 
 export const formatDate = (dateString: string): string => {
 	const date = new Date(dateString);
-	console.log(date);
 	const formatter = new Intl.DateTimeFormat("en-US", {
 		year: "numeric",
 		month: "short",

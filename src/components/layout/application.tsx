@@ -6,7 +6,7 @@ import AutoSizer, { Size } from "react-virtualized-auto-sizer";
 
 export default function ApplicationLayout() {
 	return (
-		<div className="flex flex-col h-screen">
+		<div className="flex flex-col h-screen overflow-y-none">
 			<Header />
 			<div className="flex flex-row grow h-full">
 				<SideBar />
