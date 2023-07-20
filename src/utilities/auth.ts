@@ -49,6 +49,15 @@ export async function handleAuthentication() {
 			// Save the tokens to local storage
 			localStorage.setItem("access_token", authResult.accessToken);
 			localStorage.setItem("id_token", authResult.idToken);
+			
+			// This method will make a request to the /userinfo endpoint
+			// and return the user object, which contains the user's information,
+			// similar to the response below.
+			auth0Client.client.userInfo(authResult.accessToken, function(err, user) {
+				console.log("\nUser info... ", user);
+				console.log("\nUser id... ", user.sub);
+				localStorage.setItem("userId", user.sub);
+			});
 		} else if (err) {
 			console.log(err);
 		}
@@ -57,14 +66,15 @@ export async function handleAuthentication() {
 	const aToken = localStorage.getItem("access_token");
 	const iToken = localStorage.getItem("id_token");
 
-	//just to check the info in iToken
-	printDecodedToken(iToken!);
+	/** This function is to print out the contents inside id token,
+	 * uncomment to test it, and check the console
+	 */
+	// printDecodedToken(iToken!);
 
 	// send access token to backend
-	fetchApiFromBackend(aToken!, "userinfo");
+	// fetchApiFromBackend(aToken!, "userinfo");
 
-	const sub = localStorage.getItem("sub");
-	await sendUserData(sub!);
+	// await sendUserData(sub!);
 }
 
 // function that send the token to the backend,
