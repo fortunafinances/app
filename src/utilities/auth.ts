@@ -33,7 +33,7 @@ export function signup() {
 }
 
 export function signout() {
-	userId(null);
+	// userId(null);
 	localStorage.removeItem("id_token");
 	localStorage.removeItem("access_token");
 	auth0Client.logout({
@@ -86,6 +86,7 @@ function fetchApiFromBackend(token: string, endpoint: string) {
 
             // store sub to local storage
             localStorage.setItem('userId', response.sub);
+            localStorage.setItem('userName', response.nickname);
 
 			// should output 200
 			console.log(res.status);
