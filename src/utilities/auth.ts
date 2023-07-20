@@ -1,6 +1,6 @@
 import auth0 from 'auth0-js';
 import jwtDecode from 'jwt-decode';
-import { userId } from "./reactiveVariables";
+// import { userId } from "./reactiveVariables";
 
 interface DecodedToken {
 	openid: string;
@@ -21,7 +21,7 @@ const auth0Client = new auth0.WebAuth({
 	audience: "http://127.0.0.1:5000/",
 	redirectUri: "http://localhost:4040/callback",
 	responseType: "token id_token",
-	scope: "openid email sub nickname profile offline_access read:user", // what we want the token to include
+	scope: "openid email sub nickname profile read:user", // what we want the token to include
 });
 
 export function login() {
@@ -50,7 +50,7 @@ export async function handleAuthentication() {
 			localStorage.setItem("access_token", authResult.accessToken);
 			localStorage.setItem("id_token", authResult.idToken);
 		} else if (err) {
-			console.log(err);
+			console.log("Error in handle auth: ", err);
 		}
 	});
 
@@ -58,13 +58,13 @@ export async function handleAuthentication() {
 	const iToken = localStorage.getItem("id_token");
 
 	//just to check the info in iToken
-	printDecodedToken(iToken!);
+	printDecodedToken(iToken);
 
 	// send access token to backend
-	fetchApiFromBackend(aToken!, "userinfo");
+	// fetchApiFromBackend(aToken!, "userinfo");
 
-	const sub = localStorage.getItem("sub");
-	await sendUserData(sub!);
+	// const sub = localStorage.getItem("sub");
+	// await sendUserData(sub!);
 }
 
 // function that send the token to the backend,
@@ -120,6 +120,7 @@ function printDecodedToken(token: string) {
 
 		console.log(`\nUser email: ${decodedToken.email}`);
 		console.log(`User nickname: ${decodedToken.nickname}`);
+        localStorage.setItem("---- user", decodedToken.nickname);
 		console.log(`User sub: ${decodedToken.sub}`);
 		if (decodedToken.exp < Date.now() / 1000) {
 			console.log("Token has expired");
