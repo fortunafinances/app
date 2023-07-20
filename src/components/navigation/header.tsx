@@ -7,9 +7,9 @@ import {
 	userId,
 } from "../../utilities/reactiveVariables";
 import { useReactiveVar } from "@apollo/client/react/hooks/useReactiveVar";
+import { signout } from "../../utilities/auth";
 
 export default function Header() {
-	const navigate = useNavigate();
 	const userAccount = useReactiveVar(userId);
 	const currentAccountNumber = useReactiveVar(currentAccountId);
 
@@ -17,12 +17,7 @@ export default function Header() {
 		(item) => item.id === currentAccountNumber
 	);
 
-	const logOut = () => {
-		userId(null);
-		localStorage.removeItem("id_token");
-		localStorage.removeItem("access_token");
-		navigate("/");
-	};
+	
 
 	return (
 		<header className="flex items-center w-full bg-gray-200 py-2">
@@ -55,7 +50,7 @@ export default function Header() {
 							</div>
 							<button
 								className="btn btn-outline btn-secondary"
-								onClick={logOut}
+								onClick={signout}
 							>
 								Log Out
 							</button>

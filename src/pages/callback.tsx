@@ -11,7 +11,7 @@ const Callback = () => {
     setTimeout(() => {
       // Redirect the user to a desired page
       window.location.href = '/app';
-    }, 1000); // Adjust the delay as needed
+    }, 1000000000); // Adjust the delay as needed
   }, []);
 
   return (
