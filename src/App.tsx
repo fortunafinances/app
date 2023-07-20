@@ -26,28 +26,28 @@ const client = new ApolloClient({
 
 export default function App() {
   return (
-    <ApolloProvider client={client}>
-      <Router>
-        <Routes>
-          <Route index element={<UnauthenticatedHomepage />} />
-          <Route path="/app" element={<ApplicationLayout />}>
-            <Route index element={<Navigate to="overview" replace />} />
-            <Route path="overview" element={<Overview />} />
-            <Route path="holdings" element={<Holdings />} />
-            <Route path="activity" element={<Activity />} />
-            <Route path="orders" element={<Orders />} />
-            <Route path="*" element={<NoMatch />} />
-          </Route>
-          <Route path="/editProfile" element={<EditUser />} />
-          <Route path="/trade" element={<Trade />} />
-          <Route path="/callback" element={<Callback />} />
-          <Route path="/transferIn" element={<TransferIn />} />
-          <Route
-            path="/transferNotification"
-            element={<TransferSuccessful />}
-          />
-        </Routes>
-      </Router>
-    </ApolloProvider>
-  );
+		<ApolloProvider client={client}>
+			<Router>
+				<Routes>
+					<Route index element={<UnauthenticatedHomepage />} />
+					<Route path="/app" element={<ApplicationLayout />}>
+						<Route index element={<Navigate to="overview" replace />} />
+						<Route path="overview" element={<Overview />} />
+						<Route path="holdings" element={<Holdings />} />
+						<Route path="activity" element={<Activity />} />
+						<Route path="orders" element={<Orders />} />
+						<Route path="trade" element={<Trade />} />
+						<Route path="*" element={<NoMatch />} />
+					</Route>
+					<Route path="/editProfile" element={<EditUser />} />
+					<Route path="/callback" element={<Callback />} />
+					<Route path="/transferIn" element={<TransferIn />} />
+					<Route
+						path="/transferNotification"
+						element={<TransferSuccessful />}
+					/>
+				</Routes>
+			</Router>
+		</ApolloProvider>
+	);
 }

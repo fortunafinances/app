@@ -9,8 +9,11 @@ export type GraphQLReturnData = {
 
 export interface Stock {
 	ticker: string;
-	currPrice: number;
 	name: string;
+	description: string;
+	currPrice: number;
+	prevClosePrice?: number;
+	sector: string;
 }
 export interface Holding extends GraphQLReturnData {
 	stockQuantity: number;

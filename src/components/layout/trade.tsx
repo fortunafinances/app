@@ -35,39 +35,38 @@ export default function Trade() {
   }, [state]);
 
   return (
-    <div className="h-screen flex">
-      <div className={twMerge("bg-[#F9E5E5] w-[35%]", buy && "bg-success")}>
-        <div className="relative mt-5">
-          <div
-            className={twMerge(
-              "text-[#920000] font-semibold ml-5",
-              buy && "text-success-content"
-            )}
-          >
-            <h1 className="text-4xl">{header}</h1>
-            <p className="text-xl">Account Name</p>
-            <button className="absolute top-0 right-10 text-xl flex flex-row items-center">
-              <HiSwitchHorizontal color="black" />
-              <div
-                className={twMerge(
-                  "text-success-content font-medium",
-                  buy && "text-[#920000]"
-                )}
-                onClick={() => {
-                  setBuy((buy) => !buy);
-                }}
-              >
-                {switchButton}
-              </div>
-            </button>
-            {/* </Link> */}
-          </div>
-          <SymbolQuantityLimit />
-        </div>
-      </div>
-      <div className="flex-1 flex overflow-hidden">
-        <StockInfo />
-      </div>
-    </div>
-  );
+		<div className="h-screen flex">
+			<div className={twMerge("bg-[#F9E5E5] w-[35%]", buy && "bg-success")}>
+				<div className="relative mt-5">
+					<div
+						className={twMerge(
+							"text-[#920000] font-semibold ml-5",
+							buy && "text-success-content"
+						)}
+					>
+						<h1 className="text-4xl">{header}</h1>
+						<p className="text-xl">Account Name</p>
+						<button className="absolute top-0 right-10 text-xl flex flex-row items-center">
+							<HiSwitchHorizontal color="black" />
+							<div
+								className={twMerge(
+									"text-success-content font-medium",
+									buy && "text-[#920000]"
+								)}
+								onClick={() => {
+									setBuy((buy) => !buy);
+								}}
+							>
+								{switchButton}
+							</div>
+						</button>
+					</div>
+					<SymbolQuantityLimit />
+				</div>
+			</div>
+			<div className="flex-1 flex overflow-hidden">
+				<StockInfo />
+			</div>
+		</div>
+	);
 }

@@ -24,7 +24,7 @@ export default function Holdings() {
 				filterVariant: "range",
 			},
 			{
-				header: "stock.currPrice",
+				header: "Price",
 				id: "stock.currPrice",
 				filterVariant: "range",
 				size: 55,
