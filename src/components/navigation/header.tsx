@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import SearchBar from "../input/searchBar";
 import { CgProfile } from "react-icons/cg";
 import {
@@ -7,22 +7,15 @@ import {
 	userId,
 } from "../../utilities/reactiveVariables";
 import { useReactiveVar } from "@apollo/client/react/hooks/useReactiveVar";
+import { signout } from "../../utilities/auth";
 
 export default function Header() {
-	const navigate = useNavigate();
 	const userAccount = useReactiveVar(userId);
 	const currentAccountNumber = useReactiveVar(currentAccountId);
 
 	const currentAccount = accounts.find(
 		(item) => item.id === currentAccountNumber
 	);
-
-	const logOut = () => {
-		userId(null);
-		localStorage.removeItem("id_token");
-		localStorage.removeItem("access_token");
-		navigate("/");
-	};
 
 	return (
 		<header className="flex items-center w-full bg-gray-200 py-2">
@@ -55,7 +48,7 @@ export default function Header() {
 							</div>
 							<button
 								className="btn btn-outline btn-secondary"
-								onClick={logOut}
+								onClick={signout}
 							>
 								Log Out
 							</button>
