@@ -1,15 +1,21 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function TransferSuccessful() {
   const [showAlert, setShowAlert] = useState(true); //if true: transfer success; false: order success
   const [messageType, setMessageType] = useState(true);
   const [message, setMessage] = useState("Your transfer was successful.");
   const [buttonName, setButtonName] = useState("View Transactions");
+  let navigate = useNavigate();
+  let [path, setPath] = useState("/app/activity");
 
-  if (messageType === false) {
-    setMessage("Your order has been placed.");
-    setButtonName("View Orders");
-  }
+  useEffect(() => {
+    if (messageType === false) {
+      setMessage("Your order has been placed.");
+      setButtonName("View Orders");
+      setPath("/app/orders");
+    }
+  }, [setMessageType]);
 
   return (
     <div className="h-screen flex items-center justify-center">
@@ -25,7 +31,10 @@ export default function TransferSuccessful() {
               >
                 Close
               </button>
-              <button className="btn btn-sm bg-white hover:bg-primary hover:text-white">
+              <button
+                className="btn btn-sm bg-white hover:bg-primary hover:text-white"
+                onClick={() => navigate(path)}
+              >
                 {buttonName}
               </button>
             </div>
