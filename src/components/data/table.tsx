@@ -4,6 +4,7 @@ import { GraphQLReturnData, Holding } from "../../utilities/types";
 import DataContainer from "../container/dataContainer";
 import { symbol } from "../../utilities/reactiveVariables";
 import { useNavigate } from "react-router-dom";
+import AutoSizer, { Size } from "react-virtualized-auto-sizer";
 
 interface TableProps<DataType extends GraphQLReturnData> {
 	loading: boolean;
@@ -40,109 +41,114 @@ export default function Table<DataType extends GraphQLReturnData>({
 	};
 
 	return (
-		<MaterialReactTable
-			columns={columnData}
-			data={generateExtraData(data!)}
-			enableColumnActions={false}
-			enableColumnFilters={true}
-			enablePagination={true}
-			enableSorting={true}
-			enableBottomToolbar={true}
-			enableStickyFooter
-			enableTopToolbar={false}
-			muiTableBodyRowProps={{ hover: false }}
-			enableColumnResizing={true}
-			layoutMode="grid"
-			enableRowActions
-			renderRowActions={({ row }) => {
-				if (row.original.__typename === "Holding") {
-					const holding = row.original as unknown as Holding &
-						GraphQLReturnData;
-					return (
-						<div className="flex flex-nowrap gap-2 w-full justify-evenly [&>button]:min-h-0 [&>button]:h-8">
-							<button
-								className="btn btn-primary"
-								onClick={() => {
-									symbol(holding.stock.ticker);
-									navigate("/app/trade", { state: { tradeType: true } });
-								}}
-							>
-								Buy
-							</button>
-							<button
-								className="btn btn-secondary"
-								onClick={() => {
-									symbol(holding.stock.ticker);
-									navigate("/app/trade", { state: { tradeType: false } });
-								}}
-							>
-								Sell
-							</button>
-						</div>
-					);
-				} else {
-					return <></>;
-				}
-			}}
-			positionActionsColumn="last"
-			displayColumnDefOptions={{
-				"mrt-row-actions": {
-					header: "Trade", //change header text
-					size: 50, //make actions column wider
-				},
-			}}
-			defaultColumn={{
-				minSize: 10,
-				maxSize: 100,
-				size: 60,
-			}}
-			initialState={{
-				showColumnFilters: true,
-			}}
-			muiTableBodyProps={{
-				sx: () => ({
-					"& tr:nth-of-type(odd)": {
-						backgroundColor: "#ddd",
-					},
-				}),
-			}}
-			muiTableContainerProps={({ table }) => ({
-				sx: {
-					height: `calc(100% - ${table.refs.topToolbarRef.current?.offsetHeight}px - ${table.refs.bottomToolbarRef.current?.offsetHeight}px)`,
-					maxHeight: "680px",
-					overflowY: "auto",
-				},
-			})}
-			muiTablePaperProps={{
-				sx: {
-					height: "100%",
-					maxWidth: "100%",
-					m: "auto",
-				},
-			}}
-			muiTableProps={{
-				sx: {
-					border: "1px solid rgba(81, 81, 81, 1)",
-				},
-			}}
-			muiTableHeadCellProps={{
-				sx: {
-					border: "1px solid rgba(81, 81, 81, 1)",
-					"& .MuiFormControl-root ": {
-						overflowX: "hidden",
-					},
-				},
-			}}
-			muiTableBodyCellProps={{
-				sx: {
-					border: "1px solid rgba(81, 81, 81, 1)",
-				},
-			}}
-			muiTableHeadCellFilterTextFieldProps={{
-				sx: {
-					minWidth: "5px",
-				},
-			}}
-		/>
+		<AutoSizer>
+			{({ height, width }: Size) => (
+				<div style={{ height, width }} className="overflow-y-auto">
+					<MaterialReactTable
+						columns={columnData}
+						data={generateExtraData(data!)}
+						enableColumnActions={false}
+						enableColumnFilters={true}
+						enablePagination={true}
+						enableSorting={true}
+						enableBottomToolbar={true}
+						enableStickyFooter
+						enableTopToolbar={false}
+						muiTableBodyRowProps={{ hover: false }}
+						enableColumnResizing={true}
+						layoutMode="grid"
+						enableRowActions
+						renderRowActions={({ row }) => {
+							if (row.original.__typename === "Holding") {
+								const holding = row.original as unknown as Holding &
+									GraphQLReturnData;
+								return (
+									<div className="flex flex-nowrap gap-2 w-full justify-evenly [&>button]:min-h-0 [&>button]:h-8">
+										<button
+											className="btn btn-primary"
+											onClick={() => {
+												symbol(holding.stock.ticker);
+												navigate("/app/trade", { state: { tradeType: true } });
+											}}
+										>
+											Buy
+										</button>
+										<button
+											className="btn btn-secondary"
+											onClick={() => {
+												symbol(holding.stock.ticker);
+												navigate("/app/trade", { state: { tradeType: false } });
+											}}
+										>
+											Sell
+										</button>
+									</div>
+								);
+							} else {
+								return <></>;
+							}
+						}}
+						positionActionsColumn="last"
+						displayColumnDefOptions={{
+							"mrt-row-actions": {
+								header: "Trade", //change header text
+								size: 50, //make actions column wider
+							},
+						}}
+						defaultColumn={{
+							minSize: 10,
+							maxSize: 100,
+							size: 60,
+						}}
+						initialState={{
+							showColumnFilters: true,
+						}}
+						muiTableBodyProps={{
+							sx: () => ({
+								"& tr:nth-of-type(odd)": {
+									backgroundColor: "#ddd",
+								},
+							}),
+						}}
+						muiTableContainerProps={({ table }) => ({
+							sx: {
+								maxHeight: `calc(${height} - ${table.refs.topToolbarRef.current?.offsetHeight}px - ${table.refs.bottomToolbarRef.current?.offsetHeight}px)`,
+								overflowY: "auto",
+							},
+						})}
+						muiTablePaperProps={{
+							sx: {
+								height: "100%",
+								maxWidth: "100%",
+								m: "auto",
+							},
+						}}
+						muiTableProps={{
+							sx: {
+								border: "1px solid rgba(81, 81, 81, 1)",
+							},
+						}}
+						muiTableHeadCellProps={{
+							sx: {
+								border: "1px solid rgba(81, 81, 81, 1)",
+								"& .MuiFormControl-root ": {
+									overflowX: "hidden",
+								},
+							},
+						}}
+						muiTableBodyCellProps={{
+							sx: {
+								border: "1px solid rgba(81, 81, 81, 1)",
+							},
+						}}
+						muiTableHeadCellFilterTextFieldProps={{
+							sx: {
+								minWidth: "5px",
+							},
+						}}
+					/>
+				</div>
+			)}
+		</AutoSizer>
 	);
 }
