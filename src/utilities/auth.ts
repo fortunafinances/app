@@ -43,7 +43,7 @@ export function signout() {
 	console.log("Sign out");
 }
 
-export function handleAuthentication() {
+export async function handleAuthentication() {
 	auth0Client.parseHash((err, authResult) => {
 		if (authResult && authResult.accessToken && authResult.idToken) {
 			// Save the tokens to local storage
@@ -58,18 +58,18 @@ export function handleAuthentication() {
 	const itoken = localStorage.getItem("id_token");
 
 	//just to check the info in itoken
-	printDecodedToken(itoken);
+	printDecodedToken(itoken!);
 
 	// send access token to backend
-	fetchApiFromBackend(atoken, "userinfo");
+	fetchApiFromBackend(atoken!, "userinfo");
 
 	const sub = localStorage.getItem("sub");
-	sendUserData(sub);
+	await sendUserData(sub!);
 }
 
 // function that send the token to the backend,
 // ask for permission to access a specific endpoint
-function fetchApiFromBackend(token, endpoint) {
+function fetchApiFromBackend(token: string, endpoint: string) {
 	// https://dev-wpc8kymxzmepqxl5.us.auth0.com
 	// http://127.0.0.1:5000
 	fetch(`https://dev-wpc8kymxzmepqxl5.us.auth0.com/${endpoint}`, {
@@ -80,14 +80,15 @@ function fetchApiFromBackend(token, endpoint) {
 	})
 		.then((response) => response.json())
 		.then((response) => {
+			const res = response as Response & { sub: string };
 			console.log("Response from the api", response);
-			console.log(response.sub);
+			console.log(res.sub);
 
 			// store sub to local storage
-			localStorage.setItem("sub", response.sub);
+			localStorage.setItem("sub", res.sub);
 
 			// should output 200
-			console.log(response.status);
+			console.log(res.status);
 		})
 		.catch((error) => {
 			console.log("error in fetching --- " + error);
@@ -96,7 +97,7 @@ function fetchApiFromBackend(token, endpoint) {
 }
 
 // sending user data to backend (aka sub)
-function sendUserData(data) {
+function sendUserData(data: string) {
 	return fetch(`http://localhost:5000/addUser`, {
 		method: "POST",
 		headers: {
@@ -112,9 +113,9 @@ function sendUserData(data) {
 }
 
 /** function that will print out the info id token contains */
-function printDecodedToken(token) {
+function printDecodedToken(token: string) {
 	if (token) {
-		const decodedToken = jwtDecode(token) as DecodedToken;
+		const decodedToken: DecodedToken = jwtDecode(token);
 
 		console.log(`\nUser email: ${decodedToken.email}`);
 		console.log(`User nickname: ${decodedToken.nickname}`);

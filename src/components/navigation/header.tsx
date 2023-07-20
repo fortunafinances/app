@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import SearchBar from "../input/searchBar";
 import { CgProfile } from "react-icons/cg";
 import {
@@ -16,8 +16,6 @@ export default function Header() {
 	const currentAccount = accounts.find(
 		(item) => item.id === currentAccountNumber
 	);
-
-	
 
 	return (
 		<header className="flex items-center w-full bg-gray-200 py-2">
