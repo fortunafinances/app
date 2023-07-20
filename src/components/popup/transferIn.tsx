@@ -3,6 +3,8 @@ import Select from "react-select";
 import { BiDollar } from "react-icons/bi";
 import { preventMinus } from "../../utilities/common";
 import { accounts } from "../../utilities/reactiveVariables";
+import { gql, useMutation } from "@apollo/client";
+import { useNavigate } from "react-router-dom";
 
 type DropdownProps = {
 	label: string;
@@ -10,19 +12,36 @@ type DropdownProps = {
 };
 
 export default function TransferIn() {
+	const navigate = useNavigate();
+	const MAKE_TRANSFER = gql`
+		mutation InsertTransfer(
+			$sendAccId: Int!
+			$receiveAccId: Int!
+			$transferAmt: Float!
+		) {
+			insertTransfer(
+				sendAccId: $sendAccId
+				receiveAccId: $receiveAccId
+				transferAmt: $transferAmt
+			)
+		}
+	`;
+
+	const [makeTransfer, { data, loading, error }] = useMutation(MAKE_TRANSFER);
+
+	const handleSubmit = () => {
+		makeTransfer({
+			variables: { sendAccId: 1, receiveAccId: 2, transferAmt: 100 },
+		}).catch((err) => {
+			console.error(err);
+		});
+		navigate("activity");
+	};
+
 	const transferType = [
 		{ label: "In", value: "IN" },
 		{ label: "Out", value: "OUT" },
 		{ label: "Between", value: "BETWEEN" },
-	];
-
-	const aquaticCreatures = [
-		{ label: "Shark", value: "Shark" },
-		{ label: "Dolphin", value: "Dolphin" },
-		{ label: "Whale", value: "Whale" },
-		{ label: "Octopus", value: "Octopus" },
-		{ label: "Crab", value: "Crab" },
-		{ label: "Lobster", value: "Lobster" },
 	];
 
 	const createDropdownItems = () => {
@@ -127,7 +146,10 @@ export default function TransferIn() {
 					<button className="btn border-[#920000] text-[#920000] bg-[#F9E5E5] hover:shadow-xl shadow-[#920000] hover:bg-[#920000] hover:text-[#f9e5e5]">
 						Discard
 					</button>
-					<button className="btn border-success-content text-success-content bg-[#E3FDDC] hover:shadow-xl shadow-succes-content hover:bg-success-content hover:text-[#e3fddc]">
+					<button
+						className="btn border-success-content text-success-content bg-[#E3FDDC] hover:shadow-xl shadow-succes-content hover:bg-success-content hover:text-[#e3fddc]"
+						onClick={handleSubmit}
+					>
 						Submit
 					</button>
 				</div>
