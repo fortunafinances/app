@@ -1,11 +1,15 @@
 import { AiFillCaretDown } from "react-icons/ai";
+import { useReactiveVar } from "@apollo/client";
+import { symbol } from "../../../utilities/reactiveVariables";
 
 export default function StockInfo() {
   const company = "Apple";
-  const symbol = "AAPL";
   const price = 191.34;
   const dollarChange = 1.12;
   const percentChange = 0.58;
+  // const ticker = "APPL";
+
+  const symbolName = useReactiveVar(symbol);
 
   return (
     <div className="flex-1 overflow-y-scroll">
@@ -14,7 +18,7 @@ export default function StockInfo() {
         <div className="flex justify-between md:flex-row lg:gap-20 m-6">
           <div className="flex flex-col gap-5">
             <h1 className="text-6xl font-semibold">{company}</h1>
-            <h2 className="text-4xl text-[#929292]">{symbol}</h2>
+            <h2 className="text-4xl text-[#929292]">{symbolName}</h2>
           </div>
           <div className="flex flex-col gap-6">
             <h1 className="text-6xl text-primary font-medium">${price}</h1>
