@@ -83,7 +83,7 @@ function fetchApiFromBackend(token, endpoint) {
             console.log(response.sub)
 
             // store sub to local storage
-            localStorage.setItem('sub', response.sub);
+            localStorage.setItem('userId', response.sub);
 
             // should output 200
             console.log(response.status)
@@ -97,7 +97,7 @@ function fetchApiFromBackend(token, endpoint) {
 
 // sending user data to backend (aka sub)
 function sendUserData(data) {
-    return fetch(`http://localhost:5000/addUser`, {
+    return fetch(`http://localhost:5000/add_user`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
