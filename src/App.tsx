@@ -43,6 +43,8 @@ export default function App() {
           <Route path="/callback" element={<Callback />} />
           <Route path="/successNotification" element={<TransferSuccessful />} />
           <Route path="/errorNotification" element={<ErrorNotification />} />
+
+          <Route path="/createProfile" element={<CreateProfile />} />
         </Routes>
       </Router>
     </ApolloProvider>
