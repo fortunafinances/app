@@ -12,13 +12,13 @@ type User = {
 
 export const sidebarClosed = makeVarPersisted("sidebarClosed", false);
 export const currentAccountId = makeVarPersisted("currentAccountId", 1);
-export const userId = makeVarPersisted<User | null>("user", {
+export const userInfo = makeVarPersisted<User | null>("user", {
   userId: "",
-  username: "Nolan Gelinas",
-  nickname: "string",
-  email: "string",
-  picture: "string",
-  dateOfBirth: "string",
+  username: "",
+  nickname: "",
+  email: "",
+  picture: "",
+  dateOfBirth: "",
 });
 
 export const symbol = makeVar("");
