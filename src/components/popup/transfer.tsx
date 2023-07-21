@@ -32,10 +32,7 @@ export default function Transfer() {
 		insertTrade: string;
 	};
 
-	// eslint-disable-next-line @typescript-eslint/no-unused-vars
-	const [makeTransfer, { data, loading, error }] =
-		useMutation<TransferReturnData>(MAKE_TRANSFER);
-
+	const [makeTransfer] = useMutation<TransferReturnData>(MAKE_TRANSFER);
 	const [fromAccount, setFromAccount] = useState<number | null>(null);
 	const [toAccount, setToAccount] = useState<number | null>(null);
 	const [amount, setAmount] = useState(0);
@@ -49,9 +46,13 @@ export default function Transfer() {
 				receiveAccId: Number(toAccount),
 				transferAmt: Number(amount),
 			},
-		}).catch((err) => {
-			console.error(err);
-		});
+		})
+			.then((data) => {
+				console.log(data);
+			})
+			.catch((err) => {
+				console.error(err);
+			});
 
 		navigate("activity");
 	};
