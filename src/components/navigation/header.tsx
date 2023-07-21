@@ -4,13 +4,13 @@ import { CgProfile } from "react-icons/cg";
 import {
 	accounts,
 	currentAccountId,
-	userId,
+	userInfo,
 } from "../../utilities/reactiveVariables";
 import { useReactiveVar } from "@apollo/client/react/hooks/useReactiveVar";
 import { signout } from "../../utilities/auth";
 
 export default function Header() {
-	const userAccount = useReactiveVar(userId);
+	const userAccount = useReactiveVar(userInfo);
 	const currentAccountNumber = useReactiveVar(currentAccountId);
 
 	const currentAccount = accounts.find(
@@ -30,7 +30,7 @@ export default function Header() {
 			</div>
 			<SearchBar />
 			<div className="flex flex-row gap-3 items-center text-2xl mx-3">
-				<h3 className="hidden lg:inline">Welcome, {userAccount?.username}</h3>
+				<h3 className="hidden lg:inline">Welcome, {userAccount?.nickname}</h3>
 				<div className="dropdown dropdown-end">
 					<label tabIndex={0} className="cursor-pointer">
 						<CgProfile size={40} />
