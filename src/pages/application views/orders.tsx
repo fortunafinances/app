@@ -21,11 +21,15 @@ export default function Orders() {
 				header: "Type",
 				accessorKey: "type",
 				size: 30,
+				filterVariant: "select",
+				filterSelectOptions: ["Market", "Limit"],
 			},
 			{
 				header: "Side",
 				accessorKey: "side",
 				size: 40,
+				filterVariant: "select",
+				filterSelectOptions: ["Buy", "Sell"],
 			},
 			{
 				header: "Symbol",
@@ -41,16 +45,15 @@ export default function Orders() {
 				header: "Qty",
 				accessorKey: "tradeQty",
 				size: 40,
-			},
-			{
-				header: "Type",
-				accessorKey: "type",
-				size: 50,
+				filterFn: "between",
+				filterVariant: "range",
 			},
 			{
 				header: "Status",
 				accessorKey: "status",
 				size: 50,
+				filterVariant: "select",
+				filterSelectOptions: ["Placed", "Executed"],
 			},
 		],
 		[]

@@ -21,6 +21,8 @@ export default function Activity() {
 			{
 				header: "Type",
 				accessorKey: "type",
+				filterVariant: "select",
+				filterSelectOptions: ["Transfer", "Trade"],
 			},
 			{
 				header: "Description",

@@ -54,7 +54,7 @@ export default function SymbolQuantityLimit() {
 					(element) => element.ticker === symbolName
 				);
 				const price = stock!.currPrice;
-				setStockPrice(price);
+				setStockPrice(price!);
 				setTotalPrice(quantity * stockPrice);
 			}    
   }, [data, quantity, symbolName, stockPrice]);

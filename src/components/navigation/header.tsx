@@ -37,7 +37,7 @@ export default function Header() {
 					</label>
 					<div
 						tabIndex={0}
-						className="dropdown-content z-[1] card card-compact w-64 p-2 shadow bg-primary text-primary-content"
+						className="dropdown-content z-[200] card card-compact w-64 p-2 shadow bg-primary text-primary-content"
 					>
 						<div className="card-body">
 							<div className="flex flex-row justify-between items-center">

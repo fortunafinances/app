@@ -80,7 +80,7 @@ export default function Transfer() {
 	}, [checkBetween, transfer]);
 
 	return (
-		<dialog id="transfer_modal" className="modal">
+		<dialog id="transfer_modal" className="modal overflow-none">
 			<form
 				method="dialog"
 				className="modal-box bg-[#EDEDFE] flex flex-col gap-3 text-primary overflow-y-auto"
