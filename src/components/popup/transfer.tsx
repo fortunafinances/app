@@ -27,7 +27,13 @@ export default function Transfer() {
 		}
 	`;
 
-	const [makeTransfer, { data, loading, error }] = useMutation(MAKE_TRANSFER);
+	type TransferReturnData = {
+		insertTrade: string;
+	};
+
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
+	const [makeTransfer, { data, loading, error }] =
+		useMutation<TransferReturnData>(MAKE_TRANSFER);
 
 	const [fromAccount, setFromAccount] = useState<number | null>(null);
 	const [toAccount, setToAccount] = useState<number | null>(null);

@@ -3,18 +3,18 @@ import { handleAuthentication } from "../utilities/auth";
 
 const Callback = () => {
   useEffect(() => {
-		async function handleCallback() {
+		function handleCallback() {
 			console.log("callback...");
 			// Handle the callback logic here
 			// e.g., retrieve user information, set up user session
-			await handleAuthentication();
+			handleAuthentication();
 			// Simulate a loading state
 			setTimeout(() => {
 				// Redirect the user to a desired page
 				window.location.href = "/app";
-			}, 200000); // Adjust the delay as needed
+			}, 2000); // Adjust the delay as needed
 		}
-		handleCallback().catch((error) => console.error(error));
+		handleCallback();
 	}, []);
 
 	return (

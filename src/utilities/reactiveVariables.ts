@@ -1,7 +1,7 @@
 import { makeVar } from "@apollo/client/cache/inmemory/reactiveVars";
 import { makeVarPersisted } from "./hooks";
 
-type User = {
+export type User = {
   userId: string;
   username: string;
   nickname: string;

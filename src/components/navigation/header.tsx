@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import SearchBar from "../input/searchBar";
 import { CgProfile } from "react-icons/cg";
 import {
+	User,
 	accounts,
 	currentAccountId,
 	userInfo,
@@ -10,7 +11,7 @@ import { useReactiveVar } from "@apollo/client/react/hooks/useReactiveVar";
 import { signout } from "../../utilities/auth";
 
 export default function Header() {
-	const userAccount = useReactiveVar(userInfo);
+	const userAccount = useReactiveVar<User | null>(userInfo);
 	const currentAccountNumber = useReactiveVar(currentAccountId);
 
 	const currentAccount = accounts.find(

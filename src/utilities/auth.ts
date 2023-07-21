@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import auth0 from 'auth0-js';
 import jwtDecode from 'jwt-decode';
 import { userInfo } from "./reactiveVariables";
@@ -41,30 +42,39 @@ export function signout() {
 	console.log("Sign out");
 }
 
-export async function handleAuthentication() {
+export function handleAuthentication() {
 	auth0Client.parseHash((err, authResult) => {
 		if (authResult && authResult.accessToken && authResult.idToken) {
 			// Save the tokens to local storage
 			localStorage.setItem("access_token", authResult.accessToken);
 			localStorage.setItem("id_token", authResult.idToken);
-			
+
 			// This method will make a request to the /userinfo endpoint
 			// and return the user object, which contains the user's information,
 			// similar to the response below.
-			auth0Client.client.userInfo(authResult.accessToken, function(err, userData) {
-				console.log("\nUser info... ", userData);
-				console.log("\nUser id... ", userData.sub);
-				localStorage.setItem("userId", userData.sub);
-				userInfo({userId: userData.sub, username: userData.name,
-					nickname: userData.nickname, email: userData.email, picture: userData.picture, dateOfBirth: "1/1/2000"})
-			});
+			auth0Client.client.userInfo(
+				authResult.accessToken,
+				function (err, userData) {
+					console.log("\nUser info... ", userData);
+					console.log("\nUser id... ", userData.sub);
+					localStorage.setItem("userId", userData.sub);
+					userInfo({
+						userId: userData.sub,
+						username: userData.name,
+						nickname: userData.nickname,
+						email: userData.email!,
+						picture: userData.picture,
+						dateOfBirth: "1/1/2000",
+					});
+				}
+			);
 		} else if (err) {
 			console.log(err);
 		}
 	});
 
-	const aToken = localStorage.getItem("access_token");
-	const iToken = localStorage.getItem("id_token");
+	// const aToken = localStorage.getItem("access_token");
+	// const iToken = localStorage.getItem("id_token");
 
 	/** This function is to print out the contents inside id token,
 	 * uncomment to test it, and check the console
