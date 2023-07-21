@@ -6,7 +6,7 @@ export const preventMinus = (e: React.KeyboardEvent<HTMLInputElement>) => {
 
 export const percentChange = (curr: number, prev: number): string => {
 	const formatter = new Intl.NumberFormat("en-US", {
-		maximumSignificantDigits: 3,
+		maximumSignificantDigits: 2,
 	});
 
 	return formatter.format(((curr - prev) / prev) * 100);
@@ -23,4 +23,8 @@ export const formatDate = (dateString: string): string => {
 	});
 
 	return formatter.format(date);
+};
+
+export const sortDate = (a: string, b: string): number => {
+	return new Date(a) >= new Date(b) ? 1 : -1;
 };

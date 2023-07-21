@@ -11,16 +11,11 @@
 }
 
 @layer utilities {
-	.hover-scale-helper {
-		@apply transition-transform duration-150 ease-in-out;
-	}
-
-	.text-vertical {
-		writing-mode: vertical-rl;
-		text-orientation: upright;
-	}
-
 	.absolute-center {
-		@apply relative top-[50%] left-[50%] -translate-y-[50%] -translate-x-[50%];
+		@apply absolute top-[50%] left-[50%] -translate-y-[50%] -translate-x-[50%];
+	}
+
+	.ellipsis {
+		@apply whitespace-nowrap overflow-hidden overflow-ellipsis block;
 	}
 }

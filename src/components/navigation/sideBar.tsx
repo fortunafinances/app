@@ -10,7 +10,8 @@ import { useReactiveVar } from "@apollo/client/react/hooks/useReactiveVar";
 import { accounts, sidebarClosed } from "../../utilities/reactiveVariables";
 
 export default function SideBar() {
-	const collapsed = useReactiveVar(sidebarClosed);
+		const collapsed = useReactiveVar(sidebarClosed);
+		const accountList = useReactiveVar(accounts);
 
 	return (
 		<div className="relative h-full">
@@ -23,7 +24,7 @@ export default function SideBar() {
 				{!collapsed && (
 					<div className="flex flex-col">
 						<h2 className="mx-3 mt-1 text-xl">Accounts</h2>
-						<Dropdown data={accounts} />
+						<Dropdown data={accountList} />
 					</div>
 				)}
 				<button

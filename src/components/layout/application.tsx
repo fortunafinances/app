@@ -6,13 +6,13 @@ import AutoSizer, { Size } from "react-virtualized-auto-sizer";
 
 export default function ApplicationLayout() {
 	return (
-		<div className="flex flex-col h-screen overflow-y-none">
+		<div className="flex flex-col h-screen">
 			<Header />
 			<div className="flex flex-row grow h-full">
 				<SideBar />
-				<div className="flex flex-col grow h-full">
+				<div className="flex flex-col grow h-full overflow-none">
 					<AppNavigation />
-					<main className="relative h-full">
+					<main className="relative h-full overflow-none">
 						<AutoSizer>
 							{({ height, width }: Size) => (
 								<div style={{ height, width }} className="overflow-y-auto">

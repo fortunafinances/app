@@ -65,7 +65,10 @@ export default function Table<DataType extends GraphQLReturnData>({
 						}}
 						enableRowActions={enableRowActions ?? true}
 						renderRowActions={({ row }) => {
-							if (row.original.__typename === "Holding") {
+							if (
+								row.original.__typename === "Holding" ||
+								row.original.__typename === "Order"
+							) {
 								const holding = row.original as unknown as Holding &
 									GraphQLReturnData;
 								return (

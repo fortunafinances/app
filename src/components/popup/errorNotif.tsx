@@ -4,7 +4,7 @@ export default function ErrorNotification() {
   const [showAlert, setShowAlert] = useState(true); //if true: transfer success; false: order success
 
   return (
-    <div className="h-screen flex items-center justify-center">
+    <div className="flex items-center justify-center">
       {showAlert ? (
         <div className="alert flex flex-auto shadow-lg max-w-fit min-h-[25%] min-w-fit px-10 bg-[#F9E5E5]">
           <div className="flex flex-col gap-6 p-3 text-primary items-center">
