@@ -18,7 +18,7 @@ export default function Header() {
 	);
 
 	return (
-		<header className="flex items-center w-full bg-gray-200 py-2">
+		<header className="flex items-center bg-gray-200 py-2">
 			<div className="flex items-center h-full text-3xl mx-2">
 				<h1 className="hidden lg:inline">
 					<b>
@@ -37,11 +37,13 @@ export default function Header() {
 					</label>
 					<div
 						tabIndex={0}
-						className="dropdown-content z-[200] card card-compact w-64 p-2 shadow bg-primary text-primary-content"
+						className="dropdown-content z-[20] card card-compact w-64 p-2 shadow bg-primary text-primary-content"
 					>
 						<div className="card-body">
-							<div className="flex flex-row justify-between items-center">
-								<h3 className="card-title">{userAccount?.username}</h3>
+							<div className="flex flex-col justify-between">
+								<h3 className="card-title text-lg ellipsis">
+									{userAccount?.nickname}
+								</h3>
 								<Link to={`/editProfile`} className="w-fit">
 									Edit profile
 								</Link>
