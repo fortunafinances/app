@@ -2,15 +2,23 @@ import { makeVar } from "@apollo/client/cache/inmemory/reactiveVars";
 import { makeVarPersisted } from "./hooks";
 
 type User = {
-  userId: number;
+  userId: string;
   username: string;
+  nickname: string;
+  email: string;
+  picture: string;
+  dateOfBirth: string;
 };
 
 export const sidebarClosed = makeVarPersisted("sidebarClosed", false);
 export const currentAccountId = makeVarPersisted("currentAccountId", 1);
 export const userId = makeVarPersisted<User | null>("user", {
-  userId: 1,
+  userId: "",
   username: "Nolan Gelinas",
+  nickname: "string",
+  email: "string",
+  picture: "string",
+  dateOfBirth: "string",
 });
 
 export const symbol = makeVar("");

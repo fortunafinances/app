@@ -33,9 +33,7 @@ export function signup() {
 }
 
 export function signout() {
-	userId(null);
-	localStorage.removeItem("id_token");
-	localStorage.removeItem("access_token");
+	localStorage.clear();
 	auth0Client.logout({
 		returnTo: "http://localhost:4040/",
 		clientID: "OxQxuofsPZXSFzTqbVtKgErT2xrl3VfZ",
