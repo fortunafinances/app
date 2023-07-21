@@ -1,6 +1,6 @@
 import auth0 from 'auth0-js';
 import jwtDecode from 'jwt-decode';
-import { userId } from "./reactiveVariables";
+import { userInfo } from "./reactiveVariables";
 
 interface DecodedToken {
 	openid: string;
@@ -51,10 +51,12 @@ export async function handleAuthentication() {
 			// This method will make a request to the /userinfo endpoint
 			// and return the user object, which contains the user's information,
 			// similar to the response below.
-			auth0Client.client.userInfo(authResult.accessToken, function(err, user) {
-				console.log("\nUser info... ", user);
-				console.log("\nUser id... ", user.sub);
-				localStorage.setItem("userId", user.sub);
+			auth0Client.client.userInfo(authResult.accessToken, function(err, userData) {
+				console.log("\nUser info... ", userData);
+				console.log("\nUser id... ", userData.sub);
+				localStorage.setItem("userId", userData.sub);
+				userInfo({userId: userData.sub, username: userData.name,
+					nickname: userData.nickname, email: userData.email, picture: userData.picture, dateOfBirth: "1/1/2000"})
 			});
 		} else if (err) {
 			console.log(err);
