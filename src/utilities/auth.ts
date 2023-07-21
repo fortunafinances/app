@@ -21,7 +21,7 @@ const auth0Client = new auth0.WebAuth({
 	audience: "http://127.0.0.1:5000/",
 	redirectUri: "http://localhost:4040/callback",
 	responseType: "token id_token",
-	scope: "openid email sub nickname profile offline_access read:user", // what we want the token to include
+	scope: "openid email sub nickname profile read:user", // what we want the token to include
 });
 
 export function login() {
@@ -68,7 +68,7 @@ export function handleAuthentication() {
 				}
 			);
 		} else if (err) {
-			console.log(err);
+			console.log("Error in handle auth: ", err);
 		}
 	});
 }
@@ -96,6 +96,7 @@ function printDecodedToken(token: string) {
 
 		console.log(`\nUser email: ${decodedToken.email}`);
 		console.log(`User nickname: ${decodedToken.nickname}`);
+        localStorage.setItem("---- user", decodedToken.nickname);
 		console.log(`User sub: ${decodedToken.sub}`);
 		if (decodedToken.exp < Date.now() / 1000) {
 			console.log("Token has expired");
