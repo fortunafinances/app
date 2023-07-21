@@ -3,8 +3,6 @@ import SearchBar from "../input/searchBar";
 import { CgProfile } from "react-icons/cg";
 import {
 	User,
-	accounts,
-	currentAccountId,
 	userInfo,
 } from "../../utilities/reactiveVariables";
 import { useReactiveVar } from "@apollo/client/react/hooks/useReactiveVar";
@@ -12,11 +10,6 @@ import { signout } from "../../utilities/auth";
 
 export default function Header() {
 	const userAccount = useReactiveVar<User | null>(userInfo);
-	const currentAccountNumber = useReactiveVar(currentAccountId);
-
-	const currentAccount = accounts.find(
-		(item) => item.id === currentAccountNumber
-	);
 
 	return (
 		<header className="flex items-center bg-gray-200 py-2">
@@ -24,9 +17,7 @@ export default function Header() {
 				<h1 className="hidden lg:inline">
 					<b>
 						<Link to="/">Fortuna</Link>
-						&nbsp;/&nbsp;
 					</b>
-					{currentAccount!.name} Account
 				</h1>
 			</div>
 			<SearchBar />

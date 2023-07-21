@@ -3,7 +3,7 @@ import Select from "react-select";
 import { BiDollar } from "react-icons/bi";
 import { preventMinus } from "../../utilities/common";
 import { accounts } from "../../utilities/reactiveVariables";
-import { gql, useMutation } from "@apollo/client";
+import { gql, useMutation, useReactiveVar } from "@apollo/client";
 import { useNavigate } from "react-router-dom";
 
 type DropdownProps = {
@@ -12,6 +12,7 @@ type DropdownProps = {
 };
 
 export default function Transfer() {
+	const accountList = useReactiveVar(accounts);
 	const navigate = useNavigate();
 	const MAKE_TRANSFER = gql`
 		mutation InsertTransfer(
@@ -51,7 +52,7 @@ export default function Transfer() {
 		}).catch((err) => {
 			console.error(err);
 		});
-		
+
 		navigate("activity");
 	};
 
@@ -63,13 +64,13 @@ export default function Transfer() {
 
 	const createDropdownItems = useCallback((exclude?: number) => {
 		const ret: DropdownProps[] = [];
-		accounts.map((account) => {
-			if (account.id !== exclude || exclude === undefined) {
-				ret.push({ label: account.name, value: account.id });
+		accountList.map((account) => {
+			if (account.accId !== exclude || exclude === undefined) {
+				ret.push({ label: account.name, value: account.accId });
 			}
 		});
 		return ret;
-	}, []);
+	}, [accountList]);
 
 	const checkBetween = useCallback(() => {
 		if (transfer === "BETWEEN") {

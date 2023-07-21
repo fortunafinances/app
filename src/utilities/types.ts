@@ -37,6 +37,12 @@ export interface Order extends GraphQLReturnData {
 	stock: Stock;
 }
 
+export interface Account extends GraphQLReturnData {
+	accId: number;
+	cash: number;
+	name: string;
+}
+
 export enum OrderType {
 	Market = "Market",
 	Limit = "Limit",

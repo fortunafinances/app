@@ -1,5 +1,6 @@
 import { makeVar } from "@apollo/client/cache/inmemory/reactiveVars";
 import { makeVarPersisted } from "./hooks";
+import { Account } from "./types";
 
 export type User = {
   userId: string;
@@ -23,14 +24,4 @@ export const userInfo = makeVarPersisted<User | null>("user", {
 
 export const symbol = makeVar("");
 
-export const accounts = [
-	{
-		id: 1,
-		name: "Brokerage",
-	},
-	{
-		id: 2,
-		name: "Retirement",
-	},
-	{ id: 3, name: "College Fund" },
-];
+export const accounts = makeVarPersisted<Account[]>("accounts", []);

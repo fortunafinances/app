@@ -1,10 +1,13 @@
 import { useEffect } from 'react';
 import { handleAuthentication } from "../utilities/auth";
+import { useQuery } from "@apollo/client";
+import gql from "graphql-tag";
+import { Account } from "../utilities/types";
+import { accounts } from "../utilities/reactiveVariables";
 
 const Callback = () => {
-  useEffect(() => {
+	useEffect(() => {
 		function handleCallback() {
-			console.log("callback...");
 			// Handle the callback logic here
 			// e.g., retrieve user information, set up user session
 			handleAuthentication();
@@ -16,6 +19,27 @@ const Callback = () => {
 		}
 		handleCallback();
 	}, []);
+
+	// Perform first time setup for common overview data
+	const GET_ACCOUNTS = gql`
+		query Accounts {
+			accounts(input: { userId: "1" }) {
+				accId
+				name
+				cash
+			}
+		}
+	`;
+
+	type AccountQuery = {
+		accounts: Account[];
+	};
+	const { error, data } = useQuery<AccountQuery>(GET_ACCOUNTS);
+
+	if (error) console.error(error);
+	if (data) {
+		accounts(data.accounts);
+	}
 
 	return (
 		<div className="w-screen h-screen">
