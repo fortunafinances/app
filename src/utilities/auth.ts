@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import auth0 from 'auth0-js';
 import jwtDecode from 'jwt-decode';
 import { userInfo } from "./reactiveVariables";
@@ -72,51 +71,9 @@ export function handleAuthentication() {
 			console.log(err);
 		}
 	});
-
-	// const aToken = localStorage.getItem("access_token");
-	// const iToken = localStorage.getItem("id_token");
-
-	/** This function is to print out the contents inside id token,
-	 * uncomment to test it, and check the console
-	 */
-	// printDecodedToken(iToken!);
-
-	// send access token to backend
-	// fetchApiFromBackend(aToken!, "userinfo");
-
-	// await sendUserData(sub!);
 }
 
-// function that send the token to the backend,
-// ask for permission to access a specific endpoint
-function fetchApiFromBackend(token: string, endpoint: string) {
-	// https://dev-wpc8kymxzmepqxl5.us.auth0.com
-	// http://127.0.0.1:5000
-	fetch(`https://dev-wpc8kymxzmepqxl5.us.auth0.com/${endpoint}`, {
-		headers: new Headers({
-			Authorization: `Bearer ${token}`,
-			"Content-Type": "application/json",
-		}),
-	})
-		.then((response) => response.json())
-		.then((response) => {
-			const res = response as Response & { sub: string };
-			console.log("Response from the api", response);
-			console.log(res.sub);
-
-			// store sub to local storage
-			localStorage.setItem("userId", res.sub);
-
-			// should output 200
-			console.log(res.status);
-		})
-		.catch((error) => {
-			console.log("error in fetching --- " + error);
-		});
-	console.log("\nACCESS TOKEN = " + token);
-}
-
-// sending user data to backend (aka sub)
+/** sending user data to backend */
 function sendUserData(data: string) {
 	return fetch(`http://localhost:5000/add_user`, {
 		method: "POST",
