@@ -38,13 +38,14 @@ export default function Transfer() {
 	const handleSubmit = () => {
 		makeTransfer({
 			variables: {
-				sendAccId: fromAccount,
-				receiveAccId: toAccount,
-				transferAmt: amount,
+				sendAccId: Number(fromAccount),
+				receiveAccId: Number(toAccount),
+				transferAmt: Number(amount),
 			},
 		}).catch((err) => {
 			console.error(err);
 		});
+		
 		navigate("activity");
 	};
 
@@ -54,14 +55,15 @@ export default function Transfer() {
 		{ label: "Between", value: "BETWEEN" },
 	];
 
-	const createDropdownItems = () => {
+	const createDropdownItems = useCallback((exclude?: number) => {
 		const ret: DropdownProps[] = [];
 		accounts.map((account) => {
-			ret.push({ label: account.name, value: account.id });
+			if (account.id !== exclude || exclude === undefined) {
+				ret.push({ label: account.name, value: account.id });
+			}
 		});
-
 		return ret;
-	};
+	}, []);
 
 	const checkBetween = useCallback(() => {
 		if (transfer === "BETWEEN") {
@@ -78,10 +80,10 @@ export default function Transfer() {
 	}, [checkBetween, transfer]);
 
 	return (
-		<dialog id="transfer_modal" className="modal">
+		<dialog id="transfer_modal" className="modal overflow-none">
 			<form
 				method="dialog"
-				className="modal-box bg-[#EDEDFE] flex flex-col gap-3 text-primary overflow-y-visible"
+				className="modal-box bg-[#EDEDFE] flex flex-col gap-3 text-primary overflow-y-auto"
 			>
 				<h1 className="font-bold text-4xl">TRANSFER {transfer}</h1>
 				<h2 className="font-medium text-2xl">Transfer Type</h2>
@@ -117,13 +119,13 @@ export default function Transfer() {
 						<Select
 							id="sourceAcct"
 							menuPortalTarget={document.getElementById("transfer_modal")}
-							options={createDropdownItems()}
+							options={createDropdownItems(toAccount!)}
 							theme={(theme) => ({
 								...theme,
 								borderRadius: 3,
 							})}
 							onChange={(e) => {
-								setFromAccount(Number(e!.valueOf()));
+								setFromAccount(Number(e!.value));
 							}}
 						/>
 						<label htmlFor="destAcct" className="font-medium text-2xl">
@@ -132,14 +134,14 @@ export default function Transfer() {
 						<Select
 							id="destAcct"
 							menuPortalTarget={document.getElementById("transfer_modal")}
-							options={createDropdownItems()}
+							options={createDropdownItems(fromAccount!)}
 							theme={(theme) => ({
 								...theme,
 								primary: "black",
 								borderRadius: 3,
 							})}
 							onChange={(e) => {
-								setToAccount(Number(e!.valueOf()));
+								setToAccount(Number(e!.value));
 							}}
 						/>
 					</div>

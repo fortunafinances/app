@@ -24,3 +24,7 @@ export const formatDate = (dateString: string): string => {
 
 	return formatter.format(date);
 };
+
+export const sortDate = (a: string, b: string): number => {
+	return new Date(a) >= new Date(b) ? 1 : -1;
+};

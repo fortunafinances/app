@@ -10,8 +10,13 @@ export interface TradeProps {
 	buyState: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
+type State = {
+	tradeType: boolean;
+};
+
 export default function Trade() {
-	const { state } = useLocation();
+	const location = useLocation();
+	const state: State = location.state as State;
 	//if true, BUY screen
 	//if false, SELL screen
 	const [buy, setBuy] = useState(true);
@@ -52,19 +57,21 @@ export default function Trade() {
 								>
 									<h1 className="text-4xl">{header}</h1>
 									<p className="text-xl">Account Name</p>
-									<button className="absolute top-0 right-10 text-xl flex flex-row items-center">
+									<button
+										className="absolute top-0 right-10 text-xl flex flex-row items-center"
+										onClick={() => {
+											setBuy((buy) => !buy);
+										}}
+									>
 										<HiSwitchHorizontal color="black" />
-										<div
+										<p
 											className={twMerge(
 												"text-success-content font-medium",
 												buy && "text-[#920000]"
 											)}
-											onClick={() => {
-												setBuy((buy) => !buy);
-											}}
 										>
 											{switchButton}
-										</div>
+										</p>
 									</button>
 								</div>
 								<SymbolQuantityLimit />

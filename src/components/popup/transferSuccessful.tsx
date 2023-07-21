@@ -6,8 +6,8 @@ export default function TransferSuccessful() {
   const [messageType, setMessageType] = useState(true);
   const [message, setMessage] = useState("Your transfer was successful.");
   const [buttonName, setButtonName] = useState("View Transactions");
-  let navigate = useNavigate();
-  let [path, setPath] = useState("/app/activity");
+  const navigate = useNavigate();
+  const [path, setPath] = useState("/app/activity");
 
   useEffect(() => {
     if (messageType === false) {
@@ -15,7 +15,7 @@ export default function TransferSuccessful() {
       setButtonName("View Orders");
       setPath("/app/orders");
     }
-  }, [setMessageType]);
+  }, [messageType, setMessageType]);
 
   return (
     <div className="h-screen flex items-center justify-center">

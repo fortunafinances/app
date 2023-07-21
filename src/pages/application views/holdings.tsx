@@ -30,12 +30,12 @@ export default function Holdings() {
 				id: "stock.currPrice",
 				filterVariant: "range",
 				size: 55,
-				accessorFn: (row) => `${formatDollars(row.stock.currPrice)}`,
+				accessorFn: (row) => `${formatDollars(row.stock.currPrice!)}`,
 				sortingFn: (a, b) => {
-					return a.original.stock.currPrice - b.original.stock.currPrice;
+					return a.original.stock.currPrice! - b.original.stock.currPrice!;
 				},
 				filterFn: (row, _columnIds, filterValue: number[]) =>
-					filterRange(row.original.stock.currPrice, _columnIds, filterValue),
+					filterRange(row.original.stock.currPrice!, _columnIds, filterValue),
 			},
 			{
 				header: "Value",
@@ -43,16 +43,16 @@ export default function Holdings() {
 				filterVariant: "range",
 				size: 55,
 				accessorFn: (row) =>
-					`${formatDollars(row.stockQuantity * row.stock.currPrice)}`,
+					`${formatDollars(row.stockQuantity * row.stock.currPrice!)}`,
 				sortingFn: (a, b) => {
 					return (
-						a.original.stock.currPrice * a.original.stockQuantity -
-						b.original.stock.currPrice * b.original.stockQuantity
+						a.original.stock.currPrice! * a.original.stockQuantity -
+						b.original.stock.currPrice! * b.original.stockQuantity
 					);
 				},
 				filterFn: (row, _columnIds, filterValue: number[]) =>
 					filterRange(
-						row.original.stock.currPrice * row.original.stockQuantity,
+						row.original.stock.currPrice! * row.original.stockQuantity,
 						_columnIds,
 						filterValue
 					),
