@@ -1,11 +1,13 @@
 import { MRT_ColumnDef } from "material-react-table";
 import Table from "../../components/data/table";
-import { gql, useQuery } from "@apollo/client";
+import { gql, useQuery, useReactiveVar } from "@apollo/client";
 import { filterRange, formatDollars } from "../../utilities/currency";
 import { GraphQLReturnData, Holding } from "../../utilities/types";
 import { useMemo } from "react";
+import { currentAccountId } from "../../utilities/reactiveVariables";
 
 export default function Holdings() {
+	const accountId = useReactiveVar(currentAccountId);
 	const cols = useMemo<MRT_ColumnDef<Holding>[]>(
 		() => [
 			{
@@ -24,7 +26,7 @@ export default function Holdings() {
 				filterVariant: "range",
 			},
 			{
-				header: "stock.currPrice",
+				header: "Price",
 				id: "stock.currPrice",
 				filterVariant: "range",
 				size: 55,
@@ -64,8 +66,8 @@ export default function Holdings() {
 	}
 
 	const GET_HOLDINGS = gql`
-		query Holdings {
-			holdings(input: { accId: 1 }) {
+		query Holdings($accId: Int!) {
+			holdings(input: { accId: $accId }) {
 				stockQuantity
 				stock {
 					ticker
@@ -76,7 +78,9 @@ export default function Holdings() {
 		}
 	`;
 
-	const { loading, error, data } = useQuery<HoldingsQuery>(GET_HOLDINGS);
+	const { loading, error, data } = useQuery<HoldingsQuery>(GET_HOLDINGS, {
+		variables: { accId: accountId },
+	});
 
 	return (
 		<div className="h-full w-full overflow-y-clip">
@@ -85,6 +89,7 @@ export default function Holdings() {
 				error={error}
 				data={data?.holdings}
 				columnData={cols}
+				sorting={[{ id: "stock.ticker", desc: false }]}
 			/>
 		</div>
 	);

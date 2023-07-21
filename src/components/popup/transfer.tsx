@@ -2,25 +2,66 @@ import { useCallback, useEffect, useState } from "react";
 import Select from "react-select";
 import { BiDollar } from "react-icons/bi";
 import { preventMinus } from "../../utilities/common";
+import { accounts } from "../../utilities/reactiveVariables";
+import { gql, useMutation } from "@apollo/client";
+import { useNavigate } from "react-router-dom";
 
-export default function TransferIn() {
+type DropdownProps = {
+	label: string;
+	value: number;
+};
+
+export default function Transfer() {
+	const navigate = useNavigate();
+	const MAKE_TRANSFER = gql`
+		mutation InsertTransfer(
+			$sendAccId: Int!
+			$receiveAccId: Int!
+			$transferAmt: Float!
+		) {
+			insertTransfer(
+				sendAccId: $sendAccId
+				receiveAccId: $receiveAccId
+				transferAmt: $transferAmt
+			)
+		}
+	`;
+
+	const [makeTransfer, { data, loading, error }] = useMutation(MAKE_TRANSFER);
+
+	const [fromAccount, setFromAccount] = useState<number | null>(null);
+	const [toAccount, setToAccount] = useState<number | null>(null);
+	const [amount, setAmount] = useState(0);
+	const [transfer, setTransfer] = useState("");
+	const [between, setBetween] = useState(false);
+
+	const handleSubmit = () => {
+		makeTransfer({
+			variables: {
+				sendAccId: fromAccount,
+				receiveAccId: toAccount,
+				transferAmt: amount,
+			},
+		}).catch((err) => {
+			console.error(err);
+		});
+		navigate("activity");
+	};
+
 	const transferType = [
 		{ label: "In", value: "IN" },
 		{ label: "Out", value: "OUT" },
 		{ label: "Between", value: "BETWEEN" },
 	];
 
-	const aquaticCreatures = [
-		{ label: "Shark", value: "Shark" },
-		{ label: "Dolphin", value: "Dolphin" },
-		{ label: "Whale", value: "Whale" },
-		{ label: "Octopus", value: "Octopus" },
-		{ label: "Crab", value: "Crab" },
-		{ label: "Lobster", value: "Lobster" },
-	];
+	const createDropdownItems = () => {
+		const ret: DropdownProps[] = [];
+		accounts.map((account) => {
+			ret.push({ label: account.name, value: account.id });
+		});
 
-	const [transfer, setTransfer] = useState("");
-	const [between, setBetween] = useState(false);
+		return ret;
+	};
 
 	const checkBetween = useCallback(() => {
 		if (transfer === "BETWEEN") {
@@ -37,14 +78,6 @@ export default function TransferIn() {
 	}, [checkBetween, transfer]);
 
 	return (
-		// <div>
-		//   // {/* Open the modal using ID.showModal() method */}
-		//   <button
-		//     className="btn text-primary bg-[#EDEDFE]"
-		//     onClick={() => window.transfer_modal.showModal()}
-		//   >
-		//     Transfer
-		//   </button>
 		<dialog id="transfer_modal" className="modal">
 			<form
 				method="dialog"
@@ -69,7 +102,7 @@ export default function TransferIn() {
 						<h2 className="font-medium text-2xl">Account</h2>
 						<Select
 							menuPortalTarget={document.getElementById("transfer_modal")}
-							options={aquaticCreatures}
+							options={createDropdownItems()}
 							theme={(theme) => ({
 								...theme,
 								borderRadius: 3,
@@ -78,24 +111,36 @@ export default function TransferIn() {
 					</div>
 				) : (
 					<div>
-						<h2 className="font-medium text-2xl">From Account</h2>
+						<label htmlFor="sourceAcct" className="font-medium text-2xl">
+							From Account
+						</label>
 						<Select
+							id="sourceAcct"
 							menuPortalTarget={document.getElementById("transfer_modal")}
-							options={aquaticCreatures}
+							options={createDropdownItems()}
 							theme={(theme) => ({
 								...theme,
 								borderRadius: 3,
 							})}
+							onChange={(e) => {
+								setFromAccount(Number(e!.valueOf()));
+							}}
 						/>
-						<h2 className="font-medium text-2xl">To Account</h2>
+						<label htmlFor="destAcct" className="font-medium text-2xl">
+							To Account
+						</label>
 						<Select
+							id="destAcct"
 							menuPortalTarget={document.getElementById("transfer_modal")}
-							options={aquaticCreatures}
+							options={createDropdownItems()}
 							theme={(theme) => ({
 								...theme,
 								primary: "black",
 								borderRadius: 3,
 							})}
+							onChange={(e) => {
+								setToAccount(Number(e!.valueOf()));
+							}}
 						/>
 					</div>
 				)}
@@ -111,6 +156,9 @@ export default function TransferIn() {
 						min={0}
 						step="0.01"
 						placeholder="Price"
+						onChange={(e) => {
+							setAmount(Number(e.target.value));
+						}}
 						onKeyDown={preventMinus}
 						className="input h-9 w-full border-[1px] rounded-[3px] border-[#cccccc] focus:ring-blue-500 focus:border-blue-500 focus:border-[2px] !outline-none"
 					/>
@@ -121,7 +169,10 @@ export default function TransferIn() {
 					<button className="btn border-[#920000] text-[#920000] bg-[#F9E5E5] hover:shadow-xl shadow-[#920000] hover:bg-[#920000] hover:text-[#f9e5e5]">
 						Discard
 					</button>
-					<button className="btn border-success-content text-success-content bg-[#E3FDDC] hover:shadow-xl shadow-succes-content hover:bg-success-content hover:text-[#e3fddc]">
+					<button
+						className="btn border-success-content text-success-content bg-[#E3FDDC] hover:shadow-xl shadow-succes-content hover:bg-success-content hover:text-[#e3fddc]"
+						onClick={handleSubmit}
+					>
 						Submit
 					</button>
 				</div>

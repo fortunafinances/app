@@ -9,8 +9,11 @@ export type GraphQLReturnData = {
 
 export interface Stock {
 	ticker: string;
-	currPrice: number;
 	name: string;
+	description: string;
+	currPrice: number;
+	prevClosePrice?: number;
+	sector: string;
 }
 export interface Holding extends GraphQLReturnData {
 	stockQuantity: number;
@@ -18,9 +21,18 @@ export interface Holding extends GraphQLReturnData {
 }
 
 export interface Activity extends GraphQLReturnData {
-	date: Date;
+	date: string;
 	type: "Trade" | "Transfer";
 	description: string;
 	amount: number;
 }
 
+export enum OrderType {
+	Market = "Market",
+	Limit = "Limit",
+}
+
+export enum OrderSide {
+	Buy = "Buy",
+	Sell = "Sell",
+}

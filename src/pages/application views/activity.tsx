@@ -1,16 +1,22 @@
-import { gql, useQuery } from "@apollo/client";
+import { gql, useQuery, useReactiveVar } from "@apollo/client";
 import Table from "../../components/data/table";
 import { useMemo } from "react";
 import { MRT_ColumnDef } from "material-react-table";
 import { Activity, GraphQLReturnData } from "../../utilities/types";
 import { filterRange, formatDollars } from "../../utilities/currency";
+import { formatDate } from "../../utilities/common";
+import { currentAccountId } from "../../utilities/reactiveVariables";
 
 export default function Activity() {
+		const accountId = useReactiveVar(currentAccountId);
+
 	const cols = useMemo<MRT_ColumnDef<Activity>[]>(
 		() => [
 			{
 				header: "Date",
-				accessorKey: "date",
+				id: "date",
+				accessorFn: (row) => `${formatDate(row.date)}`,
+				sortingFn: "datetime",
 			},
 			{
 				header: "Type",
@@ -42,8 +48,8 @@ export default function Activity() {
 	};
 
 	const GET_ACTIVITIES = gql`
-		query Activity {
-			activity(input: { accId: 1 }) {
+		query Activity($accId: Int!) {
+			activity(input: { accId: $accId }) {
 				date
 				type
 				description
@@ -52,7 +58,8 @@ export default function Activity() {
 		}
 	`;
 
-	const { loading, error, data } = useQuery<ActivitiesQuery>(GET_ACTIVITIES);
+	const { loading, error, data } = useQuery<ActivitiesQuery>(GET_ACTIVITIES, {
+		variables: { accId: accountId }});
 
 	return (
 		<div className="h-full w-full overflow-y-clip">
@@ -61,6 +68,8 @@ export default function Activity() {
 				error={error}
 				data={data?.activity}
 				columnData={cols}
+				enableRowActions={false}
+				sorting={[{ id: "date", desc: true }]}
 			/>
 		</div>
 	);

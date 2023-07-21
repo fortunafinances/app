@@ -7,6 +7,7 @@ import {
 	userId,
 } from "../../utilities/reactiveVariables";
 import { useReactiveVar } from "@apollo/client/react/hooks/useReactiveVar";
+import { signout } from "../../utilities/auth";
 
 export default function Header() {
 	const userAccount = useReactiveVar(userId);
@@ -21,11 +22,7 @@ export default function Header() {
 			<div className="flex items-center h-full text-3xl mx-2">
 				<h1 className="hidden lg:inline">
 					<b>
-						<Link to="/">
-							<span className="hover-scale-helper hover:scale-110">
-								Fortuna
-							</span>
-						</Link>
+						<Link to="/">Fortuna</Link>
 						&nbsp;/&nbsp;
 					</b>
 					{currentAccount!.name} Account
@@ -33,7 +30,7 @@ export default function Header() {
 			</div>
 			<SearchBar />
 			<div className="flex flex-row gap-3 items-center text-2xl mx-3">
-				<h3 className="hidden lg:inline">Welcome, {userAccount.username}</h3>
+				<h3 className="hidden lg:inline">Welcome, {userAccount?.username}</h3>
 				<div className="dropdown dropdown-end">
 					<label tabIndex={0} className="cursor-pointer">
 						<CgProfile size={40} />
@@ -44,14 +41,17 @@ export default function Header() {
 					>
 						<div className="card-body">
 							<div className="flex flex-row justify-between items-center">
-								<h3 className="card-title">{userAccount.username}</h3>
+								<h3 className="card-title">{userAccount?.username}</h3>
 								<Link to={`/editProfile`} className="w-fit">
 									Edit profile
 								</Link>
 							</div>
-							<Link to="/" className="btn btn-outline btn-secondary">
+							<button
+								className="btn btn-outline btn-secondary"
+								onClick={signout}
+							>
 								Log Out
-							</Link>
+							</button>
 						</div>
 					</div>
 				</div>
