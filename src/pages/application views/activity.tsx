@@ -4,11 +4,11 @@ import { useMemo } from "react";
 import { MRT_ColumnDef } from "material-react-table";
 import { Activity, GraphQLReturnData } from "../../utilities/types";
 import { filterRange, formatDollars } from "../../utilities/currency";
-import { formatDate } from "../../utilities/common";
+import { formatDate, sortDate } from "../../utilities/common";
 import { currentAccountId } from "../../utilities/reactiveVariables";
 
 export default function Activity() {
-		const accountId = useReactiveVar(currentAccountId);
+	const accountId = useReactiveVar(currentAccountId);
 
 	const cols = useMemo<MRT_ColumnDef<Activity>[]>(
 		() => [
@@ -16,7 +16,7 @@ export default function Activity() {
 				header: "Date",
 				id: "date",
 				accessorFn: (row) => `${formatDate(row.date)}`,
-				sortingFn: "datetime",
+				sortingFn: (a, b) => sortDate(a.original.date, b.original.date),
 			},
 			{
 				header: "Type",
@@ -59,7 +59,8 @@ export default function Activity() {
 	`;
 
 	const { loading, error, data } = useQuery<ActivitiesQuery>(GET_ACTIVITIES, {
-		variables: { accId: accountId }});
+		variables: { accId: accountId },
+	});
 
 	return (
 		<div className="h-full w-full overflow-y-clip">
