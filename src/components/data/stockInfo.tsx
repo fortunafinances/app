@@ -1,9 +1,9 @@
 import { AiFillCaretDown, AiFillCaretUp } from "react-icons/ai";
 import { gql, useQuery, useReactiveVar } from "@apollo/client";
-import { symbol } from "../../../utilities/reactiveVariables";
-import { Stock } from "../../../utilities/types";
-import { formatDollars } from "../../../utilities/currency";
-import { percentChange } from "../../../utilities/common";
+import { symbol } from "../../utilities/reactiveVariables";
+import { Stock } from "../../utilities/types";
+import { formatDollars } from "../../utilities/currency";
+import { percentChange } from "../../utilities/common";
 
 export default function StockInfo() {
 	const symbolName = useReactiveVar(symbol);
@@ -71,7 +71,6 @@ export default function StockInfo() {
 					</div>
 				</div>
 				{/* Graph */}
-				{/* <div className="h-[50vh] w-[90%] border-4 border-primary m-[5%]"></div> */}
 				<div className="m-6 flex flex-col gap-3">
 					{/* About the Company */}
 					<div className="text-4xl font-medium ">About {company}</div>

@@ -1,9 +1,9 @@
 import { useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { HiSwitchHorizontal } from "react-icons/hi";
-import SymbolQuantityLimit from "../input/trade/buySellSymbolQuantityLimit";
+import SymbolQuantityLimit from "../input/tradeForm";
 import { twMerge } from "tailwind-merge";
-import StockInfo from "../input/trade/buySellStockInfo";
+import StockInfo from "../data/stockInfo";
 import AutoSizer, { Size } from "react-virtualized-auto-sizer";
 
 export interface TradeProps {
