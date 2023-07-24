@@ -10,15 +10,21 @@ export default function ApplicationLayout() {
 			<Header />
 			<div className="flex flex-row grow h-full">
 				<SideBar />
-				<div className="flex flex-col grow h-full overflow-none">
+				<div className="flex flex-col grow h-full">
 					<AppNavigation />
-					<main className="relative h-full overflow-none">
+					<main className="relative h-full">
 						<AutoSizer>
-							{({ height, width }: Size) => (
-								<div style={{ height, width }} className="overflow-y-auto">
-									<Outlet />
-								</div>
-							)}
+							{({ height, width }: Size) => {
+								console.log(height, width);
+								return (
+									<div
+										style={{ height: height - 1, width: width - 1 }}
+										className="overflow-y-auto"
+									>
+										<Outlet />
+									</div>
+								);
+							}}
 						</AutoSizer>
 					</main>
 				</div>

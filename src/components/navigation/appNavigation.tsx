@@ -2,17 +2,13 @@ import { Link, useLocation } from "react-router-dom";
 import { twMerge } from "tailwind-merge";
 import Transfer from "../popup/transfer";
 import { useReactiveVar } from "@apollo/client";
-import { currentAccountId, accounts } from "../../utilities/reactiveVariables";
+import { accounts } from "../../utilities/reactiveVariables";
+import Dropdown from "../input/dropdown";
 
 const navItems = ["overview", "holdings", "orders", "activity"];
 
 export default function AppNavigation() {
-	const currentAccountNumber = useReactiveVar(currentAccountId);
 	const accountList = useReactiveVar(accounts);
-
-	const currentAccount = accountList.find(
-		(item) => item.accId === currentAccountNumber
-	);
 
 	const path = useLocation().pathname;
 	const currentPage = path.split("/")[path.split("/").length - 1];
@@ -21,7 +17,7 @@ export default function AppNavigation() {
 			<div className="flex flex-row justify-between items-center">
 				<div className="text-white flex flex-row items-center px-2">
 					<h3 className="text-xl font-semibold border-r-2 pr-2">
-						{currentAccount?.name}
+						<Dropdown data={accountList} />
 					</h3>
 					<div>
 						{navItems.map((item, i) => {

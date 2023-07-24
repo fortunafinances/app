@@ -29,7 +29,7 @@ export default function Transfer() {
 	`;
 
 	type TransferReturnData = {
-		insertTrade: string;
+		insertTransfer: string;
 	};
 
 	const [makeTransfer] = useMutation<TransferReturnData>(MAKE_TRANSFER);
@@ -45,6 +45,17 @@ export default function Transfer() {
 				sendAccId: Number(fromAccount),
 				receiveAccId: Number(toAccount),
 				transferAmt: Number(amount),
+			},
+			update: (store, { data }) => {
+				const transfers = store.readQuery<TransferReturnData>({
+					query: MAKE_TRANSFER,
+				});
+				store.writeQuery({
+					query: MAKE_TRANSFER,
+					data: {
+						transfers: [...transfers!.insertTransfer, data?.insertTransfer],
+					},
+				});
 			},
 		})
 			.then((data) => {
