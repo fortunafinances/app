@@ -15,7 +15,6 @@ export default function ApplicationLayout() {
 					<main className="relative h-full">
 						<AutoSizer>
 							{({ height, width }: Size) => {
-								console.log(height, width);
 								return (
 									<div
 										style={{ height: height - 1, width: width - 1 }}

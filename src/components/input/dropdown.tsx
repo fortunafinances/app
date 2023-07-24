@@ -12,8 +12,6 @@ const Dropdown = ({ data }: DropdownProps) => {
 
 	const currentAccount = data.find((a) => a.accId === currentAccountNumber);
 
-	console.log(data);
-
 	if (!data || data.length === 0)
 		return <div className="text-red-400">Error getting accounts</div>;
 

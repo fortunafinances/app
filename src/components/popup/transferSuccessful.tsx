@@ -6,8 +6,8 @@ export default function TransferSuccessful() {
   const [messageType, setMessageType] = useState(true);
   const [message, setMessage] = useState("Your transfer was successful.");
   const [buttonName, setButtonName] = useState("View Transactions");
-  const navigate = useNavigate();
   const [path, setPath] = useState("/app/activity");
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (messageType === false) {
