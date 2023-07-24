@@ -20,8 +20,8 @@ import ErrorNotification from "./components/popup/errorNotif";
 import CreateProfile from "./pages/application views/createProfile";
 
 const client = new ApolloClient({
-  uri: "http://localhost:5000/graphql",
-  cache,
+	uri: "http://127.0.0.1:5000/graphql",
+	cache,
 });
 
 export default function App() {
