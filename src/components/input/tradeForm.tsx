@@ -76,7 +76,8 @@ export default function TradeForm({ buyOrSell }: buyProp) {
     data.map((item) => {
       ret.push({ label: item.ticker, value: item.ticker });
     });
-    return ret;
+    const toret = ret.sort((a, b) => (a.value > b.value ? 1 : -1));
+    return toret;
   };
 
   const preventMinus = (e: React.KeyboardEvent<HTMLInputElement>) => {
