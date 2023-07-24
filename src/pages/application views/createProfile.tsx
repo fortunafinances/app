@@ -145,7 +145,10 @@ export default function CreateProfile() {
                     disabled={isSubmitting}
                     className="flex flex-row justify-end"
                   >
-                    <BsArrowRight size={60} />
+                    <BsArrowRight
+                      size={60}
+                      className="transition duration:500 hover:scale-125"
+                    />
                   </button>
                 </Form>
               )}
