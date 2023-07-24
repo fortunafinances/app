@@ -5,6 +5,7 @@ import DataContainer from "../container/dataContainer";
 import { symbol } from "../../utilities/reactiveVariables";
 import { useNavigate } from "react-router-dom";
 import AutoSizer, { Size } from "react-virtualized-auto-sizer";
+import { AiFillStar, AiOutlineStar } from "react-icons/ai";
 
 interface TableProps<DataType extends GraphQLReturnData> {
 	loading: boolean;
@@ -71,6 +72,7 @@ export default function Table<DataType extends GraphQLReturnData>({
 							) {
 								const holding = row.original as unknown as Holding &
 									GraphQLReturnData;
+								const filled = false;
 								return (
 									<div className="flex flex-col flex-nowrap gap-2 w-full justify-evenly [&>button]:min-h-0 [&>button]:h-8">
 										<button
@@ -91,6 +93,20 @@ export default function Table<DataType extends GraphQLReturnData>({
 										>
 											Sell
 										</button>
+										<div className="flex flex-row items-center justify-center">
+											<button
+												className="w-fit"
+												onClick={() => {
+													console.log("star");
+												}}
+											>
+												{filled ? (
+													<AiFillStar size={40} />
+												) : (
+													<AiOutlineStar size={40} />
+												)}
+											</button>
+										</div>
 									</div>
 								);
 							} else {
@@ -119,12 +135,13 @@ export default function Table<DataType extends GraphQLReturnData>({
 						})}
 						muiTableProps={{
 							sx: {
-								border: "1px solid rgba(81, 81, 81, 1)",
+								// border: "1px solid rgba(81, 81, 81, 1)",
 							},
 						}}
 						muiTableHeadCellProps={{
 							sx: {
-								border: "1px solid rgba(81, 81, 81, 1)",
+								borderLeft: "1px solid rgba(81, 81, 81, 1)",
+								borderRight: "1px solid rgba(81, 81, 81, 1)",
 								"& .MuiFormControl-root ": {
 									overflowX: "hidden",
 								},
