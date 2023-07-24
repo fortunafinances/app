@@ -7,6 +7,7 @@ import {
 import { twMerge } from "tailwind-merge";
 import { useReactiveVar } from "@apollo/client/react/hooks/useReactiveVar";
 import { sidebarClosed } from "../../utilities/reactiveVariables";
+import TotalAccountValue from "../data/totalAccountValue";
 
 export default function SideBar() {
 	const collapsed = useReactiveVar(sidebarClosed);
@@ -19,11 +20,7 @@ export default function SideBar() {
 					collapsed ? "w-16" : "w-screen sm:w-64"
 				)}
 			>
-				{!collapsed && (
-					<div className="flex flex-col">
-						<h2 className="mx-3 mt-1 text-xl">Accounts</h2>
-					</div>
-				)}
+				{!collapsed && <TotalAccountValue />}
 				<button
 					onClick={() => sidebarClosed(!collapsed)}
 					className="absolute right-0 bg-gray-200 text-black w-fit py-4 rounded-l-md top-[50%] -translate-y-[50%]"
