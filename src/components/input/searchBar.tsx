@@ -22,7 +22,7 @@ export default function SearchBar() {
 	if (error) return <>Error: {error.message}</>;
 
 	return (
-		<form className="form-control grow mx-2">
+		<form className="form-control grow mx-2 z-50">
 			<Select
 				options={
 					data
