@@ -1,9 +1,9 @@
 import { useEffect } from 'react';
 import { handleAuthentication } from "../utilities/auth";
 import { useQuery } from "@apollo/client";
-import gql from "graphql-tag";
 import { Account } from "../utilities/types";
 import { accounts } from "../utilities/reactiveVariables";
+import { GET_ACCOUNTS } from "../utilities/graphQL";
 
 const Callback = () => {
 	useEffect(() => {
@@ -21,16 +21,6 @@ const Callback = () => {
 	}, []);
 
 	// Perform first time setup for common overview data
-	const GET_ACCOUNTS = gql`
-		query Accounts {
-			accounts(input: { userId: "AUTHuser1" }) {
-				accId
-				name
-				cash
-			}
-		}
-	`;
-
 	type AccountQuery = {
 		accounts: Account[];
 	};

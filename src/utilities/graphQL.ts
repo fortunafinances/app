@@ -37,3 +37,23 @@ export const MAKE_TRANSFER = gql`
 		)
 	}
 `;
+
+export const GET_ACCOUNTS = gql`
+	query Accounts {
+		accounts(input: { userId: "AUTHuser1" }) {
+			accId
+			name
+			cash
+		}
+	}
+`;
+
+export const GET_STOCK_NAMES = gql`
+	query Stocks {
+		stocks {
+			name
+			ticker
+			currPrice
+		}
+	}
+`;
