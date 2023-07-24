@@ -1,10 +1,11 @@
 import { MRT_ColumnDef } from "material-react-table";
 import Table from "../../components/data/table";
-import { gql, useQuery, useReactiveVar } from "@apollo/client";
+import { useQuery, useReactiveVar } from "@apollo/client";
 import { filterRange, formatDollars } from "../../utilities/currency";
 import { GraphQLReturnData, Holding } from "../../utilities/types";
 import { useMemo } from "react";
 import { currentAccountId } from "../../utilities/reactiveVariables";
+import { GET_HOLDINGS } from "../../utilities/graphQL";
 
 export default function Holdings() {
 	const accountId = useReactiveVar(currentAccountId);
@@ -64,19 +65,6 @@ export default function Holdings() {
 	interface HoldingsQuery {
 		holdings: Holding[] & GraphQLReturnData;
 	}
-
-	const GET_HOLDINGS = gql`
-		query Holdings($accId: Int!) {
-			holdings(input: { accId: $accId }) {
-				stockQuantity
-				stock {
-					ticker
-					name
-					currPrice
-				}
-			}
-		}
-	`;
 
 	const { loading, error, data } = useQuery<HoldingsQuery>(GET_HOLDINGS, {
 		variables: { accId: accountId },

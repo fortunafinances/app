@@ -25,7 +25,15 @@ export default function Header() {
 				<h3 className="hidden lg:inline">Welcome, {userAccount?.nickname}</h3>
 				<div className="dropdown dropdown-end">
 					<label tabIndex={0} className="cursor-pointer">
-						<CgProfile size={40} />
+						{userAccount?.picture ? (
+							<img
+								src={userAccount.picture}
+								alt="Profile Picture"
+								className="w-10 h-10 rounded-full"
+							/>
+						) : (
+							<CgProfile size={40} />
+						)}
 					</label>
 					<div
 						tabIndex={0}
