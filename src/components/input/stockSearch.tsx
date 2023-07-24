@@ -13,7 +13,7 @@ type Dropdown = {
 type StockData = {
 	stocks: Stock[];
 };
-export default function SearchBar() {
+export default function StockSearchBar({ className }: { className?: string }) {
 	const navigate = useNavigate();
 	const symbolName = useReactiveVar(symbol);
 	const { loading, error, data } = useQuery<StockData>(GET_STOCK_NAMES);
@@ -22,8 +22,9 @@ export default function SearchBar() {
 	if (error) return <>Error: {error.message}</>;
 
 	return (
-		<form className="form-control grow mx-2 z-50">
+		<form className={twMerge("form-control grow z-50 cursor-text", className)}>
 			<Select
+				className="cursor-text"
 				options={
 					data
 						? data.stocks.map((stock) => {

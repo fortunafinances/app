@@ -31,7 +31,7 @@ const AccountDropdown = ({ data }: DropdownProps) => {
 
 	return (
 		<div
-			className="dropdown mt-1 mx-1 text-black capitalize"
+			className="dropdown mt-1 text-black capitalize"
 			title={currentAccount!.name + " Account"}
 		>
 			<label
