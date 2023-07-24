@@ -4,7 +4,7 @@ import { BiDollar } from "react-icons/bi";
 import { preventMinus } from "../../utilities/common";
 import { accounts } from "../../utilities/reactiveVariables";
 import { gql, useMutation, useReactiveVar } from "@apollo/client";
-import { useNavigate } from "react-router-dom";
+import { GET_ACTIVITIES } from "../../utilities/graphQL";
 
 type DropdownProps = {
 	label: string;
@@ -13,7 +13,6 @@ type DropdownProps = {
 
 export default function Transfer() {
 	const accountList = useReactiveVar(accounts);
-	const navigate = useNavigate();
 	const MAKE_TRANSFER = gql`
 		mutation InsertTransfer(
 			$sendAccId: Int!
@@ -40,32 +39,28 @@ export default function Transfer() {
 	const [between, setBetween] = useState(false);
 
 	const handleSubmit = () => {
+		console.log(fromAccount, toAccount, amount);
 		makeTransfer({
 			variables: {
-				sendAccId: Number(fromAccount),
-				receiveAccId: Number(toAccount),
+				sendAccId: fromAccount,
+				receiveAccId: toAccount,
 				transferAmt: Number(amount),
 			},
-			update: (store, { data }) => {
-				const transfers = store.readQuery<TransferReturnData>({
-					query: MAKE_TRANSFER,
-				});
-				store.writeQuery({
-					query: MAKE_TRANSFER,
-					data: {
-						transfers: [...transfers!.insertTransfer, data?.insertTransfer],
-					},
-				});
-			},
+			refetchQueries: [{ query: GET_ACTIVITIES }],
 		})
 			.then((data) => {
 				console.log(data);
+				(document.getElementById(
+					"transfer_successful"
+				) as HTMLDialogElement)!.showModal();
 			})
 			.catch((err) => {
-				console.error(err);
-			});
+				console.log("error: ", err);
 
-		navigate("activity");
+				(document.getElementById(
+					"transfer_error"
+				) as HTMLDialogElement)!.showModal();
+			});
 	};
 
 	const transferType = [
@@ -74,15 +69,18 @@ export default function Transfer() {
 		{ label: "Between", value: "BETWEEN" },
 	];
 
-	const createDropdownItems = useCallback((exclude?: number) => {
-		const ret: DropdownProps[] = [];
-		accountList.map((account) => {
-			if (account.accId !== exclude || exclude === undefined) {
-				ret.push({ label: account.name, value: account.accId });
-			}
-		});
-		return ret;
-	}, [accountList]);
+	const createDropdownItems = useCallback(
+		(exclude?: number) => {
+			const ret: DropdownProps[] = [];
+			accountList.map((account) => {
+				if (account.accId !== exclude || exclude === undefined) {
+					ret.push({ label: account.name, value: account.accId });
+				}
+			});
+			return ret;
+		},
+		[accountList]
+	);
 
 	const checkBetween = useCallback(() => {
 		if (transfer === "BETWEEN") {

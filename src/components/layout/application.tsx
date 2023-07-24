@@ -3,6 +3,9 @@ import Header from "../navigation/header";
 import SideBar from "../navigation/sideBar";
 import AppNavigation from "../navigation/appNavigation";
 import AutoSizer, { Size } from "react-virtualized-auto-sizer";
+import Transfer from "../popup/transfer";
+import TransferSuccessful from "../popup/transferSuccessful";
+import ErrorNotification from "../popup/errorNotif";
 
 export default function ApplicationLayout() {
 	return (
@@ -15,7 +18,6 @@ export default function ApplicationLayout() {
 					<main className="relative h-full">
 						<AutoSizer>
 							{({ height, width }: Size) => {
-								console.log(height, width);
 								return (
 									<div
 										style={{ height: height - 1, width: width - 1 }}
@@ -29,6 +31,9 @@ export default function ApplicationLayout() {
 					</main>
 				</div>
 			</div>
+			<Transfer />
+			<TransferSuccessful />
+			<ErrorNotification />
 		</div>
 	);
 }
