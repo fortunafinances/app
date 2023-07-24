@@ -10,3 +10,30 @@ export const GET_ACTIVITIES = gql`
 		}
 	}
 `;
+
+export const GET_HOLDINGS = gql`
+	query Holdings($accId: Int!) {
+		holdings(input: { accId: $accId }) {
+			stockQuantity
+			stock {
+				ticker
+				name
+				currPrice
+			}
+		}
+	}
+`;
+
+export const MAKE_TRANSFER = gql`
+	mutation InsertTransfer(
+		$sendAccId: Int!
+		$receiveAccId: Int!
+		$transferAmt: Float!
+	) {
+		insertTransfer(
+			sendAccId: $sendAccId
+			receiveAccId: $receiveAccId
+			transferAmt: $transferAmt
+		)
+	}
+`;

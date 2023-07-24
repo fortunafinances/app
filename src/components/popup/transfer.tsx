@@ -3,8 +3,8 @@ import Select from "react-select";
 import { BiDollar } from "react-icons/bi";
 import { preventMinus } from "../../utilities/common";
 import { accounts } from "../../utilities/reactiveVariables";
-import { gql, useMutation, useReactiveVar } from "@apollo/client";
-import { GET_ACTIVITIES } from "../../utilities/graphQL";
+import { useMutation, useReactiveVar } from "@apollo/client";
+import { GET_ACTIVITIES, MAKE_TRANSFER } from "../../utilities/graphQL";
 
 type DropdownProps = {
 	label: string;
@@ -13,25 +13,18 @@ type DropdownProps = {
 
 export default function Transfer() {
 	const accountList = useReactiveVar(accounts);
-	const MAKE_TRANSFER = gql`
-		mutation InsertTransfer(
-			$sendAccId: Int!
-			$receiveAccId: Int!
-			$transferAmt: Float!
-		) {
-			insertTransfer(
-				sendAccId: $sendAccId
-				receiveAccId: $receiveAccId
-				transferAmt: $transferAmt
-			)
-		}
-	`;
 
 	type TransferReturnData = {
 		insertTransfer: string;
 	};
 
-	const [makeTransfer] = useMutation<TransferReturnData>(MAKE_TRANSFER);
+	const [makeTransfer] = useMutation<TransferReturnData>(MAKE_TRANSFER, {
+		refetchQueries: [
+			{
+				query: GET_ACTIVITIES,
+			},
+		],
+	});
 	const [fromAccount, setFromAccount] = useState<number | null>(null);
 	const [toAccount, setToAccount] = useState<number | null>(null);
 	const [amount, setAmount] = useState(0);
@@ -39,14 +32,12 @@ export default function Transfer() {
 	const [between, setBetween] = useState(false);
 
 	const handleSubmit = () => {
-		console.log(fromAccount, toAccount, amount);
 		makeTransfer({
 			variables: {
 				sendAccId: fromAccount,
 				receiveAccId: toAccount,
 				transferAmt: Number(amount),
 			},
-			refetchQueries: [{ query: GET_ACTIVITIES }],
 		})
 			.then((data) => {
 				console.log(data);
