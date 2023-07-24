@@ -57,11 +57,13 @@ export function LineChart() {
             quarter: ["January", "February", "March"]
         }
     ]);
+    const range = useReactiveVar(lineChartDateRange)
+    const rangeLable = range[0].full;
+    console.log("range", rangeLable)
 
-    const range = useReactiveVar(lineChartDateRange);
 
     const data = {
-        labels: range[0].full,
+        labels: rangeLable,
         datasets: [
             {
                 label: "Dataset 1",
@@ -78,8 +80,21 @@ export function LineChart() {
         ],
     };
 
-    // chart.labels = range[0].full;
-
-    return <Line options={chart} data={data} />;
+    return (
+        <div>
+            <Line options={chart} data={data} />
+            <div className="inline-flex">
+                <button className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold border border-gray-400 py-2 px-4 rounded-l">
+                    3 Months
+                </button>
+                <button className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold border border-gray-400 py-2 px-4">
+                    6 Months
+                </button>
+                <button className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold border border-gray-400 py-2 px-4 rounded-r">
+                    12 Months
+                </button>
+            </div>
+        </div>
+    );
 
 }
