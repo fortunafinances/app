@@ -1,4 +1,4 @@
-import { gql, useQuery, useReactiveVar } from "@apollo/client";
+import { useQuery, useReactiveVar } from "@apollo/client";
 import Table from "../../components/data/table";
 import { useMemo } from "react";
 import { MRT_ColumnDef } from "material-react-table";
@@ -6,6 +6,7 @@ import { Activity, GraphQLReturnData } from "../../utilities/types";
 import { filterRange, formatDollars } from "../../utilities/currency";
 import { formatDate, sortDate } from "../../utilities/common";
 import { currentAccountId } from "../../utilities/reactiveVariables";
+import { GET_ACTIVITIES } from "../../utilities/graphQL";
 
 export default function Activity() {
 	const accountId = useReactiveVar(currentAccountId);
@@ -48,17 +49,6 @@ export default function Activity() {
 	type ActivitiesQuery = {
 		activity: Activity[] & GraphQLReturnData;
 	};
-
-	const GET_ACTIVITIES = gql`
-		query Activity($accId: Int!) {
-			activity(input: { accId: $accId }) {
-				date
-				type
-				description
-				amount
-			}
-		}
-	`;
 
 	const { loading, error, data } = useQuery<ActivitiesQuery>(GET_ACTIVITIES, {
 		variables: { accId: accountId },

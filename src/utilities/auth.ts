@@ -1,16 +1,16 @@
 import auth0 from 'auth0-js';
-import jwtDecode from 'jwt-decode';
+// import jwtDecode from 'jwt-decode';
 import { userInfo } from "./reactiveVariables";
 
-interface DecodedToken {
-	openid: string;
-	email: string;
-	sub: string;
-	nickname: string;
-	profile: string;
-	exp: number;
-	// add other claims as needed
-}
+// interface DecodedToken {
+// 	openid: string;
+// 	email: string;
+// 	sub: string;
+// 	nickname: string;
+// 	profile: string;
+// 	exp: number;
+// 	// add other claims as needed
+// }
 
 // WebAuth will redirect user to the login page
 const auth0Client = new auth0.WebAuth({
@@ -33,7 +33,10 @@ export function signup() {
 }
 
 export function signout() {
-	localStorage.clear();
+	localStorage.removeItem("access_token");
+	localStorage.removeItem("id_token");
+	localStorage.removeItem("user");
+	localStorage.removeItem("accounts");
 	auth0Client.logout({
 		returnTo: "http://localhost:4040/",
 		clientID: "OxQxuofsPZXSFzTqbVtKgErT2xrl3VfZ",
@@ -53,17 +56,16 @@ export function handleAuthentication() {
 			// similar to the response below.
 			auth0Client.client.userInfo(
 				authResult.accessToken,
-				function (err, userData) {
+				function (_err, userData) {
 					console.log("\nUser info... ", userData);
 					console.log("\nUser id... ", userData.sub);
-					localStorage.setItem("userId", userData.sub);
 					userInfo({
 						userId: userData.sub,
 						username: userData.name,
 						nickname: userData.nickname,
 						email: userData.email!,
 						picture: userData.picture,
-						dateOfBirth: "1/1/2000",
+						dateOfBirth: "",
 					});
 				}
 			);
@@ -74,36 +76,36 @@ export function handleAuthentication() {
 }
 
 /** sending user data to backend */
-function sendUserData(data: string) {
-	return fetch(`http://localhost:5000/add_user`, {
-		method: "POST",
-		headers: {
-			"Content-Type": "application/json",
-		},
-		body: JSON.stringify(data),
-	})
-		.then((response) => response.json())
-		.then((response) => {
-			console.log("Sending data to backend... ", response);
-		})
-		.catch((error) => console.log(error));
-}
+// function sendUserData(data: string) {
+// 	return fetch(`http://localhost:5000/add_user`, {
+// 		method: "POST",
+// 		headers: {
+// 			"Content-Type": "application/json",
+// 		},
+// 		body: JSON.stringify(data),
+// 	})
+// 		.then((response) => response.json())
+// 		.then((response) => {
+// 			console.log("Sending data to backend... ", response);
+// 		})
+// 		.catch((error) => console.log(error));
+// }
 
-/** function that will print out the info id token contains */
-function printDecodedToken(token: string) {
-	if (token) {
-		const decodedToken: DecodedToken = jwtDecode(token);
+// /** function that will print out the info id token contains */
+// function printDecodedToken(token: string) {
+// 	if (token) {
+// 		const decodedToken: DecodedToken = jwtDecode(token);
 
-		console.log(`\nUser email: ${decodedToken.email}`);
-		console.log(`User nickname: ${decodedToken.nickname}`);
-        localStorage.setItem("---- user", decodedToken.nickname);
-		console.log(`User sub: ${decodedToken.sub}`);
-		if (decodedToken.exp < Date.now() / 1000) {
-			console.log("Token has expired");
-		} else {
-			console.log("Token is still valid");
-		}
-	}
-}
+// 		console.log(`\nUser email: ${decodedToken.email}`);
+// 		console.log(`User nickname: ${decodedToken.nickname}`);
+//         localStorage.setItem("---- user", decodedToken.nickname);
+// 		console.log(`User sub: ${decodedToken.sub}`);
+// 		if (decodedToken.exp < Date.now() / 1000) {
+// 			console.log("Token has expired");
+// 		} else {
+// 			console.log("Token is still valid");
+// 		}
+// 	}
+// }
 
 

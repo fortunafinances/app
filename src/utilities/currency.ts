@@ -14,6 +14,5 @@ export function filterRange(
 ): boolean {
 	const min = filterValue[0] ? filterValue[0] : Number.NEGATIVE_INFINITY;
 	const max = filterValue[1] ? filterValue[1] : Number.POSITIVE_INFINITY;
-	console.log(max, fieldValue);
 	return fieldValue >= min && fieldValue <= max;
 }

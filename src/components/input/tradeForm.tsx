@@ -1,10 +1,12 @@
 import Select from "react-select";
 import { useEffect, useState } from "react";
 import { BiDollar } from "react-icons/bi";
-import { gql, useQuery, useReactiveVar } from "@apollo/client";
-import { Stock } from "../../../utilities/types";
-import { formatDollars } from "../../../utilities/currency";
-import { symbol } from "../../../utilities/reactiveVariables";
+import { gql, useMutation, useQuery, useReactiveVar } from "@apollo/client";
+import { Stock } from "../../utilities/types";
+import { formatDollars } from "../../utilities/currency";
+import { currentAccountId, symbol } from "../../utilities/reactiveVariables";
+import { OrderType, OrderSide } from "../../utilities/types";
+import { GET_STOCK_NAMES } from "../../utilities/graphQL";
 
 interface StockData {
   stocks: Stock[];
@@ -15,26 +17,59 @@ type DropdownData = {
   value: string;
 };
 
-const GET_STOCK_NAMES = gql`
-  query Stocks {
-    stocks {
-      ticker
-      currPrice
-    }
-  }
-`;
+export interface buyProp {
+  buyOrSell: boolean;
+}
 
-export default function SymbolQuantityLimit() {
+export default function TradeForm({ buyOrSell }: buyProp) {
   const { loading, error, data } = useQuery<StockData>(GET_STOCK_NAMES);
 
   const symbolName = useReactiveVar(symbol);
+  const accountNumber = useReactiveVar(currentAccountId);
+
+  const PLACE_ORDER = gql`
+    mutation InsertTrade(
+      $accID: Int!
+      $type: OrderType!
+      $side: OrderSide!
+      $ticker: String!
+      $tradeQty: Int!
+    ) {
+      insertTrade(
+        accID: $accID
+        type: $type
+        side: $side
+        ticker: $ticker
+        tradeQty: $tradeQty
+      )
+    }
+  `;
+
+  type TransferReturnData = {
+    insertTrade: string;
+  };
+
+  const [placeOrder] = useMutation<TransferReturnData>(PLACE_ORDER);
+
+  const handleSubmit = () => {
+    placeOrder({
+      variables: {
+        accID: accountNumber,
+        type: marketState ? OrderType.Market : OrderType.Limit,
+        side: buyOrSell ? OrderSide.Buy : OrderSide.Sell,
+        ticker: symbolName,
+        tradeQty: quantity,
+      },
+    }).catch((error) => console.error(error));
+  };
 
   const makeDropdownData = (data: Stock[]) => {
     const ret: DropdownData[] = [];
     data.map((item) => {
       ret.push({ label: item.ticker, value: item.ticker });
     });
-    return ret;
+    const toret = ret.sort((a, b) => (a.value > b.value ? 1 : -1));
+    return toret;
   };
 
   const preventMinus = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -49,14 +84,14 @@ export default function SymbolQuantityLimit() {
   const [totalPrice, setTotalPrice] = useState(0);
 
   useEffect(() => {
-			if (symbolName !== "" && symbolName !== "Select..." && data) {
-				const stock = data.stocks.find(
-					(element) => element.ticker === symbolName
-				);
-				const price = stock!.currPrice;
-				setStockPrice(price!);
-				setTotalPrice(quantity * stockPrice);
-			}    
+    if (symbolName !== "" && symbolName !== "Select..." && data) {
+      const stock = data.stocks.find(
+        (element) => element.ticker === symbolName
+      );
+      const price = stock!.currPrice;
+      setStockPrice(price!);
+      setTotalPrice(quantity * stockPrice);
+    }
   }, [data, quantity, symbolName, stockPrice]);
 
   if (loading) return <>Loading</>;
@@ -67,7 +102,7 @@ export default function SymbolQuantityLimit() {
       <div className="m-4 mt-6 flex flex-col gap-3">
         <h1 className="font-semibold text-xl">Symbol</h1>
         <Select
-          options={makeDropdownData(data!.stocks)}
+          options={makeDropdownData(data!.stocks).sort()}
           onChange={(options) => {
             symbol(String(options?.value));
           }}
@@ -141,7 +176,10 @@ export default function SymbolQuantityLimit() {
         <button className="border-[#920000] text-[#920000] bg-[#F9E5E5] hover:shadow-xl shadow-[#920000] hover:bg-[#920000] hover:text-[#f9e5e5]">
           Cancel
         </button>
-        <button className="border-success-content text-success-content bg-[#E3FDDC] hover:shadow-xl shadow-succes-content hover:bg-success-content hover:text-[#e3fddc]">
+        <button
+          className="border-success-content text-success-content bg-[#E3FDDC] hover:shadow-xl shadow-succes-content hover:bg-success-content hover:text-[#e3fddc]"
+          onClick={handleSubmit}
+        >
           Submit
         </button>
       </div>
