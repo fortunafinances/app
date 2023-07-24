@@ -22,6 +22,14 @@ export const userInfo = makeVarPersisted<User | null>("user", {
   dateOfBirth: "",
 });
 
+type DateRanges = {
+  full: string[];
+  half: string[];
+  quarter: string[];
+}
+
+export const lineChartDateRange = makeVarPersisted<DateRanges[]>("lineChartDateRange", []);
+
 export const symbol = makeVar("");
 
 export const accounts = makeVarPersisted<Account[]>("accounts", []);
