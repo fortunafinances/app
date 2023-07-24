@@ -3,7 +3,7 @@ import { twMerge } from "tailwind-merge";
 import Transfer from "../popup/transfer";
 import { useReactiveVar } from "@apollo/client";
 import { accounts } from "../../utilities/reactiveVariables";
-import Dropdown from "../input/dropdown";
+import AccountDropdown from "../input/accountDropdown";
 
 const navItems = ["overview", "holdings", "orders", "activity"];
 
@@ -17,7 +17,7 @@ export default function AppNavigation() {
 			<div className="flex flex-row justify-between items-center">
 				<div className="text-white flex flex-row items-center px-2">
 					<h3 className="text-xl font-semibold border-r-2 pr-2">
-						<Dropdown data={accountList} />
+						<AccountDropdown data={accountList} />
 					</h3>
 					<div>
 						{navItems.map((item, i) => {

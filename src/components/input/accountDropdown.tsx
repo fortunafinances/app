@@ -7,7 +7,7 @@ export interface DropdownProps {
 	data: Account[];
 }
 
-const Dropdown = ({ data }: DropdownProps) => {
+const AccountDropdown = ({ data }: DropdownProps) => {
 	const currentAccountNumber = useReactiveVar(currentAccountId);
 
 	const currentAccount = data.find((a) => a.accId === currentAccountNumber);
@@ -29,15 +29,14 @@ const Dropdown = ({ data }: DropdownProps) => {
 		);
 	};
 
-
 	return (
 		<div
-			className="dropdown m-1 text-black"
+			className="dropdown mt-1 text-black"
 			title={currentAccount!.name + " Account"}
 		>
 			<label
 				tabIndex={0}
-				className="btn normal-case bg-base-200 w-full text-xl flex flex-row flex-nowrap justify-between"
+				className="btn bg-white outline-none b-0 rounded-b-none normal-case w-full text-xl flex flex-row flex-nowrap justify-between"
 			>
 				<div className="relative top-[50%] -translate-y-[15px] h-full max-w-[90%] -left-2">
 					<p className="truncate max-w-full h-full text-center">
@@ -49,7 +48,7 @@ const Dropdown = ({ data }: DropdownProps) => {
 			</label>
 			<ul
 				tabIndex={0}
-				className="dropdown-content menu p-2 shadow bg-base-200 rounded-box w-full z-50"
+				className="dropdown-content menu p-2 shadow bg-white rounded-b-box w-full z-50"
 			>
 				{data.map((item, i) => (
 					<li key={i} className="w-full" title={item.name}>
@@ -61,9 +60,17 @@ const Dropdown = ({ data }: DropdownProps) => {
 						</a>
 					</li>
 				))}
+				<li key={-1} className="w-full" title={"Add new account"}>
+					<a
+						onClick={() => {}}
+						className="truncate max-w-full inline text-center"
+					>
+						+
+					</a>
+				</li>
 			</ul>
 		</div>
 	);
 };
 
-export default Dropdown;
+export default AccountDropdown;
