@@ -1,6 +1,7 @@
 import { gql, useQuery, useReactiveVar } from "@apollo/client";
 import DataContainer from "../../components/container/dataContainer";
 import PieChart from "../../components/data/pieChart";
+import { LineChart } from "../../components/data/lineChart";
 import { formatDollars } from "../../utilities/currency";
 import { currentAccountId } from "../../utilities/reactiveVariables";
 
@@ -62,6 +63,7 @@ export default function Overview() {
 			</DataContainer>
 			<DataContainer className="h-full md:max-w-[50%] max-w-full p-3 flex flex-row justify-around">
 				<PieChart />
+				<LineChart />
 			</DataContainer>
 		</div>
 	);
