@@ -60,7 +60,7 @@ export default function TradeForm({ buyOrSell }: buyProp) {
 	};
 
 	const [marketState, setMarketState] = useState(true);
-	const [quantity, setQuantity] = useState(0);
+	const [quantity, setQuantity] = useState(1);
 	const [stockPrice, setStockPrice] = useState(0);
 	const [totalPrice, setTotalPrice] = useState(0);
 
@@ -82,17 +82,6 @@ export default function TradeForm({ buyOrSell }: buyProp) {
 		<div>
 			<div className="m-4 mt-6 flex flex-col gap-3">
 				<h1 className="font-semibold text-xl">Symbol</h1>
-				{/* <Select
-          options={makeDropdownData(data!.stocks).sort()}
-          onChange={(options) => {
-            symbol(String(options?.value));
-          }}
-          value={{ value: symbolName, label: symbolName }}
-          theme={(theme) => ({
-            ...theme,
-            borderRadius: 3,
-          })}
-        /> */}
 				<StockSearchBar className="z-40 w-full" />
 			</div>
 			<div className="m-4 mt-6 flex flex-col gap-3">
@@ -106,6 +95,7 @@ export default function TradeForm({ buyOrSell }: buyProp) {
 						onChange={(e) => {
 							setQuantity(Number(e.target.value));
 						}}
+						value={quantity}
 						className="input h-9 w-full border-[1px] rounded-[3px] border-[#cccccc] focus:ring-blue-500 focus:border-blue-500 focus:border-[2px] !outline-none"
 					/>
 				</div>

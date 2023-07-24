@@ -5,6 +5,7 @@ import { useQuery, useReactiveVar } from "@apollo/client";
 import { GET_STOCK_NAMES } from "../../utilities/graphQL";
 import { Stock } from "../../utilities/types";
 import { useNavigate } from "react-router-dom";
+import { useCallback } from "react";
 
 type Dropdown = {
 	label: string;
@@ -18,6 +19,14 @@ export default function StockSearchBar({ className }: { className?: string }) {
 	const symbolName = useReactiveVar(symbol);
 	const { loading, error, data } = useQuery<StockData>(GET_STOCK_NAMES);
 
+	const getStockName = useCallback(
+		(symbol: string) => {
+			const stock = data?.stocks.find((stock) => stock.ticker === symbol);
+			return stock?.name;
+		},
+		[data?.stocks]
+	);
+
 	if (loading) return <>...</>;
 	if (error) return <>Error: {error.message}</>;
 
@@ -28,15 +37,15 @@ export default function StockSearchBar({ className }: { className?: string }) {
 				options={
 					data
 						? data.stocks.map((stock) => {
-								return { label: stock.ticker, value: stock.name! };
+								return { label: stock.name!, value: stock.ticker };
 						  })
 						: []
 				}
 				formatOptionLabel={formatOptionLabel}
 				placeholder="Search"
-				value={{ label: symbolName, value: symbolName }}
+				value={{ label: getStockName(symbolName)!, value: symbolName }}
 				onChange={(e) => {
-					symbol(e?.label);
+					symbol(e?.value);
 					navigate("/app/trade", { state: { tradeType: true } });
 				}}
 				onInputChange={function (): void {}}
@@ -51,7 +60,7 @@ const formatOptionLabel = (
 	props: Dropdown,
 	meta: FormatOptionLabelMeta<Dropdown>
 ) => {
-	if (props.label.length === 0 || props.value.length === 0)
+	if (props?.label?.length === 0 || props?.value?.length === 0)
 		return <div className="text-gray-500">Search for a stock</div>;
 	return (
 		<div className="flex flex-row items-center gap-2">
