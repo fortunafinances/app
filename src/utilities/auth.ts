@@ -33,7 +33,10 @@ export function signup() {
 }
 
 export function signout() {
-	localStorage.clear();
+	localStorage.removeItem("access_token");
+	localStorage.removeItem("id_token");
+	localStorage.removeItem("user");
+	localStorage.removeItem("accounts");
 	auth0Client.logout({
 		returnTo: "http://localhost:4040/",
 		clientID: "OxQxuofsPZXSFzTqbVtKgErT2xrl3VfZ",
@@ -56,14 +59,13 @@ export function handleAuthentication() {
 				function (_err, userData) {
 					console.log("\nUser info... ", userData);
 					console.log("\nUser id... ", userData.sub);
-					localStorage.setItem("userId", userData.sub);
 					userInfo({
 						userId: userData.sub,
 						username: userData.name,
 						nickname: userData.nickname,
 						email: userData.email!,
 						picture: userData.picture,
-						dateOfBirth: "1/1/2000",
+						dateOfBirth: "",
 					});
 				}
 			);

@@ -23,7 +23,7 @@ const Callback = () => {
 	// Perform first time setup for common overview data
 	const GET_ACCOUNTS = gql`
 		query Accounts {
-			accounts(input: { userId: "1" }) {
+			accounts(input: { userId: "AUTHuser1" }) {
 				accId
 				name
 				cash
@@ -37,9 +37,12 @@ const Callback = () => {
 	const { error, data } = useQuery<AccountQuery>(GET_ACCOUNTS);
 
 	if (error) console.error(error);
-	if (data) {
-		accounts(data.accounts);
-	}
+
+	useEffect(() => {
+		if (data) {
+			accounts(data.accounts);
+		}
+	}, [data]);
 
 	return (
 		<div className="w-screen h-screen">
