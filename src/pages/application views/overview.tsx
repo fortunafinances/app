@@ -61,11 +61,11 @@ export default function Overview() {
 				/>
 				<DataComponent title="Cash" dollars={data?.displayBar.cash ?? 0} />
 			</DataContainer>
-			<div style={{ display: "flex", flexDirection: "row" }}>
-				<DataContainer className="h-full md:max-w-[50%] max-w-full p-3 flex flex-row justify-around" >
+			<div className="flex">
+				<DataContainer className="h-full md:max-w-[50%] max-w-full p-3 flex flex-row justify-around mr-1" >
 					<PieChart />
 				</DataContainer>
-				<DataContainer className="h-full md:max-w-[50%] max-w-full p-3 flex flex-row justify-around">
+				<DataContainer className="h-full md:max-w-[50%] max-w-full p-3 flex flex-row justify-around ml-1">
 					<LineChart />
 				</DataContainer>
 			</div>
