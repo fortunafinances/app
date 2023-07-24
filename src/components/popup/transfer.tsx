@@ -6,26 +6,37 @@ import { accounts } from "../../utilities/reactiveVariables";
 import { useMutation, useReactiveVar } from "@apollo/client";
 import { GET_ACTIVITIES, MAKE_TRANSFER } from "../../utilities/graphQL";
 import { formatDollars } from "../../utilities/currency";
+import { twMerge } from "tailwind-merge";
 
 type DropdownProps = {
 	label: string;
 	value: number;
 };
 
+type TransferReturnData = {
+	insertTransfer: string;
+};
+
+const transferType = [
+	{ label: "In", value: "IN" },
+	{ label: "Out", value: "OUT" },
+	{ label: "Between", value: "BETWEEN" },
+];
+
 export default function Transfer() {
 	const accountList = useReactiveVar(accounts);
 
-	const currentAccountValue = (id: number) =>
-		accountList.find((account) => {
-			return account.accId === id;
-		})?.cash;
+	const getAccountValue = useCallback(
+		(id: number) => {
+			return accountList.find((account) => {
+				return account.accId === id;
+			})?.cash;
+		},
+		[accountList]
+	);
 
 	const getAccount = (id: number) =>
 		accountList.find((account) => account.accId === id);
-
-	type TransferReturnData = {
-		insertTransfer: string;
-	};
 
 	const [makeTransfer] = useMutation<TransferReturnData>(MAKE_TRANSFER, {
 		refetchQueries: [
@@ -40,6 +51,7 @@ export default function Transfer() {
 	const [amount, setAmount] = useState(0);
 	const [transfer, setTransfer] = useState("");
 	const [between, setBetween] = useState(false);
+	const [valid, setValid] = useState(false);
 
 	const successModal = document.getElementById(
 		"transfer_successful"
@@ -49,6 +61,7 @@ export default function Transfer() {
 	) as HTMLDialogElement;
 
 	const handleSubmit = () => {
+		if (!valid) return;
 		makeTransfer({
 			variables: {
 				sendAccId: fromAccount,
@@ -69,19 +82,25 @@ export default function Transfer() {
 			});
 	};
 
-	const transferType = [
-		{ label: "In", value: "IN" },
-		{ label: "Out", value: "OUT" },
-		{ label: "Between", value: "BETWEEN" },
-	];
+	useEffect(() => {
+		if (
+			!fromAccount ||
+			!toAccount ||
+			!amount ||
+			!transfer ||
+			amount >= getAccountValue(fromAccount)!
+		) {
+			setValid(false);
+		} else {
+			setValid(true);
+		}
+	}, [amount, fromAccount, getAccountValue, toAccount, transfer]);
 
 	const clearForm = () => {
 		setTransfer("");
 		setFromAccount(null);
 		setToAccount(null);
 		setAmount(0);
-		console.log("clearing form");
-		console.log(transfer, fromAccount, toAccount, amount);
 	};
 
 	const createDropdownItems = useCallback(
@@ -203,26 +222,36 @@ export default function Transfer() {
 				{/* Amount */}
 				<h2 className="font-medium text-2xl">Amount</h2>
 				<div className="flex flex-row justify-center items-center gap-2">
-					<div className="relative">
-						<i className="absolute top-[50%] -translate-y-[50%]">
-							<BiDollar />
-						</i>
-						<input
-							type="number"
-							min={0}
-							step="0.01"
-							placeholder="Price"
-							onChange={(e) => {
-								setAmount(Number(e.target.value));
-							}}
-							value={amount}
-							onKeyDown={preventMinus}
-							className="input h-9 w-full border-[1px] rounded-[3px] border-[#cccccc] focus:ring-blue-500 focus:border-blue-500 focus:border-[2px] !outline-none"
-						/>
+					<div className="flex flex-col">
+						<div className="relative">
+							<i className="absolute top-[50%] -translate-y-[50%]">
+								<BiDollar />
+							</i>
+							<input
+								type="number"
+								min={0}
+								step="0.01"
+								placeholder="Price"
+								onChange={(e) => {
+									setAmount(Number(e.target.value));
+								}}
+								value={amount}
+								onKeyDown={preventMinus}
+								className="input h-9 w-full border-[1px] rounded-[3px] border-[#cccccc] focus:ring-blue-500 focus:border-blue-500 focus:border-[2px] !outline-none"
+							/>
+						</div>
+						<p
+							className={twMerge(
+								"text-red-500 hidden text-xs",
+								amount >= getAccountValue(fromAccount!)! && "inline"
+							)}
+						>
+							Amount must be less than source account value!
+						</p>
 					</div>
 					<h2 className="text-center">
 						<span className="text-lg font-bold">Source Account Value: </span>
-						{formatDollars(currentAccountValue(fromAccount!) ?? 0)}
+						{formatDollars(getAccountValue(fromAccount!)!)}
 					</h2>
 				</div>
 				{/* Discard and Submit */}
@@ -235,8 +264,9 @@ export default function Transfer() {
 						Discard
 					</button>
 					<button
-						className="btn border-success-content text-success-content bg-[#E3FDDC] hover:shadow-xl shadow-succes-content hover:bg-success-content hover:text-[#e3fddc]"
+						className="btn border-success-content text-success-content bg-[#E3FDDC] hover:shadow-xl shadow-success-content hover:bg-success-content hover:text-[#e3fddc]"
 						onClick={handleSubmit}
+						disabled={!valid}
 					>
 						Submit
 					</button>
