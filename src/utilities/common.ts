@@ -28,3 +28,14 @@ export const formatDate = (dateString: string): string => {
 export const sortDate = (a: string, b: string): number => {
 	return new Date(a) >= new Date(b) ? 1 : -1;
 };
+
+export const getMostRecentMonths = (num: number) => {
+	const today = new Date(); // Get today's date
+	const months = []; // Create an empty array for the months
+	// add month into months
+	for (let i = 1; i <= num; i++) {
+		const month = new Date(today.getFullYear(), today.getMonth() - i, 1);
+		months.push(month.toLocaleString("default", { month: "long" }));
+	}
+	return months.reverse();
+}
