@@ -49,7 +49,7 @@ const Dropdown = ({ data }: DropdownProps) => {
 			</label>
 			<ul
 				tabIndex={0}
-				className="dropdown-content menu p-2 shadow bg-base-200 rounded-box w-full z-50"
+				className="dropdown-content menu p-2 shadow bg-white rounded-b-box w-full z-50 text-lg"
 			>
 				{data.map((item, i) => (
 					<li key={i} className="w-full" title={item.name}>
