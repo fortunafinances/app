@@ -36,30 +36,7 @@ export function LineChart() {
         },
     };
 
-    // create range var to store the selection
-    // lineChartDateRange([
-    //     {
-    //         full: [
-    //             "January",
-    //             "February",
-    //             "March",
-    //             "April",
-    //             "May",
-    //             "June",
-    //             "July",
-    //             "August",
-    //             "September",
-    //             "October",
-    //             "November",
-    //             "December"
-    //         ],
-    //         half: ["January", "February", "March", "April", "May", "June"],
-    //         quarter: ["January", "February", "March"]
-    //     }
-    // ]);
     const range = useReactiveVar(lineChartDateRange)
-   
-    console.log("range", range)
 
     const data = {
         labels: range!,
@@ -80,22 +57,22 @@ export function LineChart() {
     };
 
     return (
-        <div>
+        <div className='w-full'>
             <Line options={chart} data={data} />
-            <div className="inline-flex">
+            <div className="flex mt-5 justify-center ">
                 <button
                     onClick={() => lineChartDateRange(dateRanges.quarter)}
-                    className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold border border-gray-400 py-2 px-4 rounded-l">
+                    className="flex-1 bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold border border-gray-400 py-2 px-4 rounded-l">
                     3 Months
                 </button>
-                <button 
+                <button
                     onClick={() => lineChartDateRange(dateRanges.half)}
-                    className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold border border-gray-400 py-2 px-4">
+                    className="flex-1 bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold border border-gray-400 py-2 px-4">
                     6 Months
                 </button>
                 <button
-                    onClick={() => lineChartDateRange(dateRanges.full)} 
-                    className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold border border-gray-400 py-2 px-4 rounded-r">
+                    onClick={() => lineChartDateRange(dateRanges.full)}
+                    className="flex-1 bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold border border-gray-400 py-2 px-4 rounded-r">
                     12 Months
                 </button>
             </div>
