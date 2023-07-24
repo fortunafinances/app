@@ -6,6 +6,7 @@ import { Stock } from "../../utilities/types";
 import { formatDollars } from "../../utilities/currency";
 import { currentAccountId, symbol } from "../../utilities/reactiveVariables";
 import { OrderType, OrderSide } from "../../utilities/types";
+import { GET_STOCK_NAMES } from "../../utilities/graphQL";
 
 interface StockData {
   stocks: Stock[];
@@ -15,15 +16,6 @@ type DropdownData = {
   label: string;
   value: string;
 };
-
-const GET_STOCK_NAMES = gql`
-  query Stocks {
-    stocks {
-      ticker
-      currPrice
-    }
-  }
-`;
 
 export interface buyProp {
   buyOrSell: boolean;
