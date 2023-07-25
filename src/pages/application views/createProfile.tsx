@@ -3,12 +3,15 @@ import { BsArrowRight } from "react-icons/bs";
 import { useNavigate } from "react-router-dom";
 
 export default function CreateProfile() {
-  const navigate = useNavigate();
+  type errorType ={
+    firstname? : string;
+    lastname? :string;
+    username? :string;
+    phonenumber?:  string;
+  }
 
-  const routeChange = () => {
-    const path = `/createAccount`;
-    navigate(path);
-  };
+  const navigate = useNavigate();
+  
   return (
     <div className="h-screen flex [&>div]:w-[50%]">
       <div className="flex flex-col gap-5 bg-primary text-secondary p-8">
@@ -32,24 +35,15 @@ export default function CreateProfile() {
               initialValues={{
                 firstname: "",
                 lastname: "",
-                email: "",
+                username: "",
                 phonenumber: "",
-                birthdate: "",
               }}
-              onSubmit={(values, { setSubmitting }) => {
-                setTimeout(() => {
-                  alert(JSON.stringify(values, null, 2));
-                  setSubmitting(false);
-                }, 400);
+              onSubmit={() => {
+                navigate('/createAccount');
               }}
+
               validate={(values) => {
-                const errors = {
-                  firstname: "",
-                  lastname: "",
-                  email: "",
-                  phonenumber: "",
-                  birthdate: "",
-                };
+                const errors: errorType= {};
                 if (!values.firstname) {
                   errors.firstname = "*Required";
                 }
@@ -58,13 +52,10 @@ export default function CreateProfile() {
                   errors.lastname = "*Required";
                 }
 
-                if (!values.email) {
-                  errors.email = "*Required";
-                } else if (
-                  !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.email)
-                ) {
-                  errors.email = "Invalid email address";
-                }
+                if (!values.username) {
+                  errors.username = "*Required";
+                } 
+
 
                 if (!values.phonenumber) {
                   errors.phonenumber = "*Required";
@@ -75,14 +66,11 @@ export default function CreateProfile() {
                 ) {
                   errors.phonenumber = "Invalid phone number";
                 }
-                if (!values.birthdate) {
-                  errors.birthdate = "*Required";
-                }
                 return errors;
               }}
             >
-              {({ isSubmitting }) => (
-                <Form className="flex flex-col gap-4 ">
+              {({ isSubmitting}) => (
+                <Form className="flex flex-col gap-4">
                   <div>
                     <h1 className="text-left text-3xl font-medium pl-1">
                       First Name
@@ -117,22 +105,6 @@ export default function CreateProfile() {
                   </div>
                   <div>
                     <h1 className="text-left text-3xl font-medium pl-1">
-                      Email
-                    </h1>
-                    <ErrorMessage
-                      name="email"
-                      component="div"
-                      className="text-left text-[#FF0000]"
-                    />
-                    <Field
-                      type="email"
-                      name="email"
-                      placeholder="Email Address"
-                      className="pl-3 h-14 w-full rounded-md text-xl"
-                    />
-                  </div>
-                  <div>
-                    <h1 className="text-left text-3xl font-medium pl-1">
                       Phone Number
                     </h1>
                     <ErrorMessage
@@ -147,11 +119,26 @@ export default function CreateProfile() {
                       className="pl-3 h-14 w-full rounded-md text-xl"
                     />
                   </div>
+                  <div>
+                    <h1 className="text-left text-3xl font-medium pl-1">
+                      Username
+                    </h1>
+                    <ErrorMessage
+                      name="username"
+                      component="div"
+                      className="text-left text-[#FF0000]"
+                    />
+                    <Field
+                      type="username"
+                      name="username"
+                      placeholder="Username"
+                      className="pl-3 h-14 w-full rounded-md text-xl"
+                    />
+                  </div>
                   <button
                     type="submit"
                     disabled={isSubmitting}
                     className="flex flex-row justify-end"
-                    onClick={routeChange}
                   >
                     <BsArrowRight
                       size={60}
