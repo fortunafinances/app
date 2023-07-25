@@ -31,7 +31,7 @@ const AccountDropdown = ({ data }: DropdownProps) => {
 
 	return (
 		<div
-			className="dropdown mt-1 text-black"
+			className="dropdown mt-1 mx-1 text-black capitalize"
 			title={currentAccount!.name + " Account"}
 		>
 			<label
@@ -39,7 +39,7 @@ const AccountDropdown = ({ data }: DropdownProps) => {
 				className="btn bg-white outline-none b-0 rounded-b-none normal-case w-full text-xl flex flex-row flex-nowrap justify-between"
 			>
 				<div className="relative top-[50%] -translate-y-[15px] h-full max-w-[90%] -left-2">
-					<p className="truncate max-w-full h-full text-center">
+					<p className="truncate max-w-full h-full text-center capitalize">
 						{currentAccount!.name}
 						{appendAccount() ? "" : " Account"}
 					</p>
@@ -48,7 +48,7 @@ const AccountDropdown = ({ data }: DropdownProps) => {
 			</label>
 			<ul
 				tabIndex={0}
-				className="dropdown-content menu p-2 shadow bg-white rounded-b-box w-full z-50"
+				className="dropdown-content menu p-2 shadow bg-white rounded-b-box w-full z-50 text-lg"
 			>
 				{data.map((item, i) => (
 					<li key={i} className="w-full" title={item.name}>

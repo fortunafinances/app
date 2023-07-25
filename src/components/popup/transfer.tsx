@@ -5,7 +5,7 @@ import { preventMinus } from "../../utilities/common";
 import { accounts } from "../../utilities/reactiveVariables";
 import { useMutation, useReactiveVar } from "@apollo/client";
 import { GET_ACTIVITIES, MAKE_TRANSFER } from "../../utilities/graphQL";
- import { useFormik } from "formik";
+//  import { useFormik } from "formik";
 
  type DropdownProps = {
 		label: string;
@@ -27,14 +27,14 @@ import { GET_ACTIVITIES, MAKE_TRANSFER } from "../../utilities/graphQL";
 			],
 		});
 
-		const formik = useFormik({
-			initialValues: {
-				fromAccount: "",
-				toAccount: "",
-				amount: "",
-			},
-			onSubmit: (values) => console.log(values),
-		});
+		// const formik = useFormik({
+		// 	initialValues: {
+		// 		fromAccount: "",
+		// 		toAccount: "",
+		// 		amount: "",
+		// 	},
+		// 	onSubmit: (values) => console.log(values),
+		// });
 		const [fromAccount, setFromAccount] = useState<number | null>(null);
 		const [toAccount, setToAccount] = useState<number | null>(null);
 		const [amount, setAmount] = useState(0);
