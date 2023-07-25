@@ -15,7 +15,7 @@ export default function AppNavigation() {
 	return (
 		<nav className="bg-gray-800">
 			<div className="flex flex-row justify-between items-center">
-				<div className="text-white flex flex-row items-center">
+				<div className="text-white flex flex-row items-end">
 					<h3 className="text-xl font-semibold">
 						<AccountDropdown data={accountList} />
 					</h3>

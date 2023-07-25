@@ -39,8 +39,8 @@ export const MAKE_TRANSFER = gql`
 `;
 
 export const GET_ACCOUNTS = gql`
-	query Accounts {
-		accounts(input: { userId: "AUTHuser1" }) {
+	query Accounts($userId: String!) {
+		accounts(input: { userId: $userId }) {
 			accId
 			name
 			cash
@@ -54,6 +54,19 @@ export const GET_STOCK_NAMES = gql`
 			name
 			ticker
 			currPrice
+		}
+	}
+`;
+
+export const CREATE_ACCOUNT = gql`
+	mutation InsertAccount($name: String!, $userId: ID!) {
+		insertAccount(name: $name, userId: $userId) {
+			message
+			account {
+				accId
+				name
+				cash
+			}
 		}
 	}
 `;

@@ -37,11 +37,11 @@ export function signout() {
 	localStorage.removeItem("id_token");
 	localStorage.removeItem("user");
 	localStorage.removeItem("accounts");
+	localStorage.removeItem("currentAccountId");
 	auth0Client.logout({
 		returnTo: "http://localhost:4040/",
 		clientID: "OxQxuofsPZXSFzTqbVtKgErT2xrl3VfZ",
 	});
-	console.log("Sign out");
 }
 
 export function handleAuthentication() {
@@ -59,13 +59,11 @@ export function handleAuthentication() {
 				function (_err, userData) {
 					console.log("\nUser info... ", userData);
 					console.log("\nUser id... ", userData.sub);
+
 					userInfo({
 						userId: userData.sub,
-						username: userData.name,
-						nickname: userData.nickname,
 						email: userData.email!,
 						picture: userData.picture,
-						dateOfBirth: "",
 					});
 				}
 			);
