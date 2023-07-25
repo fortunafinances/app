@@ -15,7 +15,7 @@ export type User = {
 };
 
 export type GraphQLReturnData = {
-	__typename: string;
+	__typename?: string;
 };
 
 export interface Stock {
@@ -49,7 +49,7 @@ export interface Order extends GraphQLReturnData {
 }
 
 export interface Account extends GraphQLReturnData {
-	accId: string;
+	accId: number;
 	cash: number;
 	name: string;
 }

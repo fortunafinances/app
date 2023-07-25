@@ -79,11 +79,19 @@ const Callback = () => {
 							lastName: res.data?.insertUser.user.lastName,
 							...user!,
 						});
-						getAccounts()
+						getAccounts({ variables: { userId: user!.userId } })
 							.then((res) => {
-								accounts(res.data?.accounts);
+								console.log(res);
+								accounts(
+									res.data?.accounts.map((acc) => {
+										return {
+											accId: Number(acc.accId),
+											cash: acc.cash,
+											name: acc.name,
+										};
+									})
+								);
 								currentAccountId(accounts()[0].accId);
-								console.log("Accounts list: ", accounts());
 							})
 							.catch((err) => {
 								console.error(err);
@@ -100,7 +108,7 @@ const Callback = () => {
 	return (
 		<div className="w-screen h-screen">
 			<div className="flex flex-col absolute-center items-center w-full text-center">
-				<div className="text-4xl">Redirecting you to the dashboard...</div>
+				<div className="text-4xl">Redirecting...</div>
 				<span className="loading loading-dots loading-lg" />
 			</div>
 		</div>

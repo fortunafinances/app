@@ -99,7 +99,9 @@ export default function CreateAccount() {
 											.then((res) => {
 												if (!res.data?.insertAccount.account) return;
 												accounts([res.data?.insertAccount.account]);
-												currentAccountId(res.data?.insertAccount.account.accId);
+												currentAccountId(
+													Number(res.data?.insertAccount.account.accId)
+												);
 												console.log(
 													"new acct: ",
 													res.data?.insertAccount.account

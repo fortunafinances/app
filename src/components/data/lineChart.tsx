@@ -39,7 +39,7 @@ export function LineChart() {
     const range = useReactiveVar(lineChartDateRange)
 
     const data = {
-        labels: range!,
+        labels: range,
         datasets: [
             {
                 label: "Brokerage Account",
