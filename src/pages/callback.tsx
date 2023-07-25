@@ -7,8 +7,8 @@ import { GET_ACCOUNTS } from "../utilities/graphQL";
 import { useNavigate } from "react-router-dom";
 
 const GET_USER = gql`
-	mutation InsertUser($userId: ID!) {
-		insertUser(userId: $userId) {
+	mutation InsertUser($userId: ID!, $email: String!) {
+		insertUser(userId: $userId, email: $email) {
 			message
 			user {
 				userId
@@ -60,6 +60,7 @@ const Callback = () => {
 			getUser({
 				variables: {
 					userId: user!.userId,
+					email: user!.email,
 				},
 			})
 				.then((res) => {
@@ -69,10 +70,10 @@ const Callback = () => {
 					} else {
 						// If user has completed onboarding, navigate to dashboard and populate user info
 						userInfo({
-							...user!,
 							username: res.data?.insertUser.user.username,
 							firstName: res.data?.insertUser.user.firstName,
 							lastName: res.data?.insertUser.user.lastName,
+							...user!,
 						});
 						getAccounts()
 							.then((res) => {

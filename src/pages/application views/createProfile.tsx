@@ -1,28 +1,62 @@
-import { gql, useMutation } from "@apollo/client";
+import { gql, useMutation, useReactiveVar } from "@apollo/client";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { BsArrowRight } from "react-icons/bs";
 import { useNavigate } from "react-router-dom";
+import { userInfo } from "../../utilities/reactiveVariables";
+import { useEffect } from "react";
+import { User } from "../../utilities/types";
 
 type ErrorType = {
-	firstname?: string;
-	lastname?: string;
+	firstName?: string;
+	lastName?: string;
 	username?: string;
-	phonenumber?: string;
+	phoneNumber?: string;
 };
 
-export default function CreateProfile() {
-  const navigate = useNavigate();
-
-  const user = localStorage.getItem("user");
-	if (!user) {
-		navigate("/");
+const POST_USER_INFO = gql`
+	mutation InsertUser(
+		$userId: ID!
+		$username: String!
+		$firstName: String!
+		$lastName: String!
+		$phoneNumber: String!
+	) {
+		insertUser(
+			userId: $userId
+			username: $username
+			firstName: $firstName
+			lastName: $lastName
+			phoneNumber: $phoneNumber
+		) {
+			message
+			user {
+				userId
+				username
+				firstName
+				lastName
+				email
+				phoneNumber
+				picture
+			}
+		}
 	}
+`;
 
-  const routeChange = () => {
-    const path = `/createAccount`;
-    navigate(path);
-  };
-  return (
+export default function CreateProfile() {
+	const navigate = useNavigate();
+
+	const [postUserInfo] = useMutation<{ insertUser: { user: User } }>(
+		POST_USER_INFO
+	);
+
+	const user = useReactiveVar(userInfo);
+	useEffect(() => {
+		if (!user) {
+			navigate("/");
+		}
+	}, [user, navigate]);
+
+	return (
 		<div className="h-screen flex [&>section]:w-[50%]">
 			<section className="flex flex-col gap-5 bg-primary text-secondary p-8">
 				<h1 className=" mt-[30%] font-semibold text-left md:text-8xl text-5xl">
@@ -43,47 +77,59 @@ export default function CreateProfile() {
 					<center>
 						<Formik
 							initialValues={{
-								firstname: "",
-								lastname: "",
-								email: "",
-								phonenumber: "",
-								birthdate: "",
+								firstName: "",
+								lastName: "",
+								username: "",
+								phoneNumber: "",
 							}}
 							onSubmit={(values, { setSubmitting }) => {
-								setTimeout(() => {
-									alert(JSON.stringify(values, null, 2));
-									setSubmitting(false);
-								}, 400);
+								postUserInfo({
+									variables: {
+										userId: user!.userId,
+										username: values.username,
+										firstName: values.firstName,
+										lastName: values.lastName,
+										phoneNumber: values.phoneNumber,
+									},
+								})
+									.then((res) => {
+										userInfo({
+                      username: values.username,
+											firstName: values.firstName,
+											lastName: values.lastName,
+											phoneNumber: values.phoneNumber,
+											picture: res.data?.insertUser.user.picture,
+											...user!,
+										});
+										console.log(user);
+										setSubmitting(false);
+										navigate("/createAccount");
+									})
+									.catch((err) => {
+										console.error(err);
+									});
 							}}
 							validate={(values) => {
 								const errors: ErrorType = {};
-								if (!values.firstname) {
-									errors.firstname = "*Required";
+								if (!values.firstName) {
+									errors.firstName = "*Required";
 								}
 
 								if (!values.lastName) {
 									errors.lastName = "*Required";
 								}
-
-								if (!values.email) {
-									errors.email = "*Required";
-								} else if (
-									!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.email)
-								) {
-									errors.email = "Invalid email address";
-								}
 								if (!values.username) {
 									errors.username = "*Required";
 								}
 
-								if (!values.phonenumber) {
-									errors.phonenumber = "*Required";
+								if (!values.phoneNumber) {
+									errors.phoneNumber = "*Required";
 								} else if (
 									!/^\(?([0-9]{3})\)?[-.●]?([0-9]{3})[-.●]?([0-9]{4})$/i.test(
-										values.phonenumber
+										values.phoneNumber
 									)
 								) {
-									errors.phonenumber = "Invalid phone number";
+									errors.phoneNumber = "Invalid phone number";
 								}
 								return errors;
 							}}
@@ -91,79 +137,76 @@ export default function CreateProfile() {
 							{({ isSubmitting }) => (
 								<Form className="flex flex-col gap-4">
 									<div>
-										<h1 className="text-left text-3xl font-medium pl-1">
+										<label
+											htmlFor="firstName"
+											className="text-left text-3xl font-medium pl-1"
+										>
 											First Name
-										</h1>
+										</label>
 										<ErrorMessage
-											name="firstname"
+											name="firstName"
 											component="div"
 											className="text-left text-[#FF0000]"
 										/>
 										<Field
+											id="firstName"
 											type="text"
-											name="firstname"
+											name="firstName"
 											placeholder="First name"
 											className="pl-3 h-14 w-full rounded-md text-xl"
 										/>
 									</div>
 									<div>
-										<h1 className="text-left text-3xl font-medium pl-1">
+										<label
+											htmlFor="lastName"
+											className="text-left text-3xl font-medium pl-1"
+										>
 											Last Name
-										</h1>
+										</label>
 										<ErrorMessage
-											name="lastname"
+											name="lastName"
 											component="div"
 											className="text-left text-[#FF0000]"
 										/>
 										<Field
+											id="lastName"
 											type="text"
-											name="lastname"
+											name="lastName"
 											placeholder="Last name"
 											className="pl-3 h-14 w-full rounded-md text-xl"
 										/>
 									</div>
 									<div>
-										<h1 className="text-left text-3xl font-medium pl-1">
-											Email
-										</h1>
-										<ErrorMessage
-											name="email"
-											component="div"
-											className="text-left text-[#FF0000]"
-										/>
-										<Field
-											type="email"
-											name="email"
-											placeholder="Email Address"
-											className="pl-3 h-14 w-full rounded-md text-xl"
-										/>
-									</div>
-									<div>
-										<h1 className="text-left text-3xl font-medium pl-1">
+										<label
+											htmlFor="phoneNumber"
+											className="text-left text-3xl font-medium pl-1"
+										>
 											Phone Number
-										</h1>
+										</label>
 										<ErrorMessage
-											name="phonenumber"
+											name="phoneNumber"
 											component="div"
 											className="text-left text-[#FF0000]"
 										/>
 										<Field
-											type="phonenumber"
-											name="phonenumber"
+											id="phoneNumber"
+											type="phoneNumber"
+											name="phoneNumber"
 											placeholder="Phone number"
 											className="pl-3 h-14 w-full rounded-md text-xl"
 										/>
 									</div>
 									<div>
-										<h1 className="text-left text-3xl font-medium pl-1">
+										<label className="text-left text-3xl font-medium pl-1">
 											Username
-										</h1>
+										</label>
 										<ErrorMessage
 											name="username"
 											component="div"
 											className="text-left text-[#FF0000]"
 										/>
 										<Field
+											id="username"
 											type="username"
 											name="username"
 											placeholder="Username"
@@ -174,7 +217,6 @@ export default function CreateProfile() {
 										type="submit"
 										disabled={isSubmitting}
 										className="flex flex-row justify-end"
-										onClick={routeChange}
 									>
 										<BsArrowRight
 											size={60}
