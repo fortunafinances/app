@@ -6,6 +6,7 @@ import { GraphQLReturnData, Holding } from "../../utilities/types";
 import { useMemo } from "react";
 import { currentAccountId } from "../../utilities/reactiveVariables";
 import { GET_HOLDINGS } from "../../utilities/graphQL";
+import { Link } from "react-router-dom";
 
 export default function Holdings() {
 	const accountId = useReactiveVar(currentAccountId);
@@ -69,6 +70,16 @@ export default function Holdings() {
 	const { loading, error, data } = useQuery<HoldingsQuery>(GET_HOLDINGS, {
 		variables: { accId: accountId },
 	});
+
+	if (!loading && data?.holdings.length === 0)
+		return (
+			<div className="h-full w-full flex flex-col justify-center items-center text-2xl">
+				<h2 className="text-5xl">No Holdings Found...</h2>
+				<Link to="/app/trade" className="hover:underline underline-offset-8">
+					Place your first order
+				</Link>
+			</div>
+		);
 
 	return (
 		<div className="h-full w-full overflow-y-clip">

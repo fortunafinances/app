@@ -1,6 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
 import { twMerge } from "tailwind-merge";
-import Transfer from "../popup/transfer";
 import { useReactiveVar } from "@apollo/client";
 import { accounts } from "../../utilities/reactiveVariables";
 import AccountDropdown from "../input/accountDropdown";
@@ -36,17 +35,23 @@ export default function AppNavigation() {
 						})}
 					</div>
 				</div>
-				<button
-					className="btn text-primary bg-[#EDEDFE] min-h-[2rem] h-[1rem] mr-3"
-					onClick={() => {
-						(
-							document.getElementById("transfer_modal")! as HTMLDialogElement
-						).showModal();
-					}}
-				>
-					Transfer
-				</button>
-				<Transfer />
+				<div className="tracking-narrow">
+					<Link to="/app/trade">
+						<button className="btn tracking-wider text-primary bg-[#EDEDFE] min-h-[2rem] h-[1rem] mr-3">
+							Trade
+						</button>
+					</Link>
+					<button
+						className="btn tracking-wider text-white bg-primary hover:bg-purple-800 min-h-[2rem] h-[1rem] mr-3"
+						onClick={() => {
+							(
+								document.getElementById("transfer_modal")! as HTMLDialogElement
+							).showModal();
+						}}
+					>
+						Transfer
+					</button>
+				</div>
 			</div>
 		</nav>
 	);
