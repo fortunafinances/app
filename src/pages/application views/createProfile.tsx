@@ -14,19 +14,19 @@ export default function CreateProfile() {
   
   return (
     <div className="h-screen flex [&>div]:w-[50%]">
-      <div className="flex flex-col gap-5 bg-primary text-secondary p-8">
+      <div className="flex flex-col gap-5 bg-primary text-accent p-8">
         <h1 className=" mt-[30%] font-semibold text-left md:text-8xl text-5xl">
           Welcome to Fortuna
         </h1>
         <h2 className=" inline-block text-4xl">
           Get better results with{" "}
-          <p className="font-bold text-left inline-block text-black bg-secondary px-2">
+          <p className="font-bold text-left inline-block text-accent bg-[#7C1FFF] px-2">
             Fortuna
           </p>{" "}
           at the helm of your portfolio
         </h2>
       </div>
-      <div className="bg-secondary p-4 text-primary">
+      <div className="bg-accent p-4 text-primary">
         <h1 className="text-7xl">Create Profile</h1>
         <hr className="h-[2px] my-8 bg-primary border-0"></hr>
         <div className="App">
@@ -84,7 +84,7 @@ export default function CreateProfile() {
                       type="text"
                       name="firstname"
                       placeholder="First name"
-                      className="pl-3 h-14 w-full rounded-md text-xl"
+                      className="pl-3 h-14 w-full rounded-md text-xl outline-info"
                     />
                   </div>
                   <div>
@@ -100,7 +100,7 @@ export default function CreateProfile() {
                       type="text"
                       name="lastname"
                       placeholder="Last name"
-                      className="pl-3 h-14 w-full rounded-md text-xl"
+                      className="pl-3 h-14 w-full rounded-md text-xl outline-info"
                     />
                   </div>
                   <div>
@@ -116,7 +116,7 @@ export default function CreateProfile() {
                       type="phonenumber"
                       name="phonenumber"
                       placeholder="Phone number"
-                      className="pl-3 h-14 w-full rounded-md text-xl"
+                      className="pl-3 h-14 w-full rounded-md text-xl outline-info"
                     />
                   </div>
                   <div>
@@ -132,7 +132,7 @@ export default function CreateProfile() {
                       type="username"
                       name="username"
                       placeholder="Username"
-                      className="pl-3 h-14 w-full rounded-md text-xl"
+                      className="pl-3 h-14 w-full rounded-md text-xl outline-info"
                     />
                   </div>
                   <button
@@ -142,7 +142,7 @@ export default function CreateProfile() {
                   >
                     <BsArrowRight
                       size={60}
-                      className="transition duration:500 hover:scale-125"
+                      className="transition duration:500 hover:scale-125 hover:fill-[#7c1fff]"
                     />
                   </button>
                 </Form>
