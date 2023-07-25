@@ -45,7 +45,9 @@ export default function AppNavigation() {
 						className="btn tracking-wider text-white bg-primary hover:bg-purple-800 min-h-[2rem] h-[1rem] mr-3"
 						onClick={() => {
 							(
-								document.getElementById("transfer_modal")! as HTMLDialogElement
+								document.getElementById(
+									"new_transfer_modal"
+								)! as HTMLDialogElement
 							).showModal();
 						}}
 					>

@@ -90,7 +90,10 @@ export default function Orders() {
 		return (
 			<div className="h-full w-full flex flex-col justify-center items-center text-2xl">
 				<h2 className="text-5xl">No Orders Found...</h2>
-				<Link to="/app/trade" className="hover:underline underline-offset-8">
+				<Link
+					to="/app/trade"
+					className="hover:underline underline-offset-8 text-primary"
+				>
 					Place your first order
 				</Link>
 			</div>

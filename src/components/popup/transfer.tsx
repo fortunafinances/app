@@ -10,18 +10,25 @@ import { twMerge } from "tailwind-merge";
 
 type DropdownProps = {
 	label: string;
-	value: number;
+	value: string;
 };
 
 type TransferReturnData = {
 	insertTransfer: string;
 };
 
-const transferType = [
+const transferType: DropdownProps[] = [
 	{ label: "In", value: "IN" },
 	{ label: "Out", value: "OUT" },
 	{ label: "Between", value: "BETWEEN" },
 ];
+
+interface Values {
+	transferType: string;
+	toAccount: string;
+	fromAccount: string;
+	amount: number;
+}
 
 export default function Transfer() {
 	const accountList = useReactiveVar(accounts);
@@ -135,16 +142,19 @@ export default function Transfer() {
 			<form
 				method="dialog"
 				className="modal-box bg-[#EDEDFE] flex flex-col gap-3 text-primary overflow-y-auto"
+				onSubmit={formik.handleSubmit}
 			>
 				<h1 className="font-bold text-4xl">TRANSFER {transfer}</h1>
-				<h2 className="font-medium text-2xl">Transfer Type</h2>
+				<label htmlFor="transferType" className="font-medium text-2xl">
+					Transfer Type
+				</label>
 				<Select
 					menuPortalTarget={document.getElementById("transfer_modal")}
+					name="transferType"
+					id="transferType"
 					options={transferType}
-					onChange={(e) => {
-						setTransfer(e!.value);
-						checkBetween();
-					}}
+					onChange={formik.handleChange}
+					value={formik.values.transferType}
 					theme={(theme) => ({
 						...theme,
 						borderRadius: 3,
