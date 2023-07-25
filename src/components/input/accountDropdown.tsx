@@ -10,9 +10,10 @@ export interface DropdownProps {
 const AccountDropdown = ({ data }: DropdownProps) => {
 	const currentAccountNumber = useReactiveVar(currentAccountId);
 
-	const currentAccount = data.find((a) => a.accId === currentAccountNumber);
-
-	if (!data || data.length === 0)
+	const currentAccount = data.find(
+		(a) => Number(a.accId) === currentAccountNumber
+	);
+	if (!data || data.length === 0 || !currentAccount)
 		return <div className="text-red-400">Error getting accounts</div>;
 
 	const handleClick = (index: number) => {
@@ -24,15 +25,13 @@ const AccountDropdown = ({ data }: DropdownProps) => {
 	};
 
 	const appendAccount = () => {
-		return !(
-			currentAccount!.name.split("").at(-1)?.toLowerCase() === "account"
-		);
+		return !(currentAccount.name.split("").at(-1)?.toLowerCase() === "account");
 	};
 
 	return (
 		<div
 			className="dropdown mt-1 text-black capitalize"
-			title={currentAccount!.name + " Account"}
+			title={currentAccount.name + " Account"}
 		>
 			<label
 				tabIndex={0}
@@ -40,7 +39,7 @@ const AccountDropdown = ({ data }: DropdownProps) => {
 			>
 				<div className="relative top-[50%] -translate-y-[15px] h-full max-w-[90%] -left-2">
 					<p className="truncate max-w-full h-full text-center capitalize">
-						{currentAccount!.name}
+						{currentAccount.name}
 						{appendAccount() ? "" : " Account"}
 					</p>
 				</div>

@@ -3,6 +3,17 @@ export type Token = {
 	idToken: string;
 };
 
+export type User = {
+	userId: string;
+	email: string;
+	picture?: string;
+	username?: string;
+	firstName?: string;
+	lastName?: string;
+	phoneNumber?: string;
+	onboardingComplete?: boolean;
+};
+
 export type GraphQLReturnData = {
 	__typename: string;
 };
