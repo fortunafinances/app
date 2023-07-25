@@ -2,7 +2,11 @@ import { useEffect } from "react";
 import { handleAuthentication } from "../utilities/auth";
 import { gql, useLazyQuery, useMutation, useReactiveVar } from "@apollo/client";
 import { Account } from "../utilities/types";
-import { accounts, userInfo } from "../utilities/reactiveVariables";
+import {
+	accounts,
+	currentAccountId,
+	userInfo,
+} from "../utilities/reactiveVariables";
 import { GET_ACCOUNTS } from "../utilities/graphQL";
 import { useNavigate } from "react-router-dom";
 
@@ -78,6 +82,7 @@ const Callback = () => {
 						getAccounts()
 							.then((res) => {
 								accounts(res.data?.accounts);
+								currentAccountId(accounts()[0].accId);
 								console.log("Accounts list: ", accounts());
 							})
 							.catch((err) => {

@@ -57,3 +57,16 @@ export const GET_STOCK_NAMES = gql`
 		}
 	}
 `;
+
+export const CREATE_ACCOUNT = gql`
+	mutation InsertAccount($name: String!, $userId: ID!) {
+		insertAccount(name: $name, userId: $userId) {
+			message
+			account {
+				accId
+				name
+				cash
+			}
+		}
+	}
+`;

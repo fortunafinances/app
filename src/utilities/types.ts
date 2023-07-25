@@ -49,7 +49,7 @@ export interface Order extends GraphQLReturnData {
 }
 
 export interface Account extends GraphQLReturnData {
-	accId: number;
+	accId: string;
 	cash: number;
 	name: string;
 }

@@ -10,13 +10,13 @@ export interface DropdownProps {
 const AccountDropdown = ({ data }: DropdownProps) => {
 	const currentAccountNumber = useReactiveVar(currentAccountId);
 
-	const currentAccount = data.find(
-		(a) => Number(a.accId) === currentAccountNumber
-	);
-	if (!data || data.length === 0 || !currentAccount)
+	const currentAccount = data.find((a) => a.accId === currentAccountNumber);
+	if (!data || data.length === 0 || !currentAccount) {
+		console.log(currentAccount, currentAccountNumber);
 		return <div className="text-red-400">Error getting accounts</div>;
+	}
 
-	const handleClick = (index: number) => {
+	const handleClick = (index: string) => {
 		const elem = document.activeElement;
 		if (elem && elem instanceof HTMLElement) {
 			elem?.blur();
