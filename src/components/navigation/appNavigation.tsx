@@ -13,10 +13,10 @@ export default function AppNavigation() {
 	const path = useLocation().pathname;
 	const currentPage = path.split("/")[path.split("/").length - 1];
 	return (
-		<nav className="bg-gray-800 border-l-2 border-gray-200  ">
+		<nav className="bg-gray-800">
 			<div className="flex flex-row justify-between items-center">
 				<div className="text-white flex flex-row items-center">
-					<h3 className="text-xl font-semibold border-r-2">
+					<h3 className="text-xl font-semibold">
 						<AccountDropdown data={accountList} />
 					</h3>
 					<div>

@@ -1,6 +1,7 @@
 import { makeVar } from "@apollo/client/cache/inmemory/reactiveVars";
 import { makeVarPersisted } from "./hooks";
 import { Account } from "./types";
+import { getMostRecentMonths } from "./common";
 
 export type User = {
   userId: string;
@@ -31,16 +32,6 @@ export const dateRanges = {
 export const lineChartDateRange = makeVarPersisted<string[] | null>("lineChartDateRange",
   dateRanges.full);
 
-function getMostRecentMonths(num: number) {
-  let today = new Date(); // Get today's date
-  let months = []; // Create an empty array for the months
-  // add month into months
-  for (let i = 1; i <= num; i++) {
-    let month = new Date(today.getFullYear(), today.getMonth() - i, 1);
-    months.push(month.toLocaleString('default', { month: 'long' }));
-  }
-  return months.reverse();
-}
 
 export const symbol = makeVar("");
 

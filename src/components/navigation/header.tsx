@@ -1,10 +1,7 @@
 import { Link } from "react-router-dom";
-import SearchBar from "../input/searchBar";
+import StockSearchBar from "../input/stockSearch";
 import { CgProfile } from "react-icons/cg";
-import {
-	User,
-	userInfo,
-} from "../../utilities/reactiveVariables";
+import { User, userInfo } from "../../utilities/reactiveVariables";
 import { useReactiveVar } from "@apollo/client/react/hooks/useReactiveVar";
 import { signout } from "../../utilities/auth";
 
@@ -20,7 +17,7 @@ export default function Header() {
 					</b>
 				</h1>
 			</div>
-			<SearchBar />
+			<StockSearchBar />
 			<div className="flex flex-row gap-3 items-center text-2xl mx-3">
 				<h3 className="hidden lg:inline">Welcome, {userAccount?.nickname}</h3>
 				<div className="dropdown dropdown-end">
