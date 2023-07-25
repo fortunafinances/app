@@ -8,10 +8,10 @@ export const currentAccountId = makeVarPersisted("currentAccountId", 1);
 export const userInfo = makeVarPersisted<User | null>("user", null);
 
 export const dateRanges = {
-	full: getMostRecentMonths(12),
-	half: getMostRecentMonths(6),
-	quarter: getMostRecentMonths(3),
-};
+  two: getMostRecentMonths(24),
+  full: getMostRecentMonths(12),
+  half: getMostRecentMonths(6),
+}
 
 export const lineChartDateRange = makeVarPersisted<string[]>(
 	"lineChartDateRange",

@@ -3,36 +3,26 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import { BsArrowRight } from "react-icons/bs";
 import { useNavigate } from "react-router-dom";
 
-export default function CreateProfile() {
-	const navigate = useNavigate();
+type ErrorType = {
+	firstname?: string;
+	lastname?: string;
+	username?: string;
+	phonenumber?: string;
+};
 
-	// Prevent unauthorized access
-	const user = localStorage.getItem("user");
+export default function CreateProfile() {
+  const navigate = useNavigate();
+
+  const user = localStorage.getItem("user");
 	if (!user) {
 		navigate("/");
 	}
 
-	const SEND_USER_DATA = gql`
-		mutation InsertUser {
-			insertUser(
-				userId: "AUTHuser17"
-				username: null
-				nickname: null
-				dateOfBirth: null
-			) {
-				apiMessage
-				dateOfBirth
-				picture
-				email
-				nickname
-				username
-			}
-		}
-	`;
-
-	const [sendUserData] = useMutation(SEND_USER_DATA);
-
-	return (
+  const routeChange = () => {
+    const path = `/createAccount`;
+    navigate(path);
+  };
+  return (
 		<div className="h-screen flex [&>section]:w-[50%]">
 			<section className="flex flex-col gap-5 bg-primary text-secondary p-8">
 				<h1 className=" mt-[30%] font-semibold text-left md:text-8xl text-5xl">
@@ -53,31 +43,22 @@ export default function CreateProfile() {
 					<center>
 						<Formik
 							initialValues={{
-								firstName: "",
-								lastName: "",
+								firstname: "",
+								lastname: "",
 								email: "",
-								phoneNumber: "",
+								phonenumber: "",
+								birthdate: "",
 							}}
 							onSubmit={(values, { setSubmitting }) => {
-								sendUserData({ variables: {} })
-									.then(() => {})
-									.catch((err) => {
-										console.error(err);
-									});
 								setTimeout(() => {
 									alert(JSON.stringify(values, null, 2));
 									setSubmitting(false);
 								}, 400);
 							}}
 							validate={(values) => {
-								const errors = {
-									firstName: "",
-									lastName: "",
-									email: "",
-									phoneNumber: "",
-								};
-								if (!values.firstName) {
-									errors.firstName = "*Required";
+								const errors: ErrorType = {};
+								if (!values.firstname) {
+									errors.firstname = "*Required";
 								}
 
 								if (!values.lastName) {
@@ -91,33 +72,36 @@ export default function CreateProfile() {
 								) {
 									errors.email = "Invalid email address";
 								}
+								if (!values.username) {
+									errors.username = "*Required";
+								}
 
-								if (!values.phoneNumber) {
-									errors.phoneNumber = "*Required";
+								if (!values.phonenumber) {
+									errors.phonenumber = "*Required";
 								} else if (
 									!/^\(?([0-9]{3})\)?[-.●]?([0-9]{3})[-.●]?([0-9]{4})$/i.test(
-										values.phoneNumber
+										values.phonenumber
 									)
 								) {
-									errors.phoneNumber = "Invalid phone number";
+									errors.phonenumber = "Invalid phone number";
 								}
 								return errors;
 							}}
 						>
 							{({ isSubmitting }) => (
-								<Form className="flex flex-col gap-4 ">
+								<Form className="flex flex-col gap-4">
 									<div>
 										<h1 className="text-left text-3xl font-medium pl-1">
 											First Name
 										</h1>
 										<ErrorMessage
-											name="firstName"
+											name="firstname"
 											component="div"
 											className="text-left text-[#FF0000]"
 										/>
 										<Field
 											type="text"
-											name="firstName"
+											name="firstname"
 											placeholder="First name"
 											className="pl-3 h-14 w-full rounded-md text-xl"
 										/>
@@ -127,13 +111,13 @@ export default function CreateProfile() {
 											Last Name
 										</h1>
 										<ErrorMessage
-											name="lastName"
+											name="lastname"
 											component="div"
 											className="text-left text-[#FF0000]"
 										/>
 										<Field
 											type="text"
-											name="lastName"
+											name="lastname"
 											placeholder="Last name"
 											className="pl-3 h-14 w-full rounded-md text-xl"
 										/>
@@ -159,25 +143,44 @@ export default function CreateProfile() {
 											Phone Number
 										</h1>
 										<ErrorMessage
-											name="phoneNumber"
+											name="phonenumber"
 											component="div"
 											className="text-left text-[#FF0000]"
 										/>
 										<Field
-											type="phoneNumber"
-											name="phoneNumber"
+											type="phonenumber"
+											name="phonenumber"
 											placeholder="Phone number"
 											className="pl-3 h-14 w-full rounded-md text-xl"
 										/>
 									</div>
-									<div className="flex flex-row justify-end">
-										<button type="submit" disabled={isSubmitting}>
-											<BsArrowRight
-												size={60}
-												className="transition duration:500 hover:scale-125"
-											/>
-										</button>
+									<div>
+										<h1 className="text-left text-3xl font-medium pl-1">
+											Username
+										</h1>
+										<ErrorMessage
+											name="username"
+											component="div"
+											className="text-left text-[#FF0000]"
+										/>
+										<Field
+											type="username"
+											name="username"
+											placeholder="Username"
+											className="pl-3 h-14 w-full rounded-md text-xl"
+										/>
 									</div>
+									<button
+										type="submit"
+										disabled={isSubmitting}
+										className="flex flex-row justify-end"
+										onClick={routeChange}
+									>
+										<BsArrowRight
+											size={60}
+											className="transition duration:500 hover:scale-125"
+										/>
+									</button>
 								</Form>
 							)}
 						</Formik>

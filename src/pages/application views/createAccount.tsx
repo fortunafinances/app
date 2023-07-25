@@ -3,6 +3,13 @@ import { BsArrowLeft, BsArrowRight } from "react-icons/bs";
 import { useNavigate } from "react-router-dom";
 
 export default function CreateAccount() {
+  type errorType ={
+    accountname? : string;
+    bank? :string;
+    accountnumber? :string;
+    routingnumber?:  string;
+  }
+
   const navigate = useNavigate();
 
   const routeChange = () => {
@@ -41,13 +48,9 @@ export default function CreateAccount() {
                   setSubmitting(false);
                 }, 400);
               }}
+
               validate={(values) => {
-                const errors = {
-                  accountname: "",
-                  bank: "",
-                  accountnumber: "",
-                  routingnumber: "",
-                };
+                const errors: errorType = {};
                 if (!values.accountname) {
                   errors.accountname = "*Required";
                 }
@@ -89,11 +92,11 @@ export default function CreateAccount() {
                     <h1 className="text-left text-3xl font-medium pl-1">
                       Bank
                     </h1>
-                    <ErrorMessage
+                    {/* <ErrorMessage
                       name="bank"
                       component="div"
                       className="text-left text-[#FF0000]"
-                    />
+                    /> */}
                     <Field
                       type="text"
                       name="bank"
@@ -105,11 +108,11 @@ export default function CreateAccount() {
                     <h1 className="text-left text-3xl font-medium pl-1">
                       Account Number
                     </h1>
-                    <ErrorMessage
+                    {/* <ErrorMessage
                       name="accountnumber"
                       component="div"
                       className="text-left text-[#FF0000]"
-                    />
+                    /> */}
                     <Field
                       type="accountnumber"
                       name="accountnumber"
@@ -121,11 +124,11 @@ export default function CreateAccount() {
                     <h1 className="text-left text-3xl font-medium pl-1">
                       Routing Number
                     </h1>
-                    <ErrorMessage
+                    {/* <ErrorMessage
                       name="routingnumber"
                       component="div"
                       className="text-left text-[#FF0000]"
-                    />
+                    /> */}
                     <Field
                       type="routingnumber"
                       name="routingnumber"

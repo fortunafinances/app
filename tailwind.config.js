@@ -17,9 +17,11 @@ export default {
 		themes: [
 			{
 				myTheme: {
-					primary: "#707099",
-					secondary: "#f0ecd8",
-					accent: "#dfbea5",
+					primary: "#80CCF1", //baby blue
+					"primary-focus": "#009aed", //steel blue
+					secondary: "#FFD4A5", //light orange
+					"secondary-focus": "#FFAF6D", //dark orange
+					accent: "#FFFDF4", //floral white
 					neutral: "#adaa9b",
 					"base-100": "white",
 					success: "#e5f9e7",
