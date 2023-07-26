@@ -1,8 +1,8 @@
 import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-  Navigate,
+	BrowserRouter as Router,
+	Routes,
+	Route,
+	Navigate,
 } from "react-router-dom";
 import ApplicationLayout from "./components/layout/application";
 import Overview from "./pages/application views/overview";
@@ -19,14 +19,15 @@ import TransferSuccessful from "./components/popup/transferSuccessful";
 import ErrorNotification from "./components/popup/errorNotif";
 import CreateProfile from "./pages/application views/createProfile";
 import CreateAccount from "./pages/application views/createAccount";
+import StockSuggestion from "./pages/application views/stockSuggestion";
 
 const client = new ApolloClient({
-  uri: "http://127.0.0.1:5000/graphql",
-  cache,
+	uri: "http://127.0.0.1:5000/graphql",
+	cache,
 });
 
 export default function App() {
-  return (
+	return (
 		<ApolloProvider client={client}>
 			<Router>
 				<Routes>
@@ -45,7 +46,8 @@ export default function App() {
 					<Route path="/successNotification" element={<TransferSuccessful />} />
 					<Route path="/errorNotification" element={<ErrorNotification />} />
 					<Route path="/createProfile" element={<CreateProfile />} />
-          <Route path="/createAccount" element={<CreateAccount />} />
+					<Route path="/createAccount" element={<CreateAccount />} />
+					<Route path="/stockSuggestion" element={<StockSuggestion />} />
 				</Routes>
 			</Router>
 		</ApolloProvider>
