@@ -1,9 +1,9 @@
 import { useEffect } from "react";
 import { handleAuthentication } from "../utilities/auth";
-import { gql, useMutation, useReactiveVar } from "@apollo/client";
-import {
-	userInfo,
-} from "../utilities/reactiveVariables";
+import { gql, useLazyQuery, useMutation, useReactiveVar } from "@apollo/client";
+import { Account } from "../utilities/types";
+import { currentAccountId, userInfo } from "../utilities/reactiveVariables";
+import { GET_ACCOUNTS } from "../utilities/graphQL";
 import { useNavigate } from "react-router-dom";
 
 const GET_USER = gql`
@@ -39,7 +39,12 @@ type UserQuery = {
 	};
 };
 
+type AccountQuery = {
+	accounts: Account[];
+};
+
 const Callback = () => {
+	const [getAccounts] = useLazyQuery<AccountQuery>(GET_ACCOUNTS);
 	const navigate = useNavigate();
 	const [getUser] = useMutation<UserQuery>(GET_USER);
 
@@ -70,6 +75,13 @@ const Callback = () => {
 							lastName: res.data?.insertUser.user.lastName,
 							...user!,
 						});
+						getAccounts({ variables: { userId: user!.userId } })
+							.then((res) => {
+								currentAccountId(res.data?.accounts[0].accId);
+							})
+							.catch((err) => {
+								console.error(err);
+							});
 						navigate("/app", { replace: true });
 					}
 				})
@@ -77,7 +89,7 @@ const Callback = () => {
 					console.error(err);
 				});
 		}, 2000);
-	}, [getUser, navigate, user]);
+	}, [getAccounts, getUser, navigate, user]);
 
 	return (
 		<div className="w-screen h-screen">
