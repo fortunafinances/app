@@ -1,202 +1,247 @@
-import { useCallback, useEffect, useState } from "react";
-import Select from "react-select";
-import { BiDollar } from "react-icons/bi";
-import { preventMinus } from "../../utilities/common";
-import { accounts } from "../../utilities/reactiveVariables";
-import { useMutation, useReactiveVar } from "@apollo/client";
-import { GET_ACTIVITIES, MAKE_TRANSFER } from "../../utilities/graphQL";
- import { useFormik } from "formik";
+import { Field, Form, Formik, FormikHelpers } from "formik";
+import FormikSelect from "../input/formikSelect";
+import { userInfo } from "../../utilities/reactiveVariables";
+import { Account } from "../../utilities/types";
+import { useMutation, useQuery } from "@apollo/client";
+import {
+	GET_ACCOUNTS,
+	GET_ACTIVITIES,
+	GET_OVERVIEW,
+	MAKE_TRANSFER,
+} from "../../utilities/graphQL";
+import * as Yup from "yup";
 
- type DropdownProps = {
-		label: string;
-		value: number;
- };
+interface FormType {
+	transferType: string;
+	transferInAccount: string;
+	transferOutAccount: string;
+	toAccount: string;
+	fromAccount: string;
+	amount: string;
+}
 
- export default function Transfer() {
-		const accountList = useReactiveVar(accounts);
+type DropdownProps = {
+	label: string;
+	value: string | number;
+};
 
-		type TransferReturnData = {
-			insertTransfer: string;
-		};
+type TransferReturnData = {
+	insertTransfer: string;
+};
 
-		const [makeTransfer] = useMutation<TransferReturnData>(MAKE_TRANSFER, {
-			refetchQueries: [
-				{
-					query: GET_ACTIVITIES,
-				},
-			],
-		});
+const transferType: DropdownProps[] = [
+	{ label: "In", value: "IN" },
+	{ label: "Out", value: "OUT" },
+	{ label: "Between", value: "BETWEEN" },
+];
 
-		const formik = useFormik({
-			initialValues: {
-				fromAccount: "",
-				toAccount: "",
-				amount: "",
-			},
-			onSubmit: (values) => console.log(values),
-		});
-		const [fromAccount, setFromAccount] = useState<number | null>(null);
-		const [toAccount, setToAccount] = useState<number | null>(null);
-		const [amount, setAmount] = useState(0);
-		const [transfer, setTransfer] = useState("");
-		const [between, setBetween] = useState(false);
+const makeAccountList = (accounts: Account[], index?: number) => {
+	const ret: DropdownProps[] = [{ label: "", value: "" }];
+	accounts.map((account) => {
+		if (index) {
+			if (account.accId === index) return;
+		}
+		ret.push({ label: account.name, value: account.accId });
+	});
+	return ret;
+};
 
-		const handleSubmit = () => {
-			makeTransfer({
-				variables: {
-					sendAccId: fromAccount,
-					receiveAccId: toAccount,
-					transferAmt: Number(amount),
-				},
-			})
-				.then((data) => {
-					console.log(data);
-					(document.getElementById(
-						"transfer_successful"
-					) as HTMLDialogElement)!.showModal();
-				})
-				.catch((err) => {
-					console.log("error: ", err);
+const SignupSchema = Yup.object().shape({
+	transferType: Yup.string().required("*Required"),
+	transferInAccount: Yup.number().when("transferType", {
+		is: "IN",
+		then: (schema) => schema.required("*Required"),
+	}),
+	transferOutAccount: Yup.number().when("transferType", {
+		is: "OUT",
+		then: (schema) => schema.required("*Required"),
+	}),
+	toAccount: Yup.number().when("transferType", {
+		is: "BETWEEN",
+		then: (schema) => schema.required("*Required"),
+	}),
+	fromAccount: Yup.number().when("transferType", {
+		is: "BETWEEN",
+		then: (schema) => schema.required("*Required"),
+	}),
+	amount: Yup.number()
+		.required("*Required")
+		.moreThan(0, "Must be greater than 0"),
+});
 
-					(document.getElementById(
-						"transfer_error"
-					) as HTMLDialogElement)!.showModal();
-				});
-		};
+export default function Transfer() {
+	const { loading, data } = useQuery<{ accounts: Account[] }>(GET_ACCOUNTS, {
+		variables: { userId: userInfo()?.userId },
+	});
 
-		const transferType = [
-			{ label: "In", value: "IN" },
-			{ label: "Out", value: "OUT" },
-			{ label: "Between", value: "BETWEEN" },
-		];
+	const [makeTransfer] = useMutation<TransferReturnData>(MAKE_TRANSFER, {
+		refetchQueries: [{ query: GET_ACTIVITIES }, { query: GET_OVERVIEW }],
+	});
 
-		const createDropdownItems = useCallback(
-			(exclude?: number) => {
-				const ret: DropdownProps[] = [];
-				accountList.map((account) => {
-					if (account.accId !== exclude || exclude === undefined) {
-						ret.push({ label: account.name, value: account.accId });
-					}
-				});
-				return ret;
-			},
-			[accountList]
-		);
+	const successModal = document.getElementById(
+		"transfer_successful"
+	) as HTMLDialogElement;
+	const errorModal = document.getElementById(
+		"transfer_error"
+	) as HTMLDialogElement;
 
-		const checkBetween = useCallback(() => {
-			if (transfer === "BETWEEN") {
-				setBetween(true);
-			} else {
-				setBetween(false);
-			}
-		}, [transfer]);
-
-		useEffect(() => {
-			if (transfer !== "") {
-				checkBetween();
-			}
-		}, [checkBetween, transfer]);
-
-		return (
-			<dialog id="transfer_modal" className="modal overflow-none">
-				<form
-					method="dialog"
-					className="modal-box bg-[#EDEDFE] flex flex-col gap-3 text-primary overflow-y-auto"
-				>
-					<h1 className="font-bold text-4xl">TRANSFER {transfer}</h1>
-					<h2 className="font-medium text-2xl">Transfer Type</h2>
-					<Select
-						menuPortalTarget={document.getElementById("transfer_modal")}
-						options={transferType}
-						onChange={(e) => {
-							setTransfer(e!.value);
-							checkBetween();
-						}}
-						theme={(theme) => ({
-							...theme,
-							borderRadius: 3,
-						})}
-					/>
-					{!between ? (
-						<div>
-							<h2 className="font-medium text-2xl">Account</h2>
-							<Select
-								menuPortalTarget={document.getElementById("transfer_modal")}
-								options={createDropdownItems()}
-								theme={(theme) => ({
-									...theme,
-									borderRadius: 3,
-								})}
-							/>
-						</div>
-					) : (
-						<div>
-							<label htmlFor="sourceAcct" className="font-medium text-2xl">
-								From Account
-							</label>
-							<Select
-								id="sourceAcct"
-								menuPortalTarget={document.getElementById("transfer_modal")}
-								options={createDropdownItems(toAccount!)}
-								theme={(theme) => ({
-									...theme,
-									borderRadius: 3,
-								})}
-								onChange={(e) => {
-									setFromAccount(Number(e!.value));
-								}}
-							/>
-							<label htmlFor="destAcct" className="font-medium text-2xl">
-								To Account
-							</label>
-							<Select
-								id="destAcct"
-								menuPortalTarget={document.getElementById("transfer_modal")}
-								options={createDropdownItems(fromAccount!)}
-								theme={(theme) => ({
-									...theme,
-									primary: "black",
-									borderRadius: 3,
-								})}
-								onChange={(e) => {
-									setToAccount(Number(e!.value));
-								}}
-							/>
-						</div>
-					)}
-
-					{/* Amount */}
-					<h2 className="font-medium text-2xl">Amount</h2>
-					<div className="relative">
-						<i className="absolute top-[50%] -translate-y-[50%] align-middle">
-							<BiDollar />
-						</i>
-						<input
-							type="number"
-							min={0}
-							step="0.01"
-							placeholder="Price"
-							onChange={(e) => {
-								setAmount(Number(e.target.value));
-							}}
-							onKeyDown={preventMinus}
-							className="input h-9 w-full border-[1px] rounded-[3px] border-[#cccccc] focus:ring-blue-500 focus:border-blue-500 focus:border-[2px] !outline-none"
+	return (
+		<dialog id="new_transfer_modal" className="modal">
+			<Formik
+				initialValues={{
+					transferType: "",
+					transferInAccount: "",
+					transferOutAccount: "",
+					toAccount: "",
+					fromAccount: "",
+					amount: "",
+				}}
+				validationSchema={SignupSchema}
+				onSubmit={(
+					values: FormType,
+					{ setSubmitting, resetForm }: FormikHelpers<FormType>
+				) => {
+					makeTransfer({
+						variables: {
+							sendAccId:
+								values.transferType === "OUT"
+									? values.transferOutAccount
+									: values.transferType === "IN"
+									? 0
+									: values.fromAccount,
+							receiveAccId:
+								values.transferType === "OUT"
+									? 0
+									: values.transferType === "IN"
+									? values.transferInAccount
+									: values.toAccount,
+							transferAmt: values.amount,
+						},
+					})
+						.then((data) => {
+							if (data.data?.insertTransfer === "Success") {
+								resetForm();
+								successModal.showModal();
+							} else {
+								errorModal.showModal();
+							}
+						})
+						.catch(() => {
+							errorModal.showModal();
+						})
+						.finally(() => {
+							setSubmitting(false);
+						});
+				}}
+			>
+				{({ values, errors, touched, isValid }) => (
+					<Form className="modal-box bg-[#EDEDFE] flex flex-col gap-3 text-primary overflow-y-auto min-h-[15em]">
+						<label htmlFor="transferType">Transfer Type</label>
+						<FormikSelect
+							id="transferType"
+							selectOptions={transferType}
+							formikFieldName="transferType"
+							placeholder="Select..."
 						/>
-					</div>
-					{/* Discard and Submit */}
-					<div className="modal-action [&>button]:border-2">
-						{/* if there is a button in form, it will close the modal */}
-						<button className="btn border-[#920000] text-[#920000] bg-[#F9E5E5] hover:shadow-xl shadow-[#920000] hover:bg-[#920000] hover:text-[#f9e5e5]">
-							Discard
-						</button>
-						<button
-							className="btn border-success-content text-success-content bg-[#E3FDDC] hover:shadow-xl shadow-succes-content hover:bg-success-content hover:text-[#e3fddc]"
-							onClick={handleSubmit}
-						>
-							Submit
-						</button>
-					</div>
-				</form>
-			</dialog>
-		);
- }
+						{errors.transferType && touched.transferType && (
+							<p className="text-red-600">{errors.transferType}</p>
+						)}
+						{loading ? (
+							<span className="loading loading-dots loading-md" />
+						) : values.transferType === "" ? (
+							<></>
+						) : values.transferType === "IN" ? (
+							<div>
+								<label htmlFor="transferInAccount">Destination Account</label>
+								<FormikSelect
+									id="transferInAccount"
+									name="transferInAccount"
+									key="transferInAccount"
+									selectOptions={makeAccountList(data!.accounts)}
+									formikFieldName="transferInAccount"
+									placeholder="Select..."
+								/>
+								{errors.transferInAccount && touched.transferInAccount && (
+									<p className="text-red-600">{errors.transferInAccount}</p>
+								)}
+							</div>
+						) : values.transferType === "OUT" ? (
+							<div>
+								<label htmlFor="transferOutAccount">Source Account</label>
+								<FormikSelect
+									id="transferOutAccount"
+									name="transferOutAccount"
+									key="transferOutAccount"
+									selectOptions={makeAccountList(data!.accounts)}
+									formikFieldName="transferOutAccount"
+									placeholder="Select..."
+								/>
+								{errors.transferOutAccount && touched.transferOutAccount && (
+									<p className="text-red-600">{errors.transferOutAccount}</p>
+								)}
+							</div>
+						) : (
+							<div>
+								<label htmlFor="toAccount">Destination Account</label>
+								<FormikSelect
+									id="toAccount"
+									name="toAccount"
+									key="toAccount"
+									selectOptions={makeAccountList(
+										data!.accounts,
+										Number(values.fromAccount)
+									)}
+									formikFieldName="toAccount"
+									placeholder="Select..."
+								/>
+								{errors.toAccount && touched.toAccount ? (
+									<p className="text-red-600">{errors.toAccount}</p>
+								) : null}
+								<label htmlFor="fromAccount">Source Account</label>
+								<FormikSelect
+									id="fromAccount"
+									name="fromAccount"
+									key="fromAccount"
+									selectOptions={makeAccountList(
+										data!.accounts,
+										Number(values.toAccount)
+									)}
+									formikFieldName="fromAccount"
+									placeholder="Select..."
+								/>
+								{errors.fromAccount && touched.fromAccount ? (
+									<p className="text-red-600">{errors.fromAccount}</p>
+								) : null}
+							</div>
+						)}
+						<div className="flex flex-col">
+							<label htmlFor="amount">Amount</label>
+							<Field
+								type="number"
+								min="0"
+								step="0.01"
+								id="amount"
+								name="amount"
+								placeholder="Enter Amount..."
+								className="p-2 rounded-md outline-secondary outline-1 outline focus:outline-blue-600 focus:outline-2 bg-white"
+							/>
+							{errors.amount && touched.amount ? (
+								<p className="text-red-600">{errors.amount}</p>
+							) : null}
+						</div>
+
+						<div className="modal-action">
+							<button
+								type="submit"
+								disabled={!isValid}
+								className="btn outline outline-1 outline-black"
+							>
+								Submit
+							</button>
+						</div>
+					</Form>
+				)}
+			</Formik>
+		</dialog>
+	);
+}
