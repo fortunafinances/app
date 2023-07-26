@@ -3,34 +3,73 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import { BsArrowLeft, BsArrowRight } from "react-icons/bs";
 import { useNavigate } from "react-router-dom";
 import {
-	accounts,
-	currentAccountId,
-	userInfo,
+    accounts,
+    currentAccountId,
+    userInfo,
 } from "../../utilities/reactiveVariables";
 
 
 export default function StockSuggestion() {
-	const navigate = useNavigate();
-	const user = useReactiveVar(userInfo);
+    const categories = ["Technology",
+        "Healthcare",
+        "Energy",
+        "Financial Services",
+        "Consumer Goods",
+        "Real Estate",
+        "Transportation",
+        "Media & Entertainment",
+        "Retail",
+        "Arts & Culture",
+        "Social Responsibility",
+        "Sustainability",
+        "LGBTQ+ Rights",
+        "Diversity, Equity, and Inclusion",
+        "Women in Leadership",
+        "Blockchain",
+        "Metaverse",
+        "AI"];
+    const navigate = useNavigate();
+    const user = useReactiveVar(userInfo);
 
-	return (
-		<div className="h-screen flex [&>div]:w-[50%]">
-			<div className="flex flex-col gap-5 bg-primary text-accent p-8">
-				<h1 className=" mt-[30%] font-semibold text-left md:text-7xl text-5xl">
-					Let's invest in your first stock
-				</h1>
-				
-			</div>
-			<div className="bg-accent p-4 text-primary">
-				<h1 className="text-1xl md:text-3xl">Select 5 categories that you're most interested in</h1>
-				<hr className="h-[2px] my-8 bg-primary border-0"></hr>
-				<div className="App">
-					<center>
-					
-						
-					</center>
-				</div>
-			</div>
-		</div>
-	);
+
+
+    return (
+        <div className="h-screen flex [&>div]:w-[50%]">
+            <div className="flex flex-col gap-5 bg-primary text-accent p-8">
+                <h1 className=" mt-[30%] font-semibold text-left md:text-7xl text-5xl">
+                    Let's invest in your first stock
+                </h1>
+
+            </div>
+            <div className="bg-accent p-4 text-primary">
+                <h1 className="text-1xl md:text-3xl">Select 5 categories that you're most interested in</h1>
+                <hr className="h-[2px] my-8 bg-primary border-0"></hr>
+                <div className="App">
+                    <center>
+                        {categories.map((item, index) => (
+                            <SuggestionButton key={index} text={item} onClick={() => handleButtonClick(item)} />
+                        ))}
+
+                    </center>
+                </div>
+            </div>
+        </div>
+    );
 }
+
+function handleButtonClick(item) {
+
+}
+
+const SuggestionButton = ({ text, ...props }) => {
+    return (
+        <button
+            className="focus:bg-[#2a0066] focus:text-gray-50 flex-1 px-5 py-2.5 relative group overflow-hidden font-medium bg-transparent-50 text-gray-600 border  border-[#2a0066] hover:border-success-600 hover:bg-neutral-500 hover:bg-opacity-10 hover:text-success-600 inline-block rounded m-2"
+            {...props}
+        >
+            {text}
+        </button>
+    );
+};
+
+
