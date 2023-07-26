@@ -2,11 +2,7 @@ import { gql, useMutation, useReactiveVar } from "@apollo/client";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { BsArrowLeft, BsArrowRight } from "react-icons/bs";
 import { useNavigate } from "react-router-dom";
-import {
-	accounts,
-	currentAccountId,
-	userInfo,
-} from "../../utilities/reactiveVariables";
+import { currentAccountId, userInfo } from "../../utilities/reactiveVariables";
 import { Account, User } from "../../utilities/types";
 import { CREATE_ACCOUNT } from "../../utilities/graphQL";
 
@@ -60,13 +56,6 @@ export default function CreateAccount() {
 				<h1 className=" mt-[30%] font-semibold text-left md:text-8xl text-6xl">
 					Create An Account
 				</h1>
-				{/* <h2 className=" inline-block text-4xl">
-          Get better results with{" "}
-          <p className="font-bold text-left inline-block text-black bg-secondary px-2">
-            Fortuna
-          </p>{" "}
-          at the helm of your portfolio
-        </h2> */}
 			</div>
 			<div className="bg-accent p-4 text-primary">
 				<h1 className="text-5xl md:text-7xl">Account Information</h1>
@@ -98,13 +87,8 @@ export default function CreateAccount() {
 										})
 											.then((res) => {
 												if (!res.data?.insertAccount.account) return;
-												accounts([res.data?.insertAccount.account]);
 												currentAccountId(
 													Number(res.data?.insertAccount.account.accId)
-												);
-												console.log(
-													"new acct: ",
-													res.data?.insertAccount.account
 												);
 											})
 											.catch((err) => {

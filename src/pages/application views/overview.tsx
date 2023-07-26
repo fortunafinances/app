@@ -1,9 +1,10 @@
-import { gql, useQuery, useReactiveVar } from "@apollo/client";
+import { useQuery, useReactiveVar } from "@apollo/client";
 import DataContainer from "../../components/container/dataContainer";
 import PieChart from "../../components/data/pieChart";
 import { LineChart } from "../../components/data/lineChart";
 import { formatDollars } from "../../utilities/currency";
 import { currentAccountId } from "../../utilities/reactiveVariables";
+import { GET_OVERVIEW } from "../../utilities/graphQL";
 
 type DisplayBar = {
 	displayBar: {
@@ -15,16 +16,6 @@ type DisplayBar = {
 
 export default function Overview() {
 	const accountId = useReactiveVar(currentAccountId);
-
-	const GET_OVERVIEW = gql`
-		query DisplayBar($accId: Int!) {
-			displayBar(input: { accId: $accId }) {
-				total
-				invest
-				cash
-			}
-		}
-	`;
 
 	const { loading, error, data } = useQuery<DisplayBar>(GET_OVERVIEW, {
 		variables: { accId: accountId },
@@ -62,14 +53,13 @@ export default function Overview() {
 				<DataComponent title="Cash" dollars={data?.displayBar.cash ?? 0} />
 			</DataContainer>
 			<div className="flex">
-				<DataContainer className="h-full md:max-w-[50%] max-w-full p-3 flex flex-row justify-around mr-1" >
+				<DataContainer className="h-full md:max-w-[50%] max-w-full p-3 flex flex-row justify-around mr-1">
 					<PieChart />
 				</DataContainer>
 				<DataContainer className="h-full md:max-w-[50%] max-w-full p-3 flex flex-row justify-around ml-1">
 					<LineChart />
 				</DataContainer>
 			</div>
-
 		</div>
 	);
 }

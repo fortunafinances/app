@@ -1,6 +1,6 @@
 import { makeVar } from "@apollo/client/cache/inmemory/reactiveVars";
 import { makeVarPersisted } from "./hooks";
-import { Account, User } from "./types";
+import { User } from "./types";
 import { getMostRecentMonths } from "./common";
 
 export const sidebarClosed = makeVarPersisted("sidebarClosed", false);
@@ -8,10 +8,10 @@ export const currentAccountId = makeVarPersisted("currentAccountId", 0);
 export const userInfo = makeVarPersisted<User | null>("user", null);
 
 type DateRanges = {
-  two: string[];
-  full: string[];
-  half: string[];
-}
+	two: string[];
+	full: string[];
+	half: string[];
+};
 
 export const dateRanges: DateRanges = {
 	two: getMostRecentMonths(24),
@@ -24,7 +24,4 @@ export const lineChartDateRange = makeVarPersisted<string[]>(
 	dateRanges.full
 );
 
-
 export const symbol = makeVar("");
-
-export const accounts = makeVarPersisted<Account[]>("accounts", []);

@@ -2,11 +2,7 @@ import { useEffect } from "react";
 import { handleAuthentication } from "../utilities/auth";
 import { gql, useLazyQuery, useMutation, useReactiveVar } from "@apollo/client";
 import { Account } from "../utilities/types";
-import {
-	accounts,
-	currentAccountId,
-	userInfo,
-} from "../utilities/reactiveVariables";
+import { currentAccountId, userInfo } from "../utilities/reactiveVariables";
 import { GET_ACCOUNTS } from "../utilities/graphQL";
 import { useNavigate } from "react-router-dom";
 
@@ -81,17 +77,7 @@ const Callback = () => {
 						});
 						getAccounts({ variables: { userId: user!.userId } })
 							.then((res) => {
-								console.log(res);
-								accounts(
-									res.data?.accounts.map((acc) => {
-										return {
-											accId: Number(acc.accId),
-											cash: acc.cash,
-											name: acc.name,
-										};
-									})
-								);
-								currentAccountId(accounts()[0].accId);
+								currentAccountId(res.data?.accounts[0].accId);
 							})
 							.catch((err) => {
 								console.error(err);

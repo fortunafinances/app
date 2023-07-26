@@ -149,7 +149,7 @@ export default function TradeForm({ buyOrSell }: buyProp) {
 					Cancel
 				</button>
 				<button
-					className="border-success-content text-success-content bg-[#E3FDDC] hover:shadow-xl shadow-succes-content hover:bg-success-content hover:text-[#e3fddc]"
+					className="border-success-content text-success-content bg-[#E3FDDC] hover:shadow-xl shadow-success-content hover:bg-success-content hover:text-[#e3fddc]"
 					onClick={handleSubmit}
 				>
 					Submit
