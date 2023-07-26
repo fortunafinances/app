@@ -35,9 +35,12 @@ const transferType: DropdownProps[] = [
 	{ label: "Between", value: "BETWEEN" },
 ];
 
-const makeAccountList = (accounts: Account[]) => {
-	const ret: DropdownProps[] = [];
+const makeAccountList = (accounts: Account[], index?: number) => {
+	const ret: DropdownProps[] = [{ label: "", value: "" }];
 	accounts.map((account) => {
+		if (index) {
+			if (account.accId === index) return;
+		}
 		ret.push({ label: account.name, value: account.accId });
 	});
 	return ret;
@@ -184,7 +187,10 @@ export default function Transfer() {
 									id="toAccount"
 									name="toAccount"
 									key="toAccount"
-									selectOptions={makeAccountList(data!.accounts)}
+									selectOptions={makeAccountList(
+										data!.accounts,
+										Number(values.fromAccount)
+									)}
 									formikFieldName="toAccount"
 									placeholder="Select..."
 								/>
@@ -196,7 +202,10 @@ export default function Transfer() {
 									id="fromAccount"
 									name="fromAccount"
 									key="fromAccount"
-									selectOptions={makeAccountList(data!.accounts)}
+									selectOptions={makeAccountList(
+										data!.accounts,
+										Number(values.toAccount)
+									)}
 									formikFieldName="fromAccount"
 									placeholder="Select..."
 								/>

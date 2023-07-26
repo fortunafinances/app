@@ -5,7 +5,7 @@ import AppNavigation from "../navigation/appNavigation";
 import AutoSizer, { Size } from "react-virtualized-auto-sizer";
 import TransferSuccessful from "../popup/transferSuccessful";
 import ErrorNotification from "../popup/errorNotif";
-import NewTransfer from "../popup/transfer";
+import Transfer from "../popup/transfer";
 
 export default function ApplicationLayout() {
 	return (
@@ -31,7 +31,7 @@ export default function ApplicationLayout() {
 					</main>
 				</div>
 			</div>
-			<NewTransfer />
+			<Transfer />
 			<TransferSuccessful />
 			<ErrorNotification />
 		</div>

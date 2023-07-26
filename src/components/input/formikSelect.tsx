@@ -42,6 +42,10 @@ export default function FormikSelect({
 					// This line disable the blue border
 					boxShadow: "none",
 				}),
+				option: (styles) => ({
+					...styles,
+					minHeight: "40px",
+				}),
 			}}
 		/>
 	);
