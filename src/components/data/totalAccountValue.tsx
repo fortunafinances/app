@@ -15,15 +15,22 @@ export default function TotalAccountValue() {
 
 	const user = useReactiveVar(userInfo);
 
-	const { loading, data } = useQuery<{ allAccValue: number }>(GET_TOTAL_VALUE, {
-		variables: { userId: user?.userId },
-	});
+	const { loading, error, data } = useQuery<{ allAccValue: number }>(
+		GET_TOTAL_VALUE,
+		{
+			variables: { userId: user?.userId },
+		}
+	);
 
 	return (
 		<div className="bg-yellow-400 w-full flex flex-col gap-1 p-2 text-black items-center">
 			<p>All Accounts</p>
 			<h3 className="text-xl font-bold text-ellipsis">
-				{loading ? "loading..." : formatDollars(data!.allAccValue)}
+				{loading
+					? "loading..."
+					: error
+					? "Error"
+					: formatDollars(data!.allAccValue)}
 			</h3>
 			<p className="text-xs">As of {formatDate(date.toLocaleDateString())}</p>
 		</div>
