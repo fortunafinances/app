@@ -27,8 +27,18 @@ export default function StockSearchBar({ className }: { className?: string }) {
 		[data?.stocks]
 	);
 
-	if (loading) return <>...</>;
-	if (error) return <>Error: {error.message}</>;
+	if (loading)
+		return (
+			<div className="grow flex flex-row items-center justify-center">
+				<span className="loading loading-dots loading-md" />
+			</div>
+		);
+	if (error)
+		return (
+			<div className="grow text-red-600 flex flex-row items-center justify-center font-bold">
+				Error: {error.message}
+			</div>
+		);
 
 	return (
 		<form className={twMerge("form-control grow z-50 cursor-text", className)}>
