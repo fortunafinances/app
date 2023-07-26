@@ -70,3 +70,13 @@ export const CREATE_ACCOUNT = gql`
 		}
 	}
 `;
+
+export const GET_OVERVIEW = gql`
+	query DisplayBar($accId: Int!) {
+		displayBar(input: { accId: $accId }) {
+			total
+			invest
+			cash
+		}
+	}
+`;

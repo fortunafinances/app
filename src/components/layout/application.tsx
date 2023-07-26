@@ -3,10 +3,9 @@ import Header from "../navigation/header";
 import SideBar from "../navigation/sideBar";
 import AppNavigation from "../navigation/appNavigation";
 import AutoSizer, { Size } from "react-virtualized-auto-sizer";
-import Transfer from "../popup/transfer";
 import TransferSuccessful from "../popup/transferSuccessful";
 import ErrorNotification from "../popup/errorNotif";
-import NewTransfer from "../popup/newTransfer";
+import NewTransfer from "../popup/transfer";
 
 export default function ApplicationLayout() {
 	return (
@@ -33,7 +32,6 @@ export default function ApplicationLayout() {
 				</div>
 			</div>
 			<NewTransfer />
-			{/* <Transfer /> */}
 			<TransferSuccessful />
 			<ErrorNotification />
 		</div>
