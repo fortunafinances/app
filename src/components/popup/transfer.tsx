@@ -46,6 +46,12 @@ export default function Transfer() {
 			},
 		],
 	});
+	const successModal = document.getElementById(
+		"transfer_successful"
+	) as HTMLDialogElement;
+	const errorModal = document.getElementById(
+		"transfer_error"
+	) as HTMLDialogElement;
 
 	const [fromAccount, setFromAccount] = useState<number | null>(null);
 	const [toAccount, setToAccount] = useState<number | null>(null);
@@ -54,12 +60,6 @@ export default function Transfer() {
 	const [between, setBetween] = useState(false);
 	const [valid, setValid] = useState(false);
 
-	const successModal = document.getElementById(
-		"transfer_successful"
-	) as HTMLDialogElement;
-	const errorModal = document.getElementById(
-		"transfer_error"
-	) as HTMLDialogElement;
 
 	const handleSubmit = () => {
 		if (!valid) return;

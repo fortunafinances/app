@@ -24,5 +24,7 @@ module.exports = {
 			{ allowConstantExport: true },
 		],
 		"@typescript-eslint/no-non-null-assertion": "off",
+		"no-underscore-dangle": "off",
+		"no-param-reassign": "off",
 	},
 };

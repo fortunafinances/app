@@ -2,17 +2,24 @@ import { useReactiveVar } from "@apollo/client/react/hooks/useReactiveVar";
 import { BsChevronDown } from "react-icons/bs";
 import { currentAccountId } from "../../utilities/reactiveVariables";
 import { Account } from "../../utilities/types";
+import { ApolloError } from "@apollo/client";
 
 export interface DropdownProps {
-	data: Account[];
+	data: Account[] | undefined;
+	loading: boolean;
+	error: ApolloError | undefined;
 }
 
-const AccountDropdown = ({ data }: DropdownProps) => {
+const AccountDropdown = ({ data, loading, error }: DropdownProps) => {
 	const currentAccountNumber = useReactiveVar(currentAccountId);
 
-	const currentAccount = data.find(
+	if (loading) return <div>Loading...</div>;
+	if (error) return <div>Error</div>;
+
+	const currentAccount = data?.find(
 		(a) => Number(a.accId) === Number(currentAccountNumber)
 	);
+
 	if (!data || data.length === 0 || !currentAccount) {
 		console.log(currentAccount, currentAccountNumber);
 		return <div className="text-red-400">Error getting accounts</div>;
