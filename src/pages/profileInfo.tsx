@@ -1,8 +1,7 @@
 import EdiText from "react-editext";
-import { useState } from "react";
 
 export default function ProfileInfo() {
-  const firstName = "lidnsay";
+  const firstName = "Lindsay";
   const onSave = (val: string) => {
     console.log("Edited Value -> ", val);
   };
