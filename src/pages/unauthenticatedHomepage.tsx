@@ -9,15 +9,15 @@ export default function UnauthenticatedHomepage() {
 			<div className="hero min-h-[85vh] bg-primary">
 				<div className="hero-content text-center">
 					<div className="max-w-md">
-						<h1 className="text-8xl font-bold text-secondary">Fortuna</h1>
+						<h1 className="text-9xl font-bold text-accent">Fortuna</h1>
 						<p className="py-6 text-3xl text-secondary">
 							Get better results with Fortuna at the helm of your portfolio
 						</p>
-						<div className="flex flex-row gap-4 justify-center [&>button]:text-xl">
-							<button className="btn btn-neutral text-white" onClick={signup}>
+						<div className="flex flex-row gap-4 justify-center [&>button]:bg-[#F2EEFB] [&>button]:text-xl hover:[&>button]:bg-[#2a0066] hover:[&>button]:text-[#F2EEFB] [&>button]:border-current">
+							<button className="btn text-[#2a0066]" onClick={signup}>
 								Sign Up
 							</button>
-							<button className="btn btn-neutral text-white" onClick={login}>
+							<button className="btn text-[#2a0066]" onClick={login}>
 								Login
 							</button>
 						</div>
@@ -25,7 +25,7 @@ export default function UnauthenticatedHomepage() {
 				</div>
 			</div>
 
-			<div className="h-[15vh] bg-gradient-to-b from-[#707099] to-[#f0ecd8] flex justify-center align-middle">
+			<div className="h-[15vh] bg-gradient-to-b from-primary to-accent flex justify-center align-middle">
 				<button
 					onClick={() =>
 						window.scrollTo({
@@ -40,7 +40,7 @@ export default function UnauthenticatedHomepage() {
 					/>
 				</button>
 			</div>
-			<div className="flex flex-row w-full bg-[#f0ecd8] text-left ">
+			<div className="flex flex-row w-full bg-accent text-left ">
 				<div className="grid flex-grow card rounded-box max-w-[60%]  p-7">
 					<p className="text-4xl font-bold p-1">
 						We love to trade, and we hope you do too!
@@ -76,7 +76,7 @@ export default function UnauthenticatedHomepage() {
 					</ul>
 				</div>
 			</div>
-			<div className="h-[5vh] bg-gradient-to-b from-[#f0ecd8] to-white"></div>
+			<div className="h-[5vh] bg-gradient-to-b from-accent to-white"></div>
 			<footer className="footer pb-8 bg-white text-neutral-conten flex flex-row justify-center gap-20">
 				<div>
 					<a className="link link-hover">About</a>

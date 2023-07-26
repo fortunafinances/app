@@ -39,8 +39,8 @@ export const MAKE_TRANSFER = gql`
 `;
 
 export const GET_ACCOUNTS = gql`
-	query Accounts {
-		accounts(input: { userId: "AUTHuser1" }) {
+	query Accounts($userId: String!) {
+		accounts(input: { userId: $userId }) {
 			accId
 			name
 			cash
@@ -54,6 +54,39 @@ export const GET_STOCK_NAMES = gql`
 			name
 			ticker
 			currPrice
+		}
+	}
+`;
+
+export const CREATE_ACCOUNT = gql`
+	mutation InsertAccount($name: String!, $userId: ID!) {
+		insertAccount(name: $name, userId: $userId) {
+			message
+			account {
+				accId
+				name
+				cash
+			}
+		}
+	}
+`;
+
+export const GET_OVERVIEW = gql`
+	query DisplayBar($accId: Int!) {
+		displayBar(input: { accId: $accId }) {
+			total
+			invest
+			cash
+		}
+	}
+`;
+
+export const GET_PIE_CHART_DATA = gql`
+	query PieData($accId: Int!) {
+		pieData(input: { accId: $accId }) {
+			labels
+			values
+			message
 		}
 	}
 `;
