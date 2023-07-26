@@ -1,4 +1,5 @@
 import { Field, Form, Formik, FormikHelpers } from "formik";
+import FormikSelect from "../input/formikSelect";
 
 interface FormType {
 	transferType: string;
@@ -6,6 +7,17 @@ interface FormType {
 	fromAccount: string;
 	amount: number;
 }
+
+type DropdownProps = {
+	label: string;
+	value: string;
+};
+
+const transferType: DropdownProps[] = [
+	{ label: "In", value: "IN" },
+	{ label: "Out", value: "OUT" },
+	{ label: "Between", value: "BETWEEN" },
+];
 
 export default function NewTransfer() {
 	return (
@@ -26,8 +38,13 @@ export default function NewTransfer() {
 				}}
 			>
 				<Form className="modal-box bg-[#EDEDFE] flex flex-col gap-3 text-primary overflow-y-auto">
-					<label htmlFor="transferType">First Name</label>
-					<Field id="transferType" name="transferType" placeholder="John" />
+					<label htmlFor="transferType">Transfer Type</label>
+					<FormikSelect
+						selectOptions={transferType}
+						formikFieldName="transferType"
+						placeholder="Select..."
+					/>
+					{/* <Field id="transferType" name="transferType" placeholder="John" /> */}
 
 					<label htmlFor="toAccount">Last Name</label>
 					<Field id="toAccount" name="toAccount" placeholder="Doe" />

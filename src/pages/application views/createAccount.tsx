@@ -98,8 +98,16 @@ export default function CreateAccount() {
 										})
 											.then((res) => {
 												if (!res.data?.insertAccount.account) return;
-												accounts([res.data?.insertAccount.account]);
-												currentAccountId(
+												accounts([
+													{
+														accId: Number(
+															res.data?.insertAccount.account.accId
+														),
+														name: res.data?.insertAccount.account.name,
+														cash: res.data?.insertAccount.account.cash,
+													},
+												]);
+												currentAccountId( 
 													Number(res.data?.insertAccount.account.accId)
 												);
 												console.log(

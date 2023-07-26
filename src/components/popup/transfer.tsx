@@ -23,12 +23,6 @@ const transferType: DropdownProps[] = [
 	{ label: "Between", value: "BETWEEN" },
 ];
 
-interface Values {
-	transferType: string;
-	toAccount: string;
-	fromAccount: string;
-	amount: number;
-}
 
 export default function Transfer() {
 	const accountList = useReactiveVar(accounts);
