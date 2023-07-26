@@ -80,3 +80,13 @@ export const GET_OVERVIEW = gql`
 		}
 	}
 `;
+
+export const GET_PIE_CHART_DATA = gql`
+	query PieData($accId: Int!) {
+		pieData(input: { accId: $accId }) {
+			labels
+			values
+			message
+		}
+	}
+`;

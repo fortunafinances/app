@@ -1,16 +1,34 @@
 import { Doughnut } from "react-chartjs-2";
 import { Chart, ArcElement, Tooltip, Legend } from "chart.js";
-import { useState } from "react";
+import { useQuery, useReactiveVar } from "@apollo/client";
+import { currentAccountId } from "../../utilities/reactiveVariables";
+import { GET_PIE_CHART_DATA } from "../../utilities/graphQL";
 
 Chart.register([ArcElement, Tooltip, Legend]);
 
+type PieData = {
+	pieData: {
+		labels: string[];
+		values: number[];
+	};
+};
+
 export default function PieChart() {
-	const [data] = useState({
-		labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
+	const currentAccountNumber = useReactiveVar(currentAccountId);
+	const {
+		loading,
+		error,
+		data: remoteData,
+	} = useQuery<PieData>(GET_PIE_CHART_DATA, {
+		variables: { accId: currentAccountNumber },
+	});
+
+	const data = {
+		labels: remoteData?.pieData.labels,
 		datasets: [
 			{
 				label: "# of Votes",
-				data: [12, 19, 3, 5, 2, 3],
+				data: remoteData?.pieData.values,
 				backgroundColor: [
 					"rgba(255, 99, 132, 0.8)",
 					"rgba(54, 162, 235, 0.8)",
@@ -30,7 +48,17 @@ export default function PieChart() {
 				borderWidth: 1,
 			},
 		],
-	});
+	};
+
+	if (loading) return <p>Loading...</p>;
+	if (error) return <p>Error :(</p>;
+	if (
+		remoteData?.pieData.values.length === undefined ||
+		remoteData?.pieData.values.length < 1
+	)
+		return <p>No data to display</p>;
+
+	console.log(remoteData?.pieData);
 
 	return <Doughnut data={data} />;
 }
