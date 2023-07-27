@@ -25,20 +25,8 @@ ChartJS.register(
 
 
 export function LineChart() {
-    const dateLables = [
-        '2021-09-06',
-        '2021-09-13',
-        '2021-09-20',
-        '2021-09-27',
-        '2021-10-04',
-        '2021-10-11',
-        '2021-10-18',
-        '2021-10-25',
-        '2021-11-01',
-        '2021-11-08',
-        '2021-11-15',
-        '2021-11-22'
-    ]
+    const dateLables = ['2021-09-06', '2021-09-13', '2021-09-20', '2021-09-27', '2021-10-04', '2021-10-11', '2021-10-18', '2021-10-25', '2021-11-01', '2021-11-08', '2021-11-15', '2021-11-22', '2021-12-29', '2021-12-7', '2021-12-20', '2021-12-27', '2022-10-04', '2022-10-11', '2022-10-18', '2022-10-25', '2022-11-01', '2022-11-08', '2022-11-15', '2022-11-22',
+        '2023-09-06', '2023-09-13', '2023-09-20', '2023-09-27', '2023-10-04', '2023-10-11', '2023-10-18', '2023-10-25', '2023-11-01', '2023-11-08', '2023-11-15', '2023-11-22', '2023-12-29', '2023-12-7', '2023-12-20', '2023-12-27', '2024-10-04', '2024-10-11', '2024-10-18', '2024-10-25', '2024-11-01', '2024-11-08', '2024-11-15', '2024-11-22']
 
     const chartOptions = {
         responsive: true,
@@ -71,13 +59,17 @@ export function LineChart() {
         datasets: [
             {
                 label: "Brokerage Account",
-                data: [50, 60, 20, 50, 60, 20, 100, 5, 40, 80, 55, 25, 15, 20],
+                data: [50, 60, 20, 50, 60, 20, 100, 5, 40, 80, 55, 25, 15, 20,
+                    80, 55, 25, 50, 60, 20, 100, 25, 0, 50, 60, 20, 50, 60, 20, 100, 5, 40, 80, 55, 25, 15, 20,
+                    80, 55, 25, 50, 60, 20, 100,],
                 borderColor: "rgb(255, 99, 132)",
                 backgroundColor: "rgba(255, 99, 132, 0.5)",
             },
             {
                 label: "S&P 500",
-                data: [100, 25, 40, 80, 55, 25, 50, 60, 20, 100, 25, 40, 80],
+                data: [100, 25, 40, 80, 55, 25, 50, 60, 20, 100, 25, 40, 80,
+                    20, 50, 60, 20, 100, 5, 40, 80, 50, 60, 20, 50, 60, 20, 100, 5, 40, 80, 55, 25, 15, 20,
+                    80, 55, 25, 50, 60, 20, 100, 25,],
                 borderColor: "rgb(53, 162, 235)",
                 backgroundColor: "rgba(53, 162, 235, 0.5)",
             },
@@ -88,29 +80,30 @@ export function LineChart() {
     // change the format from full format to just showing months
     const formattedLabels = chartData.labels.map((label) =>
         // passed date into moment and have it format the expected format for us
-        moment(label).format('MMM')
+        moment(label).format('MMM YY')
     );
 
     // function to create the gap in lables
     function labelGap(labels: string[]) {
         const uniqueLabels = [];
         // create a set to keep track of which month we add already
-        const set = new Set(); 
+        const set = new Set();
         for (let label of labels) {
             // if set doens't have lable, add it to array and set
-          if (!set.has(label)) {
-            uniqueLabels.push(label);
-            set.add(label);
-          } else {
-            // added empty string to lable
-            uniqueLabels.push(""); 
-          }
-        }  
+            if (!set.has(label)) {
+                uniqueLabels.push(label);
+                set.add(label);
+            } else {
+                // added empty string to lable
+                uniqueLabels.push("");
+            }
+        }
         return uniqueLabels;
     }
 
     // get new lables array to pass in chart
     const newLables = labelGap(formattedLabels);
+    console.log(newLables)
 
     // put the new date format + gap into lables of chartData
     const modifiedChartData = {
@@ -122,27 +115,13 @@ export function LineChart() {
         <div className='w-full' >
             <Line options={chartOptions} data={modifiedChartData} />
             <div className="flex mt-5 justify-center">
+                {/* 3 months */}
+                <button className="w-full flex-1 btn text-primary bg-[#EDEDFE] min-h-[2rem] h-[1rem] mr-3">3 Months</button>
                 {/* 6 months */}
-                <button
-                    onClick={() => lineChartDateRange(dateRanges.half)}
-                    className="focus:bg-gray-600 focus:text-gray-50 flex-1 px-5 py-2.5 relative group overflow-hidden font-medium bg-gray-50 text-gray-600 border  border-gray-400 inline-block">
-                    <span className="absolute top-0 left-0 flex w-full h-0 mb-0 transition-all duration-200 ease-out transform translate-y-0 bg-gray-600 group-hover:h-full opacity-90"></span>
-                    <span className="relative group-hover:text-white">6 Months</span>
-                </button>
+                <button className="w-full flex-1 btn text-primary bg-[#EDEDFE] min-h-[2rem] h-[1rem] mr-3">6 Months</button>
                 {/* 12 months */}
-                <button
-                    onClick={() => lineChartDateRange(dateRanges.full)}
-                    className="focus:bg-gray-600 focus:text-gray-50 flex-1 px-5 py-2.5 relative group overflow-hidden font-medium bg-gray-50 text-gray-600 border  border-gray-400 inline-block rounded-r">
-                    <span className="absolute top-0 left-0 flex w-full h-0 mb-0 transition-all duration-200 ease-out transform translate-y-0 bg-gray-600 group-hover:h-full opacity-90"></span>
-                    <span className="relative group-hover:text-white">12 Months</span>
-                </button>
-                {/* 24 months */}
-                <button
-                    onClick={() => lineChartDateRange(dateRanges.two)}
-                    className="focus:bg-gray-600 focus:text-gray-50 flex-1 px-5 py-2.5 relative group overflow-hidden font-medium bg-gray-50 text-gray-600 border  border-gray-400 inline-block rounded-l">
-                    <span className="absolute top-0 left-0 flex w-full h-0 mb-0 transition-all duration-200 ease-out transform translate-y-0 bg-gray-600 group-hover:h-full opacity-90"></span>
-                    <span className="relative group-hover:text-white">24 Months</span>
-                </button>
+                <button className="w-full flex-1 btn text-primary bg-[#EDEDFE] min-h-[2rem] h-[1rem] mr-3">12 Months</button>
+
             </div>
         </div >
     );
