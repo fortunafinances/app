@@ -12,6 +12,8 @@ import { Line } from 'react-chartjs-2';
 import moment from 'moment';
 import { dateRanges, lineChartDateRange } from '../../utilities/reactiveVariables';
 import { useReactiveVar } from "@apollo/client/react/hooks/useReactiveVar";
+import { getMostRecentMonths } from '../../utilities/common';
+import { useState } from 'react';
 
 ChartJS.register(
     Title,
@@ -26,8 +28,9 @@ ChartJS.register(
 
 export function LineChart() {
     const dateLables = ['2021-09-06', '2021-09-13', '2021-09-20', '2021-09-27', '2021-10-04', '2021-10-11', '2021-10-18', '2021-10-25', '2021-11-01', '2021-11-08', '2021-11-15', '2021-11-22', '2021-12-29', '2021-12-7', '2021-12-20', '2021-12-27', '2022-10-04', '2022-10-11', '2022-10-18', '2022-10-25', '2022-11-01', '2022-11-08', '2022-11-15', '2022-11-22',
-        '2023-09-06', '2023-09-13', '2023-09-20', '2023-09-27', '2023-10-04', '2023-10-11', '2023-10-18', '2023-10-25', '2023-11-01', '2023-11-08', '2023-11-15', '2023-11-22', '2023-12-29', '2023-12-7', '2023-12-20', '2023-12-27', '2024-10-04', '2024-10-11', '2024-10-18', '2024-10-25', '2024-11-01', '2024-11-08', '2024-11-15', '2024-11-22']
-
+    '2023-09-06', '2023-09-13', '2023-09-20', '2023-09-27', '2023-10-04', '2023-10-11', '2023-10-18', '2023-10-25', '2023-11-01', '2023-11-08', '2023-11-15', '2023-11-22', '2023-12-29', '2023-12-7', '2023-12-20', '2023-12-27', '2024-10-04', '2024-10-11', '2024-10-18', '2024-10-25', '2024-11-01', '2024-11-08', '2024-11-15', '2024-11-22']
+    
+    const [range, setRange] = useState(dateLables);
     const chartOptions = {
         responsive: true,
         plugins: {
@@ -52,10 +55,9 @@ export function LineChart() {
         },
     };
 
-    const range = useReactiveVar(lineChartDateRange)
 
     const chartData = {
-        labels: dateLables,
+        labels: range,
         datasets: [
             {
                 label: "Brokerage Account",
@@ -116,11 +118,31 @@ export function LineChart() {
             <Line options={chartOptions} data={modifiedChartData} />
             <div className="flex mt-5 justify-center">
                 {/* 3 months */}
-                <button className="w-full flex-1 btn text-primary bg-[#EDEDFE] min-h-[2rem] h-[1rem] mr-3">3 Months</button>
+                <button 
+                onClick={() => {
+                    const newRange = getMostRecentMonths(dateLables, 3);
+                    setRange(newRange);
+                  }}
+                className="w-full flex-1 btn text-primary bg-[#EDEDFE] min-h-[2rem] h-[1rem] mr-3">3 Months
+                </button>
+
                 {/* 6 months */}
-                <button className="w-full flex-1 btn text-primary bg-[#EDEDFE] min-h-[2rem] h-[1rem] mr-3">6 Months</button>
+                <button
+                onClick={() => {
+                    const newRange = getMostRecentMonths(dateLables, 6);
+                    setRange(newRange);
+                  }}
+                className="w-full flex-1 btn text-primary bg-[#EDEDFE] min-h-[2rem] h-[1rem] mr-3">6 Months
+                </button>
+                
                 {/* 12 months */}
-                <button className="w-full flex-1 btn text-primary bg-[#EDEDFE] min-h-[2rem] h-[1rem] mr-3">12 Months</button>
+                <button 
+                onClick={() => {
+                    const newRange = getMostRecentMonths(dateLables, 12);
+                    setRange(newRange);
+                  }}
+                className="w-full flex-1 btn text-primary bg-[#EDEDFE] min-h-[2rem] h-[1rem] mr-3">12 Months
+                </button>
 
             </div>
         </div >
