@@ -29,13 +29,32 @@ export const sortDate = (a: string, b: string): number => {
 	return new Date(a) >= new Date(b) ? 1 : -1;
 };
 
-export const getMostRecentMonths = (num: number) => {
-	const today = new Date(); // Get today's date
-	const months = []; // Create an empty array for the months
-	// add month into months
-	for (let i = 1; i <= num; i++) {
-		const month = new Date(today.getFullYear(), today.getMonth() - i, 1);
-		months.push(month.toLocaleString("default", { month: "long" }));
+export const getMostRecentMonths = (dates: string[], num: number): string[] => {
+	const dateObjects = dates.map((date) => new Date(date));
+
+	dateObjects.sort((a, b) => b.getTime() - a.getTime());
+
+	const recentMonths: string[] = [];
+	let count = 0;
+
+	for (let date of dateObjects) {
+		const year = date.getFullYear();
+		const month = ("0" + (date.getMonth() + 1)).slice(-2);
+		const monthYear = `${year}-${month}`;
+
+		if (!recentMonths.includes(monthYear)) {
+			recentMonths.push(monthYear);
+			count++;
+		}
+
+		if (count === num) {
+			break;
+		}
 	}
-	return months.reverse();
-}
+
+	const formattedDates = dateObjects
+		.filter((date) => recentMonths.includes(`${date.getFullYear()}-${("0" + (date.getMonth() + 1)).slice(-2)}`))
+		.map((date) => date.toISOString().split("T")[0]);
+
+	return formattedDates;
+};
