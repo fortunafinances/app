@@ -41,7 +41,7 @@ export function LineChart() {
 
 	const range = useReactiveVar(lineChartDateRange);
 
-	const data = {
+	const chartData = {
 		labels: range,
 		datasets: [
 			{
@@ -62,7 +62,7 @@ export function LineChart() {
 
 	return (
 		<div className="w-full">
-			<Line options={chart} data={data} />
+			<Line options={chart} data={chartData} />
 			<div className="flex mt-5 justify-center ">
 				<button
 					onClick={() => lineChartDateRange(dateRanges.half)}
