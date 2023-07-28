@@ -3,6 +3,7 @@ import FormikSelect from "../input/formikSelect";
 import { userInfo } from "../../utilities/reactiveVariables";
 import { Account } from "../../utilities/types";
 import { useMutation, useQuery } from "@apollo/client";
+import { useRef } from "react";
 import {
 	GET_ACCOUNTS,
 	GET_ACTIVITIES,
@@ -46,29 +47,6 @@ const makeAccountList = (accounts: Account[], index?: number) => {
 	return ret;
 };
 
-const SignupSchema = Yup.object().shape({
-	transferType: Yup.string().required("*Required"),
-	transferInAccount: Yup.number().when("transferType", {
-		is: "IN",
-		then: (schema) => schema.required("*Required"),
-	}),
-	transferOutAccount: Yup.number().when("transferType", {
-		is: "OUT",
-		then: (schema) => schema.required("*Required"),
-	}),
-	toAccount: Yup.number().when("transferType", {
-		is: "BETWEEN",
-		then: (schema) => schema.required("*Required"),
-	}),
-	fromAccount: Yup.number().when("transferType", {
-		is: "BETWEEN",
-		then: (schema) => schema.required("*Required"),
-	}),
-	amount: Yup.number()
-		.required("*Required")
-		.moreThan(0, "Must be greater than 0"),
-});
-
 export default function Transfer() {
 	const { loading, data } = useQuery<{ accounts: Account[] }>(GET_ACCOUNTS, {
 		variables: { userId: userInfo()?.userId },
@@ -78,15 +56,80 @@ export default function Transfer() {
 		refetchQueries: [{ query: GET_ACTIVITIES }, { query: GET_OVERVIEW }],
 	});
 
+	const transferRef = useRef<HTMLDialogElement>(null);
+
+	const SignupSchema = Yup.object().shape({
+		transferType: Yup.string().required("*Required"),
+		transferInAccount: Yup.number().when("transferType", {
+			is: "IN",
+			then: (schema) => schema.required("*Required"),
+		}),
+		transferOutAccount: Yup.number().when("transferType", {
+			is: "OUT",
+			then: (schema) => schema.required("*Required"),
+		}),
+		toAccount: Yup.number().when("transferType", {
+			is: "BETWEEN",
+			then: (schema) => schema.required("*Required"),
+		}),
+		fromAccount: Yup.number().when("transferType", {
+			is: "BETWEEN",
+			then: (schema) => schema.required("*Required"),
+		}),
+		amount: Yup.number()
+			.required("*Required")
+			.moreThan(0, "Must be greater than 0")
+			.when("transferType", {
+				is: "IN",
+				then: (schema) =>
+					schema.max(1_000_000, "Exceeded maximum deposit"),
+			})
+			.when("transferType", {
+				is: "OUT",
+				then: (schema) =>
+					schema.test({
+						name: "balance",
+						message: "${path} exceeds account balance",
+						test: (value, context) => {
+							const account = data!.accounts.find(
+								(acc) =>
+									acc.accId ===
+									context.resolve(
+										Yup.ref("transferOutAccount"),
+									),
+							);
+							return value <= account!.cash;
+						},
+					}),
+			})
+			.when("transferType", {
+				is: "BETWEEN",
+				then: (schema) =>
+					schema.test({
+						name: "balance",
+						message: "${path} exceeds account balance",
+						test: (value, context) => {
+							const account = data!.accounts.find(
+								(acc) =>
+									acc.accId ===
+									context.resolve(Yup.ref("fromAccount")),
+							);
+							if (!account) return false;
+							return value <= account.cash;
+						},
+					}),
+			}),
+	});
+
 	const successModal = document.getElementById(
-		"transfer_successful"
+		"transfer_successful",
 	) as HTMLDialogElement;
 	const errorModal = document.getElementById(
-		"transfer_error"
+		"transfer_error",
 	) as HTMLDialogElement;
 
 	return (
-		<dialog id="new_transfer_modal" className="modal">
+		<dialog id="transfer_modal" className="modal" ref={transferRef}>
 			<Formik
 				initialValues={{
 					transferType: "",
@@ -99,7 +142,7 @@ export default function Transfer() {
 				validationSchema={SignupSchema}
 				onSubmit={(
 					values: FormType,
-					{ setSubmitting, resetForm }: FormikHelpers<FormType>
+					{ setSubmitting, resetForm }: FormikHelpers<FormType>,
 				) => {
 					makeTransfer({
 						variables: {
@@ -130,6 +173,7 @@ export default function Transfer() {
 							errorModal.showModal();
 						})
 						.finally(() => {
+							transferRef.current?.close();
 							setSubmitting(false);
 						});
 				}}
@@ -144,7 +188,9 @@ export default function Transfer() {
 							placeholder="Select..."
 						/>
 						{errors.transferType && touched.transferType && (
-							<p className="text-red-600">{errors.transferType}</p>
+							<p className="text-red-600">
+								{errors.transferType}
+							</p>
 						)}
 						{loading ? (
 							<span className="loading loading-dots loading-md" />
@@ -152,66 +198,88 @@ export default function Transfer() {
 							<></>
 						) : values.transferType === "IN" ? (
 							<div>
-								<label htmlFor="transferInAccount">Destination Account</label>
+								<label htmlFor="transferInAccount">
+									Destination Account
+								</label>
 								<FormikSelect
 									id="transferInAccount"
 									name="transferInAccount"
 									key="transferInAccount"
-									selectOptions={makeAccountList(data!.accounts)}
+									selectOptions={makeAccountList(
+										data!.accounts,
+									)}
 									formikFieldName="transferInAccount"
 									placeholder="Select..."
 								/>
-								{errors.transferInAccount && touched.transferInAccount && (
-									<p className="text-red-600">{errors.transferInAccount}</p>
-								)}
+								{errors.transferInAccount &&
+									touched.transferInAccount && (
+										<p className="text-red-600">
+											{errors.transferInAccount}
+										</p>
+									)}
 							</div>
 						) : values.transferType === "OUT" ? (
 							<div>
-								<label htmlFor="transferOutAccount">Source Account</label>
+								<label htmlFor="transferOutAccount">
+									Source Account
+								</label>
 								<FormikSelect
 									id="transferOutAccount"
 									name="transferOutAccount"
 									key="transferOutAccount"
-									selectOptions={makeAccountList(data!.accounts)}
+									selectOptions={makeAccountList(
+										data!.accounts,
+									)}
 									formikFieldName="transferOutAccount"
 									placeholder="Select..."
 								/>
-								{errors.transferOutAccount && touched.transferOutAccount && (
-									<p className="text-red-600">{errors.transferOutAccount}</p>
-								)}
+								{errors.transferOutAccount &&
+									touched.transferOutAccount && (
+										<p className="text-red-600">
+											{errors.transferOutAccount}
+										</p>
+									)}
 							</div>
 						) : (
 							<div>
-								<label htmlFor="toAccount">Destination Account</label>
-								<FormikSelect
-									id="toAccount"
-									name="toAccount"
-									key="toAccount"
-									selectOptions={makeAccountList(
-										data!.accounts,
-										Number(values.fromAccount)
-									)}
-									formikFieldName="toAccount"
-									placeholder="Select..."
-								/>
-								{errors.toAccount && touched.toAccount ? (
-									<p className="text-red-600">{errors.toAccount}</p>
-								) : null}
-								<label htmlFor="fromAccount">Source Account</label>
+								<label htmlFor="fromAccount">
+									Source Account
+								</label>
 								<FormikSelect
 									id="fromAccount"
 									name="fromAccount"
 									key="fromAccount"
 									selectOptions={makeAccountList(
 										data!.accounts,
-										Number(values.toAccount)
+										Number(values.toAccount),
 									)}
 									formikFieldName="fromAccount"
 									placeholder="Select..."
 								/>
-								{errors.fromAccount && touched.fromAccount ? (
-									<p className="text-red-600">{errors.fromAccount}</p>
-								) : null}
+								{errors.fromAccount && touched.fromAccount && (
+									<p className="text-red-600">
+										{errors.fromAccount}
+									</p>
+								)}
+								<label htmlFor="toAccount">
+									Destination Account
+								</label>
+								<FormikSelect
+									id="toAccount"
+									name="toAccount"
+									key="toAccount"
+									selectOptions={makeAccountList(
+										data!.accounts,
+										Number(values.fromAccount),
+									)}
+									formikFieldName="toAccount"
+									placeholder="Select..."
+								/>
+								{errors.toAccount && touched.toAccount && (
+									<p className="text-red-600">
+										{errors.toAccount}
+									</p>
+								)}
 							</div>
 						)}
 						<div className="flex flex-col">
@@ -225,12 +293,20 @@ export default function Transfer() {
 								placeholder="Enter Amount..."
 								className="p-2 rounded-md outline-secondary outline-1 outline focus:outline-blue-600 focus:outline-2 bg-white"
 							/>
-							{errors.amount && touched.amount ? (
+							{errors.amount && (
 								<p className="text-red-600">{errors.amount}</p>
-							) : null}
+							)}
 						</div>
 
 						<div className="modal-action">
+							<button
+								className="btn outline outline-1 outline-black bg-secondary"
+								onClick={() => {
+									transferRef.current?.close();
+								}}
+							>
+								Close
+							</button>
 							<button
 								type="submit"
 								disabled={!isValid}

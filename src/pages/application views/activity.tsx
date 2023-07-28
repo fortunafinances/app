@@ -54,6 +54,25 @@ export default function Activity() {
 		variables: { accId: accountId },
 	});
 
+	if (data?.activity.length === 0)
+		return (
+			<div className="h-full w-full flex flex-col justify-center items-center text-2xl">
+				<h2 className="text-5xl">No Activity Yet...</h2>
+				<button
+					onClick={() =>
+						(
+							document.getElementById(
+								"transfer_modal",
+							) as HTMLDialogElement
+						).showModal()
+					}
+					className="hover:underline underline-offset-8 text-primary"
+				>
+					Click here to make your first transfer
+				</button>
+			</div>
+		);
+
 	return (
 		<div className="h-full w-full overflow-y-clip">
 			<Table
