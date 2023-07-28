@@ -34,7 +34,7 @@ export const getMostRecentMonths = (dates: string[], num: number): string[] => {
 
 	dateObjects.sort((a, b) => b.getTime() - a.getTime());
 
-	const recentMonths: string[] = [];
+	const recentMonths: string[] = []; 
 	let count = 0;
 
 	for (let date of dateObjects) {
@@ -51,6 +51,7 @@ export const getMostRecentMonths = (dates: string[], num: number): string[] => {
 			break;
 		}
 	}
+	dateObjects.sort((a, b) => a.getTime() - b.getTime()); 
 
 	const formattedDates = dateObjects
 		.filter((date) => recentMonths.includes(`${date.getFullYear()}-${("0" + (date.getMonth() + 1)).slice(-2)}`))
