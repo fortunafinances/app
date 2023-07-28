@@ -11,7 +11,7 @@ import {
 import { Line } from 'react-chartjs-2';
 import moment from 'moment';
 import { getMostRecentMonths } from '../../utilities/common';
-import { useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { GET_LINE_CHART_SP500, GET_LINE_CHART_USER } from '../../utilities/graphQL';
 import { useQuery, useReactiveVar } from "@apollo/client";
 import { currentAccountId } from '../../utilities/reactiveVariables';
@@ -54,12 +54,24 @@ export function LineChart() {
 
 
     // get SP500 date and price from query
-    const dateLables = spData?.stockHistorical.date;
+    const dateLabels = spData?.stockHistorical.date;
     const spPrice = spData?.stockHistorical.price;
-    // console.log(dateLables);
+
+    console.log("print dateLabels: ", dateLabels);
+
+    const labels = useMemo(() => (dateLabels ? [...dateLabels] : []), [dateLabels]);
+
+
+    console.log("print labels: ", labels);
 
     const userPrice = userData?.accountHistorical.value;
-    const [range, setRange] = useState(dateLables);
+    const [range, setRange] = useState([]);
+
+    useEffect(() => {
+        setRange(labels);
+    }, [labels]);
+
+    console.log("print range: ", range);
 
     if (spLoading || userLoading) {
         return (
@@ -78,7 +90,6 @@ export function LineChart() {
     )
         return <p>No data to display</p>;
 
-    console.log(spData?.stockHistorical.date);
 
     // initialize the chart
     const chartOptions = {
@@ -164,7 +175,7 @@ export function LineChart() {
                 {/* 3 months */}
                 <button
                     onClick={() => {
-                        const newRange = getMostRecentMonths(dateLables!, 3);
+                        const newRange = getMostRecentMonths(dateLabels!, 3);
                         setRange(newRange);
                     }}
                     className="w-full flex-1 btn text-primary bg-[#EDEDFE] min-h-[2rem] h-[1rem] mr-3">3 Months
@@ -173,7 +184,7 @@ export function LineChart() {
                 {/* 6 months */}
                 <button
                     onClick={() => {
-                        const newRange = getMostRecentMonths(dateLables!, 6);
+                        const newRange = getMostRecentMonths(dateLabels!, 6);
                         setRange(newRange);
                     }}
                     className="w-full flex-1 btn text-primary bg-[#EDEDFE] min-h-[2rem] h-[1rem] mr-3">6 Months
@@ -182,7 +193,7 @@ export function LineChart() {
                 {/* 12 months */}
                 <button
                     onClick={() => {
-                        const newRange = getMostRecentMonths(dateLables!, 12);
+                        const newRange = getMostRecentMonths(dateLabels!, 12);
                         setRange(newRange);
                     }}
                     className="w-full flex-1 btn text-primary bg-[#EDEDFE] min-h-[2rem] h-[1rem] mr-3">12 Months
