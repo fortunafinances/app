@@ -10,7 +10,6 @@ import {
 } from 'chart.js';
 import { Line } from 'react-chartjs-2';
 import moment from 'moment';
-import { dateRanges, lineChartDateRange } from '../../utilities/reactiveVariables';
 import { useReactiveVar } from "@apollo/client/react/hooks/useReactiveVar";
 import { getMostRecentMonths } from '../../utilities/common';
 import { useState } from 'react';
@@ -24,7 +23,6 @@ ChartJS.register(
     PointElement,
     LineElement
 );
-
 
 export function LineChart() {
     const dateLables = ['2021-09-06', '2021-09-13', '2021-09-20', '2021-09-27', '2021-10-04', '2021-10-11', '2021-10-18', '2021-10-25', '2021-11-01', '2021-11-08', '2021-11-15', '2021-11-22', '2021-12-29', '2021-12-7', '2021-12-20', '2021-12-27', '2022-10-04', '2022-10-11', '2022-10-18', '2022-10-25', '2022-11-01', '2022-11-08', '2022-11-15', '2022-11-22',
@@ -54,7 +52,6 @@ export function LineChart() {
             },
         },
     };
-
 
     const chartData = {
         labels: range,
