@@ -7,6 +7,7 @@ import { useMemo } from "react";
 import { currentAccountId } from "../../utilities/reactiveVariables";
 import { GET_HOLDINGS } from "../../utilities/graphQL";
 import NoInvestments from "../../components/data/noInvestments";
+import { filterInclusive } from "../../utilities/common";
 
 export default function Holdings() {
 	const accountId = useReactiveVar(currentAccountId);
@@ -24,7 +25,7 @@ export default function Holdings() {
 				header: "Quantity",
 				accessorKey: "stockQuantity",
 				size: 55,
-				filterFn: "between",
+				filterFn: filterInclusive,
 				filterVariant: "range",
 			},
 			{

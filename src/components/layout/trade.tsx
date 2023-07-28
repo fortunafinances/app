@@ -5,6 +5,7 @@ import TradeForm from "../input/tradeForm";
 import { twMerge } from "tailwind-merge";
 import StockInfo from "../data/stockInfo";
 import AutoSizer, { Size } from "react-virtualized-auto-sizer";
+import TransferSuccessful from "../popup/transferSuccessful";
 
 export interface TradeProps {
   buyState: React.Dispatch<React.SetStateAction<boolean>>;
@@ -44,6 +45,7 @@ export default function Trade() {
     <AutoSizer>
       {({ height, width }: Size) => (
         <div style={{ height, width }} className="overflow-y-auto">
+          <TransferSuccessful transfer={false} modalId="trade_successful" />
           <div className="h-full flex">
             <div
               className={twMerge("bg-[#F9E5E5] w-[35%]", buy && "bg-success")}
