@@ -89,8 +89,6 @@ export default function Transfer() {
 				then: (schema) =>
 					schema.test({
 						name: "balance",
-						exclusive: false,
-						params: {},
 						message: "${path} exceeds account balance",
 						test: (value, context) => {
 							const account = data!.accounts.find(
@@ -100,8 +98,24 @@ export default function Transfer() {
 										Yup.ref("transferOutAccount"),
 									),
 							);
-							console.log(account);
 							return value <= account!.cash;
+						},
+					}),
+			})
+			.when("transferType", {
+				is: "BETWEEN",
+				then: (schema) =>
+					schema.test({
+						name: "balance",
+						message: "${path} exceeds account balance",
+						test: (value, context) => {
+							const account = data!.accounts.find(
+								(acc) =>
+									acc.accId ===
+									context.resolve(Yup.ref("fromAccount")),
+							);
+							if (!account) return false;
+							return value <= account.cash;
 						},
 					}),
 			}),
@@ -228,25 +242,6 @@ export default function Transfer() {
 							</div>
 						) : (
 							<div>
-								<label htmlFor="toAccount">
-									Destination Account
-								</label>
-								<FormikSelect
-									id="toAccount"
-									name="toAccount"
-									key="toAccount"
-									selectOptions={makeAccountList(
-										data!.accounts,
-										Number(values.fromAccount),
-									)}
-									formikFieldName="toAccount"
-									placeholder="Select..."
-								/>
-								{errors.toAccount && touched.toAccount ? (
-									<p className="text-red-600">
-										{errors.toAccount}
-									</p>
-								) : null}
 								<label htmlFor="fromAccount">
 									Source Account
 								</label>
@@ -261,11 +256,30 @@ export default function Transfer() {
 									formikFieldName="fromAccount"
 									placeholder="Select..."
 								/>
-								{errors.fromAccount && touched.fromAccount ? (
+								{errors.fromAccount && touched.fromAccount && (
 									<p className="text-red-600">
 										{errors.fromAccount}
 									</p>
-								) : null}
+								)}
+								<label htmlFor="toAccount">
+									Destination Account
+								</label>
+								<FormikSelect
+									id="toAccount"
+									name="toAccount"
+									key="toAccount"
+									selectOptions={makeAccountList(
+										data!.accounts,
+										Number(values.fromAccount),
+									)}
+									formikFieldName="toAccount"
+									placeholder="Select..."
+								/>
+								{errors.toAccount && touched.toAccount && (
+									<p className="text-red-600">
+										{errors.toAccount}
+									</p>
+								)}
 							</div>
 						)}
 						<div className="flex flex-col">
@@ -279,12 +293,20 @@ export default function Transfer() {
 								placeholder="Enter Amount..."
 								className="p-2 rounded-md outline-secondary outline-1 outline focus:outline-blue-600 focus:outline-2 bg-white"
 							/>
-							{errors.amount && touched.amount ? (
+							{errors.amount && (
 								<p className="text-red-600">{errors.amount}</p>
-							) : null}
+							)}
 						</div>
 
 						<div className="modal-action">
+							<button
+								className="btn outline outline-1 outline-black bg-secondary"
+								onClick={() => {
+									transferRef.current?.close();
+								}}
+							>
+								Close
+							</button>
 							<button
 								type="submit"
 								disabled={!isValid}
