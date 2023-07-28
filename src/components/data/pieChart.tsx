@@ -27,7 +27,7 @@ export default function PieChart() {
 		labels: remoteData?.pieData.labels,
 		datasets: [
 			{
-				label: "# of Votes",
+				label: "% of Portfolio",
 				data: remoteData?.pieData.values,
 				backgroundColor: [
 					"rgba(255, 99, 132, 0.8)",

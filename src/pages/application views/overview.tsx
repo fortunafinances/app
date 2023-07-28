@@ -85,11 +85,12 @@ export default function Overview() {
 			{holdingsData?.holdings.length === 0 ? (
 				<NoInvestments />
 			) : (
-				<div className="flex">
-					<DataContainer className="h-full md:max-w-[50%] max-w-full p-3 flex flex-row justify-around mr-1">
+				<div className="flex h-full">
+					<DataContainer className="h-full md:max-w-[50%] max-w-full p-3 flex flex-col justify-around items-center mr-1">
+						<h2 className="text-2xl">Portfolio Sector Breakdown</h2>
 						<PieChart />
 					</DataContainer>
-					<DataContainer className="h-full md:max-w-[50%] max-w-full p-3 flex flex-row justify-around ml-1">
+					<DataContainer className="h-full md:max-w-[50%] max-w-full p-3 flex flex-col justify-center ml-1">
 						<LineChart />
 					</DataContainer>
 				</div>
