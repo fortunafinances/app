@@ -1,4 +1,4 @@
-import { makeVar } from "@apollo/client/cache/inmemory/reactiveVars";
+import { makeVar } from "@apollo/client";
 import { makeVarPersisted } from "./hooks";
 import { User } from "./types";
 import { getMostRecentMonths } from "./common";
@@ -21,7 +21,7 @@ export const dateRanges: DateRanges = {
 
 export const lineChartDateRange = makeVarPersisted<string[]>(
 	"lineChartDateRange",
-	dateRanges.full
+	dateRanges.full,
 );
 
 export const symbol = makeVar("");

@@ -16,7 +16,6 @@ export default function AppNavigation() {
 		{ variables: { userId: user?.userId } }
 	);
 
-
 	const path = useLocation().pathname;
 	const currentPage = path.split("/")[path.split("/").length - 1];
 	return (
@@ -54,7 +53,7 @@ export default function AppNavigation() {
 						onClick={() => {
 							(
 								document.getElementById(
-									"new_transfer_modal"
+									"transfer_modal",
 								)! as HTMLDialogElement
 							).showModal();
 						}}

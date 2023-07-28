@@ -58,7 +58,5 @@ export default function PieChart() {
 	)
 		return <p>No data to display</p>;
 
-	console.log(remoteData?.pieData);
-
 	return <Doughnut data={data} />;
 }
