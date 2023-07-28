@@ -10,9 +10,10 @@ import {
 } from 'chart.js';
 import { Line } from 'react-chartjs-2';
 import moment from 'moment';
-import { useReactiveVar } from "@apollo/client/react/hooks/useReactiveVar";
 import { getMostRecentMonths } from '../../utilities/common';
 import { useState } from 'react';
+import { GET_LINE_CHART_SP500 } from '../../utilities/graphQL';
+import { useQuery, useReactiveVar } from "@apollo/client";
 
 ChartJS.register(
     Title,
@@ -24,9 +25,23 @@ ChartJS.register(
     LineElement
 );
 
+type LineSPData = {
+    stockHistorical: {
+        date: string[];
+        price: number[];
+    }
+}
+
 export function LineChart() {
-    const dateLables = ['2021-09-06', '2021-09-13', '2021-09-20', '2021-09-27', '2021-10-04', '2021-10-11', '2021-10-18', '2021-10-25', '2021-11-01', '2021-11-08', '2021-11-15', '2021-11-22', '2021-12-29', '2021-12-7', '2021-12-20', '2021-12-27', '2022-10-04', '2022-10-11', '2022-10-18', '2022-10-25', '2022-11-01', '2022-11-08', '2022-11-15', '2022-11-22',
-    '2023-09-06', '2023-09-13', '2023-09-20', '2023-09-27', '2023-10-04', '2023-10-11', '2023-10-18', '2023-10-25', '2023-11-01', '2023-11-08', '2023-11-15', '2023-11-22', '2023-12-29', '2023-12-7', '2023-12-20', '2023-12-27', '2024-10-04', '2024-10-11', '2024-10-18', '2024-10-25', '2024-11-01', '2024-11-08', '2024-11-15', '2024-11-22']
+    const { loading, error, data: remoteData } = useQuery<LineSPData>(GET_LINE_CHART_SP500, {
+		variables: { ticker: "^GSPC" },
+	});
+
+    // const dateLables = ['2021-09-06', '2021-09-13', '2021-09-20', '2021-09-27', '2021-10-04', '2021-10-11', '2021-10-18', '2021-10-25', '2021-11-01', '2021-11-08', '2021-11-15', '2021-11-22', '2021-12-29', '2021-12-7', '2021-12-20', '2021-12-27', '2022-10-04', '2022-10-11', '2022-10-18', '2022-10-25', '2022-11-01', '2022-11-08', '2022-11-15', '2022-11-22',
+    // '2023-09-06', '2023-09-13', '2023-09-20', '2023-09-27', '2023-10-04', '2023-10-11', '2023-10-18', '2023-10-25', '2023-11-01', '2023-11-08', '2023-11-15', '2023-11-22', '2023-12-29', '2023-12-7', '2023-12-20', '2023-12-27', '2024-10-04', '2024-10-11', '2024-10-18', '2024-10-25', '2024-11-01', '2024-11-08', '2024-11-15', '2024-11-22']
+    
+    const dateLables = remoteData?.stockHistorical.date;
+    console.log(dateLables);
     
     const [range, setRange] = useState(dateLables);
     const chartOptions = {
