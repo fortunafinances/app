@@ -1,4 +1,4 @@
-import { makeVar } from "@apollo/client/cache/inmemory/reactiveVars";
+import { makeVar } from "@apollo/client";
 import { makeVarPersisted } from "./hooks";
 import { User } from "./types";
 

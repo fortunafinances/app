@@ -5,7 +5,7 @@ import { MRT_ColumnDef } from "material-react-table";
 import { Order, GraphQLReturnData } from "../../utilities/types";
 import { formatDate, sortDate } from "../../utilities/common";
 import { currentAccountId } from "../../utilities/reactiveVariables";
-import { Link } from "react-router-dom";
+import NoInvestments from "../../components/data/noInvestments";
 
 export default function Orders() {
 	const accountId = useReactiveVar(currentAccountId);
@@ -57,7 +57,7 @@ export default function Orders() {
 				filterSelectOptions: ["Placed", "Executed"],
 			},
 		],
-		[]
+		[],
 	);
 
 	type OrdersQuery = {
@@ -86,18 +86,7 @@ export default function Orders() {
 		variables: { accId: accountId },
 	});
 
-	if (!loading && data?.orders.length === 0)
-		return (
-			<div className="h-full w-full flex flex-col justify-center items-center text-2xl">
-				<h2 className="text-5xl">No Orders Found...</h2>
-				<Link
-					to="/app/trade"
-					className="hover:underline underline-offset-8 text-primary"
-				>
-					Place your first order
-				</Link>
-			</div>
-		);
+	if (!loading && data?.orders.length === 0) return <NoInvestments />;
 
 	return (
 		<div className="h-full w-full overflow-y-clip">

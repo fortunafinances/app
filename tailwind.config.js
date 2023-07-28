@@ -7,7 +7,7 @@ export default {
 	content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
 	theme: {
 		fontFamily: {
-			sans: ["PT Sans", "sans-serif"],
+			sans: ["lexend", "PT Sans", "sans-serif"],
 		},
 		extend: {},
 	},
@@ -27,7 +27,7 @@ export default {
 					success: "#e5f9e7",
 					"success-content": "#529D3F",
 				},
-				lindsayTheme:{
+				lindsayTheme: {
 					primary: "#2A0066", //persian indigo
 					"primary-focus": "#F2EEFB", //magnolia
 					secondary: "#E7D6FF", //perwinkle
@@ -39,7 +39,7 @@ export default {
 					success: "#e5f9e7",
 					"success-content": "#529D3F",
 				},
-				brightTheme:{
+				brightTheme: {
 					primary: "#7c1fff", //persian indigo
 					"primary-focus": "#F2EEFB", //magnolia
 					secondary: "#E7D6FF", //perwinkle

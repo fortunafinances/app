@@ -3,6 +3,7 @@ import { BsChevronDown } from "react-icons/bs";
 import { currentAccountId } from "../../utilities/reactiveVariables";
 import { Account } from "../../utilities/types";
 import { ApolloError } from "@apollo/client";
+import { Link } from "react-router-dom";
 
 export interface DropdownProps {
 	data: Account[] | undefined;
@@ -17,11 +18,10 @@ const AccountDropdown = ({ data, loading, error }: DropdownProps) => {
 	if (error) return <div>Error</div>;
 
 	const currentAccount = data?.find(
-		(a) => Number(a.accId) === Number(currentAccountNumber)
+		(a) => Number(a.accId) === Number(currentAccountNumber),
 	);
 
 	if (!data || data.length === 0 || !currentAccount) {
-		console.log(currentAccount, currentAccountNumber);
 		return <div className="text-red-400">Error getting accounts</div>;
 	}
 
@@ -33,13 +33,9 @@ const AccountDropdown = ({ data, loading, error }: DropdownProps) => {
 		currentAccountId(index);
 	};
 
-	const appendAccount = () => {
-		return !(currentAccount.name.split("").at(-1)?.toLowerCase() === "account");
-	};
-
 	return (
 		<div
-			className="dropdown mt-1 text-black capitalize"
+			className="dropdown mt-1 text-black capitalize min-w-[200px] max-w-[400px]"
 			title={currentAccount.name + " Account"}
 		>
 			<label
@@ -49,7 +45,6 @@ const AccountDropdown = ({ data, loading, error }: DropdownProps) => {
 				<div className="relative top-[50%] -translate-y-[15px] h-full max-w-[90%] -left-2">
 					<p className="truncate max-w-full h-full text-center capitalize">
 						{currentAccount.name}
-						{appendAccount() ? "" : " Account"}
 					</p>
 				</div>
 				<BsChevronDown />
@@ -69,12 +64,12 @@ const AccountDropdown = ({ data, loading, error }: DropdownProps) => {
 					</li>
 				))}
 				<li key={-1} className="w-full" title={"Add new account"}>
-					<a
-						onClick={() => {}}
+					<Link
+						to="/createAccount"
 						className="truncate max-w-full inline text-center"
 					>
 						+
-					</a>
+					</Link>
 				</li>
 			</ul>
 		</div>
