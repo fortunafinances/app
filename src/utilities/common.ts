@@ -39,3 +39,16 @@ export const getMostRecentMonths = (num: number) => {
 	}
 	return months.reverse();
 }
+
+export const filterInclusive = (
+	row: { getValue: (id: string) => number },
+	id: string,
+	filterValue: number[] | string[],
+) => {
+	const value = row.getValue(id);
+	let [min, max] = filterValue;
+	if (min === undefined || min === "") min = Number.NEGATIVE_INFINITY;
+	if (max === undefined || max === "") max = Number.POSITIVE_INFINITY;
+
+	return value >= Number(min) && value <= Number(max);
+};

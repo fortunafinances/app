@@ -13,6 +13,14 @@ type PieData = {
 	};
 };
 
+interface PieChartContext {
+	label: string;
+	parsed: number;
+	dataset: {
+		data: number[];
+	};
+}
+
 export default function PieChart() {
 	const currentAccountNumber = useReactiveVar(currentAccountId);
 	const {
@@ -50,6 +58,28 @@ export default function PieChart() {
 		],
 	};
 
+	const options = {
+		plugins: {
+			tooltip: {
+				callbacks: {
+					label: (context: PieChartContext) => {
+						console.log(context);
+						const sum = context.dataset.data.reduce(
+							(a: number, total: number) => total + a,
+						);
+						const formatter = new Intl.NumberFormat("en-US", {
+							minimumFractionDigits: 0,
+							maximumFractionDigits: 2,
+						});
+						return `${context.label}: ${formatter.format(
+							(Number(context.parsed) / sum) * 100,
+						)}%`;
+					},
+				},
+			},
+		},
+	};
+
 	if (loading) return <p>Loading...</p>;
 	if (error) return <p>Error :(</p>;
 	if (
@@ -58,5 +88,5 @@ export default function PieChart() {
 	)
 		return <p>No data to display</p>;
 
-	return <Doughnut data={data} />;
+	return <Doughnut data={data} options={options} />;
 }

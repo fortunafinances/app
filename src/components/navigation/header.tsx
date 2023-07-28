@@ -1,5 +1,4 @@
 import { Link } from "react-router-dom";
-import StockSearchBar from "../input/stockSearch";
 import { CgProfile } from "react-icons/cg";
 import { userInfo } from "../../utilities/reactiveVariables";
 import { useReactiveVar } from "@apollo/client/react/hooks/useReactiveVar";
@@ -9,7 +8,7 @@ export default function Header() {
 	const user = useReactiveVar(userInfo);
 
 	return (
-		<header className="flex items-center bg-primary py-2">
+		<header className="flex items-center justify-between bg-primary py-1">
 			<div className="flex items-center h-full text-3xl mx-2">
 				<h1 className="hidden lg:inline">
 					<b className="text-white">
@@ -17,7 +16,6 @@ export default function Header() {
 					</b>
 				</h1>
 			</div>
-			<StockSearchBar />
 			<div className="flex flex-row gap-3 items-center text-2xl mx-3">
 				<h3 className="hidden lg:inline text-white">
 					Welcome {user?.firstName + " " + user?.lastName}
