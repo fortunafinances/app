@@ -57,12 +57,13 @@ export function LineChart() {
     const dateLabels = spData?.stockHistorical.date;
     const spPrice = spData?.stockHistorical.price;
 
-    console.log("print dateLabels: ", dateLabels);
+    // console.log("print dateLabels: ", dateLabels);
+    // console.log("print price: ", spPrice);
 
     const labels = useMemo(() => (dateLabels ? [...dateLabels] : []), [dateLabels]);
 
 
-    console.log("print labels: ", labels);
+    // console.log("print labels: ", labels);
 
     const userPrice = userData?.accountHistorical.value;
     const [range, setRange] = useState([]);
@@ -71,7 +72,7 @@ export function LineChart() {
         setRange(labels);
     }, [labels]);
 
-    console.log("print range: ", range);
+    // console.log("print range: ", range);
 
     if (spLoading || userLoading) {
         return (
@@ -90,7 +91,14 @@ export function LineChart() {
     )
         return <p>No data to display</p>;
 
+    function getLabelForValue(value: number) {
+        return labels[value];
+    }
 
+    function getMonthName(month: number) {
+        const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+        return months[parseInt(month) - 1];
+    }
     // initialize the chart
     const chartOptions = {
         responsive: true,
@@ -102,15 +110,20 @@ export function LineChart() {
                 display: true,
                 text: 'Line Chart',
             },
+        },
+        scales: {
             x: {
-                type: 'time',
-                time: {
-                    displayFormats: {
-                        month: 'MMM',
-                    },
-                },
                 ticks: {
-                    source: 'auto',
+                    callback: (value: number, index: number) => {
+                        const currentLabel = getLabelForValue(value);
+                        if (index % 4 === 0) {
+                            const [year, month, day] = currentLabel.split('-');
+                            const formattedLabel = `${day} ${getMonthName(month)} - ${year.slice(2)}`;
+                            return formattedLabel;
+                        } else {
+                            return '';
+                        }
+                    },
                 },
             },
         },
@@ -135,42 +148,9 @@ export function LineChart() {
 
     };
 
-    // change the format from full format to just showing months
-    const formattedLabels = chartData.labels?.map((label) =>
-        // passed date into moment and have it format the expected format for us
-        moment(label).format('MMM YY')
-    );
-
-    // function to create the gap in lables
-    function labelGap(labels: string[]) {
-        const uniqueLabels = [];
-        // create a set to keep track of which month we add already
-        const set = new Set();
-        for (let label of labels) {
-            // if set doens't have lable, add it to array and set
-            if (!set.has(label)) {
-                uniqueLabels.push(label);
-                set.add(label);
-            } else {
-                // added empty string to lable
-                uniqueLabels.push("");
-            }
-        }
-        return uniqueLabels;
-    }
-
-    // get new lables array to pass in chart
-    const newLables = labelGap(formattedLabels!);
-
-    // put the new date format + gap into lables of chartData
-    const modifiedChartData = {
-        ...chartData,
-        labels: newLables,
-    };
-
     return (
         <div className='w-full' >
-            <Line options={chartOptions} data={modifiedChartData} />
+            <Line options={chartOptions} data={chartData} />
             <div className="flex mt-5 justify-center">
                 {/* 3 months */}
                 <button
@@ -202,5 +182,4 @@ export function LineChart() {
             </div>
         </div >
     );
-
 }
