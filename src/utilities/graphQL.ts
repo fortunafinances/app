@@ -99,3 +99,12 @@ export const GET_LINE_CHART_SP500 = gql`
 		}
 	}
 `;
+
+export const GET_LINE_CHART_USER = gql`
+	query AccountHistorical($accId: Int!) {
+		accountHistorical(input: { accId: $accId}) {
+			date
+			value
+		}
+	}
+`;
