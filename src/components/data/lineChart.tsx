@@ -116,6 +116,7 @@ export function LineChart() {
                 ticks: {
                     callback: (value: number, index: number) => {
                         const currentLabel = getLabelForValue(value);
+                        console.log(currentLabel);
                         if (index % 4 === 0) {
                             const [year, month, day] = currentLabel.split('-');
                             const formattedLabel = `${day} ${getMonthName(month)} - ${year.slice(2)}`;
@@ -128,6 +129,8 @@ export function LineChart() {
             },
         },
     };
+
+    console.log(range);
 
     const chartData = {
         labels: range,
