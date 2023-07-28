@@ -57,7 +57,7 @@ export default function Activity() {
 	if (data?.activity.length === 0)
 		return (
 			<div className="h-full w-full flex flex-col justify-center items-center text-2xl">
-				<h2 className="text-5xl">No Investments Yet...</h2>
+				<h2 className="text-5xl">No Activity Yet...</h2>
 				<button
 					onClick={() =>
 						(
@@ -68,7 +68,7 @@ export default function Activity() {
 					}
 					className="hover:underline underline-offset-8 text-primary"
 				>
-					Click here to place your first order
+					Click here to make your first transfer
 				</button>
 			</div>
 		);
