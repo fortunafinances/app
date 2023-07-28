@@ -79,7 +79,9 @@ export default function Table<DataType extends GraphQLReturnData>({
 											className="btn btn-primary"
 											onClick={() => {
 												symbol(holding.stock.ticker);
-												navigate("/app/trade", { state: { tradeType: true } });
+												navigate("/app/trade", {
+													state: { tradeType: true },
+												});
 											}}
 										>
 											Buy
@@ -88,25 +90,32 @@ export default function Table<DataType extends GraphQLReturnData>({
 											className="btn btn-secondary"
 											onClick={() => {
 												symbol(holding.stock.ticker);
-												navigate("/app/trade", { state: { tradeType: false } });
+												navigate("/app/trade", {
+													state: { tradeType: false },
+												});
 											}}
 										>
 											Sell
 										</button>
-										<div className="flex flex-row items-center justify-center">
-											<button
-												className="w-fit"
-												onClick={() => {
-													console.log("star");
-												}}
-											>
-												{filled ? (
-													<AiFillStar size={40} />
-												) : (
-													<AiOutlineStar size={40} />
-												)}
-											</button>
-										</div>
+										{row.original.__typename !==
+											"Order" && (
+											<div className="flex flex-row items-center justify-center">
+												<button
+													className="w-fit"
+													onClick={() => {
+														console.log("star");
+													}}
+												>
+													{filled ? (
+														<AiFillStar size={40} />
+													) : (
+														<AiOutlineStar
+															size={40}
+														/>
+													)}
+												</button>
+											</div>
+										)}
 									</div>
 								);
 							} else {

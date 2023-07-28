@@ -43,7 +43,7 @@ export default function Orders() {
 				size: 50,
 			},
 			{
-				header: "Qty",
+				header: "Quantity",
 				accessorKey: "tradeQty",
 				size: 40,
 				filterFn: "between",
