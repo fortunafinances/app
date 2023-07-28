@@ -4,7 +4,7 @@ import { BsArrowLeft, BsArrowRight } from "react-icons/bs";
 import { useNavigate } from "react-router-dom";
 import { currentAccountId, userInfo } from "../../utilities/reactiveVariables";
 import { Account, User } from "../../utilities/types";
-import { CREATE_ACCOUNT } from "../../utilities/graphQL";
+import { CREATE_ACCOUNT, GET_ACCOUNTS } from "../../utilities/graphQL";
 
 type ErrorType = {
 	accountName?: string;
@@ -43,11 +43,12 @@ export default function CreateAccount() {
 	const user = useReactiveVar(userInfo);
 
 	const [postUserInfo] = useMutation<{ insertUser: { user: User } }>(
-		POST_USER_INFO
+		POST_USER_INFO,
 	);
 
 	const [postAccount] = useMutation<{ insertAccount: { account: Account } }>(
-		CREATE_ACCOUNT
+		CREATE_ACCOUNT,
+		{ refetchQueries: [{ query: GET_ACCOUNTS }] },
 	);
 
 	return (
@@ -86,9 +87,16 @@ export default function CreateAccount() {
 											},
 										})
 											.then((res) => {
-												if (!res.data?.insertAccount.account) return;
+												if (
+													!res.data?.insertAccount
+														.account
+												)
+													return;
 												currentAccountId(
-													Number(res.data?.insertAccount.account.accId)
+													Number(
+														res.data?.insertAccount
+															.account.accId,
+													),
 												);
 											})
 											.catch((err) => {
@@ -105,18 +113,6 @@ export default function CreateAccount() {
 								if (!values.accountName) {
 									errors.accountName = "*Required";
 								}
-
-								// if (!values.bank) {
-								//   errors.bank = "*Required";
-								// }
-
-								// if (!values.accountNumber) {
-								//   errors.accountNumber = "*Required";
-								// }
-
-								// if (!values.routingNumber) {
-								//   errors.routingNumber = "*Required";
-								// }
 
 								return errors;
 							}}
@@ -190,14 +186,19 @@ export default function CreateAccount() {
 									<div className="flex flex-row justify-between">
 										<button
 											disabled={isSubmitting}
-											onClick={() => navigate("/createProfile")}
+											onClick={() =>
+												navigate("/createProfile")
+											}
 										>
 											<BsArrowLeft
 												size={60}
 												className="transition duration:500 hover:scale-125 hover:fill-[#7c1fff]"
 											/>
 										</button>
-										<button type="submit" disabled={isSubmitting}>
+										<button
+											type="submit"
+											disabled={isSubmitting}
+										>
 											<BsArrowRight
 												size={60}
 												className="transition duration:500 hover:scale-125 hover:fill-[#7c1fff]"

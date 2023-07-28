@@ -33,15 +33,9 @@ const AccountDropdown = ({ data, loading, error }: DropdownProps) => {
 		currentAccountId(index);
 	};
 
-	const appendAccount = () => {
-		return !(
-			currentAccount.name.split("").at(-1)?.toLowerCase() === "account"
-		);
-	};
-
 	return (
 		<div
-			className="dropdown mt-1 text-black capitalize"
+			className="dropdown mt-1 text-black capitalize min-w-[200px] max-w-[400px]"
 			title={currentAccount.name + " Account"}
 		>
 			<label
@@ -51,7 +45,6 @@ const AccountDropdown = ({ data, loading, error }: DropdownProps) => {
 				<div className="relative top-[50%] -translate-y-[15px] h-full max-w-[90%] -left-2">
 					<p className="truncate max-w-full h-full text-center capitalize">
 						{currentAccount.name}
-						{appendAccount() ? "" : " Account"}
 					</p>
 				</div>
 				<BsChevronDown />

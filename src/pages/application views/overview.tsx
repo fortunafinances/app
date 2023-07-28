@@ -20,7 +20,7 @@ export default function Overview() {
 	const accountId = useReactiveVar(currentAccountId);
 
 	const { loading, error, data } = useQuery<DisplayBar>(GET_OVERVIEW, {
-		variables: { accId: accountId },
+		variables: { accId: accountId ? accountId : 0 },
 	});
 
 	type DataComponentProps = {
