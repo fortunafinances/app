@@ -54,6 +54,7 @@ export default function Table<DataType extends GraphQLReturnData>({
 						enableTopToolbar={false}
 						muiTableBodyRowProps={{ hover: false }}
 						enableColumnResizing={true}
+						sortDescFirst={false}
 						layoutMode="grid"
 						defaultColumn={{
 							minSize: 10,
@@ -70,8 +71,9 @@ export default function Table<DataType extends GraphQLReturnData>({
 								row.original.__typename === "Holding" ||
 								row.original.__typename === "Order"
 							) {
-								const holding = row.original as unknown as Holding &
-									GraphQLReturnData;
+								const holding =
+									row.original as unknown as Holding &
+										GraphQLReturnData;
 								const filled = false;
 								return (
 									<div className="flex flex-col flex-nowrap gap-2 w-full justify-evenly [&>button]:min-h-0 [&>button]:h-8">

@@ -3,7 +3,7 @@ import Table from "../../components/data/table";
 import { useMemo } from "react";
 import { MRT_ColumnDef } from "material-react-table";
 import { Order, GraphQLReturnData } from "../../utilities/types";
-import { formatDate, sortDate } from "../../utilities/common";
+import { filterInclusive, formatDate, sortDate } from "../../utilities/common";
 import { currentAccountId } from "../../utilities/reactiveVariables";
 import NoInvestments from "../../components/data/noInvestments";
 
@@ -46,7 +46,7 @@ export default function Orders() {
 				header: "Quantity",
 				accessorKey: "tradeQty",
 				size: 40,
-				filterFn: "between",
+				filterFn: filterInclusive,
 				filterVariant: "range",
 			},
 			{
