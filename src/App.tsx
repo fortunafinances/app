@@ -10,7 +10,7 @@ import Holdings from "./pages/application views/holdings";
 import UnauthenticatedHomepage from "./pages/unauthenticatedHomepage";
 import { ApolloClient, ApolloProvider } from "@apollo/client";
 import Activity from "./pages/application views/activity";
-import EditUser from "./pages/editUser";
+// import EditUser from "./pages/editUser";
 import Callback from "./pages/callback";
 import Trade from "./components/layout/trade";
 import cache from "./utilities/cache";
@@ -42,7 +42,7 @@ export default function App() {
 						<Route path="activity" element={<Activity />} />
 						<Route path="orders" element={<Orders />} />
 						<Route path="trade" element={<Trade />} />
-						<Route path="editProfile" element={<ProfileInfo />} />
+						{/* <Route path="editProfile" element={<ProfileInfo />} /> */}
 						<Route
 							path="*"
 							element={<Navigate to="overview" replace />}
@@ -59,7 +59,7 @@ export default function App() {
 					/>
 					<Route path="/createProfile" element={<CreateProfile />} />
 					<Route path="/createAccount" element={<CreateAccount />} />
-					{/* <Route path="/profileInfo" element={<ProfileInfo />} /> */}
+					<Route path="/profileInfo" element={<ProfileInfo />} />
 				</Routes>
 			</Router>
 		</ApolloProvider>
