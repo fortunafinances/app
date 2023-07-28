@@ -20,7 +20,7 @@ export default function Header() {
 			<StockSearchBar />
 			<div className="flex flex-row gap-3 items-center text-2xl mx-3">
 				<h3 className="hidden lg:inline">
-					Welcome, {user?.firstName + " " + user?.lastName}
+					Welcome {user?.firstName + " " + user?.lastName}
 				</h3>
 				<div className="dropdown dropdown-end">
 					<label tabIndex={0} className="cursor-pointer">
