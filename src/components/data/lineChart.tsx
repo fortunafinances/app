@@ -12,8 +12,9 @@ import { Line } from 'react-chartjs-2';
 import moment from 'moment';
 import { getMostRecentMonths } from '../../utilities/common';
 import { useState } from 'react';
-import { GET_LINE_CHART_SP500 } from '../../utilities/graphQL';
+import { GET_LINE_CHART_SP500, GET_LINE_CHART_USER } from '../../utilities/graphQL';
 import { useQuery, useReactiveVar } from "@apollo/client";
+import { currentAccountId } from '../../utilities/reactiveVariables';
 
 ChartJS.register(
     Title,
@@ -32,18 +33,54 @@ type LineSPData = {
     }
 }
 
-export function LineChart() {
-    const { loading, error, data: remoteData } = useQuery<LineSPData>(GET_LINE_CHART_SP500, {
-		variables: { ticker: "^GSPC" },
-	});
+type LineUser = {
+    accountHistorical: {
+        date: string[];
+        value: number[];
+    }
+}
 
-    // const dateLables = ['2021-09-06', '2021-09-13', '2021-09-20', '2021-09-27', '2021-10-04', '2021-10-11', '2021-10-18', '2021-10-25', '2021-11-01', '2021-11-08', '2021-11-15', '2021-11-22', '2021-12-29', '2021-12-7', '2021-12-20', '2021-12-27', '2022-10-04', '2022-10-11', '2022-10-18', '2022-10-25', '2022-11-01', '2022-11-08', '2022-11-15', '2022-11-22',
-    // '2023-09-06', '2023-09-13', '2023-09-20', '2023-09-27', '2023-10-04', '2023-10-11', '2023-10-18', '2023-10-25', '2023-11-01', '2023-11-08', '2023-11-15', '2023-11-22', '2023-12-29', '2023-12-7', '2023-12-20', '2023-12-27', '2024-10-04', '2024-10-11', '2024-10-18', '2024-10-25', '2024-11-01', '2024-11-08', '2024-11-15', '2024-11-22']
-    
-    const dateLables = remoteData?.stockHistorical.date;
-    console.log(dateLables);
-    
+export function LineChart() {
+    // get SP 500 query
+    const { loading: spLoading, error: spError, data: spData } = useQuery<LineSPData>(GET_LINE_CHART_SP500, {
+        variables: { ticker: "^GSPC" },
+    });
+
+    // get user query
+    const currentAccountNumber = useReactiveVar(currentAccountId);
+    const { loading: userLoading, error: userError, data: userData } = useQuery<LineUser>(GET_LINE_CHART_USER, {
+        variables: { accId: 1 },
+    });
+
+
+    // get SP500 date and price from query
+    const dateLables = spData?.stockHistorical.date;
+    const spPrice = spData?.stockHistorical.price;
+    // console.log(dateLables);
+
+    const userPrice = userData?.accountHistorical.value;
     const [range, setRange] = useState(dateLables);
+
+    if (spLoading || userLoading) {
+        return (
+            <div>
+                <span className="loading loading-ball loading-xs"></span>
+                <span className="loading loading-ball loading-sm"></span>
+                <span className="loading loading-ball loading-md"></span>
+                <span className="loading loading-ball loading-lg"></span>
+            </div>
+        )
+    };
+    if (spError || userError) return <p>Error :</p>;
+    if (
+        spData?.stockHistorical.date.length === undefined ||
+        spData?.stockHistorical.date.length < 1
+    )
+        return <p>No data to display</p>;
+
+    console.log(spData?.stockHistorical.date);
+
+    // initialize the chart
     const chartOptions = {
         responsive: true,
         plugins: {
@@ -73,17 +110,13 @@ export function LineChart() {
         datasets: [
             {
                 label: "Brokerage Account",
-                data: [50, 60, 20, 50, 60, 20, 100, 5, 40, 80, 55, 25, 15, 20,
-                    80, 55, 25, 50, 60, 20, 100, 25, 0, 50, 60, 20, 50, 60, 20, 100, 5, 40, 80, 55, 25, 15, 20,
-                    80, 55, 25, 50, 60, 20, 100,],
+                data: userPrice,
                 borderColor: "rgb(255, 99, 132)",
                 backgroundColor: "rgba(255, 99, 132, 0.5)",
             },
             {
                 label: "S&P 500",
-                data: [100, 25, 40, 80, 55, 25, 50, 60, 20, 100, 25, 40, 80,
-                    20, 50, 60, 20, 100, 5, 40, 80, 50, 60, 20, 50, 60, 20, 100, 5, 40, 80, 55, 25, 15, 20,
-                    80, 55, 25, 50, 60, 20, 100, 25,],
+                data: spPrice,
                 borderColor: "rgb(53, 162, 235)",
                 backgroundColor: "rgba(53, 162, 235, 0.5)",
             },
@@ -92,7 +125,7 @@ export function LineChart() {
     };
 
     // change the format from full format to just showing months
-    const formattedLabels = chartData.labels.map((label) =>
+    const formattedLabels = chartData.labels?.map((label) =>
         // passed date into moment and have it format the expected format for us
         moment(label).format('MMM YY')
     );
@@ -116,8 +149,7 @@ export function LineChart() {
     }
 
     // get new lables array to pass in chart
-    const newLables = labelGap(formattedLabels);
-    console.log(newLables)
+    const newLables = labelGap(formattedLabels!);
 
     // put the new date format + gap into lables of chartData
     const modifiedChartData = {
@@ -130,30 +162,30 @@ export function LineChart() {
             <Line options={chartOptions} data={modifiedChartData} />
             <div className="flex mt-5 justify-center">
                 {/* 3 months */}
-                <button 
-                onClick={() => {
-                    const newRange = getMostRecentMonths(dateLables, 3);
-                    setRange(newRange);
-                  }}
-                className="w-full flex-1 btn text-primary bg-[#EDEDFE] min-h-[2rem] h-[1rem] mr-3">3 Months
+                <button
+                    onClick={() => {
+                        const newRange = getMostRecentMonths(dateLables!, 3);
+                        setRange(newRange);
+                    }}
+                    className="w-full flex-1 btn text-primary bg-[#EDEDFE] min-h-[2rem] h-[1rem] mr-3">3 Months
                 </button>
 
                 {/* 6 months */}
                 <button
-                onClick={() => {
-                    const newRange = getMostRecentMonths(dateLables, 6);
-                    setRange(newRange);
-                  }}
-                className="w-full flex-1 btn text-primary bg-[#EDEDFE] min-h-[2rem] h-[1rem] mr-3">6 Months
+                    onClick={() => {
+                        const newRange = getMostRecentMonths(dateLables!, 6);
+                        setRange(newRange);
+                    }}
+                    className="w-full flex-1 btn text-primary bg-[#EDEDFE] min-h-[2rem] h-[1rem] mr-3">6 Months
                 </button>
-                
+
                 {/* 12 months */}
-                <button 
-                onClick={() => {
-                    const newRange = getMostRecentMonths(dateLables, 12);
-                    setRange(newRange);
-                  }}
-                className="w-full flex-1 btn text-primary bg-[#EDEDFE] min-h-[2rem] h-[1rem] mr-3">12 Months
+                <button
+                    onClick={() => {
+                        const newRange = getMostRecentMonths(dateLables!, 12);
+                        setRange(newRange);
+                    }}
+                    className="w-full flex-1 btn text-primary bg-[#EDEDFE] min-h-[2rem] h-[1rem] mr-3">12 Months
                 </button>
 
             </div>
