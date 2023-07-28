@@ -57,8 +57,8 @@ export default function CreateProfile() {
 	}, [user, navigate]);
 
 	return (
-		<div className="h-screen flex [&>section]:w-[50%]">
-			<section className="flex flex-col gap-5 bg-primary text-accent p-8">
+		<div className="h-screen md:flex [&>section]:md:w-[50%]">
+			<section className="md:flex hidden flex-col gap-5 bg-primary text-accent p-8">
 				<h1 className="mt-[30%] font-semibold text-left md:text-8xl text-5xl">
 					Welcome to Fortuna
 				</h1>
@@ -70,9 +70,9 @@ export default function CreateProfile() {
 					at the helm of your portfolio
 				</h2>
 			</section>
-			<section className="bg-accent p-4 text-primary">
-				<h1 className="text-7xl">Create Profile</h1>
-				<hr className="h-[2px] my-8 bg-primary border-0"></hr>
+			<section className="bg-accent p-4 text-primary h-full">
+				<h1 className="text-3xl md:text-7xl">Create Profile</h1>
+				<hr className="h-[2px] my-1 md:my-8 bg-primary border-0"></hr>
 				<div className="App">
 					<center>
 						<Formik
@@ -94,11 +94,13 @@ export default function CreateProfile() {
 								})
 									.then((res) => {
 										userInfo({
-                      username: values.username,
+											username: values.username,
 											firstName: values.firstName,
 											lastName: values.lastName,
 											phoneNumber: values.phoneNumber,
-											picture: res.data?.insertUser.user.picture,
+											picture:
+												res.data?.insertUser.user
+													.picture,
 											...user!,
 										});
 										console.log(user);
@@ -126,7 +128,7 @@ export default function CreateProfile() {
 									errors.phoneNumber = "*Required";
 								} else if (
 									!/^\(?([0-9]{3})\)?[-.●]?([0-9]{3})[-.●]?([0-9]{4})$/i.test(
-										values.phoneNumber
+										values.phoneNumber,
 									)
 								) {
 									errors.phoneNumber = "Invalid phone number";

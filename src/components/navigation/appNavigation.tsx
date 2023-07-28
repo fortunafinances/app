@@ -29,7 +29,7 @@ export default function AppNavigation() {
 							error={error}
 						/>
 					</h3>
-					<div>
+					<div className="hidden md:block">
 						{navItems.map((item, i) => {
 							return (
 								<Link key={i} to={item}>

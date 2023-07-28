@@ -132,7 +132,7 @@ export default function Transfer() {
 		<dialog id="transfer_modal" className="modal" ref={transferRef}>
 			<Formik
 				initialValues={{
-					transferType: "",
+					transferType: "IN",
 					transferInAccount: "",
 					transferOutAccount: "",
 					toAccount: "",

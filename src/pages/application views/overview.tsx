@@ -54,14 +54,14 @@ export default function Overview() {
 		);
 
 	const DataComponent = ({ title, dollars }: DataComponentProps) => (
-		<div className="flex flex-col">
+		<div className="flex flex-col text-center">
 			<p>{title}</p>
 			{loading ? (
 				<span className="loading loading-dots loading-md" />
 			) : error ? (
 				<p>Error accessing backend</p>
 			) : (
-				<p className="text-lg">{formatDollars(dollars)}</p>
+				<p className="text-md md:text-lg">{formatDollars(dollars)}</p>
 			)}
 		</div>
 	);
