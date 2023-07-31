@@ -7,8 +7,10 @@ import {
     Title,
     Tooltip,
     Legend,
+    TimeScale
 } from 'chart.js';
 import { Line } from 'react-chartjs-2';
+import "chartjs-adapter-date-fns";
 import { GET_LINE_CHART_STOCK_HISTORIAL } from '../../utilities/graphQL';
 import { useQuery } from "@apollo/client";
 import { getLabelForValue, getMonthName } from '../../utilities/common';
@@ -17,16 +19,21 @@ ChartJS.register(
     Title,
     Tooltip,
     Legend,
+    TimeScale,
     CategoryScale,
     LinearScale,
     PointElement,
     LineElement
 );
 
+type DataPoint = {
+    x: string;
+    y: number;
+}
+
 type LineStock = {
     stockHistorical: {
-        date: string[];
-        price: number[];
+        data: DataPoint[];
     }
 }
 
@@ -53,8 +60,9 @@ export function StockChart(props: StockChartProps) {
     }
 
     // get date and price from query
-    const dateLabels = lineData?.stockHistorical.date;
-    const priceData = lineData?.stockHistorical.price;
+    const stockData = lineData?.stockHistorical.data;
+    const firstDate = stockData[0].x;
+    console.log(firstDate);
 
     // initialize the chart
     const chartOptions = {
@@ -62,28 +70,25 @@ export function StockChart(props: StockChartProps) {
         plugins: {
             legend: {
                 position: 'top' as const,
+                display: false,
             },
             title: {
-                display: true,
+                display: false,
                 text: 'Stock History',
-                font: {
-                    size: 25,
-                    fontColor: '#000000',
-                }
             },
 
         },
         scales: {
-            x: {
-                ticks: {
-                    callback: (value: number) => {
-                        const currentLabel = getLabelForValue(value, dateLabels!);
-                        const [year, month, day] = currentLabel.split('-');
-                        const formattedLabel = `${day} ${getMonthName(month)} - ${year.slice(2)}`;
-                        return formattedLabel;
-                    },
-                },
-            },
+           x: {
+				type: 'time' as const,
+				time: {
+					unit: 'day' as const,
+					displayFormats: {
+						day: 'MM/d/yyyy'
+					},
+				},
+                min: firstDate,
+			},
             y: {
                 ticks: {
                     callback: function (value: number) {
@@ -95,11 +100,11 @@ export function StockChart(props: StockChartProps) {
     };
 
     const chartData = {
-        labels: dateLabels,
+        labels: "Default Data",
         datasets: [
             {
                 label: 'Price',
-                data: priceData,
+                data: stockData,
                 borderColor: "rgb(255, 99, 132)",
                 backgroundColor: "rgba(255, 99, 132, 0.5)",
             },
