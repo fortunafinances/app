@@ -124,7 +124,7 @@ export function LineChart() {
             },
             title: {
                 display: true,
-                text: 'Line Chart',
+                text: 'Performance',
             },
         },
         scales: {
