@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { handleAuthentication } from "../utilities/auth";
 import { gql, useLazyQuery, useMutation, useReactiveVar } from "@apollo/client";
-import { Account } from "../utilities/types";
+import { Account, User } from "../utilities/types";
 import { currentAccountId, userInfo } from "../utilities/reactiveVariables";
 import { GET_ACCOUNTS } from "../utilities/graphQL";
 import { useNavigate } from "react-router-dom";
@@ -26,16 +26,7 @@ const GET_USER = gql`
 
 type UserQuery = {
   insertUser: {
-    user: {
-      userId: string;
-      onboardingComplete: boolean;
-      username?: string;
-      firstName?: string;
-      lastName?: string;
-      email?: string;
-      phoneNumber?: string;
-      picture?: string;
-    };
+    user: User;
   };
 };
 
@@ -64,26 +55,40 @@ const Callback = () => {
         },
       })
         .then((res) => {
-          if (!res.data?.insertUser.user.onboardingComplete) {
-            // If user has not completed onboarding, navigate to onboarding
-            navigate("/createProfile", { replace: true });
-          } else {
-            // If user has completed onboarding, navigate to dashboard and populate user info
-            userInfo({
-              username: res.data?.insertUser.user.username,
-              firstName: res.data?.insertUser.user.firstName,
-              lastName: res.data?.insertUser.user.lastName,
-              phoneNumber: res.data?.insertUser.user.phoneNumber,
-              ...user!,
-            });
-            getAccounts({ variables: { userId: user!.userId } })
-              .then((res) => {
-                currentAccountId(res.data?.accounts[0].accId);
-              })
-              .catch((err) => {
-                console.error(err);
+          switch (res.data?.insertUser.user.onboardingComplete) {
+            case 0: {
+              navigate("/createProfile", { replace: true });
+              break;
+            }
+            case 1: {
+              userInfo({
+                username: res.data?.insertUser.user.username,
+                firstName: res.data?.insertUser.user.firstName,
+                lastName: res.data?.insertUser.user.lastName,
+                phoneNumber: res.data?.insertUser.user.phoneNumber,
+                ...user!,
               });
-            navigate("/app", { replace: true });
+              navigate("/createAccount", { replace: true });
+              break;
+            }
+            default: {
+              // If user has completed onboarding, navigate to dashboard and populate user info
+              userInfo({
+                username: res.data?.insertUser.user.username,
+                firstName: res.data?.insertUser.user.firstName,
+                lastName: res.data?.insertUser.user.lastName,
+                phoneNumber: res.data?.insertUser.user.phoneNumber,
+                ...user!,
+              });
+              getAccounts({ variables: { userId: user!.userId } })
+                .then((res) => {
+                  currentAccountId(res.data?.accounts[0].accId);
+                })
+                .catch((err) => {
+                  console.error(err);
+                });
+              navigate("/app", { replace: true });
+            }
           }
         })
         .catch((err) => {

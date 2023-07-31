@@ -17,7 +17,7 @@ export default function Header() {
 				</h1>
 			</div>
 			<div className="flex flex-row gap-3 items-center text-2xl mx-3">
-				<h3 className="hidden lg:inline text-white">
+				<h3 className="hidden lg:inline text-white capitalize">
 					Welcome {user?.firstName + " " + user?.lastName}
 				</h3>
 				<div className="dropdown dropdown-end">
@@ -29,7 +29,7 @@ export default function Header() {
 								className="w-10 h-10 rounded-full"
 							/>
 						) : (
-							<CgProfile size={40} />
+								<CgProfile size={40} color="white" />
 						)}
 					</label>
 					<div
