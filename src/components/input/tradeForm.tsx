@@ -29,6 +29,7 @@ export default function TradeForm({ buyOrSell }: buyProp) {
 	const [quantity, setQuantity] = useState(1);
 	const [stockPrice, setStockPrice] = useState(0);
 	const [totalPrice, setTotalPrice] = useState(0);
+	const [checkQuant, setCheckQuant] = useState(true); //true = submit button is disabled
 
 	const PLACE_ORDER = gql`
 		mutation InsertTrade(
@@ -130,6 +131,14 @@ export default function TradeForm({ buyOrSell }: buyProp) {
 	}, [holdingsData?.holdings, symbolName]);
 	console.log(currStockQuantity);
 
+	useEffect(() => {
+		if (quantity < 1) {
+			setCheckQuant(true);
+		} else {
+			setCheckQuant(false);
+		}
+	}, [quantity]);
+
 	// if (!loading && data?.holdings.length === 0) return <NoInvestments />;
 
 	if (loading) return <>Loading</>;
@@ -145,19 +154,24 @@ export default function TradeForm({ buyOrSell }: buyProp) {
 				<h1 className="font-semibold text-xl">
 					Quantity (Current Holdings: {currStockQuantity})
 				</h1>
-				<div className="flex flex-row justify-between">
-					<div className="border-[0px] rounded-[3px] border-[#cccccc] w-full">
-						<input
-							type="number"
-							min={1}
-							step={1}
-							onKeyDown={preventMinus}
-							onChange={(e) => {
-								setQuantity(Number(e.target.value));
-							}}
-							value={quantity}
-							className="input h-9 w-full border-[1px] rounded-[3px] border-[#cccccc] focus:ring-blue-500 focus:border-blue-500 focus:border-[2px] !outline-none"
-						/>
+				<div>
+					<h2 className="text-xs text-[#FF0000]">
+						{checkQuant ? "*required" : null}
+					</h2>
+					<div className="flex flex-row justify-between">
+						<div className="border-[0px] rounded-[3px] border-[#cccccc] w-full">
+							<input
+								type="number"
+								min={1}
+								step={1}
+								onKeyDown={preventMinus}
+								onChange={(e) => {
+									setQuantity(Number(e.target.value));
+								}}
+								value={quantity < 1 ? "" : quantity}
+								className="input h-9 w-full border-[1px] rounded-[3px] border-[#cccccc] focus:ring-blue-500 focus:border-blue-500 focus:border-[2px] !outline-none"
+							/>
+						</div>
 					</div>
 					{!buyOrSell ? (
 						<button
@@ -225,6 +239,7 @@ export default function TradeForm({ buyOrSell }: buyProp) {
 					Cancel
 				</button>
 				<button
+					disabled={checkQuant}
 					className="border-success-content text-success-content bg-[#E3FDDC] hover:shadow-xl shadow-success-content hover:bg-success-content hover:text-[#e3fddc]"
 					onClick={handleSubmit}
 				>
