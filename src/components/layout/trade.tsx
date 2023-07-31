@@ -6,6 +6,7 @@ import { twMerge } from "tailwind-merge";
 import StockInfo from "../data/stockInfo";
 import AutoSizer, { Size } from "react-virtualized-auto-sizer";
 import TransferSuccessful from "../popup/transferSuccessful";
+import ErrorNotification from "../popup/errorNotif";
 
 export interface TradeProps {
 	buyState: React.Dispatch<React.SetStateAction<boolean>>;
@@ -48,6 +49,14 @@ export default function Trade() {
 					<TransferSuccessful
 						transfer={false}
 						modalId="trade_successful"
+					/>
+					<ErrorNotification
+						modalId="insufficient_funds"
+						message="Insufficient Funds"
+					/>
+					<ErrorNotification
+						modalId="insufficient_shares"
+						message="Insufficient Shares"
 					/>
 					<div className="h-full flex">
 						<div
