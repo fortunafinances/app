@@ -125,6 +125,10 @@ export function LineChart() {
             title: {
                 display: true,
                 text: 'Performance',
+                font: {
+                    size: 25,
+                    fontColor: '#000000',
+                }
             },
         },
         scales: {
