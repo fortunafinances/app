@@ -11,6 +11,7 @@ import {
 import { Line } from 'react-chartjs-2';
 import { GET_LINE_CHART_STOCK_HISTORIAL } from '../../utilities/graphQL';
 import { useQuery } from "@apollo/client";
+import { getLabelForValue, getMonthName } from '../../utilities/common';
 
 ChartJS.register(
     Title,
@@ -33,7 +34,7 @@ interface StockChartProps {
     stockName: string;
 }
 
-export function StockChart(props : StockChartProps) {
+export function StockChart(props: StockChartProps) {
     const { loading: lineLoading, error: lineError, data: lineData } = useQuery<LineStock>(GET_LINE_CHART_STOCK_HISTORIAL, {
         variables: { ticker: props.stockName },
     });
@@ -72,6 +73,25 @@ export function StockChart(props : StockChartProps) {
             },
 
         },
+        scales: {
+            x: {
+                ticks: {
+                    callback: (value: number) => {
+                        const currentLabel = getLabelForValue(value, dateLabels!);
+                        const [year, month, day] = currentLabel.split('-');
+                        const formattedLabel = `${day} ${getMonthName(month)} - ${year.slice(2)}`;
+                        return formattedLabel;
+                    },
+                },
+            },
+            y: {
+                ticks: {
+                    callback: function (value: number) {
+                        return '$' + value; // add money symbol
+                    },
+                }
+            },
+        }
     };
 
     const chartData = {

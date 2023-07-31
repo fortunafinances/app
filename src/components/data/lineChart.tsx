@@ -9,10 +9,9 @@ import {
     Legend,
 } from 'chart.js';
 import { Line } from 'react-chartjs-2';
-import moment from 'moment';
-import { getMostRecentMonths } from '../../utilities/common';
+import { getLabelForValue, getMonthName, getMostRecentMonths } from '../../utilities/common';
 import { useEffect, useMemo, useState } from 'react';
-import { GET_LINE_CHART_SP500, GET_LINE_CHART_USER } from '../../utilities/graphQL';
+import { GET_LINE_CHART_STOCK_HISTORIAL, GET_LINE_CHART_USER } from '../../utilities/graphQL';
 import { useQuery, useReactiveVar } from "@apollo/client";
 import { currentAccountId } from '../../utilities/reactiveVariables';
 
@@ -42,7 +41,7 @@ type LineUser = {
 
 export function LineChart() {
     // get SP 500 query
-    const { loading: spLoading, error: spError, data: spData } = useQuery<LineSPData>(GET_LINE_CHART_SP500, {
+    const { loading: spLoading, error: spError, data: spData } = useQuery<LineSPData>(GET_LINE_CHART_STOCK_HISTORIAL, {
         variables: { ticker: "^GSPC" },
     });
 
@@ -106,21 +105,16 @@ export function LineChart() {
         spData?.stockHistorical.date.length < 1
     )
         return <p>No data to display</p>;
-
-    function getLabelForValue(value: number) {
-        return labels[value];
-    }
-
-    function getMonthName(month: string) {
-        const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-        return months[parseInt(month) - 1];
-    }
+    
     // initialize the chart
     const chartOptions = {
         responsive: true,
         plugins: {
             legend: {
                 position: 'top' as const,
+                labels: {
+                    usePointStyle: true,
+                },
             },
             title: {
                 display: true,
@@ -130,23 +124,19 @@ export function LineChart() {
                     fontColor: '#000000',
                 }
             },
-            legend: {
-                labels: {
-                  usePointStyle: true,
-                },
-              }
+           
         },
         scales: {
             x: {
                 ticks: {
                     callback: (value: number, index: number) => {
-                        let currentLabel = getLabelForValue(value);
+                        let currentLabel = getLabelForValue(value, labels);
                         if (range.length === 12) {
-                            currentLabel = getLabelForValue(value);
+                            currentLabel = getLabelForValue(value, labels);
                         } else if (range.length === 6) {
-                            currentLabel = getLabelForValue(value + 6 * 4);
+                            currentLabel = getLabelForValue(value + 6 * 4, labels);
                         } else if (range.length === 3) {
-                            currentLabel = getLabelForValue(value + 3 * 4);
+                            currentLabel = getLabelForValue(value + 3 * 4, labels);
                         }
 
                         if (index % 4 === 0) {
@@ -160,7 +150,7 @@ export function LineChart() {
                 },
             },
             y: {
-                ticks: {            
+                ticks: {
                     callback: function (value: number) {
                         return value + '%'; // convert it to percentage
                     },

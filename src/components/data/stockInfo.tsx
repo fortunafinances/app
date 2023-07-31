@@ -83,7 +83,7 @@ export default function StockInfo() {
 				</div>
 				{/* Graph */}
 				<div className="m-6 flex flex-col gap-3">
-					<DataContainer className=" h-full w-full flex flex-col justify-center border-0 bg-transparent">
+					<DataContainer className=" h-full w-full flex flex-col justify-center border-0 bg-transparent mb-7">
 						<StockChart stockName={symbolName} />
 					</DataContainer>
 					{/* About the Company */}
