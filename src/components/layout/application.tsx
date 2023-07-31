@@ -8,18 +8,20 @@ import ErrorNotification from "../popup/errorNotif";
 import Transfer from "../popup/transfer";
 import { useReactiveVar } from "@apollo/client";
 import { sidebarClosed } from "../../utilities/reactiveVariables";
+import { mobile } from "../../utilities/common";
 
 export default function ApplicationLayout() {
-	const sidebar = useReactiveVar(sidebarClosed);
+	const collapsed = useReactiveVar(sidebarClosed);
+
 	return (
 		<div className="flex flex-col h-screen">
 			<Header />
 			<div className="flex flex-row grow h-full">
 				<SideBar />
-				<div className="flex flex-col grow h-full">
-					{sidebar && <AppNavigation />}
-					<main className="relative h-full">
-						{sidebar && (
+				{!(mobile && !collapsed) && (
+					<div className="flex flex-col grow h-full">
+						<AppNavigation />
+						<main className="relative h-full">
 							<AutoSizer>
 								{({ height, width }: Size) => {
 									return (
@@ -28,16 +30,16 @@ export default function ApplicationLayout() {
 												height: height - 1,
 												width: width - 1,
 											}}
-											className="overflow-y-auto"
+											className="overflow-auto"
 										>
 											<Outlet />
 										</div>
 									);
 								}}
 							</AutoSizer>
-						)}
-					</main>
-				</div>
+						</main>
+					</div>
+				)}
 			</div>
 			<Transfer />
 			<TransferSuccessful transfer={true} modalId="transfer_successful" />

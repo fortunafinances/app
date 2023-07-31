@@ -56,3 +56,5 @@ export const filterInclusive = (
 export const getCurrentPath = (path: string): string => {
 	return path.split("/")[path.split("/").length - 1];
 };
+
+export const mobile = window.innerWidth < 640;

@@ -1,4 +1,4 @@
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import {
 	AiOutlineArrowLeft,
 	AiOutlineArrowRight,
@@ -17,7 +17,7 @@ export default function SideBar() {
 	const navigate = useNavigate();
 
 	const handleNavClick = (name: string) => {
-		if (window.screen.width < 768) sidebarClosed(true);
+		if (window.screen.width < 640) sidebarClosed(true);
 		navigate("/app/" + name.toLowerCase().replace(" ", "-"));
 	};
 
@@ -26,13 +26,13 @@ export default function SideBar() {
 			<div
 				className={twMerge(
 					"h-full bg-gray-800 text-white flex flex-col justify-between",
-					collapsed ? "w-6" : "w-screen sm:w-64",
+					collapsed ? "w-6" : "w-screen sm:w-48",
 				)}
 			>
 				<div>
 					{!collapsed && <TotalAccountValue />}
-					{!collapsed && (
-						<div className="px-2">
+					{!collapsed && window.screen.width <= 640 && (
+						<div className="px-2 flex justify-center">
 							{navItems.map((item, i) => {
 								return (
 									<button
@@ -66,28 +66,13 @@ export default function SideBar() {
 				</button>
 				<div className="flex flex-col items-center gap-2 p-1 text-xs">
 					{!collapsed && (
-						<div className="flex flex-col justify-between items-center w-full">
-							<div className="flex flex-row justify-around sm:justify-between w-full">
-								<Link to="/about" className="hover:underline">
-									About Fortuna
-								</Link>
-								<Link to="/privacy" className="hover:underline">
-									Privacy Policy
-								</Link>
-								<Link to="/contact" className="hover:underline">
-									Contact Us
-								</Link>
-							</div>
-							<div
-								className={collapsed ? "absolute bottom-1" : ""}
-							>
-								<p className="flex flex-row items-center gap-1">
-									<AiOutlineCopyrightCircle
-										size={collapsed ? 14 : 18}
-									/>
-									{!collapsed && 2023} Fortuna
-								</p>
-							</div>
+						<div className={collapsed ? "absolute bottom-1" : ""}>
+							<p className="flex flex-row items-center gap-1">
+								<AiOutlineCopyrightCircle
+									size={collapsed ? 14 : 18}
+								/>
+								{!collapsed && 2023} Fortuna
+							</p>
 						</div>
 					)}
 				</div>
