@@ -36,7 +36,9 @@ export default function TransferSuccessful({ transfer, modalId }: tradeProp) {
 						</button>
 						<button
 							className="btn btn-sm bg-white hover:bg-primary hover:text-white"
-							onClick={() => navigate(path)}
+							onClick={() =>
+								navigate(path)
+							}
 						>
 							{buttonName}
 						</button>

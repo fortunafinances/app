@@ -1,6 +1,6 @@
 import { Field, Form, Formik, FormikHelpers } from "formik";
 import FormikSelect from "../input/formikSelect";
-import { userInfo } from "../../utilities/reactiveVariables";
+import { currentAccountId, userInfo } from "../../utilities/reactiveVariables";
 import { Account } from "../../utilities/types";
 import { useMutation, useQuery } from "@apollo/client";
 import { useRef } from "react";
@@ -58,7 +58,7 @@ export default function Transfer() {
 
 	const transferRef = useRef<HTMLDialogElement>(null);
 
-	const SignupSchema = Yup.object().shape({
+	const validationSchema = Yup.object().shape({
 		transferType: Yup.string().required("*Required"),
 		transferInAccount: Yup.number().when("transferType", {
 			is: "IN",
@@ -139,7 +139,7 @@ export default function Transfer() {
 					fromAccount: "",
 					amount: "",
 				}}
-				validationSchema={SignupSchema}
+				validationSchema={validationSchema}
 				onSubmit={(
 					values: FormType,
 					{ setSubmitting, resetForm }: FormikHelpers<FormType>,
@@ -163,6 +163,13 @@ export default function Transfer() {
 					})
 						.then((data) => {
 							if (data.data?.insertTransfer === "Success") {
+								if (values.transferType === "IN") {
+									currentAccountId(Number(values.transferInAccount))
+								} else if (values.transferType === "OUT") {
+									currentAccountId(Number(values.transferOutAccount))
+								} else {
+									currentAccountId(Number(values.toAccount))
+								}
 								resetForm();
 								successModal.showModal();
 							} else {
