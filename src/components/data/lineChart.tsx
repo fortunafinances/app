@@ -81,7 +81,7 @@ export function LineChart() {
 
     const userPrice = userData?.accountHistorical.value;
     let userPercentage;
-    if (userPrice) {userPercentage = convertToRoundedPercentageChange(userPrice);}
+    if (userPrice) { userPercentage = convertToRoundedPercentageChange(userPrice); }
     const [range, setRange] = useState([]);
 
     useEffect(() => {
@@ -149,6 +149,13 @@ export function LineChart() {
                         }
                     },
                 },
+            },
+            y: {
+                ticks: {            
+                    callback: function (value: number) {
+                        return value + '%'; // convert it to percentage
+                    },
+                }
             },
         },
     };
