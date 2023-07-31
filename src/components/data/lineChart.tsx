@@ -140,8 +140,8 @@ export function LineChart() {
                         }
 
                         if (index % 4 === 0) {
-                            const [year, month, day] = currentLabel.split('-');
-                            const formattedLabel = `${day} ${getMonthName(month)} - ${year.slice(2)}`;
+                            const [year, month] = currentLabel.split('-');
+                            const formattedLabel = `${getMonthName(month)} ${year.slice(2)}`;
                             return formattedLabel;
                         } else {
                             return '';
