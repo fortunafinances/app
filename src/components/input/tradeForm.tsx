@@ -141,19 +141,31 @@ export default function TradeForm({ buyOrSell }: buyProp) {
       </div>
       <div className="m-4 mt-6 flex flex-col gap-3">
         <h1 className="font-semibold text-xl">Quantity (Current Holdings: {currStockQuantity})</h1>
-        <div className="border-[0px] rounded-[3px] border-[#cccccc] ">
-          <input
-            type="number"
-            min={1}
-            step={1}
-            onKeyDown={preventMinus}
-            onChange={(e) => {
-              setQuantity(Number(e.target.value));
-            }}
-            value={quantity}
-            className="input h-9 w-full border-[1px] rounded-[3px] border-[#cccccc] focus:ring-blue-500 focus:border-blue-500 focus:border-[2px] !outline-none"
-          />
-        </div>
+				<div className="flex flex-row justify-between">
+	        <div className="border-[0px] rounded-[3px] border-[#cccccc] w-full">
+	          <input
+	            type="number"
+	            min={1}
+	            step={1}
+	            onKeyDown={preventMinus}
+	            onChange={(e) => {
+	              setQuantity(Number(e.target.value));
+	            }}
+	            value={quantity}
+	            className="input h-9 w-full border-[1px] rounded-[3px] border-[#cccccc] focus:ring-blue-500 focus:border-blue-500 focus:border-[2px] !outline-none"
+	          />
+	        </div>
+					{!buyOrSell ? (
+						<button
+							className="ml-2 text-center w-[15%] rounded-sm bg-[#e6e6e6]"
+							onClick={() => {
+								setQuantity(currStockQuantity);
+							}}
+						>
+							Sell All
+						</button>
+					) : null}
+				</div>
       </div>
       {/* market limit toggle buttons */}
       <div className="flex flex-row justify-evenly font-semibold [&>button]:w-full px-4 h-10 [&>button]:border border-[#cccccc] rounded-sm">
