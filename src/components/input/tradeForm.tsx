@@ -258,7 +258,9 @@ export default function TradeForm({ buyOrSell }: buyProp) {
 							onKeyDown={preventMinus}
 							className="input h-9 w-full border-[1px] rounded-[3px] border-[#cccccc] focus:ring-blue-500 focus:border-blue-500 focus:border-[2px] !outline-none"
 							value={limitPrice!}
-							onChange={(val) => setLimitPrice(val.target.valueAsNumber)}
+							onChange={(val) =>
+								setLimitPrice(val.target.valueAsNumber)
+							}
 						/>
 					</div>
 				</span>
@@ -279,6 +281,7 @@ export default function TradeForm({ buyOrSell }: buyProp) {
 					Clear
 				</button>
 				<button
+					disabled={checkQuant}
 					className="border-success-content text-success-content bg-[#E3FDDC] hover:shadow-xl shadow-success-content hover:bg-success-content hover:text-[#e3fddc]"
 					onClick={handleSubmit}
 				>
