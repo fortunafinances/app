@@ -2,9 +2,9 @@ import { gql, useMutation, useReactiveVar } from "@apollo/client";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { BsArrowLeft, BsArrowRight } from "react-icons/bs";
 import { useLocation, useNavigate } from "react-router-dom";
-import { currentAccountId, userInfo } from "../../utilities/reactiveVariables";
-import { Account, User } from "../../utilities/types";
-import { CREATE_ACCOUNT, GET_ACCOUNTS } from "../../utilities/graphQL";
+import { currentAccountId, userInfo } from "../utilities/reactiveVariables";
+import { Account, User } from "../utilities/types";
+import { CREATE_ACCOUNT, GET_ACCOUNTS } from "../utilities/graphQL";
 
 type ErrorType = {
 	accountName?: string;

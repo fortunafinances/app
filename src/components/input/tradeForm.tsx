@@ -5,7 +5,7 @@ import { Stock } from "../../utilities/types";
 import { formatDollars } from "../../utilities/currency";
 import { currentAccountId, symbol } from "../../utilities/reactiveVariables";
 import { OrderType, OrderSide } from "../../utilities/types";
-import { GET_STOCK_NAMES } from "../../utilities/graphQL";
+import { GET_ORDERS, GET_STOCK_NAMES } from "../../utilities/graphQL";
 import StockSearchBar from "./stockSearch";
 import { preventMinus } from "../../utilities/common";
 import { GraphQLReturnData, Holding } from "../../utilities/types";
@@ -54,7 +54,7 @@ export default function TradeForm({ buyOrSell }: buyProp) {
 		insertTrade: string;
 	};
 
-	const [placeOrder] = useMutation<TransferReturnData>(PLACE_ORDER);
+	const [placeOrder] = useMutation<TransferReturnData>(PLACE_ORDER, { refetchQueries: [{ query: GET_HOLDINGS, variables: { accID: accountId } }, { query: GET_ORDERS, variables: { accId: accountId } }] });
 
 	const successModal = document.getElementById(
 		"trade_successful",
@@ -139,7 +139,7 @@ export default function TradeForm({ buyOrSell }: buyProp) {
     <div>
       <div className="m-4 mt-6 flex flex-col gap-3">
         <h1 className="font-semibold text-xl">Symbol</h1>
-        <StockSearchBar className="z-40 w-full" />
+				<StockSearchBar className="z-40 w-full" tradeType={buyOrSell} />
       </div>
       <div className="m-4 mt-6 flex flex-col gap-3">
         <h1 className="font-semibold text-xl">Quantity (Current Holdings: {currStockQuantity})</h1>

@@ -1,12 +1,12 @@
 import { useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { HiSwitchHorizontal } from "react-icons/hi";
-import TradeForm from "../input/tradeForm";
+import TradeForm from "../../components/input/tradeForm";
 import { twMerge } from "tailwind-merge";
-import StockInfo from "../data/stockInfo";
+import StockInfo from "../../components/data/stockInfo";
 import AutoSizer, { Size } from "react-virtualized-auto-sizer";
-import TransferSuccessful from "../popup/transferSuccessful";
-import ErrorNotification from "../popup/errorNotif";
+import TransferSuccessful from "../../components/popup/transferSuccessful";
+import ErrorNotification from "../../components/popup/errorNotif";
 
 export interface TradeProps {
 	buyState: React.Dispatch<React.SetStateAction<boolean>>;
@@ -42,7 +42,7 @@ export default function Trade() {
 		}
 	}, [state]);
 
-  return (
+	return (
 		<AutoSizer>
 			{({ height, width }: Size) => (
 				<div style={{ height, width }} className="overflow-y-auto">
@@ -94,12 +94,12 @@ export default function Trade() {
 								<TradeForm buyOrSell={buy} />
 							</div>
 						</div>
-						<div className="flex-1 flex ">
+						<div className="flex-1 flex">
 							<StockInfo />
 						</div>
 					</div>
 				</div>
 			)}
 		</AutoSizer>
-  );
+	);
 }

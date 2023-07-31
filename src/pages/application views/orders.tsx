@@ -1,4 +1,4 @@
-import { gql, useQuery, useReactiveVar } from "@apollo/client";
+import { useQuery, useReactiveVar } from "@apollo/client";
 import Table from "../../components/data/table";
 import { useMemo } from "react";
 import { MRT_ColumnDef } from "material-react-table";
@@ -6,6 +6,7 @@ import { Order, GraphQLReturnData } from "../../utilities/types";
 import { filterInclusive, formatDate, sortDate } from "../../utilities/common";
 import { currentAccountId } from "../../utilities/reactiveVariables";
 import NoInvestments from "../../components/data/noInvestments";
+import { GET_ORDERS } from "../../utilities/graphQL";
 
 export default function Orders() {
 	const accountId = useReactiveVar(currentAccountId);
@@ -63,24 +64,6 @@ export default function Orders() {
 	type OrdersQuery = {
 		orders: Order[] & GraphQLReturnData;
 	};
-
-	const GET_ORDERS = gql`
-		query Orders($accId: Int!) {
-			orders(input: { accId: $accId }) {
-				type
-				side
-				status
-				tradePrice
-				tradeQty
-				date
-				stock {
-					ticker
-					name
-					currPrice
-				}
-			}
-		}
-	`;
 
 	const { loading, error, data } = useQuery<OrdersQuery>(GET_ORDERS, {
 		variables: { accId: accountId },
