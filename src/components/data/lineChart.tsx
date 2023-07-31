@@ -52,20 +52,36 @@ export function LineChart() {
         variables: { accId: 1 },
     });
 
+    function convertToRoundedPercentageChange(prices: number[]) {
+        const firstPrice = prices[0];
+        const roundedPercentageChanges = [];
+
+        for (let i = 0; i < prices.length; i++) {
+            const percentageChange = ((prices[i] - firstPrice) / firstPrice) * 100;
+            const roundedPercentageChange = Number(percentageChange.toFixed(2));
+            roundedPercentageChanges.push(roundedPercentageChange);
+        }
+
+        return roundedPercentageChanges;
+    }
 
     // get SP500 date and price from query
     const dateLabels = spData?.stockHistorical.date;
     const spPrice = spData?.stockHistorical.price;
+    let spPercentage;
+    if (spPrice) { spPercentage = convertToRoundedPercentageChange(spPrice); }
+    console.log(spPercentage);
 
     // console.log("print dateLabels: ", dateLabels);
     // console.log("print price: ", spPrice);
 
     const labels = useMemo(() => (dateLabels ? [...dateLabels] : []), [dateLabels]);
 
-
     // console.log("print labels: ", labels);
 
     const userPrice = userData?.accountHistorical.value;
+    let userPercentage;
+    if (userPrice) {userPercentage = convertToRoundedPercentageChange(userPrice);}
     const [range, setRange] = useState([]);
 
     useEffect(() => {
@@ -95,7 +111,7 @@ export function LineChart() {
         return labels[value];
     }
 
-    function getMonthName(month: number) {
+    function getMonthName(month: string) {
         const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
         return months[parseInt(month) - 1];
     }
@@ -115,8 +131,15 @@ export function LineChart() {
             x: {
                 ticks: {
                     callback: (value: number, index: number) => {
-                        const currentLabel = getLabelForValue(value);
-                        console.log(currentLabel);
+                        let currentLabel = getLabelForValue(value);
+                        if (range.length === 12) {
+                            currentLabel = getLabelForValue(value);
+                        } else if (range.length === 6) {
+                            currentLabel = getLabelForValue(value + 6 * 4);
+                        } else if (range.length === 3) {
+                            currentLabel = getLabelForValue(value + 3 * 4);
+                        }
+
                         if (index % 4 === 0) {
                             const [year, month, day] = currentLabel.split('-');
                             const formattedLabel = `${day} ${getMonthName(month)} - ${year.slice(2)}`;
@@ -137,13 +160,13 @@ export function LineChart() {
         datasets: [
             {
                 label: "Brokerage Account",
-                data: userPrice,
+                data: userPercentage,
                 borderColor: "rgb(255, 99, 132)",
                 backgroundColor: "rgba(255, 99, 132, 0.5)",
             },
             {
                 label: "S&P 500",
-                data: spPrice,
+                data: spPercentage,
                 borderColor: "rgb(53, 162, 235)",
                 backgroundColor: "rgba(53, 162, 235, 0.5)",
             },
@@ -159,6 +182,7 @@ export function LineChart() {
                 <button
                     onClick={() => {
                         const newRange = getMostRecentMonths(dateLabels!, 3);
+                        console.log(newRange);
                         setRange(newRange);
                     }}
                     className="w-full flex-1 btn text-primary bg-[#EDEDFE] min-h-[2rem] h-[1rem] mr-3">3 Months
