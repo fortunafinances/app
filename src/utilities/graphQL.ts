@@ -91,7 +91,7 @@ export const GET_PIE_CHART_DATA = gql`
   }
 `;
 
-export const GET_LINE_CHART_SP500 = gql`
+export const GET_LINE_CHART_STOCK_HISTORIAL = gql`
 	query StockHistorical($ticker: String!) {
 		stockHistorical(input: { ticker: $ticker}) {
 			date
