@@ -14,7 +14,13 @@ type Dropdown = {
 type StockData = {
 	stocks: Stock[];
 };
-export default function StockSearchBar({ className }: { className?: string }) {
+export default function StockSearchBar({
+	className,
+	tradeType = true,
+}: {
+	className?: string;
+	tradeType?: boolean;
+}) {
 	const navigate = useNavigate();
 	const symbolName = useReactiveVar(symbol);
 	const { loading, error, data } = useQuery<StockData>(GET_STOCK_NAMES);
@@ -24,7 +30,7 @@ export default function StockSearchBar({ className }: { className?: string }) {
 			const stock = data?.stocks.find((stock) => stock.ticker === symbol);
 			return stock?.name;
 		},
-		[data?.stocks]
+		[data?.stocks],
 	);
 
 	if (loading)
@@ -41,13 +47,18 @@ export default function StockSearchBar({ className }: { className?: string }) {
 		);
 
 	return (
-		<form className={twMerge("form-control grow z-50 cursor-text", className)}>
+		<form
+			className={twMerge("form-control grow z-50 cursor-text", className)}
+		>
 			<Select
 				className="cursor-text"
 				options={
 					data
 						? data.stocks.map((stock) => {
-								return { label: stock.name!, value: stock.ticker };
+								return {
+									label: stock.name!,
+									value: stock.ticker,
+								};
 						  })
 						: []
 				}
@@ -56,7 +67,7 @@ export default function StockSearchBar({ className }: { className?: string }) {
 				value={{ label: getStockName(symbolName)!, value: symbolName }}
 				onChange={(e) => {
 					symbol(e?.value);
-					navigate("/app/trade", { state: { tradeType: true } });
+					navigate("/app/trade", { state: { tradeType: tradeType } });
 				}}
 				onInputChange={function (): void {}}
 				onMenuOpen={function (): void {}}

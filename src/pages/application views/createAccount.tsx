@@ -52,15 +52,15 @@ export default function CreateAccount() {
 	);
 
 	return (
-		<div className="h-screen flex [&>div]:w-[50%]">
-			<div className="flex flex-col gap-5 bg-primary text-accent p-8">
+		<div className="h-screen md:flex [&>section]:md:w-[50%]">
+			<section className="hidden md:flex flex-col gap-5 bg-primary text-accent p-8">
 				<h1 className=" mt-[30%] font-semibold text-left md:text-8xl text-6xl">
 					Create An Account
 				</h1>
-			</div>
-			<div className="bg-accent p-4 text-primary">
-				<h1 className="text-5xl md:text-7xl">Account Information</h1>
-				<hr className="h-[2px] my-8 bg-primary border-0"></hr>
+			</section>
+			<section className="bg-accent p-4 text-primary h-full">
+				<h1 className="text-3xl md:text-7xl">Account Information</h1>
+				<hr className="h-[2px] my-2 md:my-8 bg-primary border-0"></hr>
 				<div className="App">
 					<center>
 						<Formik
@@ -210,7 +210,7 @@ export default function CreateAccount() {
 						</Formik>
 					</center>
 				</div>
-			</div>
+			</section>
 		</div>
 	);
 }
