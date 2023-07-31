@@ -85,5 +85,9 @@ export const filterInclusive = (
 export const getCurrentPath = (path: string): string => {
 	return path.split("/")[path.split("/").length - 1];
 };
-
 export const mobile = window.innerWidth < 640;
+
+export const capitalize = (str: string | undefined) => {
+	if(!str) return ""
+	return str.charAt(0).toUpperCase()
+  + str.slice(1)}

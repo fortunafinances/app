@@ -7,6 +7,10 @@ import StockInfo from "../data/stockInfo";
 import AutoSizer, { Size } from "react-virtualized-auto-sizer";
 import TransferSuccessful from "../popup/transferSuccessful";
 import ErrorNotification from "../popup/errorNotif";
+import { useQuery, useReactiveVar } from "@apollo/client";
+import { currentAccountId } from "../../utilities/reactiveVariables";
+import { GET_OVERVIEW } from "../../utilities/graphQL";
+import { formatDollars } from "../../utilities/currency";
 
 export interface TradeProps {
 	buyState: React.Dispatch<React.SetStateAction<boolean>>;
@@ -24,6 +28,19 @@ export default function Trade() {
 	const [buy, setBuy] = useState(true);
 	const [header, setHeader] = useState("BUY");
 	const [switchButton, setSwitchButton] = useState("SELL");
+
+	const accountId = useReactiveVar(currentAccountId);
+	type DisplayBar = {
+		displayBar: {
+			total: number;
+			invest: number;
+			cash: number;
+		};
+	};
+
+	const { data } = useQuery<DisplayBar>(GET_OVERVIEW, {
+		variables: { accId: accountId ? accountId : 0 },
+	});
 
 	useEffect(() => {
 		if (buy === false) {
@@ -73,7 +90,13 @@ export default function Trade() {
 									)}
 								>
 									<h1 className="text-4xl">{header}</h1>
-									<p className="text-xl">Account Name</p>
+									<p className="text-xl">
+										{" "}
+										Cash:{" "}
+										{formatDollars(
+											data?.displayBar.cash ?? 0,
+										)}
+									</p>
 									<button
 										className="absolute top-0 right-10 text-xl flex flex-row items-center"
 										onClick={() => {

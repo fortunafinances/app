@@ -11,7 +11,7 @@ export type User = {
   firstName?: string;
   lastName?: string;
   phoneNumber?: string;
-  onboardingComplete?: boolean;
+  onboardingComplete?: number;
   bankName?: string;
   registerDate?: string;
 };

@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { userInfo } from "../../utilities/reactiveVariables";
 import { useEffect } from "react";
 import { User } from "../../utilities/types";
+import { capitalize } from "../../utilities/common";
 
 type ErrorType = {
 	firstName?: string;
@@ -16,10 +17,10 @@ type ErrorType = {
 const POST_USER_INFO = gql`
 	mutation InsertUser(
 		$userId: ID!
-		$username: String!
-		$firstName: String!
-		$lastName: String!
-		$phoneNumber: String!
+		$username: String
+		$firstName: String
+		$lastName: String
+		$phoneNumber: String
 	) {
 		insertUser(
 			userId: $userId
@@ -73,42 +74,45 @@ export default function CreateProfile() {
 			<section className="bg-accent p-4 text-primary h-full">
 				<h1 className="text-3xl md:text-7xl">Create Profile</h1>
 				<hr className="h-[2px] my-1 md:my-8 bg-primary border-0"></hr>
-				<div className="App">
-					<center>
+				<center className="">
 						<Formik
 							initialValues={{
-								firstName: "",
-								lastName: "",
-								username: "",
-								phoneNumber: "",
+							firstName: capitalize(user!.firstName) ?? "",
+							lastName: capitalize(user!.lastName) ?? "",
+							username: capitalize(user!.username) ?? "",
+							phoneNumber: capitalize(user!.phoneNumber) ?? "",
 							}}
 							onSubmit={(values, { setSubmitting }) => {
 								postUserInfo({
 									variables: {
 										userId: user!.userId,
 										username: values.username,
-										firstName: values.firstName,
-										lastName: values.lastName,
-										phoneNumber: values.phoneNumber,
+										firstName: values.firstName.toLowerCase(),
+										lastName: values.lastName.toLowerCase(),
+										phoneNumber: values.phoneNumber.replace(/\D/g, ""),
+										onboardingComplete: 1
 									},
 								})
 									.then((res) => {
+										console.log("setting user info")
 										userInfo({
+											userId: user!.userId,
+											email: user!.email,
 											username: values.username,
-											firstName: values.firstName,
-											lastName: values.lastName,
-											phoneNumber: values.phoneNumber,
+											firstName: values.firstName.toLowerCase(),
+											lastName: values.lastName.toLowerCase(),
+											phoneNumber: values.phoneNumber.replace(/\D/g, ""),
 											picture:
 												res.data?.insertUser.user
 													.picture,
-											...user!,
 										});
-										console.log(user);
-										setSubmitting(false);
-										navigate("/createAccount");
+										navigate("/createAccount", { state: { onboarding: true } });
 									})
 									.catch((err) => {
 										console.error(err);
+									}).finally(() => {
+										console.log(userInfo())
+										setSubmitting(false);
 									});
 							}}
 							validate={(values) => {
@@ -137,7 +141,7 @@ export default function CreateProfile() {
 							}}
 						>
 							{({ isSubmitting }) => (
-								<Form className="flex flex-col gap-4">
+							<Form className="flex flex-col gap-4">
 									<div>
 										<label
 											htmlFor="firstName"
@@ -228,8 +232,7 @@ export default function CreateProfile() {
 								</Form>
 							)}
 						</Formik>
-					</center>
-				</div>
+				</center>
 			</section>
 		</div>
 	);
