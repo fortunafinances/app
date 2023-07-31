@@ -9,16 +9,25 @@ export default function UnauthenticatedHomepage() {
 			<div className="hero min-h-[85vh] bg-primary">
 				<div className="hero-content text-center">
 					<div className="max-w-md">
-						<h1 className="text-9xl font-bold text-accent">Fortuna</h1>
+						<h1 className="text-9xl font-bold text-accent">
+							Fortuna
+						</h1>
 						<p className="py-6 text-3xl text-secondary">
-							Get better results with Fortuna at the helm of your portfolio
+							Get better results with Fortuna at the helm of your
+							portfolio
 						</p>
 						<div className="flex flex-row gap-4 justify-center [&>button]:bg-[#F2EEFB] [&>button]:text-xl hover:[&>button]:bg-[#2a0066] hover:[&>button]:text-[#F2EEFB] [&>button]:border-current">
-							<button className="btn text-[#2a0066]" onClick={signup}>
+							<button
+								className="btn text-[#2a0066]"
+								onClick={signup}
+							>
 								Sign Up
 							</button>
-							<button className="btn text-[#2a0066]" onClick={login}>
-								Login
+							<button
+								className="btn text-[#2a0066]"
+								onClick={login}
+							>
+								Log In
 							</button>
 						</div>
 					</div>
@@ -46,14 +55,16 @@ export default function UnauthenticatedHomepage() {
 						We love to trade, and we hope you do too!
 					</p>
 					<p className="text-xl p-1">
-						Now you can express that love with the latest trading platform from
-						Fortuna. We guarantee a 0-second trade execution, and will give you
-						a free popsicle if your trade doesn’t go through in this time period
+						Now you can express that love with the latest trading
+						platform from Fortuna. We guarantee a 0-second trade
+						execution, and will give you a free popsicle if your
+						trade doesn’t go through in this time period
 					</p>
 					<p className="text-xl p-1">
-						On a side-note, we just bought a big freezer and 10,000 popsicles.
-						Thankfully, we’ve hedged all popsicle expenses for the next two
-						years! (Commodity experts say popsicles are on the rise)
+						On a side-note, we just bought a big freezer and 10,000
+						popsicles. Thankfully, we’ve hedged all popsicle
+						expenses for the next two years! (Commodity experts say
+						popsicles are on the rise)
 					</p>
 				</div>
 				<div className="inline-block h-[250px] min-h-[1em] w-0.5 self-center bg-neutral"></div>
