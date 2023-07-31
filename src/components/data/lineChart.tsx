@@ -130,6 +130,11 @@ export function LineChart() {
                     fontColor: '#000000',
                 }
             },
+            legend: {
+                labels: {
+                  usePointStyle: true,
+                },
+              }
         },
         scales: {
             x: {
@@ -172,6 +177,7 @@ export function LineChart() {
             {
                 label: "Brokerage Account",
                 data: userPercentage,
+                pointStyle: 'rect',
                 borderColor: "rgb(255, 99, 132)",
                 backgroundColor: "rgba(255, 99, 132, 0.5)",
             },
