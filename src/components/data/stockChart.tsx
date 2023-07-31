@@ -51,12 +51,10 @@ export function StockChart(props : StockChartProps) {
         return <div>{lineError?.message}</div>;
     }
 
-    // get SP500 date and price from query
+    // get date and price from query
     const dateLabels = lineData?.stockHistorical.date;
     const priceData = lineData?.stockHistorical.price;
-    // console.log("print dateLabels: ", dateLabels);
-    // console.log("print price: ", spPrice);
-    // console.log("print range: ", range);
+
     // initialize the chart
     const chartOptions = {
         responsive: true,
@@ -66,7 +64,7 @@ export function StockChart(props : StockChartProps) {
             },
             title: {
                 display: true,
-                text: '???',
+                text: 'Stock History',
                 font: {
                     size: 25,
                     fontColor: '#000000',
@@ -80,7 +78,7 @@ export function StockChart(props : StockChartProps) {
         labels: dateLabels,
         datasets: [
             {
-                label: "Brokerage Account",
+                label: 'Price',
                 data: priceData,
                 borderColor: "rgb(255, 99, 132)",
                 backgroundColor: "rgba(255, 99, 132, 0.5)",
