@@ -140,7 +140,7 @@ export default function TradeForm({ buyOrSell }: buyProp) {
         <StockSearchBar className="z-40 w-full" />
       </div>
       <div className="m-4 mt-6 flex flex-col gap-3">
-        <h1 className="font-semibold text-xl">Quantity</h1>
+        <h1 className="font-semibold text-xl">Quantity (Current Holdings: {currStockQuantity})</h1>
         <div className="border-[0px] rounded-[3px] border-[#cccccc] ">
           <input
             type="number"
