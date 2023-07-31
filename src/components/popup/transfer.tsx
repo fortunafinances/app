@@ -1,6 +1,6 @@
 import { Field, Form, Formik, FormikHelpers } from "formik";
 import FormikSelect from "../input/formikSelect";
-import { userInfo } from "../../utilities/reactiveVariables";
+import { currentAccountId, userInfo } from "../../utilities/reactiveVariables";
 import { Account } from "../../utilities/types";
 import { useMutation, useQuery } from "@apollo/client";
 import { useRef } from "react";
@@ -53,7 +53,10 @@ export default function Transfer() {
 	});
 
 	const [makeTransfer] = useMutation<TransferReturnData>(MAKE_TRANSFER, {
-		refetchQueries: [{ query: GET_ACTIVITIES }, { query: GET_OVERVIEW }],
+		refetchQueries: [
+			{ query: GET_ACTIVITIES, variables: { accId: currentAccountId() } },
+			{ query: GET_OVERVIEW, variables: { accId: currentAccountId() } },
+		],
 	});
 
 	const transferRef = useRef<HTMLDialogElement>(null);
