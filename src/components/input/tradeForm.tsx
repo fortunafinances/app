@@ -37,6 +37,7 @@ export default function TradeForm({ buyOrSell }: buyProp) {
 			$side: OrderSide!
 			$ticker: String!
 			$tradeQty: Int!
+			$tradePrice: Float!
 		) {
 			insertTrade(
 				accID: $accID
@@ -44,6 +45,7 @@ export default function TradeForm({ buyOrSell }: buyProp) {
 				side: $side
 				ticker: $ticker
 				tradeQty: $tradeQty
+				tradePrice: $tradePrice
 			)
 		}
 	`;
@@ -74,6 +76,7 @@ export default function TradeForm({ buyOrSell }: buyProp) {
 				side: buyOrSell ? OrderSide.Buy : OrderSide.Sell,
 				ticker: symbolName,
 				tradeQty: quantity,
+				tradePrice: stockPrice,
 			},
 		})
 			.then((data) => {
@@ -96,7 +99,6 @@ export default function TradeForm({ buyOrSell }: buyProp) {
 				}
 			})
 			.catch((error) => console.error(error))
-			.finally(() => console.log("d"));
 	};
 
 	useEffect(() => {
