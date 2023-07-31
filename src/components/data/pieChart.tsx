@@ -63,7 +63,6 @@ export default function PieChart() {
 			tooltip: {
 				callbacks: {
 					label: (context: PieChartContext) => {
-						console.log(context);
 						const sum = context.dataset.data.reduce(
 							(a: number, total: number) => total + a,
 						);

@@ -42,49 +42,55 @@ export default function Trade() {
   }, [state]);
 
   return (
-    <AutoSizer>
-      {({ height, width }: Size) => (
-        <div style={{ height, width }} className="overflow-y-auto">
-          <TransferSuccessful transfer={false} modalId="trade_successful" />
-          <div className="h-full flex">
-            <div
-              className={twMerge("bg-[#F9E5E5] w-[35%]", buy && "bg-success")}
-            >
-              <div className="relative mt-5">
-                <div
-                  className={twMerge(
-                    "text-[#920000] font-semibold ml-5",
-                    buy && "text-success-content"
-                  )}
-                >
-                  <h1 className="text-4xl">{header}</h1>
-                  <p className="text-xl">Account Name</p>
-                  <button
-                    className="absolute top-0 right-10 text-xl flex flex-row items-center"
-                    onClick={() => {
-                      setBuy((buy) => !buy);
-                    }}
-                  >
-                    <HiSwitchHorizontal color="black" />
-                    <p
-                      className={twMerge(
-                        "text-success-content font-medium",
-                        buy && "text-[#920000]"
-                      )}
-                    >
-                      {switchButton}
-                    </p>
-                  </button>
-                </div>
-                <TradeForm buyOrSell={buy} />
-              </div>
-            </div>
-            <div className="flex-1 flex ">
-              <StockInfo />
-            </div>
-          </div>
-        </div>
-      )}
-    </AutoSizer>
+		<AutoSizer>
+			{({ height, width }: Size) => (
+				<div style={{ height, width }} className="overflow-y-auto">
+					<TransferSuccessful
+						transfer={false}
+						modalId="trade_successful"
+					/>
+					<div className="h-full flex flex-col md:flex-row">
+						<div
+							className={twMerge(
+								"bg-[#F9E5E5] w-full md:w-[35%]",
+								buy && "bg-success",
+							)}
+						>
+							<div className="relative mt-5">
+								<div
+									className={twMerge(
+										"text-[#920000] font-semibold ml-5",
+										buy && "text-success-content",
+									)}
+								>
+									<h1 className="text-4xl">{header}</h1>
+									<p className="text-xl">Account Name</p>
+									<button
+										className="absolute top-0 right-10 text-xl flex flex-row items-center"
+										onClick={() => {
+											setBuy((buy) => !buy);
+										}}
+									>
+										<HiSwitchHorizontal color="black" />
+										<p
+											className={twMerge(
+												"text-success-content font-medium",
+												buy && "text-[#920000]",
+											)}
+										>
+											{switchButton}
+										</p>
+									</button>
+								</div>
+								<TradeForm buyOrSell={buy} />
+							</div>
+						</div>
+						<div className="flex-1 flex ">
+							<StockInfo />
+						</div>
+					</div>
+				</div>
+			)}
+		</AutoSizer>
   );
 }
