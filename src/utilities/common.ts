@@ -37,7 +37,7 @@ export const getMostRecentMonths = (dates: string[], num: number): string[] => {
 	const recentMonths: string[] = []; 
 	let count = 0;
 
-	for (let date of dateObjects) {
+	for (const date of dateObjects) {
 		const year = date.getFullYear();
 		const month = ("0" + (date.getMonth() + 1)).slice(-2);
 		const monthYear = `${year}-${month}`;
