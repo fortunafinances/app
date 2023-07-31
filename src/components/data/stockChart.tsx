@@ -84,7 +84,7 @@ export function StockChart(props: StockChartProps) {
 				time: {
 					unit: 'day' as const,
 					displayFormats: {
-						day: 'MM/d/yyyy'
+						day: 'd/MM/yyyy'
 					},
 				},
                 min: firstDate,
