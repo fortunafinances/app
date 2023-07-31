@@ -8,9 +8,9 @@ export default function UnauthenticatedHomepage() {
 		<>
 			<div className="hero min-h-[85vh] bg-primary">
 				<div className="hero-content text-center">
-					<div className="max-w-md">
-						<h1 className="text-9xl font-bold text-accent">Fortuna</h1>
-						<p className="py-6 text-3xl text-secondary">
+					<div className="w-md">
+						<h1 className="text-6xl md:text-9xl font-bold text-accent">Fortuna</h1>
+						<p className="py-2 md:py-6 text-lg md:text-3xl text-secondary">
 							Get better results with Fortuna at the helm of your portfolio
 						</p>
 						<div className="flex flex-row gap-4 justify-center [&>button]:bg-[#F2EEFB] [&>button]:text-xl hover:[&>button]:bg-[#2a0066] hover:[&>button]:text-[#F2EEFB] [&>button]:border-current">
@@ -40,8 +40,8 @@ export default function UnauthenticatedHomepage() {
 					/>
 				</button>
 			</div>
-			<div className="flex flex-row w-full bg-accent text-left ">
-				<div className="grid flex-grow card rounded-box max-w-[60%]  p-7">
+			<div className="flex flex-col md:flex-row w-full bg-accent text-left ">
+				<div className="md:max-w-[60%] grid card rounded-box p-7">
 					<p className="text-4xl font-bold p-1">
 						We love to trade, and we hope you do too!
 					</p>
@@ -56,8 +56,8 @@ export default function UnauthenticatedHomepage() {
 						years! (Commodity experts say popsicles are on the rise)
 					</p>
 				</div>
-				<div className="inline-block h-[250px] min-h-[1em] w-0.5 self-center bg-neutral"></div>
-				<div className="grid flex-grow h-[40vh] card rounded-box max-w-[40%] p-7 ml-9">
+				<div className="inline-block h-0.5 w-4/5 md:h-[250px] md:w-0.5 self-center bg-neutral"></div>
+				<div className="grid grow-[4] h-[40vh] card rounded-box md:max-w-[40%] p-7 ml-9">
 					<p className="text-4xl font-bold sm: mb-5">
 						Every account comes with:
 					</p>
@@ -77,16 +77,10 @@ export default function UnauthenticatedHomepage() {
 				</div>
 			</div>
 			<div className="h-[5vh] bg-gradient-to-b from-accent to-white"></div>
-			<footer className="footer pb-8 bg-white text-neutral-conten flex flex-row justify-center gap-20">
-				<div>
-					<a className="link link-hover">About</a>
-				</div>
-				<div>
-					<a className="link link-hover">Privacy Policy</a>
-				</div>
-				<div>
-					<a className="link link-hover">Contact Us</a>
-				</div>
+			<footer className="footer py-6 bg-white text-neutral-content flex flex-row justify-evenly">
+				<a className="link link-hover">About</a>
+				<a className="link link-hover">Privacy Policy</a>
+				<a className="link link-hover">Contact Us</a>
 			</footer>
 		</>
 	);

@@ -75,14 +75,13 @@ export default function CreateAccount() {
 									variables: {
 										userId: user!.userId,
 										onboardingComplete: true,
-										bankName: values.bank,
+										bankName: values.bank.toLowerCase(),
 									},
 								})
 									.then(() => {
-										setSubmitting(false);
 										postAccount({
 											variables: {
-												name: values.accountName,
+												name: values.accountName.toLowerCase(),
 												userId: user!.userId,
 											},
 										})
@@ -106,6 +105,8 @@ export default function CreateAccount() {
 									})
 									.catch((err) => {
 										console.log(err);
+									}).finally(() => {
+										setSubmitting(false);
 									});
 							}}
 							validate={(values) => {
