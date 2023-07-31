@@ -300,6 +300,7 @@ export default function Transfer() {
 
 						<div className="modal-action">
 							<button
+								type="button"
 								className="btn outline outline-1 outline-black bg-secondary"
 								onClick={() => {
 									transferRef.current?.close();
