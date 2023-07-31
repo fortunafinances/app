@@ -72,3 +72,9 @@ export const filterInclusive = (
 
 	return value >= Number(min) && value <= Number(max);
 };
+
+export const getCurrentPath = (path: string): string => {
+	return path.split("/")[path.split("/").length - 1];
+};
+
+export const mobile = window.innerWidth < 640;

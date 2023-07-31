@@ -42,7 +42,7 @@ export default function Trade() {
 		}
 	}, [state]);
 
-	return (
+  return (
 		<AutoSizer>
 			{({ height, width }: Size) => (
 				<div style={{ height, width }} className="overflow-y-auto">
@@ -58,10 +58,10 @@ export default function Trade() {
 						modalId="insufficient_shares"
 						message="Insufficient Shares"
 					/>
-					<div className="h-full flex">
+					<div className="h-full flex flex-col md:flex-row">
 						<div
 							className={twMerge(
-								"bg-[#F9E5E5] w-[35%]",
+								"bg-[#F9E5E5] w-full md:w-[35%]",
 								buy && "bg-success",
 							)}
 						>
@@ -101,5 +101,5 @@ export default function Trade() {
 				</div>
 			)}
 		</AutoSizer>
-	);
+  );
 }

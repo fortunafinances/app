@@ -5,8 +5,9 @@ import { userInfo } from "../../utilities/reactiveVariables";
 import AccountDropdown from "../input/accountDropdown";
 import { Account } from "../../utilities/types";
 import { GET_ACCOUNTS } from "../../utilities/graphQL";
+import { navItems } from "../../utilities/config";
+import { getCurrentPath } from "../../utilities/common";
 
-const navItems = ["overview", "holdings", "orders", "activity", "trade"];
 
 export default function AppNavigation() {
 	const user = useReactiveVar(userInfo);
@@ -17,7 +18,6 @@ export default function AppNavigation() {
 	);
 
 	const path = useLocation().pathname;
-	const currentPage = path.split("/")[path.split("/").length - 1];
 	return (
 		<nav className="bg-gray-800">
 			<div className="flex flex-row justify-between items-center">
@@ -29,14 +29,14 @@ export default function AppNavigation() {
 							error={error}
 						/>
 					</h3>
-					<div>
+					<div className="px-2 hidden md:block">
 						{navItems.map((item, i) => {
 							return (
 								<Link key={i} to={item}>
 									<p
 										className={twMerge(
-											"inline-block px-3 py-2 capitalize underline-offset-4",
-											item === currentPage &&
+											"inline-block px-2 py-2 capitalize underline-offset-4",
+											item === getCurrentPath(path) &&
 												"underline font-semibold",
 										)}
 									>

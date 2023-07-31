@@ -10,7 +10,7 @@ export default function Header() {
 	return (
 		<header className="flex items-center justify-between bg-primary py-1">
 			<div className="flex items-center h-full text-3xl mx-2">
-				<h1 className="hidden lg:inline">
+				<h1 className="inline">
 					<b className="text-white">
 						<Link to="/">Fortuna</Link>
 					</b>

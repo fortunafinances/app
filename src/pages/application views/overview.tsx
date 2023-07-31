@@ -3,7 +3,10 @@ import DataContainer from "../../components/container/dataContainer";
 import PieChart from "../../components/data/pieChart";
 import { LineChart } from "../../components/data/lineChart";
 import { formatDollars } from "../../utilities/currency";
-import { currentAccountId } from "../../utilities/reactiveVariables";
+import {
+	currentAccountId,
+	sidebarClosed,
+} from "../../utilities/reactiveVariables";
 import { GET_HOLDINGS, GET_OVERVIEW } from "../../utilities/graphQL";
 import { Holding, GraphQLReturnData } from "../../utilities/types";
 import NoInvestments from "../../components/data/noInvestments";
@@ -18,6 +21,8 @@ type DisplayBar = {
 
 export default function Overview() {
 	const accountId = useReactiveVar(currentAccountId);
+
+	const sidebar = useReactiveVar(sidebarClosed);
 
 	const { loading, error, data } = useQuery<DisplayBar>(GET_OVERVIEW, {
 		variables: { accId: accountId ? accountId : 0 },
@@ -53,15 +58,17 @@ export default function Overview() {
 			</div>
 		);
 
+	if (!sidebar && window.screen.width <= 768) return <></>;
+
 	const DataComponent = ({ title, dollars }: DataComponentProps) => (
-		<div className="flex flex-col">
+		<div className="flex flex-col text-center">
 			<p>{title}</p>
 			{loading ? (
 				<span className="loading loading-dots loading-md" />
 			) : error ? (
 				<p>Error accessing backend</p>
 			) : (
-				<p className="text-lg">{formatDollars(dollars)}</p>
+				<p className="text-md md:text-lg">{formatDollars(dollars)}</p>
 			)}
 		</div>
 	);
@@ -85,12 +92,12 @@ export default function Overview() {
 			{holdingsData?.holdings.length === 0 ? (
 				<NoInvestments />
 			) : (
-				<div className="flex h-full">
-					<DataContainer className="h-full md:max-w-[50%] max-w-full p-3 flex flex-col justify-around items-center mr-1">
+				<div className="flex flex-col md:flex-row h-full gap-3">
+					<DataContainer className="h-full md:max-w-[50%] max-w-full p-3 flex flex-col justify-around items-center">
 						<h2 className="text-2xl">Portfolio Sector Breakdown</h2>
 						<PieChart />
 					</DataContainer>
-					<DataContainer className="h-full md:max-w-[50%] max-w-full p-3 flex flex-col justify-center ml-1">
+					<DataContainer className="h-full md:max-w-[50%] max-w-full p-3 flex flex-col justify-center">
 						<LineChart />
 					</DataContainer>
 				</div>
