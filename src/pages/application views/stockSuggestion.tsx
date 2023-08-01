@@ -1,5 +1,4 @@
 import { gql, useLazyQuery, useReactiveVar } from "@apollo/client";
-import { useNavigate } from "react-router-dom";
 import {
     userInfo,
 } from "../../utilities/reactiveVariables";
@@ -10,7 +9,6 @@ const ASK_GPT = gql`
     genAIQuery(input: $input)
 }
 `
-
 
 export default function StockSuggestion() {
     const categories = ["Technology",
@@ -32,17 +30,8 @@ export default function StockSuggestion() {
         "Metaverse",
         "AI"];
     const [selections, setSelections] = useState<string[]>([]);
-    const navigate = useNavigate();
     const user = useReactiveVar(userInfo);
-
-    const [askGPT] = useLazyQuery<{genAIQuery: string}>(ASK_GPT);
-
-    useEffect(() => {
-        askGPT({variables: {input: ["environment"]}}).then((res) => {
-            console.log(res);
-        }).catch((err) => console.error(err));
-    }, [askGPT])
-
+    const [askGPT] = useLazyQuery<{ genAIQuery: string }>(ASK_GPT);
 
     const btnSelection = (category: string) => {
         if (selections.length < 5 && !selections.includes(category)) {
@@ -75,6 +64,17 @@ export default function StockSuggestion() {
         );
     };
 
+    const getGPTResponse = (options: string[]) => {
+        askGPT({ variables: { input: options } })
+        .then((res) => {
+            return res.data;
+        })
+        .then((res) => {
+            console.log(res);
+        })
+        .catch((err) => console.error(err));
+    }
+    
     return (
         <div className="h-screen flex [&>div]:w-[50%]">
             <div className="flex flex-col gap-5 bg-primary text-accent p-8">
@@ -87,6 +87,7 @@ export default function StockSuggestion() {
                 <hr className="h-[2px] my-8 bg-primary border-0"></hr>
                 <div className="App">
                     <center>
+                        <div id="select">
                         {categories.map((item, index) => (
                             <SuggestionButton
                                 key={index}
@@ -97,23 +98,14 @@ export default function StockSuggestion() {
                         ))}
 
                         <button
-                            className={`mt-5 w-full bg-[#2a0066] text-gray-50 flex-1 px-5 py-2.5 relative group overflow-hidden font-medium bg-transparent-50 text-gray-600 border border-[#2a0066] hover:border-success-600 hover:bg-neutral-500 hover:bg-opacity-10 hover:text-success-600 inline-block rounded m-2 
-                            
+                            className={`mt-5 flex bg-[#2a0066] text-white flex-1 px-5 py-2.5 relative group overflow-hidden font-medium bg-transparent-50 text-gray-600 border border-[#2a0066] hover:border-success-600 hover:bg-neutral-500 hover:bg-opacity-10 hover:text-black inline-block rounded m-2                            
                             `}
-
+                            onClick={() => getGPTResponse(selections)}
                         >
                             Get Stocks Recomendattion
                         </button>
+                        </div>
                     </center>
-                    {/* <button
-                            type="submit"
-                            className="flex flex-row justify-end mt-5"
-                        >
-                            <BsArrowRight
-                                size={60}
-                                className="transition duration:500 hover:scale-125 hover:fill-[#7c1fff]"
-                            />
-                        </button> */}
                 </div>
             </div>
         </div>
