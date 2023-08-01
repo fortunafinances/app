@@ -1,13 +1,15 @@
-import { gql, useMutation } from "@apollo/client";
+import { gql, useMutation, useReactiveVar } from "@apollo/client";
 // import { error } from "console";
 import EdiText from "react-editext";
 import { User } from "../utilities/types";
 import { useEffect } from "react";
 import { BsCheckLg } from "react-icons/bs";
 import { useNavigate } from "react-router-dom";
+import { userInfo } from "../utilities/reactiveVariables";
 
 export default function ProfileInfo() {
 	const navigate = useNavigate();
+	const user = useReactiveVar(userInfo);
 
 	const handleSave = (newVal: string, fieldName: string) => {
 		console.log(newVal);
@@ -166,10 +168,10 @@ export default function ProfileInfo() {
 	useEffect(() => {
 		insertUser({
 			variables: {
-				userId: "AUTHuser1",
+				userId: user?.userId,
 			},
 		}).catch((err) => console.log(err));
-	}, [insertUser]);
+	}, [insertUser, user?.userId]);
 
 	if (loading) return <>Loading</>;
 	if (error) return <p>{error.message}</p>;

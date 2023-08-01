@@ -29,7 +29,7 @@ export default function App() {
 	const currAccount = useReactiveVar(currentAccountId);
 	useEffect(() => {
 		// console.log(currAccount)
-	}, [currAccount])
+	}, [currAccount]);
 	return (
 		<ApolloProvider client={client}>
 			<Router>
