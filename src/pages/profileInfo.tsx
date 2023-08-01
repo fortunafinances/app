@@ -4,8 +4,11 @@ import EdiText from "react-editext";
 import { User } from "../utilities/types";
 import { useEffect } from "react";
 import { BsCheckLg } from "react-icons/bs";
+import { useNavigate } from "react-router-dom";
 
 export default function ProfileInfo() {
+	const navigate = useNavigate();
+
 	const handleSave = (newVal: string, fieldName: string) => {
 		console.log(newVal);
 		console.log(fieldName);
@@ -203,7 +206,7 @@ export default function ProfileInfo() {
 					<BsCheckLg
 						size={60}
 						className="transition duration:500 hover:scale-125 hover:fill-[#7c1fff]"
-						// onClick={}
+						onClick={() => navigate("/app/overview")}
 					/>
 				</div>
 			</div>
