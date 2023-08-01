@@ -70,3 +70,8 @@ export enum OrderStatus {
   Placed = "Placed",
   Executed = "Executed",
 }
+
+export type DataPoint = {
+    x: string;
+    y: number;
+}

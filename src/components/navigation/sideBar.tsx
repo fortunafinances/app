@@ -8,8 +8,7 @@ import { twMerge } from "tailwind-merge";
 import { useReactiveVar } from "@apollo/client/react/hooks/useReactiveVar";
 import { sidebarClosed } from "../../utilities/reactiveVariables";
 import TotalAccountValue from "../data/totalAccountValue";
-import { navItems } from "../../utilities/config";
-import { getCurrentPath } from "../../utilities/common";
+import { getCurrentPath, navItems } from "../../utilities/common";
 
 export default function SideBar() {
 	const collapsed = useReactiveVar(sidebarClosed);

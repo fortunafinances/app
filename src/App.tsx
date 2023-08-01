@@ -8,20 +8,19 @@ import ApplicationLayout from "./components/layout/application";
 import Overview from "./pages/application views/overview";
 import Holdings from "./pages/application views/holdings";
 import UnauthenticatedHomepage from "./pages/unauthenticatedHomepage";
-import { ApolloClient, ApolloProvider } from "@apollo/client";
+import { ApolloClient, ApolloProvider, useReactiveVar } from "@apollo/client";
 import Activity from "./pages/application views/activity";
-// import EditUser from "./pages/editUser";
 import Callback from "./pages/callback";
-import Trade from "./components/layout/trade";
-import cache from "./utilities/cache";
+import Trade from "./pages/application views/trade";
+import cache from "./utilities/graphQL";
 import Orders from "./pages/application views/orders";
-import TransferSuccessful from "./components/popup/transferSuccessful";
-import ErrorNotification from "./components/popup/errorNotif";
-import CreateProfile from "./pages/application views/createProfile";
-import CreateAccount from "./pages/application views/createAccount";
+import CreateProfile from "./pages/createProfile";
+import CreateAccount from "./pages/createAccount";
 import StockRecommendation from "./pages/application views/StockRecommendation";
 import ProfileInfo from "./pages/profileInfo";
 import StockResults from "./pages/application views/stockResults";
+import { currentAccountId } from "./utilities/reactiveVariables";
+import { useEffect } from "react";
 
 const client = new ApolloClient({
 	uri: "http://127.0.0.1:80/graphql",
@@ -29,6 +28,10 @@ const client = new ApolloClient({
 });
 
 export default function App() {
+	const currAccount = useReactiveVar(currentAccountId);
+	useEffect(() => {
+		// console.log(currAccount)
+	}, [currAccount]);
 	return (
 		<ApolloProvider client={client}>
 			<Router>
@@ -51,14 +54,6 @@ export default function App() {
 						/>
 					</Route>
 					<Route path="/callback" element={<Callback />} />
-					<Route
-						path="/successNotification"
-						element={<TransferSuccessful />}
-					/>
-					<Route
-						path="/errorNotification"
-						element={<ErrorNotification />}
-					/>
 					<Route path="/createProfile" element={<CreateProfile />} />
 					<Route path="/createAccount" element={<CreateAccount />} />
 					<Route path="/profileInfo" element={<ProfileInfo />} />

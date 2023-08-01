@@ -1,16 +1,12 @@
 import { useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { HiSwitchHorizontal } from "react-icons/hi";
-import TradeForm from "../input/tradeForm";
+import TradeForm from "../../components/input/tradeForm";
 import { twMerge } from "tailwind-merge";
-import StockInfo from "../data/stockInfo";
+import StockInfo from "../../components/data/stockInfo";
 import AutoSizer, { Size } from "react-virtualized-auto-sizer";
-import TransferSuccessful from "../popup/transferSuccessful";
-import ErrorNotification from "../popup/errorNotif";
-import { useQuery, useReactiveVar } from "@apollo/client";
-import { currentAccountId } from "../../utilities/reactiveVariables";
-import { GET_OVERVIEW } from "../../utilities/graphQL";
-import { formatDollars } from "../../utilities/currency";
+import TransferSuccessful from "../../components/popup/successfulNotification";
+import ErrorNotification from "../../components/popup/errorNotification";
 
 export interface TradeProps {
 	buyState: React.Dispatch<React.SetStateAction<boolean>>;
@@ -29,19 +25,6 @@ export default function Trade() {
 	const [header, setHeader] = useState("BUY");
 	const [switchButton, setSwitchButton] = useState("SELL");
 
-	const accountId = useReactiveVar(currentAccountId);
-	type DisplayBar = {
-		displayBar: {
-			total: number;
-			invest: number;
-			cash: number;
-		};
-	};
-
-	const { data } = useQuery<DisplayBar>(GET_OVERVIEW, {
-		variables: { accId: accountId ? accountId : 0 },
-	});
-
 	useEffect(() => {
 		if (buy === false) {
 			setHeader("SELL");
@@ -59,7 +42,7 @@ export default function Trade() {
 		}
 	}, [state]);
 
-  return (
+	return (
 		<AutoSizer>
 			{({ height, width }: Size) => (
 				<div style={{ height, width }} className="overflow-y-auto">
@@ -78,7 +61,7 @@ export default function Trade() {
 					<div className="h-full flex flex-col md:flex-row">
 						<div
 							className={twMerge(
-								"bg-[#F9E5E5] w-full md:w-[35%]",
+								"overflow-y-auto bg-[#F9E5E5] w-full md:w-[35%]",
 								buy && "bg-success",
 							)}
 						>
@@ -90,13 +73,7 @@ export default function Trade() {
 									)}
 								>
 									<h1 className="text-4xl">{header}</h1>
-									<p className="text-xl">
-										{" "}
-										Cash:{" "}
-										{formatDollars(
-											data?.displayBar.cash ?? 0,
-										)}
-									</p>
+									<p className="text-xl">Account Name</p>
 									<button
 										className="absolute top-0 right-10 text-xl flex flex-row items-center"
 										onClick={() => {
@@ -124,5 +101,5 @@ export default function Trade() {
 				</div>
 			)}
 		</AutoSizer>
-  );
+	);
 }

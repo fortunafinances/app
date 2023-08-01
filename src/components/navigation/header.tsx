@@ -29,7 +29,7 @@ export default function Header() {
 								className="w-10 h-10 rounded-full"
 							/>
 						) : (
-								<CgProfile size={40} color="white" />
+							<CgProfile size={40} color="white" />
 						)}
 					</label>
 					<div
@@ -41,7 +41,7 @@ export default function Header() {
 								<h3 className="card-title text-lg ellipsis">
 									{user?.username}
 								</h3>
-								<Link to={`/editProfile`} className="w-fit">
+								<Link to={`/profileInfo`} className="w-fit">
 									Edit profile
 								</Link>
 							</div>

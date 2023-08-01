@@ -55,6 +55,7 @@ const Callback = () => {
         },
       })
         .then((res) => {
+          console.log(res.data?.insertUser.user.onboardingComplete)
           switch (res.data?.insertUser.user.onboardingComplete) {
             case 0: {
               navigate("/createProfile", { replace: true });
@@ -92,6 +93,7 @@ const Callback = () => {
           }
         })
         .catch((err) => {
+          console.log("bad user id")
           console.error(err);
         });
     }, 2000);
