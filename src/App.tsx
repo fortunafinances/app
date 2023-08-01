@@ -19,8 +19,9 @@ import TransferSuccessful from "./components/popup/transferSuccessful";
 import ErrorNotification from "./components/popup/errorNotif";
 import CreateProfile from "./pages/application views/createProfile";
 import CreateAccount from "./pages/application views/createAccount";
-import StockSuggestion from "./pages/application views/stockSuggestion";
+import StockRecommendation from "./pages/application views/StockRecommendation";
 import ProfileInfo from "./pages/profileInfo";
+import StockResults from "./pages/application views/stockResults";
 
 const client = new ApolloClient({
 	uri: "http://127.0.0.1:80/graphql",
@@ -61,7 +62,8 @@ export default function App() {
 					<Route path="/createProfile" element={<CreateProfile />} />
 					<Route path="/createAccount" element={<CreateAccount />} />
 					<Route path="/profileInfo" element={<ProfileInfo />} />
-					<Route path="/stockSuggestion" element={<StockSuggestion />} />
+					<Route path="/stockRecommendation" element={<StockRecommendation />} />
+					<Route path="/stockResults" element={<StockResults />} />
 				</Routes>
 			</Router>
 		</ApolloProvider>
