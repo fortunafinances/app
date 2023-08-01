@@ -6,10 +6,14 @@ import { Order, GraphQLReturnData } from "../../utilities/types";
 import { filterInclusive, formatDate, sortDate } from "../../utilities/common";
 import { currentAccountId } from "../../utilities/reactiveVariables";
 import NoInvestments from "../../components/data/noInvestments";
+import { useWindowSize } from "../../utilities/hooks";
+import OrderCard from "../../components/data/cards/orderCard";
 
 export default function Orders() {
 	const accountId = useReactiveVar(currentAccountId);
-
+	const windowSize = useWindowSize();
+	const isMobile =
+		windowSize.width !== undefined ? windowSize.width <= 600 : false;
 	const cols = useMemo<MRT_ColumnDef<Order>[]>(
 		() => [
 			{
@@ -89,7 +93,23 @@ export default function Orders() {
 	if (!loading && data?.orders.length === 0) return <NoInvestments />;
 
 	return (
-		<div className="h-full w-full overflow-y-clip">
+		<div className="h-full w-full">
+			{isMobile ? 
+			(
+				
+				data?.orders.map((order: Order) => (
+					<OrderCard
+						key={order.stock.ticker}
+						ticker={order.stock.ticker}
+						company={order.stock.name!}
+						tradeQty={order.tradeQty}
+						date={order.date}
+						status = {order.status}
+						side = {order.side}
+						type = {order.type}
+					/>
+				))
+			) : (
 			<Table
 				loading={loading}
 				error={error}
@@ -98,6 +118,7 @@ export default function Orders() {
 				enableRowActions={true}
 				sorting={[{ id: "date", desc: true }]}
 			/>
+			)}
 		</div>
 	);
 }
