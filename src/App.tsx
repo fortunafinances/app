@@ -16,7 +16,9 @@ import cache from "./utilities/graphQL";
 import Orders from "./pages/application views/orders";
 import CreateProfile from "./pages/createProfile";
 import CreateAccount from "./pages/createAccount";
+import StockRecommendation from "./pages/application views/StockRecommendation";
 import ProfileInfo from "./pages/profileInfo";
+import StockResults from "./pages/application views/stockResults";
 import { currentAccountId } from "./utilities/reactiveVariables";
 import { useEffect } from "react";
 
@@ -55,6 +57,8 @@ export default function App() {
 					<Route path="/createProfile" element={<CreateProfile />} />
 					<Route path="/createAccount" element={<CreateAccount />} />
 					<Route path="/profileInfo" element={<ProfileInfo />} />
+					<Route path="/stockRecommendation" element={<StockRecommendation />} />
+					<Route path="/stockResults" element={<StockResults />} />
 				</Routes>
 			</Router>
 		</ApolloProvider>
