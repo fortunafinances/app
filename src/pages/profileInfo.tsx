@@ -3,6 +3,7 @@ import { gql, useMutation } from "@apollo/client";
 import EdiText from "react-editext";
 import { User } from "../utilities/types";
 import { useEffect } from "react";
+import { BsCheckLg } from "react-icons/bs";
 
 export default function ProfileInfo() {
 	const handleSave = (newVal: string, fieldName: string) => {
@@ -183,7 +184,7 @@ export default function ProfileInfo() {
 			</div>
 			<div className="w-[50%] overflow-y-auto flex-col p-6 bg-accent text-primary [&>h3]:text-2xl [&>h3]:py-2 [&>h2]:text-5xl [&>h2]:py-4 ">
 				<h1 className="text-8xl">Profile</h1>
-				<hr className="h-[2px] my-8 bg-primary border-0"></hr>
+				<hr className="h-[2px] mt-8 bg-primary border-0"></hr>
 				<h2>Personal Information</h2>
 				<h3>First Name</h3>
 				{createField("firstName", data?.insertUser.user.firstName)}
@@ -198,6 +199,13 @@ export default function ProfileInfo() {
 				<h2 className="py-4">Bank Information</h2>
 				<h3>Bank</h3>
 				{createField("bankName", data?.insertUser.user.bankName)}
+				<div className="p-3 flex flex-row justify-end">
+					<BsCheckLg
+						size={60}
+						className="transition duration:500 hover:scale-125 hover:fill-[#7c1fff]"
+						// onClick={}
+					/>
+				</div>
 			</div>
 		</div>
 	);
