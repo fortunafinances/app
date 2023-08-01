@@ -68,7 +68,9 @@ export default function ProfileInfo() {
 				// onSave={(label) => handleSave(label)}
 				onSave={(newVal: string) => handleSave(newVal, label)}
 				validation={(newVal: string) => handleValidation(newVal, label)}
-				onValidationFail={validationFailed}
+				onValidationFail={(newVal: string) =>
+					validationFailed(newVal, label)
+				}
 				inputProps={{ style: { borderColor: "#7c1fff" } }}
 				containerProps={{
 					style: {
@@ -139,8 +141,22 @@ export default function ProfileInfo() {
 	const [insertUser, { loading, error, data }] =
 		useMutation<TransferReturnData>(PROFILE_INFO);
 
-	const validationFailed = () => {
-		alert("Validation Failed: Please fill out all forms.");
+	const validationFailed = (newVal: string, fieldName: string) => {
+		let errorType = "";
+		if (fieldName == "phoneNumber") {
+			errorType = "PHONE NUMBER";
+		} else if (fieldName == "firstName") {
+			errorType = "PHONE NUMBER";
+		} else if (fieldName == "lastName") {
+			errorType = "LAST NAME";
+		} else if (fieldName == "email") {
+			errorType = "EMAIL";
+		} else if (fieldName == "bank") {
+			errorType = "BANK";
+		} else if (fieldName == "username") {
+			errorType = "USERNAME";
+		}
+		alert("Validation Failed: Invalid " + errorType + " input: " + newVal);
 	};
 
 	useEffect(() => {
@@ -182,10 +198,6 @@ export default function ProfileInfo() {
 				<h2 className="py-4">Bank Information</h2>
 				<h3>Bank</h3>
 				{createField("bankName", data?.insertUser.user.bankName)}
-				{/* 
-				<h2>Accounts</h2>
-				<h3>Account 1</h3>
-				<h3>Account 2</h3> */}
 			</div>
 		</div>
 	);
