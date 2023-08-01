@@ -8,14 +8,19 @@ import { User } from "../utilities/types";
 import { capitalize } from "../utilities/common";
 import * as Yup from "yup";
 
-const phoneRegExp = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/
-
+const phoneRegExp =
+	/^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
 
 const validationSchema = Yup.object().shape({
 	firstName: Yup.string().required("*Required"),
 	lastName: Yup.string().required("*Required"),
-	username: Yup.string().required("*Required").min(3, "Username must be at least 3 characters long").max(20, "Username must be less than 20 characters long"),
-	phoneNumber: Yup.string().matches(phoneRegExp, "Phone number is not valid").required("*Required"),
+	username: Yup.string()
+		.required("*Required")
+		.min(3, "Username must be at least 3 characters long")
+		.max(20, "Username must be less than 20 characters long"),
+	phoneNumber: Yup.string()
+		.matches(phoneRegExp, "Phone number is not valid")
+		.required("*Required"),
 });
 
 const POST_USER_INFO = gql`
@@ -51,7 +56,7 @@ export default function CreateProfile() {
 	const navigate = useNavigate();
 
 	const [postUserInfo] = useMutation<{ insertUser: { user: User } }>(
-		POST_USER_INFO
+		POST_USER_INFO,
 	);
 
 	const user = useReactiveVar(userInfo);
@@ -63,8 +68,8 @@ export default function CreateProfile() {
 
 	return (
 		<div className="h-screen md:flex [&>section]:md:w-[50%]">
-			<section className="md:flex hidden flex-col gap-5 bg-primary text-accent p-8">
-				<h1 className="mt-[30%] font-semibold text-left md:text-8xl text-5xl">
+			<section className="md:flex hidden flex-col gap-5 bg-primary text-accent p-8 justify-center">
+				<h1 className="ont-semibold text-left md:text-8xl text-5xl">
 					Welcome to Fortuna
 				</h1>
 				<h2 className=" inline-block text-4xl">
@@ -75,7 +80,7 @@ export default function CreateProfile() {
 					at the helm of your portfolio
 				</h2>
 			</section>
-			<section className="bg-accent p-4 text-primary h-full">
+			<section className="bg-accent p-4 text-primary h-full overflow-y-auto">
 				<h1 className="text-3xl md:text-7xl">Create Profile</h1>
 				<hr className="h-[2px] my-1 md:my-8 bg-primary border-0"></hr>
 				<center className="">
@@ -93,29 +98,38 @@ export default function CreateProfile() {
 									username: values.username,
 									firstName: values.firstName.toLowerCase(),
 									lastName: values.lastName.toLowerCase(),
-									phoneNumber: values.phoneNumber.replace(/\D/g, ""),
-									onboardingComplete: 1
+									phoneNumber: values.phoneNumber.replace(
+										/\D/g,
+										"",
+									),
+									onboardingComplete: 1,
 								},
 							})
 								.then((res) => {
-									console.log("setting user info")
+									console.log("setting user info");
 									userInfo({
 										userId: user!.userId,
 										email: user!.email,
 										username: values.username,
-										firstName: values.firstName.toLowerCase(),
+										firstName:
+											values.firstName.toLowerCase(),
 										lastName: values.lastName.toLowerCase(),
-										phoneNumber: values.phoneNumber.replace(/\D/g, ""),
+										phoneNumber: values.phoneNumber.replace(
+											/\D/g,
+											"",
+										),
 										picture:
-											res.data?.insertUser.user
-												.picture,
+											res.data?.insertUser.user.picture,
 									});
-									navigate("/createAccount", { state: { onboarding: true } });
+									navigate("/createAccount", {
+										state: { onboarding: true },
+									});
 								})
 								.catch((err) => {
 									console.error(err);
-								}).finally(() => {
-									console.log(userInfo())
+								})
+								.finally(() => {
+									console.log(userInfo());
 									setSubmitting(false);
 								});
 						}}

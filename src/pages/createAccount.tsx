@@ -45,14 +45,17 @@ export default function CreateAccount() {
 
 	const onboarding = location === null ? false : location.onboarding;
 
-
 	const [postUserInfo] = useMutation<{ insertUser: { user: User } }>(
 		POST_USER_INFO,
 	);
 
 	const [postAccount] = useMutation<{ insertAccount: { account: Account } }>(
 		CREATE_ACCOUNT,
-		{ refetchQueries: [{ query: GET_ACCOUNTS, variables: { userId: user!.userId } }] },
+		{
+			refetchQueries: [
+				{ query: GET_ACCOUNTS, variables: { userId: user!.userId } },
+			],
+		},
 	);
 
 	return (
@@ -62,7 +65,7 @@ export default function CreateAccount() {
 					Create An Account
 				</h1>
 			</section>
-			<section className="bg-accent p-4 text-primary h-full">
+			<section className="bg-accent p-4 text-primary h-full overflow-y-auto">
 				<h1 className="text-3xl md:text-7xl">Account Information</h1>
 				<hr className="h-[2px] my-2 md:my-8 bg-primary border-0"></hr>
 				<div className="App">
@@ -109,7 +112,8 @@ export default function CreateAccount() {
 									})
 									.catch((err) => {
 										console.log(err);
-									}).finally(() => {
+									})
+									.finally(() => {
 										setSubmitting(false);
 									});
 							}}
@@ -195,10 +199,12 @@ export default function CreateAccount() {
 												navigate("/createProfile")
 											}
 										>
-											{onboarding && <BsArrowLeft
-												size={60}
-												className="transition duration:500 hover:scale-125 hover:fill-[#7c1fff]"
-											/>}
+											{onboarding && (
+												<BsArrowLeft
+													size={60}
+													className="transition duration:500 hover:scale-125 hover:fill-[#7c1fff]"
+												/>
+											)}
 										</button>
 										<button
 											type="submit"
