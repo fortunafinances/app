@@ -48,8 +48,8 @@ const POST_USER_INFO = gql`
 
 const SignupSchema = Yup.object().shape({
 	amount: Yup.number()
-		.required("*Required")
-		.moreThan(0, "Must be greater than 0")
+		.min(0)
+		// .moreThan(0, "Must be greater than 0")
 		.when("transferType", {
 			is: "IN",
 			then: (schema) => schema.max(1_000_000, "Exceeded maximum deposit"),
@@ -67,7 +67,6 @@ export default function CreateAccount() {
 
 	const onboarding = location === null ? false : location.onboarding;
 
-
 	const [postUserInfo] = useMutation<{ insertUser: { user: User } }>(
 		POST_USER_INFO,
 	);
@@ -83,12 +82,12 @@ export default function CreateAccount() {
 
 	return (
 		<div className="h-screen md:flex [&>section]:md:w-[50%]">
-			<section className="hidden md:flex flex-col gap-5 bg-primary text-accent p-8">
-				<h1 className=" mt-[30%] font-semibold text-left md:text-8xl text-6xl">
+			<section className="hidden md:flex flex-col gap-5 bg-primary text-accent p-8 justify-center">
+				<h1 className="font-semibold text-left md:text-8xl text-6xl">
 					Create An Account
 				</h1>
 			</section>
-			<section className="bg-accent p-4 text-primary h-full">
+			<section className="bg-accent p-4 text-primary h-full overflow-y-auto">
 				<h1 className="text-3xl md:text-7xl">Account Information</h1>
 				<hr className="h-[2px] my-2 md:my-8 bg-primary border-0"></hr>
 				<div className="App">
@@ -149,7 +148,8 @@ export default function CreateAccount() {
 									})
 									.catch((err) => {
 										console.log(err);
-									}).finally(() => {
+									})
+									.finally(() => {
 										setSubmitting(false);
 									});
 							}}
@@ -258,10 +258,12 @@ export default function CreateAccount() {
 												navigate("/createProfile")
 											}
 										>
-											{onboarding && <BsArrowLeft
-												size={60}
-												className="transition duration:500 hover:scale-125 hover:fill-[#7c1fff]"
-											/>}
+											{onboarding && (
+												<BsArrowLeft
+													size={60}
+													className="transition duration:500 hover:scale-125 hover:fill-[#7c1fff]"
+												/>
+											)}
 										</button>
 										<button
 											type="submit"
