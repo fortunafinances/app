@@ -47,13 +47,16 @@ export default function StockSuggestion() {
     const isBtnSelected = (category: string) => {
         return selections.length > 0 && selections.includes(category);
     }
-
+    
     // create buttons to display
     const SuggestionButton = ({ text, ...props }) => {
+        const isDisabled = selections.length >= 5 && !selections.includes(text);
         return (
             <button
                 className={`focus:bg-[#2a0066] focus:text-gray-50 flex-1 px-5 py-2.5 relative group overflow-hidden font-medium bg-transparent-50 text-gray-600 border border-[#2a0066] hover:border-success-600 hover:bg-neutral-500 hover:bg-opacity-10 hover:text-success-600 inline-block rounded m-2 
-                            ${isBtnSelected(text) ? 'bg-[#2a0066] text-gray-50' : ''}`}{...props}
+                            ${isBtnSelected(text) ? 'bg-[#2a0066] text-gray-50' : ''}`}
+                            disabled={isDisabled}
+                {...props}
             >
                 {text}
             </button>
