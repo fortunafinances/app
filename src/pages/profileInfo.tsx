@@ -24,7 +24,7 @@ export default function ProfileInfo() {
 				email:
 					fieldName === "email"
 						? newVal
-						: data?.insertUser.user.lastName,
+						: data?.insertUser.user.email,
 				phoneNumber:
 					fieldName === "phoneNumber"
 						? newVal
@@ -42,6 +42,16 @@ export default function ProfileInfo() {
 			// .then((data) => data.data?.insertUser.lastName)
 			.catch((error) => console.error(error));
 	};
+	const handleValidation = (newVal: string, fieldName: string) => {
+		if (fieldName === "phoneNumber") {
+			return /^\(?([0-9]{3})\)?[-.●]?([0-9]{3})[-.●]?([0-9]{4})$/i.test(
+				newVal,
+			);
+		} else if (newVal !== "" && typeof newVal === "string") {
+			return true;
+		}
+		return false;
+	};
 
 	function createField(label: string, name: string | undefined) {
 		// const handleSave = (label: string) => {
@@ -57,7 +67,7 @@ export default function ProfileInfo() {
 				// value={name}
 				// onSave={(label) => handleSave(label)}
 				onSave={(newVal: string) => handleSave(newVal, label)}
-				validation={(val) => val !== ""}
+				validation={(newVal: string) => handleValidation(newVal, label)}
 				onValidationFail={validationFailed}
 				inputProps={{ style: { borderColor: "#7c1fff" } }}
 				containerProps={{
@@ -129,27 +139,6 @@ export default function ProfileInfo() {
 	const [insertUser, { loading, error, data }] =
 		useMutation<TransferReturnData>(PROFILE_INFO);
 
-	// const lindsay = "lindsay";
-
-	// const handleSave = (label: string) => {
-	// 	insertUser({
-	// 		variables: {
-	// 			// username: data?.insertUser.user.username,
-	// 			userId: "AUTHUser1",
-	// 			firstName: lindsay,
-	// 			lastName: lindsay,
-	// 			email: lindsay,
-	// 			phoneNumber: lindsay,
-	// 			bankName: lindsay,
-	// 		},
-	// 	})
-	// 		// .then((data) => data.data?.insertUser.lastName)
-	// 		.catch((error) => console.error(error));
-	// };
-
-	// const onSave = (val: string) => {
-	//   console.log("Edited Value -> ", val);
-	// };
 	const validationFailed = () => {
 		alert("Validation Failed: Please fill out all forms.");
 	};
@@ -161,12 +150,6 @@ export default function ProfileInfo() {
 			},
 		}).catch((err) => console.log(err));
 	}, [insertUser]);
-
-	// const [first, setFirst] = useState(data?.insertUser.user.firstName)
-	// const [last, setLast] = useState(data?.insertUser.user.lastName)
-	// const [phone, setPhone] = useState(data?.insertUser.user.)
-	// const [mail, setMail] = useState(data?.insertUser.user.email)
-	// const [bank, setBank] = useState(data?.insertUser.user.bankName)
 
 	if (loading) return <>Loading</>;
 	if (error) return <p>{error.message}</p>;

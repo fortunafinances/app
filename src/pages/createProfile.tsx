@@ -122,7 +122,7 @@ export default function CreateProfile() {
 						validationSchema={validationSchema}
 					>
 						{({ isSubmitting }) => (
-							<Form className="flex flex-col gap-4">
+							<Form className="flex flex-col gap-4 text-left">
 								<div>
 									<label
 										htmlFor="firstName"
