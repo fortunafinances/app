@@ -82,7 +82,7 @@ export default function CreateAccount() {
 
 	return (
 		<div className="h-screen md:flex [&>section]:md:w-[50%]">
-			<section className="hidden md:flex flex-col gap-5 bg-primary text-accent p-8 justify-center">
+			<section className="hidden md:flex flex-col gap-5 bg-primary text-accent p-8 justify-center overflow-y-auto">
 				<h1 className="font-semibold text-left md:text-8xl text-6xl">
 					Create An Account
 				</h1>
