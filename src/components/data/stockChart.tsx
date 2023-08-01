@@ -11,9 +11,10 @@ import {
 } from 'chart.js';
 import { Line } from 'react-chartjs-2';
 import "chartjs-adapter-date-fns";
-import { GET_LINE_CHART_STOCK_HISTORIAL } from '../../utilities/graphQL';
+import { GET_STOCK_LINE_CHART } from '../../utilities/graphQL';
 import { useQuery } from "@apollo/client";
-import { getLabelForValue, getMonthName } from '../../utilities/common';
+import { DataPoint } from '../../utilities/types';
+import { formatDollars } from '../../utilities/currency';
 
 ChartJS.register(
     Title,
@@ -26,11 +27,6 @@ ChartJS.register(
     LineElement
 );
 
-type DataPoint = {
-    x: string;
-    y: number;
-}
-
 type LineStock = {
     stockHistorical: {
         data: DataPoint[];
@@ -42,16 +38,13 @@ interface StockChartProps {
 }
 
 export function StockChart(props: StockChartProps) {
-    const { loading: lineLoading, error: lineError, data: lineData } = useQuery<LineStock>(GET_LINE_CHART_STOCK_HISTORIAL, {
+    const { loading: lineLoading, error: lineError, data: lineData } = useQuery<LineStock>(GET_STOCK_LINE_CHART, {
         variables: { ticker: props.stockName },
     });
 
     if (lineLoading)
         return (
             <div>
-                <span className="loading loading-ball loading-xs"></span>
-                <span className="loading loading-ball loading-sm"></span>
-                <span className="loading loading-ball loading-md"></span>
                 <span className="loading loading-ball loading-lg"></span>
             </div>
         );
@@ -61,8 +54,7 @@ export function StockChart(props: StockChartProps) {
 
     // get date and price from query
     const stockData = lineData?.stockHistorical.data;
-    const firstDate = stockData[0].x;
-    console.log(firstDate);
+    const firstDate = stockData![0].x;
 
     // initialize the chart
     const chartOptions = {
@@ -84,23 +76,25 @@ export function StockChart(props: StockChartProps) {
 				time: {
 					unit: 'day' as const,
 					displayFormats: {
-						day: 'd/MM/yyyy'
+                        day: "MMM d, yyyy"
 					},
 				},
                 min: firstDate,
+                ticks: {
+                    maxTicksLimit: 6,
+                },
 			},
             y: {
+                type: "linear" as const,
                 ticks: {
-                    callback: function (value: number) {
-                        return '$' + value; // add money symbol
+                    callback: (value: string | number) => formatDollars(Number(value)),
                     },
                 }
             },
-        }
-    };
+    }
 
     const chartData = {
-        labels: "Default Data",
+        labels: ["Default Data"],
         datasets: [
             {
                 label: 'Price',

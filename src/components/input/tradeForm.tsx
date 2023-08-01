@@ -3,9 +3,9 @@ import { BiDollar } from "react-icons/bi";
 import { gql, useMutation, useQuery, useReactiveVar } from "@apollo/client";
 import { Stock } from "../../utilities/types";
 import { formatDollars } from "../../utilities/currency";
-import { currentAccountId, symbol } from "../../utilities/reactiveVariables";
+import { currentAccountId, symbol, userInfo } from "../../utilities/reactiveVariables";
 import { OrderType, OrderSide } from "../../utilities/types";
-import { GET_STOCK_NAMES } from "../../utilities/graphQL";
+import { GET_ACTIVITIES, GET_ORDERS, GET_PIE_CHART_DATA, GET_STOCK_NAMES, GET_TOTAL_VALUE } from "../../utilities/graphQL";
 import StockSearchBar from "./stockSearch";
 import { preventMinus } from "../../utilities/common";
 import { GraphQLReturnData, Holding } from "../../utilities/types";
@@ -24,6 +24,7 @@ export default function TradeForm({ buyOrSell }: buyProp) {
 
 	const symbolName = useReactiveVar(symbol);
 	const accountId = useReactiveVar(currentAccountId);
+	const user = useReactiveVar(userInfo);
 	const [currStockQuantity, setCurrStockQuantity] = useState(0);
 	const [marketState, setMarketState] = useState(true); //true is BUY
 	const [quantity, setQuantity] = useState(1);
@@ -55,7 +56,7 @@ export default function TradeForm({ buyOrSell }: buyProp) {
 		insertTrade: string;
 	};
 
-	const [placeOrder] = useMutation<TransferReturnData>(PLACE_ORDER);
+	const [placeOrder] = useMutation<TransferReturnData>(PLACE_ORDER, { refetchQueries: [{ query: GET_HOLDINGS, variables: { accId: accountId } }, { query: GET_ORDERS, variables: { accId: accountId } }, { query: GET_PIE_CHART_DATA, variables: { accId: accountId } }, { query: GET_ACTIVITIES, variables: { accId: accountId } }, { query: GET_TOTAL_VALUE, variables: { userId: user!.userId } }] });
 
 	const successModal = document.getElementById(
 		"trade_successful",
@@ -159,12 +160,10 @@ export default function TradeForm({ buyOrSell }: buyProp) {
 		<div>
 			<div className="m-4 mt-6 flex flex-col gap-3">
 				<h1 className="font-semibold text-xl">Symbol</h1>
-				<StockSearchBar className="z-40 w-full" />
+				<StockSearchBar className="z-40 w-full" tradeType={buyOrSell} />
 			</div>
 			<div className="m-4 mt-6 flex flex-col gap-3">
-				<h1 className="font-semibold text-xl">
-					Quantity (Current Holdings: {currStockQuantity})
-				</h1>
+				<h1 className="font-semibold text-xl">Quantity (Current Holdings: {currStockQuantity})</h1>
 				<div>
 					<h2 className="text-xs text-[#FF0000]">
 						{checkQuant ? "*required" : null}
@@ -202,9 +201,7 @@ export default function TradeForm({ buyOrSell }: buyProp) {
 					onClick={() => {
 						setMarketState(true);
 					}}
-					className={
-						marketState ? "bg-[#e6e6e6] shadow-inner" : "bg-white"
-					}
+					className={marketState ? "bg-[#e6e6e6] shadow-inner" : "bg-white"}
 				>
 					Market
 				</button>
@@ -212,9 +209,7 @@ export default function TradeForm({ buyOrSell }: buyProp) {
 					onClick={() => {
 						setMarketState(false);
 					}}
-					className={
-						!marketState ? "bg-[#e6e6e6] shadow-inner" : "bg-white"
-					}
+					className={!marketState ? "bg-[#e6e6e6] shadow-inner" : "bg-white"}
 				>
 					Limit
 				</button>
@@ -240,8 +235,7 @@ export default function TradeForm({ buyOrSell }: buyProp) {
 			<div className="m-4 mt-6 flex flex-row gap-3 font-semibold text-xl">
 				<h1>Total Price:</h1>
 				<h1>
-					{quantity} x {formatDollars(stockPrice)} ={" "}
-					{formatDollars(totalPrice)}
+					{quantity} x {formatDollars(stockPrice)} = {formatDollars(totalPrice)}
 				</h1>
 			</div>
 			{/* cancel and submit buttons */}
@@ -250,7 +244,6 @@ export default function TradeForm({ buyOrSell }: buyProp) {
 					Cancel
 				</button>
 				<button
-					disabled={checkQuant}
 					className="border-success-content text-success-content bg-[#E3FDDC] hover:shadow-xl shadow-success-content hover:bg-success-content hover:text-[#e3fddc]"
 					onClick={handleSubmit}
 				>

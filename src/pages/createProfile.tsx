@@ -2,17 +2,21 @@ import { gql, useMutation, useReactiveVar } from "@apollo/client";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { BsArrowRight } from "react-icons/bs";
 import { useNavigate } from "react-router-dom";
-import { userInfo } from "../../utilities/reactiveVariables";
+import { userInfo } from "../utilities/reactiveVariables";
 import { useEffect } from "react";
-import { User } from "../../utilities/types";
-import { capitalize } from "../../utilities/common";
+import { User } from "../utilities/types";
+import { capitalize } from "../utilities/common";
+import * as Yup from "yup";
 
-type ErrorType = {
-	firstName?: string;
-	lastName?: string;
-	username?: string;
-	phoneNumber?: string;
-};
+const phoneRegExp = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/
+
+
+const validationSchema = Yup.object().shape({
+	firstName: Yup.string().required("*Required"),
+	lastName: Yup.string().required("*Required"),
+	username: Yup.string().required("*Required").min(3, "Username must be at least 3 characters long").max(20, "Username must be less than 20 characters long"),
+	phoneNumber: Yup.string().matches(phoneRegExp, "Phone number is not valid").required("*Required"),
+});
 
 const POST_USER_INFO = gql`
 	mutation InsertUser(
@@ -47,7 +51,7 @@ export default function CreateProfile() {
 	const navigate = useNavigate();
 
 	const [postUserInfo] = useMutation<{ insertUser: { user: User } }>(
-		POST_USER_INFO,
+		POST_USER_INFO
 	);
 
 	const user = useReactiveVar(userInfo);
@@ -58,9 +62,9 @@ export default function CreateProfile() {
 	}, [user, navigate]);
 
 	return (
-		<div className="h-screen md:flex [&>section]:md:w-[50%] ">
-			<section className="md:flex hidden flex-col gap-5 bg-primary text-accent p-8 overflow-y-auto justify-center">
-				<h1 className="items-center font-semibold text-left md:text-8xl text-5xl">
+		<div className="h-screen md:flex [&>section]:md:w-[50%]">
+			<section className="md:flex hidden flex-col gap-5 bg-primary text-accent p-8">
+				<h1 className="mt-[30%] font-semibold text-left md:text-8xl text-5xl">
 					Welcome to Fortuna
 				</h1>
 				<h2 className=" inline-block text-4xl">
@@ -71,7 +75,7 @@ export default function CreateProfile() {
 					at the helm of your portfolio
 				</h2>
 			</section>
-			<section className="bg-accent p-4 text-primary h-full overflow-y-auto">
+			<section className="bg-accent p-4 text-primary h-full">
 				<h1 className="text-3xl md:text-7xl">Create Profile</h1>
 				<hr className="h-[2px] my-1 md:my-8 bg-primary border-0"></hr>
 				<center className="">
@@ -89,65 +93,33 @@ export default function CreateProfile() {
 									username: values.username,
 									firstName: values.firstName.toLowerCase(),
 									lastName: values.lastName.toLowerCase(),
-									phoneNumber: values.phoneNumber.replace(
-										/\D/g,
-										"",
-									),
-									onboardingComplete: 1,
+									phoneNumber: values.phoneNumber.replace(/\D/g, ""),
+									onboardingComplete: 1
 								},
 							})
 								.then((res) => {
-									console.log("setting user info");
+									console.log("setting user info")
 									userInfo({
 										userId: user!.userId,
 										email: user!.email,
 										username: values.username,
-										firstName:
-											values.firstName.toLowerCase(),
+										firstName: values.firstName.toLowerCase(),
 										lastName: values.lastName.toLowerCase(),
-										phoneNumber: values.phoneNumber.replace(
-											/\D/g,
-											"",
-										),
+										phoneNumber: values.phoneNumber.replace(/\D/g, ""),
 										picture:
-											res.data?.insertUser.user.picture,
+											res.data?.insertUser.user
+												.picture,
 									});
-									navigate("/createAccount", {
-										state: { onboarding: true },
-									});
+									navigate("/createAccount", { state: { onboarding: true } });
 								})
 								.catch((err) => {
 									console.error(err);
-								})
-								.finally(() => {
-									console.log(userInfo());
+								}).finally(() => {
+									console.log(userInfo())
 									setSubmitting(false);
 								});
 						}}
-						validate={(values) => {
-							const errors: ErrorType = {};
-							if (!values.firstName) {
-								errors.firstName = "*Required";
-							}
-
-							if (!values.lastName) {
-								errors.lastName = "*Required";
-							}
-							if (!values.username) {
-								errors.username = "*Required";
-							}
-
-							if (!values.phoneNumber) {
-								errors.phoneNumber = "*Required";
-							} else if (
-								!/^\(?([0-9]{3})\)?[-.●]?([0-9]{3})[-.●]?([0-9]{4})$/i.test(
-									values.phoneNumber,
-								)
-							) {
-								errors.phoneNumber = "Invalid phone number";
-							}
-							return errors;
-						}}
+						validationSchema={validationSchema}
 					>
 						{({ isSubmitting }) => (
 							<Form className="flex flex-col gap-4">
