@@ -46,6 +46,12 @@ export const GET_ORDERS = gql`
 	}
 `;
 
+export const GET_TOTAL_VALUE = gql`
+	query AllAccValue($userId: String!) {
+		allAccValue(input: { userId: $userId })
+	}
+`;
+
 export const MAKE_TRANSFER = gql`
   mutation InsertTransfer(
     $sendAccId: Int!
