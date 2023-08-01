@@ -82,7 +82,7 @@ export default function StockSuggestion() {
                     Let's invest in your first stock
                 </h1>
             </div>
-            <div className="bg-accent p-4 text-primary">
+            <div className="bg-accent overflow-y-auto p-4 text-primary">
                 <h1 className="text-1xl md:text-3xl">Select 5 categories that you're most interested in</h1>
                 <hr className="h-[2px] my-8 bg-primary border-0"></hr>
                 <div className="App">
