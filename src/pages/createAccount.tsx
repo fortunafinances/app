@@ -52,7 +52,7 @@ export default function CreateAccount() {
 
 	const [postAccount] = useMutation<{ insertAccount: { account: Account } }>(
 		CREATE_ACCOUNT,
-		{ refetchQueries: [{ query: GET_ACCOUNTS }] },
+		{ refetchQueries: [{ query: GET_ACCOUNTS, variables: { userId: user!.userId } }] },
 	);
 
 	return (

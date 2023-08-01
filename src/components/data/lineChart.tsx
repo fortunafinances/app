@@ -123,7 +123,7 @@ export function LineChart() {
 			showLine: true,
 			lineTension: 0.2,
 			borderColor: 'rgb(10, 150, 20)',
-			pointStyle: "rectRot",
+		pointStyle: "triangle",
 			pointRadius: 5,
 			pointHoverRadius: 7
 		}
@@ -138,7 +138,7 @@ export function LineChart() {
 						onClick={() => {
 							setRange(item.value);
 						}}
-						className={twMerge("w-full flex-1 btn text-primary bg-[#EDEDFE]", range === item.value && "bg-[#989898]")}>{item.label}
+						className={twMerge("w-full flex-1 btn text-primary bg-gray-50", range === item.value && "bg-gray-400")}>{item.label}
 					</button>
 				})}
 
