@@ -2,7 +2,8 @@ import { gql, useLazyQuery, useReactiveVar } from "@apollo/client";
 import {
     userInfo,
 } from "../../utilities/reactiveVariables";
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { Navigate } from "react-router";
 
 const ASK_GPT = gql`
     query GenAIQuery($input: [String]!) {
@@ -10,7 +11,7 @@ const ASK_GPT = gql`
 }
 `
 
-export default function StockSuggestion() {
+export default function StockRecommendation() {
     const categories = ["Technology",
         "Healthcare",
         "Energy",
@@ -30,7 +31,6 @@ export default function StockSuggestion() {
         "Metaverse",
         "AI"];
     const [selections, setSelections] = useState<string[]>([]);
-    const user = useReactiveVar(userInfo);
     const [askGPT] = useLazyQuery<{ genAIQuery: string }>(ASK_GPT);
 
     const btnSelection = (category: string) => {
@@ -70,7 +70,8 @@ export default function StockSuggestion() {
             return res.data;
         })
         .then((res) => {
-            console.log(res);
+            console.log(res?.genAIQuery);
+            <Navigate to={"/stockResults"} />;
         })
         .catch((err) => console.error(err));
     }
