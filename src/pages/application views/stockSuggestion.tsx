@@ -54,7 +54,8 @@ export default function StockSuggestion() {
         return (
             <button
                 className={`focus:bg-[#2a0066] focus:text-gray-50 flex-1 px-5 py-2.5 relative group overflow-hidden font-medium bg-transparent-50 text-gray-600 border border-[#2a0066] hover:border-success-600 hover:bg-neutral-500 hover:bg-opacity-10 hover:text-success-600 inline-block rounded m-2 
-                            ${isBtnSelected(text) ? 'bg-[#2a0066] text-gray-50' : ''}`}
+                            ${isBtnSelected(text) ? 'bg-[#2a0066] text-gray-50' : ''}
+                            ${isDisabled ? 'opacity-20' : ''}`}
                             disabled={isDisabled}
                 {...props}
             >
