@@ -1,7 +1,4 @@
-import { gql, useLazyQuery, useReactiveVar } from "@apollo/client";
-import {
-    userInfo,
-} from "../../utilities/reactiveVariables";
+import { gql, useLazyQuery } from "@apollo/client";
 import { useState } from "react";
 import { Navigate } from "react-router";
 
@@ -49,16 +46,15 @@ export default function StockRecommendation() {
     }
 
     // create buttons to display
-    const SuggestionButton = ({ text, ...props }) => {
+    const SuggestionButton = ({ text, onClick, isSelected }: {text: string; onClick: () => void; isSelected: boolean}) => {
         const isDisabled = selections.length >= 5 && !selections.includes(text);
         return (
             <button
                 className={`focus:bg-[#2a0066] focus:text-gray-50 flex-1 px-5 py-2.5 relative group overflow-hidden font-medium bg-transparent-50 text-gray-600 border border-[#2a0066] hover:border-success-600 hover:bg-neutral-500 hover:bg-opacity-10 hover:text-success-600 inline-block rounded m-1 
                             ${isBtnSelected(text) ? 'bg-[#2a0066] text-gray-50' : ''}
                             ${isDisabled ? 'opacity-20' : ''}`}
-                disabled={isDisabled}
-                {...props}
-            >
+                disabled={isDisabled && !isSelected}
+                onClick={onClick}>
                 {text}
             </button>
         );
