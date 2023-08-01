@@ -7,15 +7,17 @@ import {
 	Title,
 	Tooltip,
 	Legend,
-	TimeScale
+	TimeScale,
+	Filler
 } from 'chart.js';
-import { Line } from 'react-chartjs-2';
+import { Scatter } from 'react-chartjs-2';
 import "chartjs-adapter-date-fns";
-import { getMostRecentMonths } from '../../utilities/common';
-import { useEffect, useMemo, useState } from 'react';
-import { GET_LINE_CHART_SP500, GET_LINE_CHART_USER } from '../../utilities/graphQL';
+import { subtractMonths } from '../../utilities/common';
+import { useState } from 'react';
+import { GET_LINE_CHART } from '../../utilities/graphQL';
 import { useQuery, useReactiveVar } from "@apollo/client";
 import { currentAccountId } from '../../utilities/reactiveVariables';
+import { twMerge } from 'tailwind-merge';
 
 ChartJS.register(
 	Title,
@@ -25,131 +27,65 @@ ChartJS.register(
 	LinearScale,
 	PointElement,
 	LineElement,
-	TimeScale
+	TimeScale,
+	Filler
 );
 
-type LineSPData = {
+type LineData = {
 	stockHistorical: {
-		date: string[];
-		price: number[];
+		data: {
+			x: string;
+			y: number;
+		}[];
+	},
+	accountHistorical: {
+		data: {
+			x: string;
+			y: number;
+		}[]
 	}
 }
 
-type LineUser = {
-	accountHistorical: {
-		date: string[];
-		value: number[];
-	}
-}
+const dateOptions = [{ value: 0.7, label: "1 Week" }, { value: 1, label: "1 Month" }, { value: 3, label: "3 Months" }, { value: 6, label: "6 Months" }, { value: 12, label: "1 Year" }]
 
 export function LineChart() {
-	// get SP 500 query
-	const { loading: spLoading, error: spError, data: spData } = useQuery<LineSPData>(GET_LINE_CHART_SP500, {
-		variables: { ticker: "^GSPC" },
-	});
+	// get historical data
+	const currentAccount = useReactiveVar(currentAccountId);
+	const { loading, error, data } = useQuery<LineData>(GET_LINE_CHART, { variables: { accId: currentAccount } });
 
-	// get user query
-	const currentAccountNumber = useReactiveVar(currentAccountId);
-	const { loading: userLoading, error: userError, data: userData } = useQuery<LineUser>(GET_LINE_CHART_USER, {
-		variables: { accId: currentAccountNumber },
-	});
 
-	function convertToRoundedPercentageChange(prices: number[]) {
-		const firstPrice = prices[0];
-		const roundedPercentageChanges = [];
+	function convertToRoundedPercentageChange(dataPoints: { x: string; y: number }[]) {
+		const firstPrice = dataPoints[0].y;
+		const roundedPercentageChanges: { x: string; y: number }[] = [];
 
-		for (let i = 0; i < prices.length; i++) {
-			const percentageChange = ((prices[i] - firstPrice) / firstPrice) * 100;
+		for (let i = 0; i < dataPoints.length; i++) {
+			const percentageChange = ((dataPoints[i].y - firstPrice) / firstPrice) * 100;
 			const roundedPercentageChange = Number(percentageChange.toFixed(2));
-			roundedPercentageChanges.push(roundedPercentageChange);
+			roundedPercentageChanges.push({ x: dataPoints[i].x, y: roundedPercentageChange });
 		}
 
 		return roundedPercentageChanges;
 	}
 
-	// get SP500 date and price from query
-	const dateLabels = spData?.stockHistorical.date;
-	const spPrice = spData?.stockHistorical.price;
+	const [range, setRange] = useState<number>(3);
 
-	// console.log("print dateLabels: ", dateLabels);
-	// console.log("print price: ", spPrice);
-
-	const labels = useMemo(() => (dateLabels ? [...dateLabels] : []), [dateLabels]);
-
-
-	// console.log("print labels: ", labels);
-
-	const userPrice = userData?.accountHistorical.value;
-	const [range, setRange] = useState([]);
-
-	useEffect(() => {
-		setRange(labels);
-	}, [labels]);
-
-	// console.log("print range: ", range);
-
-	if (spLoading || userLoading) {
+	if (loading) {
 		return (
 			<span className="loading loading-ball loading-md"></span>
 		)
 	};
-	if (spError || userError) return <p>Error :</p>;
-	if (
-		spData?.stockHistorical.date.length === undefined ||
-		spData?.stockHistorical.date.length < 1
-	)
-		return <p>No data to display</p>;
 
-	function getLabelForValue(value: number) {
-		return labels[value];
-	}
-
-	function getMonthName(month: number) {
-		const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-		return months[parseInt(month) - 1];
-	}
-	// initialize the chart
-	const chartOptions = {
-		responsive: true,
-		plugins: {
-			legend: {
-				position: 'top' as const,
-			},
-			title: {
-				display: true,
-				text: 'Line Chart',
-			},
-		},
-		scales: {
-			x: {
-				ticks: {
-					callback: (value: number, index: number) => {
-						const currentLabel = getLabelForValue(value);
-						console.log(currentLabel);
-						if (index % 4 === 0) {
-							const [year, month, day] = currentLabel.split('-');
-							const formattedLabel = `${day} ${getMonthName(month)} - ${year.slice(2)}`;
-							return formattedLabel;
-						} else {
-							return '';
-						}
-					},
-				},
-			},
-		},
-	};
-
-	console.log(range);
+	if (error) { return <p>Error: {error.message}</p>; }
 
 	const options = {
+		type: "scatter",
 		responsive: true,
 		plugins: {
 			legend: {
 				position: 'top' as const,
 			},
 			title: {
-				display: true,
-				text: 'Line Chart',
+				display: false,
 			},
 		},
 		scales: {
@@ -158,58 +94,53 @@ export function LineChart() {
 				time: {
 					unit: 'day' as const,
 					displayFormats: {
-						day: 'MM/d/yyyy'
+						day: "MMM d, yyyy"
 					}
-				}
+				},
+				ticks: {
+					maxTicksLimit: 5,
+				},
+				min: subtractMonths(new Date(), range).toISOString(),
 			},
 		}
 	}
 
+
 	const chartDataSets = [{
-		label: "Default Data",
-		data: [
-			{ x: '2022-11-06', y: 50 },
-			{ x: '2022-11-07', y: 60 },
-			{ x: '2022-11-08', y: 75 },
-			{ x: '2022-11-09', y: 50 },
-			{ x: '2022-11-10', y: 60 },
-			{ x: '2022-11-11', y: 75 }
-		],
+		label: "S&P 500",
+		data:
+			convertToRoundedPercentageChange(data!.stockHistorical.data),
 		showLine: true,
-		lineTension: 0.3,
-		borderColor: 'rgb(100, 100, 255)'
-	}];
+		lineTension: 0.5,
+		borderColor: 'rgb(100, 100, 255)',
+		pointRadius: 5,
+		pointHoverRadius: 7
+
+	}, {
+			label: "Account History",
+			data:
+				convertToRoundedPercentageChange(data!.accountHistorical.data),
+			showLine: true,
+			lineTension: 0.2,
+			borderColor: 'rgb(10, 150, 20)',
+			pointStyle: "rectRot",
+			pointRadius: 5,
+			pointHoverRadius: 7
+		}
+	];
 
 	return (
 		<div className='w-full' >
-			<Line options={options} data={chartDataSets} />
-			<div className="flex mt-5 justify-center">
-				{/* 3 months */}
-				<button
-					onClick={() => {
-						const newRange = getMostRecentMonths(dateLabels!, 3);
-						setRange(newRange);
-					}}
-					className="w-full flex-1 btn text-primary bg-[#EDEDFE] min-h-[2rem] h-[1rem] mr-3">3 Months
-				</button>
-
-				{/* 6 months */}
-				<button
-					onClick={() => {
-						const newRange = getMostRecentMonths(dateLabels!, 6);
-						setRange(newRange);
-					}}
-					className="w-full flex-1 btn text-primary bg-[#EDEDFE] min-h-[2rem] h-[1rem] mr-3">6 Months
-				</button>
-
-				{/* 12 months */}
-				<button
-					onClick={() => {
-						const newRange = getMostRecentMonths(dateLabels!, 12);
-						setRange(newRange);
-					}}
-					className="w-full flex-1 btn text-primary bg-[#EDEDFE] min-h-[2rem] h-[1rem] mr-3">12 Months
-				</button>
+			<Scatter options={options} data={{ datasets: chartDataSets }} />
+			<div className="flex flex-col md:flex-row gap-1 mt-5 justify-center">
+				{dateOptions.map((item) => {
+					return <button
+						onClick={() => {
+							setRange(item.value);
+						}}
+						className={twMerge("w-full flex-1 btn text-primary bg-[#EDEDFE]", range === item.value && "bg-[#989898]")}>{item.label}
+					</button>
+				})}
 
 			</div>
 		</div >

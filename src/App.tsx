@@ -10,13 +10,10 @@ import Holdings from "./pages/application views/holdings";
 import UnauthenticatedHomepage from "./pages/unauthenticatedHomepage";
 import { ApolloClient, ApolloProvider, useReactiveVar } from "@apollo/client";
 import Activity from "./pages/application views/activity";
-// import EditUser from "./pages/editUser";
 import Callback from "./pages/callback";
 import Trade from "./pages/application views/trade";
 import cache from "./utilities/graphQL";
 import Orders from "./pages/application views/orders";
-import TransferSuccessful from "./components/popup/transferSuccessful";
-import ErrorNotification from "./components/popup/errorNotif";
 import CreateProfile from "./pages/createProfile";
 import CreateAccount from "./pages/createAccount";
 import ProfileInfo from "./pages/profileInfo";
@@ -31,7 +28,7 @@ const client = new ApolloClient({
 export default function App() {
 	const currAccount = useReactiveVar(currentAccountId);
 	useEffect(() => {
-		console.log(currAccount)
+		// console.log(currAccount)
 	}, [currAccount])
 	return (
 		<ApolloProvider client={client}>
@@ -55,14 +52,6 @@ export default function App() {
 						/>
 					</Route>
 					<Route path="/callback" element={<Callback />} />
-					<Route
-						path="/successNotification"
-						element={<TransferSuccessful />}
-					/>
-					<Route
-						path="/errorNotification"
-						element={<ErrorNotification />}
-					/>
 					<Route path="/createProfile" element={<CreateProfile />} />
 					<Route path="/createAccount" element={<CreateAccount />} />
 					<Route path="/profileInfo" element={<ProfileInfo />} />

@@ -119,20 +119,19 @@ export const GET_PIE_CHART_DATA = gql`
   }
 `;
 
-export const GET_LINE_CHART_SP500 = gql`
-	query StockHistorical($ticker: String!) {
-		stockHistorical(input: { ticker: $ticker}) {
-			date
-			price
-		}
-	}
-`;
-
-export const GET_LINE_CHART_USER = gql`
-	query AccountHistorical($accId: Int!) {
-		accountHistorical(input: { accId: $accId}) {
-			date
-			value
-		}
-	}
+export const GET_LINE_CHART = gql`
+	query StockHistorical($accId: Int!) {
+    stockHistorical(input: {ticker: "^GSPC"}) {
+        data {
+            x
+            y
+        }
+    }
+    accountHistorical(input: {accId: $accId}) {
+        data {
+            x
+            y
+        }
+    }
+}
 `;

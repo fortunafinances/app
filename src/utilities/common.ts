@@ -29,35 +29,17 @@ export const sortDate = (a: string, b: string): number => {
 	return new Date(a) >= new Date(b) ? 1 : -1;
 };
 
-export const getMostRecentMonths = (dates: string[], num: number): string[] => {
-	const dateObjects = dates.map((date) => new Date(date));
+export const subtractMonths = (date: Date, months: number) => {
+  // 👇 Make copy with "Date" constructor
+  const dateCopy = new Date(date);
 
-	dateObjects.sort((a, b) => b.getTime() - a.getTime());
-
-	const recentMonths: string[] = []; 
-	let count = 0;
-
-	for (const date of dateObjects) {
-		const year = date.getFullYear();
-		const month = ("0" + (date.getMonth() + 1)).slice(-2);
-		const monthYear = `${year}-${month}`;
-
-		if (!recentMonths.includes(monthYear)) {
-			recentMonths.push(monthYear);
-			count++;
-		}
-
-		if (count === num) {
-			break;
-		}
+	if(months < 1) {
+		dateCopy.setDate(dateCopy.getDay() - months * 10);
+	} else {
+		dateCopy.setMonth(dateCopy.getMonth() - months);
 	}
-	dateObjects.sort((a, b) => a.getTime() - b.getTime()); 
 
-	const formattedDates = dateObjects
-		.filter((date) => recentMonths.includes(`${date.getFullYear()}-${("0" + (date.getMonth() + 1)).slice(-2)}`))
-		.map((date) => date.toISOString().split("T")[0]);
-
-	return formattedDates;
+  return dateCopy;
 }
 
 export const filterInclusive = (
