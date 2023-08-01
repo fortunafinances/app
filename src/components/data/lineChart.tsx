@@ -7,12 +7,12 @@ import {
     Title,
     Tooltip,
     Legend,
+    TimeScale
 } from 'chart.js';
 import { Line } from 'react-chartjs-2';
-import moment from 'moment';
-import { getMostRecentMonths } from '../../utilities/common';
-import { useEffect, useMemo, useState } from 'react';
-import { GET_LINE_CHART_SP500, GET_LINE_CHART_USER } from '../../utilities/graphQL';
+import "chartjs-adapter-date-fns";
+import { useState } from 'react';
+import { GET_LINE_CHART_STOCK_HISTORIAL, GET_LINE_CHART_USER } from '../../utilities/graphQL';
 import { useQuery, useReactiveVar } from "@apollo/client";
 import { currentAccountId } from '../../utilities/reactiveVariables';
 
@@ -20,75 +20,49 @@ ChartJS.register(
     Title,
     Tooltip,
     Legend,
+    TimeScale,
     CategoryScale,
     LinearScale,
     PointElement,
     LineElement
 );
 
+type DataPoint = {
+    x: string;
+    y: number;
+}
+
 type LineSPData = {
     stockHistorical: {
-        date: string[];
-        price: number[];
+        data: DataPoint[];
     }
 }
 
 type LineUser = {
     accountHistorical: {
-        date: string[];
-        value: number[];
+        data: DataPoint;
     }
 }
 
 export function LineChart() {
     // get SP 500 query
-    const { loading: spLoading, error: spError, data: spData } = useQuery<LineSPData>(GET_LINE_CHART_SP500, {
+    const { loading: spLoading, error: spError, data: sp } = useQuery<LineSPData>(GET_LINE_CHART_STOCK_HISTORIAL, {
         variables: { ticker: "^GSPC" },
     });
 
     // get user query
     const currentAccountNumber = useReactiveVar(currentAccountId);
-    const { loading: userLoading, error: userError, data: userData } = useQuery<LineUser>(GET_LINE_CHART_USER, {
+    const { loading: userLoading, error: userError, data: user } = useQuery<LineUser>(GET_LINE_CHART_USER, {
         variables: { accId: 1 },
     });
 
-    function convertToRoundedPercentageChange(prices: number[]) {
-        const firstPrice = prices[0];
-        const roundedPercentageChanges = [];
+    // get date and price from query    
+    const spData = sp?.stockHistorical.data;
+    const userData = user?.accountHistorical.data;
 
-        for (let i = 0; i < prices.length; i++) {
-            const percentageChange = ((prices[i] - firstPrice) / firstPrice) * 100;
-            const roundedPercentageChange = Number(percentageChange.toFixed(2));
-            roundedPercentageChanges.push(roundedPercentageChange);
-        }
-
-        return roundedPercentageChanges;
-    }
-
-    // get SP500 date and price from query
-    const dateLabels = spData?.stockHistorical.date;
-    const spPrice = spData?.stockHistorical.price;
-    let spPercentage;
-    if (spPrice) { spPercentage = convertToRoundedPercentageChange(spPrice); }
-    console.log(spPercentage);
-
-    // console.log("print dateLabels: ", dateLabels);
-    // console.log("print price: ", spPrice);
-
-    const labels = useMemo(() => (dateLabels ? [...dateLabels] : []), [dateLabels]);
-
-    // console.log("print labels: ", labels);
-
-    const userPrice = userData?.accountHistorical.value;
-    let userPercentage;
-    if (userPrice) { userPercentage = convertToRoundedPercentageChange(userPrice); }
     const [range, setRange] = useState([]);
 
-    useEffect(() => {
-        setRange(labels);
-    }, [labels]);
 
-    // console.log("print range: ", range);
 
     if (spLoading || userLoading) {
         return (
@@ -100,27 +74,22 @@ export function LineChart() {
             </div>
         )
     };
-    if (spError || userError) return <p>Error :</p>;
+    if (spError || userError) return <p>Error : hihi</p>;
     if (
-        spData?.stockHistorical.date.length === undefined ||
-        spData?.stockHistorical.date.length < 1
+        sp?.stockHistorical.data.length === undefined ||
+        sp?.stockHistorical.data.length < 1
     )
         return <p>No data to display</p>;
 
-    function getLabelForValue(value: number) {
-        return labels[value];
-    }
-
-    function getMonthName(month: string) {
-        const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-        return months[parseInt(month) - 1];
-    }
     // initialize the chart
     const chartOptions = {
         responsive: true,
         plugins: {
             legend: {
                 position: 'top' as const,
+                labels: {
+                    usePointStyle: true,
+                },
             },
             title: {
                 display: true,
@@ -130,39 +99,29 @@ export function LineChart() {
                     fontColor: '#000000',
                 }
             },
-            legend: {
-                labels: {
-                  usePointStyle: true,
-                },
-              }
         },
         scales: {
             x: {
-                ticks: {
-                    callback: (value: number, index: number) => {
-                        let currentLabel = getLabelForValue(value);
-                        if (range.length === 12) {
-                            currentLabel = getLabelForValue(value);
-                        } else if (range.length === 6) {
-                            currentLabel = getLabelForValue(value + 6 * 4);
-                        } else if (range.length === 3) {
-                            currentLabel = getLabelForValue(value + 3 * 4);
-                        }
-
-                        if (index % 4 === 0) {
-                            const [year, month, day] = currentLabel.split('-');
-                            const formattedLabel = `${day} ${getMonthName(month)} - ${year.slice(2)}`;
-                            return formattedLabel;
-                        } else {
-                            return '';
-                        }
-                    },
-                },
+                type: 'time' as const,
+                time: {
+                    unit: 'day' as const,
+                    displayFormats: {
+                        day: 'MMM yy'
+                    }
+                }
             },
+
             y: {
-                ticks: {            
-                    callback: function (value: number) {
-                        return value + '%'; // convert it to percentage
+                ticks: {
+                    callback: function (value: number, index: number, values: number[]) {
+                        console.log(values) // currently undefined!!
+                        // Convert the money value into a percentage
+                        // const percentage = ((value - values[0]) / values[0]) * 100;
+
+                        // Format the percentage with 2 decimal places
+                        // return `${percentage.toFixed(2)}%`;
+
+                        return value + '%';
                     },
                 }
             },
@@ -176,19 +135,18 @@ export function LineChart() {
         datasets: [
             {
                 label: "Brokerage Account",
-                data: userPercentage,
+                data: userData,
                 pointStyle: 'rect',
                 borderColor: "rgb(255, 99, 132)",
                 backgroundColor: "rgba(255, 99, 132, 0.5)",
             },
             {
                 label: "S&P 500",
-                data: spPercentage,
+                data: spData,
                 borderColor: "rgb(53, 162, 235)",
                 backgroundColor: "rgba(53, 162, 235, 0.5)",
             },
         ],
-
     };
 
     return (
@@ -198,9 +156,9 @@ export function LineChart() {
                 {/* 3 months */}
                 <button
                     onClick={() => {
-                        const newRange = getMostRecentMonths(dateLabels!, 3);
-                        console.log(newRange);
-                        setRange(newRange);
+                        // const newRange = getMostRecentMonths(dateLabels!, 3);
+                        // console.log(newRange);
+                        // setRange(newRange);
                     }}
                     className="w-full flex-1 btn text-primary bg-[#EDEDFE] min-h-[2rem] h-[1rem] mr-3">3 Months
                 </button>
@@ -208,8 +166,8 @@ export function LineChart() {
                 {/* 6 months */}
                 <button
                     onClick={() => {
-                        const newRange = getMostRecentMonths(dateLabels!, 6);
-                        setRange(newRange);
+                        // const newRange = getMostRecentMonths(dateLabels!, 6);
+                        // setRange(newRange);
                     }}
                     className="w-full flex-1 btn text-primary bg-[#EDEDFE] min-h-[2rem] h-[1rem] mr-3">6 Months
                 </button>
@@ -217,12 +175,11 @@ export function LineChart() {
                 {/* 12 months */}
                 <button
                     onClick={() => {
-                        const newRange = getMostRecentMonths(dateLabels!, 12);
-                        setRange(newRange);
+                        // const newRange = getMostRecentMonths(dateLabels!, 12);
+                        // setRange(newRange);
                     }}
                     className="w-full flex-1 btn text-primary bg-[#EDEDFE] min-h-[2rem] h-[1rem] mr-3">12 Months
                 </button>
-
             </div>
         </div >
     );
