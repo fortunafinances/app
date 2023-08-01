@@ -99,7 +99,7 @@ export default function TradeForm({ buyOrSell }: buyProp) {
 					console.log("error");
 				}
 			})
-			.catch((error) => console.error(error))
+			.catch((error) => console.error(error));
 	};
 
 	useEffect(() => {
@@ -118,18 +118,29 @@ export default function TradeForm({ buyOrSell }: buyProp) {
 		holdings: Holding[] & GraphQLReturnData;
 	}
 
-	const { data: holdingsData } = useQuery<HoldingsQuery>(GET_HOLDINGS, {
-		variables: { accId: accountId },
-	});
+	const { data: holdingsData, refetch } = useQuery<HoldingsQuery>(
+		GET_HOLDINGS,
+		{
+			variables: { accId: accountId },
+		},
+	);
 
 	useEffect(() => {
+		refetch()
+			.then(() => console.log("in refetch: ", accountId))
+			.catch((error) => {
+				console.log(error);
+			});
 		const currStock = holdingsData?.holdings.find(
 			(e) => e.stock.ticker === symbolName,
 		);
 		if (currStock?.stockQuantity !== undefined)
 			setCurrStockQuantity(currStock.stockQuantity);
-	}, [holdingsData?.holdings, symbolName]);
-	console.log(currStockQuantity);
+		else {
+			setCurrStockQuantity(0);
+		}
+	}, [holdingsData?.holdings, symbolName, accountId, refetch]);
+	// console.log(currStockQuantity);
 
 	useEffect(() => {
 		if (quantity < 1) {
