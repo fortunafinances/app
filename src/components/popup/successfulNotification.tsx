@@ -6,7 +6,7 @@ export interface tradeProp {
 	modalId: string;
 }
 
-export default function TransferSuccessful({ transfer, modalId }: tradeProp) {
+export default function SuccessfulNotification({ transfer, modalId }: tradeProp) {
 	//   const [messageType, setMessageType] = useState(transfer); //false shpws ORDERS; true shows TRANSFERS
 	const [message, setMessage] = useState("Your transfer was successful.");
 	const [buttonName, setButtonName] = useState("View Transactions");
@@ -36,7 +36,9 @@ export default function TransferSuccessful({ transfer, modalId }: tradeProp) {
 						</button>
 						<button
 							className="btn btn-sm bg-white hover:bg-primary hover:text-white"
-							onClick={() => navigate(path)}
+							onClick={() =>
+								navigate(path)
+							}
 						>
 							{buttonName}
 						</button>

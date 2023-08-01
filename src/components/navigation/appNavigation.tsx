@@ -5,9 +5,7 @@ import { userInfo } from "../../utilities/reactiveVariables";
 import AccountDropdown from "../input/accountDropdown";
 import { Account } from "../../utilities/types";
 import { GET_ACCOUNTS } from "../../utilities/graphQL";
-import { navItems } from "../../utilities/config";
-import { getCurrentPath } from "../../utilities/common";
-
+import { getCurrentPath, navItems } from "../../utilities/common";
 
 export default function AppNavigation() {
 	const user = useReactiveVar(userInfo);

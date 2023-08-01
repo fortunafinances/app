@@ -11,7 +11,7 @@ export type User = {
   firstName?: string;
   lastName?: string;
   phoneNumber?: string;
-  onboardingComplete?: boolean;
+  onboardingComplete?: number;
   bankName?: string;
   registerDate?: string;
 };
@@ -69,4 +69,9 @@ export enum OrderSide {
 export enum OrderStatus {
   Placed = "Placed",
   Executed = "Executed",
+}
+
+export type DataPoint = {
+    x: string;
+    y: number;
 }
