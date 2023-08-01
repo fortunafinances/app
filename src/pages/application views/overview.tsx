@@ -1,9 +1,15 @@
-import { gql, useQuery, useReactiveVar } from "@apollo/client";
+import { useQuery, useReactiveVar } from "@apollo/client";
 import DataContainer from "../../components/container/dataContainer";
 import PieChart from "../../components/data/pieChart";
 import { LineChart } from "../../components/data/lineChart";
 import { formatDollars } from "../../utilities/currency";
-import { currentAccountId } from "../../utilities/reactiveVariables";
+import {
+	currentAccountId,
+	sidebarClosed,
+} from "../../utilities/reactiveVariables";
+import { GET_HOLDINGS, GET_OVERVIEW } from "../../utilities/graphQL";
+import { Holding, GraphQLReturnData } from "../../utilities/types";
+import NoInvestments from "../../components/data/noInvestments";
 
 type DisplayBar = {
 	displayBar: {
@@ -16,18 +22,10 @@ type DisplayBar = {
 export default function Overview() {
 	const accountId = useReactiveVar(currentAccountId);
 
-	const GET_OVERVIEW = gql`
-		query DisplayBar($accId: Int!) {
-			displayBar(input: { accId: $accId }) {
-				total
-				invest
-				cash
-			}
-		}
-	`;
+	const sidebar = useReactiveVar(sidebarClosed);
 
 	const { loading, error, data } = useQuery<DisplayBar>(GET_OVERVIEW, {
-		variables: { accId: accountId },
+		variables: { accId: accountId ? accountId : 0 },
 	});
 
 	type DataComponentProps = {
@@ -35,21 +33,48 @@ export default function Overview() {
 		dollars: number;
 	};
 
+	interface HoldingsQuery {
+		holdings: Holding[] & GraphQLReturnData;
+	}
+
+	const {
+		loading: holdingsLoading,
+		error: holdingsError,
+		data: holdingsData,
+	} = useQuery<HoldingsQuery>(GET_HOLDINGS, {
+		variables: { accId: accountId },
+	});
+
+	if (holdingsLoading)
+		return (
+			<div className="h-full w-full flex flex-row justify-center items-center">
+				<span className="loading loading-infinity loading-lg" />
+			</div>
+		);
+	if (holdingsError)
+		return (
+			<div className="h-full w-full flex flex-row justify-center items-center text-red-600 text-5xl">
+				<p>Error</p>
+			</div>
+		);
+
+	if (!sidebar && window.screen.width <= 768) return <></>;
+
 	const DataComponent = ({ title, dollars }: DataComponentProps) => (
-		<div className="flex flex-col">
+		<div className="flex flex-col text-center">
 			<p>{title}</p>
 			{loading ? (
 				<span className="loading loading-dots loading-md" />
 			) : error ? (
 				<p>Error accessing backend</p>
 			) : (
-				<p className="text-lg">{formatDollars(dollars)}</p>
+				<p className="text-md md:text-lg">{formatDollars(dollars)}</p>
 			)}
 		</div>
 	);
 
 	return (
-		<div className="p-3 flex flex-col gap-3">
+		<div className="p-3 flex flex-col gap-3 h-full">
 			<DataContainer className="font-semibold px-3 flex flex-row md:justify-start justify-between md:gap-20">
 				<DataComponent
 					title="Net Worth"
@@ -59,17 +84,24 @@ export default function Overview() {
 					title="Investments"
 					dollars={data?.displayBar.invest ?? 0}
 				/>
-				<DataComponent title="Cash" dollars={data?.displayBar.cash ?? 0} />
+				<DataComponent
+					title="Cash"
+					dollars={data?.displayBar.cash ?? 0}
+				/>
 			</DataContainer>
-			<div className="flex">
-				<DataContainer className="h-full md:max-w-[50%] max-w-full p-3 flex flex-row justify-around mr-1" >
-					<PieChart />
-				</DataContainer>
-				<DataContainer className="h-full md:max-w-[50%] max-w-full p-3 flex flex-row justify-around ml-1">
-					<LineChart />
-				</DataContainer>
-			</div>
-
+			{holdingsData?.holdings.length === 0 ? (
+				<NoInvestments />
+			) : (
+				<div className="flex flex-col md:flex-row h-full gap-3">
+					<DataContainer className="h-full md:max-w-[50%] max-w-full p-3 flex flex-col justify-around items-center">
+						<h2 className="text-2xl">Portfolio Sector Breakdown</h2>
+						<PieChart />
+					</DataContainer>
+					<DataContainer className="h-full md:max-w-[50%] max-w-full p-3 flex flex-col justify-center">
+						<LineChart />
+					</DataContainer>
+				</div>
+			)}
 		</div>
 	);
 }

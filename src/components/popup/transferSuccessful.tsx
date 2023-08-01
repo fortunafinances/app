@@ -1,26 +1,28 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-export default function TransferSuccessful() {
-	const [messageType, setMessageType] = useState(true);
+export interface tradeProp {
+	transfer: boolean;
+	modalId: string;
+}
+
+export default function TransferSuccessful({ transfer, modalId }: tradeProp) {
+	//   const [messageType, setMessageType] = useState(transfer); //false shpws ORDERS; true shows TRANSFERS
 	const [message, setMessage] = useState("Your transfer was successful.");
 	const [buttonName, setButtonName] = useState("View Transactions");
 	const [path, setPath] = useState("/app/activity");
 	const navigate = useNavigate();
 
 	useEffect(() => {
-		if (messageType === false) {
+		if (!transfer) {
 			setMessage("Your order has been placed.");
 			setButtonName("View Orders");
 			setPath("/app/orders");
 		}
-	}, [messageType, setMessageType]);
+	}, [transfer]);
 
 	return (
-		<dialog
-			id="transfer_successful"
-			className="modal flex items-center justify-center"
-		>
+		<dialog id={modalId} className="modal flex items-center justify-center">
 			<form
 				method="dialog"
 				className="modal-box alert flex flex-auto shadow-lg max-w-fit min-h-[25%] min-w-fit px-10 bg-[#f2fcef]"

@@ -2,6 +2,7 @@ export const formatDollars = (currency: number): string => {
 	const formatter = new Intl.NumberFormat("en-US", {
 		style: "currency",
 		currency: "USD",
+		notation: currency < 10_000_000 ? "standard" : "compact",
 	});
 
 	return formatter.format(currency);

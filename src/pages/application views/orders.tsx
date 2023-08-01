@@ -3,8 +3,9 @@ import Table from "../../components/data/table";
 import { useMemo } from "react";
 import { MRT_ColumnDef } from "material-react-table";
 import { Order, GraphQLReturnData } from "../../utilities/types";
-import { formatDate, sortDate } from "../../utilities/common";
+import { filterInclusive, formatDate, sortDate } from "../../utilities/common";
 import { currentAccountId } from "../../utilities/reactiveVariables";
+import NoInvestments from "../../components/data/noInvestments";
 
 export default function Orders() {
 	const accountId = useReactiveVar(currentAccountId);
@@ -42,10 +43,10 @@ export default function Orders() {
 				size: 50,
 			},
 			{
-				header: "Qty",
+				header: "Quantity",
 				accessorKey: "tradeQty",
 				size: 40,
-				filterFn: "between",
+				filterFn: filterInclusive,
 				filterVariant: "range",
 			},
 			{
@@ -56,7 +57,7 @@ export default function Orders() {
 				filterSelectOptions: ["Placed", "Executed"],
 			},
 		],
-		[]
+		[],
 	);
 
 	type OrdersQuery = {
@@ -84,6 +85,8 @@ export default function Orders() {
 	const { loading, error, data } = useQuery<OrdersQuery>(GET_ORDERS, {
 		variables: { accId: accountId },
 	});
+
+	if (!loading && data?.orders.length === 0) return <NoInvestments />;
 
 	return (
 		<div className="h-full w-full overflow-y-clip">

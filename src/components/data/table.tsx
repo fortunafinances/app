@@ -54,6 +54,7 @@ export default function Table<DataType extends GraphQLReturnData>({
 						enableTopToolbar={false}
 						muiTableBodyRowProps={{ hover: false }}
 						enableColumnResizing={true}
+						sortDescFirst={false}
 						layoutMode="grid"
 						defaultColumn={{
 							minSize: 10,
@@ -70,8 +71,9 @@ export default function Table<DataType extends GraphQLReturnData>({
 								row.original.__typename === "Holding" ||
 								row.original.__typename === "Order"
 							) {
-								const holding = row.original as unknown as Holding &
-									GraphQLReturnData;
+								const holding =
+									row.original as unknown as Holding &
+										GraphQLReturnData;
 								const filled = false;
 								return (
 									<div className="flex flex-col flex-nowrap gap-2 w-full justify-evenly [&>button]:min-h-0 [&>button]:h-8">
@@ -79,7 +81,9 @@ export default function Table<DataType extends GraphQLReturnData>({
 											className="btn btn-primary"
 											onClick={() => {
 												symbol(holding.stock.ticker);
-												navigate("/app/trade", { state: { tradeType: true } });
+												navigate("/app/trade", {
+													state: { tradeType: true },
+												});
 											}}
 										>
 											Buy
@@ -88,25 +92,32 @@ export default function Table<DataType extends GraphQLReturnData>({
 											className="btn btn-secondary"
 											onClick={() => {
 												symbol(holding.stock.ticker);
-												navigate("/app/trade", { state: { tradeType: false } });
+												navigate("/app/trade", {
+													state: { tradeType: false },
+												});
 											}}
 										>
 											Sell
 										</button>
-										<div className="flex flex-row items-center justify-center">
-											<button
-												className="w-fit"
-												onClick={() => {
-													console.log("star");
-												}}
-											>
-												{filled ? (
-													<AiFillStar size={40} />
-												) : (
-													<AiOutlineStar size={40} />
-												)}
-											</button>
-										</div>
+										{row.original.__typename !==
+											"Order" && (
+											<div className="flex flex-row items-center justify-center">
+												<button
+													className="w-fit"
+													onClick={() => {
+														console.log("star");
+													}}
+												>
+													{filled ? (
+														<AiFillStar size={40} />
+													) : (
+														<AiOutlineStar
+															size={40}
+														/>
+													)}
+												</button>
+											</div>
+										)}
 									</div>
 								);
 							} else {

@@ -6,6 +6,8 @@ import { GraphQLReturnData, Holding } from "../../utilities/types";
 import { useMemo } from "react";
 import { currentAccountId } from "../../utilities/reactiveVariables";
 import { GET_HOLDINGS } from "../../utilities/graphQL";
+import NoInvestments from "../../components/data/noInvestments";
+import { filterInclusive } from "../../utilities/common";
 
 export default function Holdings() {
 	const accountId = useReactiveVar(currentAccountId);
@@ -23,7 +25,7 @@ export default function Holdings() {
 				header: "Quantity",
 				accessorKey: "stockQuantity",
 				size: 55,
-				filterFn: "between",
+				filterFn: filterInclusive,
 				filterVariant: "range",
 			},
 			{
@@ -33,10 +35,17 @@ export default function Holdings() {
 				size: 55,
 				accessorFn: (row) => `${formatDollars(row.stock.currPrice!)}`,
 				sortingFn: (a, b) => {
-					return a.original.stock.currPrice! - b.original.stock.currPrice!;
+					return (
+						a.original.stock.currPrice! -
+						b.original.stock.currPrice!
+					);
 				},
 				filterFn: (row, _columnIds, filterValue: number[]) =>
-					filterRange(row.original.stock.currPrice!, _columnIds, filterValue),
+					filterRange(
+						row.original.stock.currPrice!,
+						_columnIds,
+						filterValue,
+					),
 			},
 			{
 				header: "Value",
@@ -44,7 +53,9 @@ export default function Holdings() {
 				filterVariant: "range",
 				size: 55,
 				accessorFn: (row) =>
-					`${formatDollars(row.stockQuantity * row.stock.currPrice!)}`,
+					`${formatDollars(
+						row.stockQuantity * row.stock.currPrice!,
+					)}`,
 				sortingFn: (a, b) => {
 					return (
 						a.original.stock.currPrice! * a.original.stockQuantity -
@@ -53,13 +64,14 @@ export default function Holdings() {
 				},
 				filterFn: (row, _columnIds, filterValue: number[]) =>
 					filterRange(
-						row.original.stock.currPrice! * row.original.stockQuantity,
+						row.original.stock.currPrice! *
+							row.original.stockQuantity,
 						_columnIds,
-						filterValue
+						filterValue,
 					),
 			},
 		],
-		[]
+		[],
 	);
 
 	interface HoldingsQuery {
@@ -69,6 +81,8 @@ export default function Holdings() {
 	const { loading, error, data } = useQuery<HoldingsQuery>(GET_HOLDINGS, {
 		variables: { accId: accountId },
 	});
+
+	if (!loading && data?.holdings.length === 0) return <NoInvestments />;
 
 	return (
 		<div className="h-full w-full overflow-y-clip">

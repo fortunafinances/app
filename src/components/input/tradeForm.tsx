@@ -8,6 +8,8 @@ import { OrderType, OrderSide } from "../../utilities/types";
 import { GET_STOCK_NAMES } from "../../utilities/graphQL";
 import StockSearchBar from "./stockSearch";
 import { preventMinus } from "../../utilities/common";
+import { GraphQLReturnData, Holding } from "../../utilities/types";
+import { GET_HOLDINGS } from "../../utilities/graphQL";
 
 interface StockData {
 	stocks: Stock[];
@@ -21,7 +23,13 @@ export default function TradeForm({ buyOrSell }: buyProp) {
 	const { loading, error, data } = useQuery<StockData>(GET_STOCK_NAMES);
 
 	const symbolName = useReactiveVar(symbol);
-	const accountNumber = useReactiveVar(currentAccountId);
+	const accountId = useReactiveVar(currentAccountId);
+	const [currStockQuantity, setCurrStockQuantity] = useState(0);
+	const [marketState, setMarketState] = useState(true); //true is BUY
+	const [quantity, setQuantity] = useState(1);
+	const [stockPrice, setStockPrice] = useState(0);
+	const [totalPrice, setTotalPrice] = useState(0);
+	const [checkQuant, setCheckQuant] = useState(true); //true = submit button is disabled
 
 	const PLACE_ORDER = gql`
 		mutation InsertTrade(
@@ -30,6 +38,7 @@ export default function TradeForm({ buyOrSell }: buyProp) {
 			$side: OrderSide!
 			$ticker: String!
 			$tradeQty: Int!
+			$tradePrice: Float!
 		) {
 			insertTrade(
 				accID: $accID
@@ -37,6 +46,7 @@ export default function TradeForm({ buyOrSell }: buyProp) {
 				side: $side
 				ticker: $ticker
 				tradeQty: $tradeQty
+				tradePrice: $tradePrice
 			)
 		}
 	`;
@@ -47,33 +57,100 @@ export default function TradeForm({ buyOrSell }: buyProp) {
 
 	const [placeOrder] = useMutation<TransferReturnData>(PLACE_ORDER);
 
+	const successModal = document.getElementById(
+		"trade_successful",
+	) as HTMLDialogElement;
+
+	const insufficientFundsModal = document.getElementById(
+		"insufficient_funds",
+	) as HTMLDialogElement;
+
+	const insufficientSharesModal = document.getElementById(
+		"insufficient_shares",
+	) as HTMLDialogElement;
+
 	const handleSubmit = () => {
 		placeOrder({
 			variables: {
-				accID: accountNumber,
+				accID: accountId,
 				type: marketState ? OrderType.Market : OrderType.Limit,
 				side: buyOrSell ? OrderSide.Buy : OrderSide.Sell,
 				ticker: symbolName,
 				tradeQty: quantity,
+				tradePrice: stockPrice,
 			},
-		}).catch((error) => console.error(error));
+		})
+			.then((data) => {
+				if (data.data?.insertTrade === "Success") {
+					console.log("success");
+					successModal.showModal();
+				} else if (
+					data.data?.insertTrade ===
+					"Error: Not enough funds in account"
+				) {
+					insufficientFundsModal.showModal();
+					console.log("not enough shares");
+				} else if (
+					data.data?.insertTrade ===
+					"Error: Not enough shares to sell"
+				) {
+					insufficientSharesModal.showModal();
+				} else {
+					console.log("error");
+				}
+			})
+			.catch((error) => console.error(error));
 	};
-
-	const [marketState, setMarketState] = useState(true);
-	const [quantity, setQuantity] = useState(1);
-	const [stockPrice, setStockPrice] = useState(0);
-	const [totalPrice, setTotalPrice] = useState(0);
 
 	useEffect(() => {
 		if (symbolName !== "" && symbolName !== "Select..." && data) {
 			const stock = data.stocks.find(
-				(element) => element.ticker === symbolName
+				(element) => element.ticker === symbolName,
 			);
 			const price = stock!.currPrice;
 			setStockPrice(price!);
 			setTotalPrice(quantity * stockPrice);
 		}
 	}, [data, quantity, symbolName, stockPrice]);
+
+	//to get current stock holdings amount
+	interface HoldingsQuery {
+		holdings: Holding[] & GraphQLReturnData;
+	}
+
+	const { data: holdingsData, refetch } = useQuery<HoldingsQuery>(
+		GET_HOLDINGS,
+		{
+			variables: { accId: accountId },
+		},
+	);
+
+	useEffect(() => {
+		refetch()
+			.then(() => console.log("in refetch: ", accountId))
+			.catch((error) => {
+				console.log(error);
+			});
+		const currStock = holdingsData?.holdings.find(
+			(e) => e.stock.ticker === symbolName,
+		);
+		if (currStock?.stockQuantity !== undefined)
+			setCurrStockQuantity(currStock.stockQuantity);
+		else {
+			setCurrStockQuantity(0);
+		}
+	}, [holdingsData?.holdings, symbolName, accountId, refetch]);
+	// console.log(currStockQuantity);
+
+	useEffect(() => {
+		if (quantity < 1) {
+			setCheckQuant(true);
+		} else {
+			setCheckQuant(false);
+		}
+	}, [quantity]);
+
+	// if (!loading && data?.holdings.length === 0) return <NoInvestments />;
 
 	if (loading) return <>Loading</>;
 	if (error) return <p>{error.message}</p>;
@@ -85,19 +162,38 @@ export default function TradeForm({ buyOrSell }: buyProp) {
 				<StockSearchBar className="z-40 w-full" />
 			</div>
 			<div className="m-4 mt-6 flex flex-col gap-3">
-				<h1 className="font-semibold text-xl">Quantity</h1>
-				<div className="border-[0px] rounded-[3px] border-[#cccccc] ">
-					<input
-						type="number"
-						min={1}
-						step={1}
-						onKeyDown={preventMinus}
-						onChange={(e) => {
-							setQuantity(Number(e.target.value));
-						}}
-						value={quantity}
-						className="input h-9 w-full border-[1px] rounded-[3px] border-[#cccccc] focus:ring-blue-500 focus:border-blue-500 focus:border-[2px] !outline-none"
-					/>
+				<h1 className="font-semibold text-xl">
+					Quantity (Current Holdings: {currStockQuantity})
+				</h1>
+				<div>
+					<h2 className="text-xs text-[#FF0000]">
+						{checkQuant ? "*required" : null}
+					</h2>
+					<div className="flex flex-row justify-between">
+						<div className="border-[0px] rounded-[3px] border-[#cccccc] w-full">
+							<input
+								type="number"
+								min={1}
+								step={1}
+								onKeyDown={preventMinus}
+								onChange={(e) => {
+									setQuantity(Number(e.target.value));
+								}}
+								value={quantity < 1 ? "" : quantity}
+								className="input h-9 w-full border-[1px] rounded-[3px] border-[#cccccc] focus:ring-blue-500 focus:border-blue-500 focus:border-[2px] !outline-none"
+							/>
+						</div>
+					</div>
+					{!buyOrSell ? (
+						<button
+							className="ml-2 text-center w-[15%] rounded-sm bg-[#e6e6e6] text-xs px-2 md:text-sm lg:text-lg"
+							onClick={() => {
+								setQuantity(currStockQuantity);
+							}}
+						>
+							Sell All
+						</button>
+					) : null}
 				</div>
 			</div>
 			{/* market limit toggle buttons */}
@@ -106,7 +202,9 @@ export default function TradeForm({ buyOrSell }: buyProp) {
 					onClick={() => {
 						setMarketState(true);
 					}}
-					className={marketState ? "bg-[#e6e6e6] shadow-inner" : "bg-white"}
+					className={
+						marketState ? "bg-[#e6e6e6] shadow-inner" : "bg-white"
+					}
 				>
 					Market
 				</button>
@@ -114,7 +212,9 @@ export default function TradeForm({ buyOrSell }: buyProp) {
 					onClick={() => {
 						setMarketState(false);
 					}}
-					className={!marketState ? "bg-[#e6e6e6] shadow-inner" : "bg-white"}
+					className={
+						!marketState ? "bg-[#e6e6e6] shadow-inner" : "bg-white"
+					}
 				>
 					Limit
 				</button>
@@ -140,7 +240,8 @@ export default function TradeForm({ buyOrSell }: buyProp) {
 			<div className="m-4 mt-6 flex flex-row gap-3 font-semibold text-xl">
 				<h1>Total Price:</h1>
 				<h1>
-					{quantity} x {formatDollars(stockPrice)} = {formatDollars(totalPrice)}
+					{quantity} x {formatDollars(stockPrice)} ={" "}
+					{formatDollars(totalPrice)}
 				</h1>
 			</div>
 			{/* cancel and submit buttons */}
@@ -149,7 +250,8 @@ export default function TradeForm({ buyOrSell }: buyProp) {
 					Cancel
 				</button>
 				<button
-					className="border-success-content text-success-content bg-[#E3FDDC] hover:shadow-xl shadow-succes-content hover:bg-success-content hover:text-[#e3fddc]"
+					disabled={checkQuant}
+					className="border-success-content text-success-content bg-[#E3FDDC] hover:shadow-xl shadow-success-content hover:bg-success-content hover:text-[#e3fddc]"
 					onClick={handleSubmit}
 				>
 					Submit
