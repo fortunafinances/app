@@ -60,6 +60,15 @@ export const getMostRecentMonths = (dates: string[], num: number): string[] => {
 	return formattedDates;
 }
 
+export const getLabelForValue = (value: number, labels: string[]) => {
+	return labels[value];
+}
+
+export const getMonthName = (month: string) => {
+	const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+	return months[parseInt(month) - 1];
+}
+
 export const filterInclusive = (
 	row: { getValue: (id: string) => number },
 	id: string,
