@@ -2,12 +2,13 @@ import { Field, Form, Formik, FormikHelpers } from "formik";
 import FormikSelect from "../input/formikSelect";
 import { currentAccountId, userInfo } from "../../utilities/reactiveVariables";
 import { Account } from "../../utilities/types";
-import { useMutation, useQuery } from "@apollo/client";
+import { useMutation, useQuery, useReactiveVar } from "@apollo/client";
 import { useRef } from "react";
 import {
 	GET_ACCOUNTS,
 	GET_ACTIVITIES,
 	GET_OVERVIEW,
+	GET_TOTAL_VALUE,
 	MAKE_TRANSFER,
 } from "../../utilities/graphQL";
 import * as Yup from "yup";
@@ -48,12 +49,14 @@ const makeAccountList = (accounts: Account[], index?: number) => {
 };
 
 export default function Transfer() {
+	const accountId = useReactiveVar(currentAccountId);
+	const user = useReactiveVar(userInfo);
 	const { loading, data } = useQuery<{ accounts: Account[] }>(GET_ACCOUNTS, {
 		variables: { userId: userInfo()?.userId },
 	});
 
 	const [makeTransfer] = useMutation<TransferReturnData>(MAKE_TRANSFER, {
-		refetchQueries: [{ query: GET_ACTIVITIES }, { query: GET_OVERVIEW }],
+		refetchQueries: [{ query: GET_ACTIVITIES, variables: { accId: accountId } }, { query: GET_OVERVIEW, variables: { accId: accountId } }, { query: GET_TOTAL_VALUE, variables: { userId: user?.userId } }],
 	});
 
 	const transferRef = useRef<HTMLDialogElement>(null);

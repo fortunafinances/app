@@ -1,14 +1,9 @@
 import { useState } from "react";
 import { formatDollars } from "../../utilities/currency";
 import { formatDate } from "../../utilities/common";
-import { gql, useQuery, useReactiveVar } from "@apollo/client";
+import { useQuery, useReactiveVar } from "@apollo/client";
 import { userInfo } from "../../utilities/reactiveVariables";
-
-const GET_TOTAL_VALUE = gql`
-	query AllAccValue($userId: String!) {
-		allAccValue(input: { userId: $userId })
-	}
-`;
+import { GET_TOTAL_VALUE } from "../../utilities/graphQL";
 
 export default function TotalAccountValue() {
 	const [date] = useState(new Date());
@@ -32,7 +27,7 @@ export default function TotalAccountValue() {
 					? "Error"
 					: formatDollars(data!.allAccValue)}
 			</h3>
-			<p className="text-xs">As of {formatDate(date.toLocaleDateString())}</p>
+			<p className="text-xs">As of {formatDate(date.toDateString())}</p>
 		</div>
 	);
 }
