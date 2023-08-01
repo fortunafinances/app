@@ -51,9 +51,21 @@ export function LineChart() {
 	// get user query
 	const currentAccountNumber = useReactiveVar(currentAccountId);
 	const { loading: userLoading, error: userError, data: userData } = useQuery<LineUser>(GET_LINE_CHART_USER, {
-		variables: { accId: 1 },
+		variables: { accId: currentAccountNumber },
 	});
 
+	function convertToRoundedPercentageChange(prices: number[]) {
+		const firstPrice = prices[0];
+		const roundedPercentageChanges = [];
+
+		for (let i = 0; i < prices.length; i++) {
+			const percentageChange = ((prices[i] - firstPrice) / firstPrice) * 100;
+			const roundedPercentageChange = Number(percentageChange.toFixed(2));
+			roundedPercentageChanges.push(roundedPercentageChange);
+		}
+
+		return roundedPercentageChanges;
+	}
 
 	// get SP500 date and price from query
 	const dateLabels = spData?.stockHistorical.date;
@@ -78,12 +90,7 @@ export function LineChart() {
 
 	if (spLoading || userLoading) {
 		return (
-			<div>
-				<span className="loading loading-ball loading-xs"></span>
-				<span className="loading loading-ball loading-sm"></span>
-				<span className="loading loading-ball loading-md"></span>
-				<span className="loading loading-ball loading-lg"></span>
-			</div>
+			<span className="loading loading-ball loading-md"></span>
 		)
 	};
 	if (spError || userError) return <p>Error :</p>;
@@ -102,32 +109,37 @@ export function LineChart() {
 		return months[parseInt(month) - 1];
 	}
 	// initialize the chart
-	// const chartOptions = {
-	//     responsive: true,
-	//     plugins: {
-	//         legend: {
-	//             position: 'top' as const,
-	//         },
-	//         title: {
-	//             display: true,
-	//             text: 'Line Chart',
-	//         },
-	//     },
-	//     scales: {
-	// 			xAxis: [{
-	// 				type: 'time',
-	// 				position: 'bottom',
-	// 				time: {
-	// 					displayFormats: { 'day': 'MM/YY' },
-	// 					tooltipFormat: 'DD/MM/YY',
-	// 					unit: 'month',
-	// 				}
-	// 			}],
-	//     },
-	// };
+	const chartOptions = {
+		responsive: true,
+		plugins: {
+			legend: {
+				position: 'top' as const,
+			},
+			title: {
+				display: true,
+				text: 'Line Chart',
+			},
+		},
+		scales: {
+			x: {
+				ticks: {
+					callback: (value: number, index: number) => {
+						const currentLabel = getLabelForValue(value);
+						console.log(currentLabel);
+						if (index % 4 === 0) {
+							const [year, month, day] = currentLabel.split('-');
+							const formattedLabel = `${day} ${getMonthName(month)} - ${year.slice(2)}`;
+							return formattedLabel;
+						} else {
+							return '';
+						}
+					},
+				},
+			},
+		},
+	};
 
-	// console.log(range);
-
+	console.log(range);
 
 	const options = {
 		responsive: true,
@@ -170,7 +182,7 @@ export function LineChart() {
 
 	return (
 		<div className='w-full' >
-			<Line options={options} data={{ datasets: chartDataSets }} />
+			<Line options={options} data={chartDataSets} />
 			<div className="flex mt-5 justify-center">
 				{/* 3 months */}
 				<button

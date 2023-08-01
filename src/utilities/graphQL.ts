@@ -1,27 +1,55 @@
 import { gql } from "@apollo/client";
+import { InMemoryCache } from "@apollo/client/cache";
+
+const cache = new InMemoryCache();
+export default cache;
 
 export const GET_ACTIVITIES = gql`
-  query Activity($accId: Int!) {
-    activity(input: { accId: $accId }) {
-      date
-      type
-      description
-      amount
-    }
-  }
+	query Activity($accId: Int!) {
+		activity(input: { accId: $accId }) {
+			date
+			type
+			description
+			amount
+		}
+	}
 `;
 
 export const GET_HOLDINGS = gql`
-  query Holdings($accId: Int!) {
-    holdings(input: { accId: $accId }) {
-      stockQuantity
-      stock {
-        ticker
-        name
-        currPrice
-      }
-    }
-  }
+	query Holdings($accId: Int!) {
+		holdings(input: { accId: $accId }) {
+			stockQuantity
+			stock {
+				ticker
+				name
+				currPrice
+			}
+		}
+	}
+`;
+
+export const GET_ORDERS = gql`
+	query Orders($accId: Int!) {
+		orders(input: { accId: $accId }) {
+			type
+			side
+			status
+			tradePrice
+			tradeQty
+			date
+			stock {
+				ticker
+				name
+				currPrice
+			}
+		}
+	}
+`;
+
+export const GET_TOTAL_VALUE = gql`
+	query AllAccValue($userId: String!) {
+		allAccValue(input: { userId: $userId })
+	}
 `;
 
 export const MAKE_TRANSFER = gql`

@@ -1,10 +1,10 @@
 import { gql, useMutation, useReactiveVar } from "@apollo/client";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { BsArrowLeft, BsArrowRight } from "react-icons/bs";
-import { useNavigate } from "react-router-dom";
-import { currentAccountId, userInfo } from "../../utilities/reactiveVariables";
-import { Account, User } from "../../utilities/types";
-import { CREATE_ACCOUNT, GET_ACCOUNTS } from "../../utilities/graphQL";
+import { useLocation, useNavigate } from "react-router-dom";
+import { currentAccountId, userInfo } from "../utilities/reactiveVariables";
+import { Account, User } from "../utilities/types";
+import { CREATE_ACCOUNT, GET_ACCOUNTS } from "../utilities/graphQL";
 
 type ErrorType = {
 	accountName?: string;
@@ -16,7 +16,7 @@ type ErrorType = {
 const POST_USER_INFO = gql`
 	mutation InsertUser(
 		$userId: ID!
-		$onboardingComplete: Boolean
+		$onboardingComplete: Int
 		$bankName: String
 	) {
 		insertUser(
@@ -41,6 +41,10 @@ const POST_USER_INFO = gql`
 export default function CreateAccount() {
 	const navigate = useNavigate();
 	const user = useReactiveVar(userInfo);
+	const location = useLocation().state as { onboarding: boolean };
+
+	const onboarding = location === null ? false : location.onboarding;
+
 
 	const [postUserInfo] = useMutation<{ insertUser: { user: User } }>(
 		POST_USER_INFO,
@@ -74,15 +78,14 @@ export default function CreateAccount() {
 								postUserInfo({
 									variables: {
 										userId: user!.userId,
-										onboardingComplete: true,
+										onboardingComplete: 2,
 										bankName: values.bank,
 									},
 								})
 									.then(() => {
-										setSubmitting(false);
 										postAccount({
 											variables: {
-												name: values.accountName,
+												name: values.accountName.toLowerCase(),
 												userId: user!.userId,
 											},
 										})
@@ -106,6 +109,8 @@ export default function CreateAccount() {
 									})
 									.catch((err) => {
 										console.log(err);
+									}).finally(() => {
+										setSubmitting(false);
 									});
 							}}
 							validate={(values) => {
@@ -190,10 +195,10 @@ export default function CreateAccount() {
 												navigate("/createProfile")
 											}
 										>
-											<BsArrowLeft
+											{onboarding && <BsArrowLeft
 												size={60}
 												className="transition duration:500 hover:scale-125 hover:fill-[#7c1fff]"
-											/>
+											/>}
 										</button>
 										<button
 											type="submit"

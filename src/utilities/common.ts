@@ -37,7 +37,7 @@ export const getMostRecentMonths = (dates: string[], num: number): string[] => {
 	const recentMonths: string[] = []; 
 	let count = 0;
 
-	for (let date of dateObjects) {
+	for (const date of dateObjects) {
 		const year = date.getFullYear();
 		const month = ("0" + (date.getMonth() + 1)).slice(-2);
 		const monthYear = `${year}-${month}`;
@@ -76,5 +76,9 @@ export const filterInclusive = (
 export const getCurrentPath = (path: string): string => {
 	return path.split("/")[path.split("/").length - 1];
 };
-
 export const mobile = window.innerWidth < 640;
+
+export const capitalize = (str: string | undefined) => {
+	if(!str) return ""
+	return str.charAt(0).toUpperCase()
+  + str.slice(1)}

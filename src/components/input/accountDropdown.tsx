@@ -4,6 +4,7 @@ import { currentAccountId } from "../../utilities/reactiveVariables";
 import { Account } from "../../utilities/types";
 import { ApolloError } from "@apollo/client";
 import { Link } from "react-router-dom";
+import { capitalize } from "../../utilities/common";
 
 export interface DropdownProps {
 	data: Account[] | undefined;
@@ -36,7 +37,7 @@ const AccountDropdown = ({ data, loading, error }: DropdownProps) => {
 	return (
 		<div
 			className="dropdown mt-1 text-black capitalize min-w-[200px] max-w-[220px] lg:max-w-[300px]"
-			title={currentAccount.name + " Account"}
+			title={capitalize(currentAccount.name)}
 		>
 			<label
 				tabIndex={0}
@@ -54,7 +55,7 @@ const AccountDropdown = ({ data, loading, error }: DropdownProps) => {
 				className="dropdown-content menu p-2 shadow bg-white rounded-b-box w-full z-50 text-lg"
 			>
 				{data.map((item, i) => (
-					<li key={i} className="w-full" title={item.name}>
+					<li key={i} className="w-full" title={capitalize(item.name)}>
 						<a
 							onClick={() => handleClick(item.accId)}
 							className="truncate max-w-full inline-block"
