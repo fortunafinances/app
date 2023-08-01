@@ -82,6 +82,11 @@ export function LineChart() {
                 },
                 min: subtractMonths(new Date(), range).toISOString(),
             },
+            y: {
+                ticks: {
+                    callback: (value: number | string) => value + "%",
+                }
+            }
         }
     }
 
@@ -91,7 +96,7 @@ export function LineChart() {
         data:
             convertToRoundedPercentageChange(data!.stockHistorical.data),
         showLine: true,
-        lineTension: 0.5,
+        lineTension: 0.2,
         borderColor: 'rgb(100, 100, 255)',
         pointRadius: 5,
         pointHoverRadius: 7
