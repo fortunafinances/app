@@ -1,9 +1,9 @@
-import { Field, Form, Formik, FormikHelpers } from "formik";
+import { Field, Form, Formik, FormikHelpers, FormikProps } from "formik";
 import FormikSelect from "../input/formikSelect";
 import { currentAccountId, userInfo } from "../../utilities/reactiveVariables";
 import { Account } from "../../utilities/types";
 import { useMutation, useQuery, useReactiveVar } from "@apollo/client";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import {
 	GET_ACCOUNTS,
 	GET_ACTIVITIES,
@@ -15,10 +15,10 @@ import * as Yup from "yup";
 
 interface FormType {
 	transferType: string;
-	transferInAccount: string;
-	transferOutAccount: string;
-	toAccount: string;
-	fromAccount: string;
+	transferInAccount: number | string;
+	transferOutAccount: number | string;
+	toAccount?: number | string;
+	fromAccount?: number | string;
 	amount: string;
 }
 
@@ -60,6 +60,13 @@ export default function Transfer() {
 	});
 
 	const transferRef = useRef<HTMLDialogElement>(null);
+	const formikRef = useRef<FormikProps<FormType>>(null);
+
+	useEffect(() => {
+		if (accountId !== undefined) {
+			formikRef.current?.resetForm({ values: { ...formikRef.current.values, transferInAccount: accountId, transferOutAccount: accountId } });
+		}
+	}, [accountId])
 
 	const validationSchema = Yup.object().shape({
 		transferType: Yup.string().required("*Required"),
@@ -134,17 +141,18 @@ export default function Transfer() {
 	return (
 		<dialog id="transfer_modal" className="modal" ref={transferRef}>
 			<Formik
+				innerRef={formikRef}
 				initialValues={{
 					transferType: "IN",
-					transferInAccount: "",
-					transferOutAccount: "",
+					transferInAccount: currentAccountId() ?? "",
+					transferOutAccount: currentAccountId(),
 					toAccount: "",
 					fromAccount: "",
 					amount: "",
 				}}
 				validationSchema={validationSchema}
 				onSubmit={(
-					values: FormType,
+					values,
 					{ setSubmitting, resetForm }: FormikHelpers<FormType>,
 				) => {
 					makeTransfer({
@@ -188,7 +196,8 @@ export default function Transfer() {
 						});
 				}}
 			>
-				{({ values, errors, touched, isValid }) => (
+				{({ values, errors, touched, isValid }) => {
+					return (
 					<Form className="modal-box bg-[#EDEDFE] flex flex-col gap-3 text-primary overflow-y-auto min-h-[15em]">
 						<label htmlFor="transferType">Transfer Type</label>
 						<FormikSelect
@@ -327,7 +336,8 @@ export default function Transfer() {
 							</button>
 						</div>
 					</Form>
-				)}
+					)
+				}}
 			</Formik>
 		</dialog>
 	);

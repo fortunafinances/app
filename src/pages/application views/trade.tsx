@@ -4,7 +4,6 @@ import { HiSwitchHorizontal } from "react-icons/hi";
 import TradeForm from "../../components/input/tradeForm";
 import { twMerge } from "tailwind-merge";
 import StockInfo from "../../components/data/stockInfo";
-import AutoSizer, { Size } from "react-virtualized-auto-sizer";
 import TransferSuccessful from "../../components/popup/successfulNotification";
 import ErrorNotification from "../../components/popup/errorNotification";
 
@@ -43,9 +42,7 @@ export default function Trade() {
 	}, [state]);
 
 	return (
-		<AutoSizer>
-			{({ height, width }: Size) => (
-				<div style={{ height, width }} className="overflow-y-auto">
+		<>
 					<TransferSuccessful
 						transfer={false}
 						modalId="trade_successful"
@@ -97,9 +94,6 @@ export default function Trade() {
 						<div className="flex-1 flex ">
 							<StockInfo />
 						</div>
-					</div>
-				</div>
-			)}
-		</AutoSizer>
+			</div></>
 	);
 }

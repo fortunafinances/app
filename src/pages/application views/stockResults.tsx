@@ -23,7 +23,7 @@ export default function StockResults() {
     const tickers = extractStringArray(res);
     console.log(tickers);
 
-    const SuggestionButton = ({ text, ...props }) => {
+    const SuggestionButton = ({ text, ...props }: { text: string }) => {
         
         return (
             <button
