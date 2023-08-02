@@ -9,18 +9,28 @@ import Transfer from "../popup/transfer";
 import { useReactiveVar } from "@apollo/client";
 import { sidebarClosed } from "../../utilities/reactiveVariables";
 import { mobile } from "../../utilities/common";
+import { useWindowSize } from "../../utilities/hooks";
 
 export default function ApplicationLayout() {
+	const windowSize = useWindowSize();
+	const isMobile =
+		windowSize.width !== undefined ? windowSize.width <= 600 : false;
 	const collapsed = useReactiveVar(sidebarClosed);
 
 	return (
 		<div className="flex flex-col h-screen">
-			<Header />
+			<div>
+				<Header />
+			</div>
 			<div className="flex flex-row grow h-full">
 				<SideBar />
 				{!(mobile && !collapsed) && (
 					<div className="flex flex-col grow h-full">
-						<AppNavigation />
+						{!isMobile && (
+							<>
+								<AppNavigation />
+							</>
+						)}
 						<main className="relative h-full">
 							<AutoSizer>
 								{({ height, width }: Size) => {

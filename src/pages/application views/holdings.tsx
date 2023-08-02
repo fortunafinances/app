@@ -8,8 +8,13 @@ import { currentAccountId } from "../../utilities/reactiveVariables";
 import { GET_HOLDINGS } from "../../utilities/graphQL";
 import NoInvestments from "../../components/data/noInvestments";
 import { filterInclusive } from "../../utilities/common";
+import { useWindowSize } from "../../utilities/hooks";
+import CardComponent from "../../components/data/cards/holdingCard";
 
 export default function Holdings() {
+	const windowSize = useWindowSize();
+	const isMobile =
+		windowSize.width !== undefined ? windowSize.width <= 600 : false;
 	const accountId = useReactiveVar(currentAccountId);
 	const cols = useMemo<MRT_ColumnDef<Holding>[]>(
 		() => [
@@ -85,14 +90,28 @@ export default function Holdings() {
 	if (!loading && data?.holdings.length === 0) return <NoInvestments />;
 
 	return (
-		<div className="h-full w-full overflow-y-clip">
-			<Table
-				loading={loading}
-				error={error}
-				data={data?.holdings}
-				columnData={cols}
-				sorting={[{ id: "stock.ticker", desc: false }]}
-			/>
+		<div className="bg-scroll h-full w-full">
+			{isMobile ? 
+			(
+				
+				data?.holdings.map((holding: Holding) => (
+					<CardComponent
+						key={holding.stock.ticker}
+						ticker={holding.stock.ticker}
+						company={holding.stock.name!}
+						tradeQty={holding.stockQuantity}
+						tradePrice={holding.stock.currPrice!}
+					/>
+				))
+			) : (
+				<Table
+					loading={loading}
+					error={error}
+					data={data?.holdings}
+					columnData={cols}
+					sorting={[{ id: "stock.ticker", desc: false }]}
+				/>
+			)}
 		</div>
 	);
 }

@@ -1,21 +1,47 @@
 import { Link } from "react-router-dom";
 import { CgProfile } from "react-icons/cg";
+import { useQuery } from "@apollo/client";
 import { userInfo } from "../../utilities/reactiveVariables";
 import { useReactiveVar } from "@apollo/client/react/hooks/useReactiveVar";
 import { signout } from "../../utilities/auth";
 
+import AccountDropdown from "../input/accountDropdown";
+import { useWindowSize } from "../../utilities/hooks";
+import { Account } from "../../utilities/types";
+import { GET_ACCOUNTS } from "../../utilities/graphQL";
+
 export default function Header() {
 	const user = useReactiveVar(userInfo);
+	const { loading, error, data } = useQuery<{ accounts: Account[] }>(
+		GET_ACCOUNTS,
+		{ variables: { userId: user?.userId } },
+	);
+	const windowSize = useWindowSize();
+	const isMobile =
+		windowSize.width !== undefined ? windowSize.width <= 600 : false;
 
 	return (
 		<header className="flex items-center justify-between bg-primary py-1">
 			<div className="flex items-center h-full text-3xl mx-2">
 				<h1 className="inline">
 					<b className="text-white">
-						<Link to="/">Fortuna</Link>
+						<Link to="/">F</Link>
 					</b>
 				</h1>
 			</div>
+			{isMobile && (
+				<>
+					<div className = "flex flex-row">
+						<h3 className="text-xl font-semibold">
+							<AccountDropdown
+								data={data?.accounts}
+								loading={loading}
+								error={error}
+							/>
+						</h3>
+					</div>
+				</>
+			)}
 			<div className="flex flex-row gap-3 items-center text-2xl mx-3">
 				<h3 className="hidden lg:inline text-white capitalize">
 					Welcome {user?.firstName + " " + user?.lastName}

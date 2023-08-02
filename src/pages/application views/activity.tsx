@@ -7,10 +7,14 @@ import { filterRange, formatDollars } from "../../utilities/currency";
 import { formatDate, sortDate } from "../../utilities/common";
 import { currentAccountId } from "../../utilities/reactiveVariables";
 import { GET_ACTIVITIES } from "../../utilities/graphQL";
+import ActivityCard from "../../components/data/cards/activityCard";
+import { useWindowSize } from "../../utilities/hooks";
 
 export default function Activity() {
 	const accountId = useReactiveVar(currentAccountId);
-
+	const windowSize = useWindowSize();
+	const isMobile =
+		windowSize.width !== undefined ? windowSize.width <= 600 : false;
 	const cols = useMemo<MRT_ColumnDef<Activity>[]>(
 		() => [
 			{
@@ -43,7 +47,7 @@ export default function Activity() {
 					filterRange(row.original.amount, _columnIds, filterValue),
 			},
 		],
-		[]
+		[],
 	);
 
 	type ActivitiesQuery = {
@@ -74,15 +78,30 @@ export default function Activity() {
 		);
 
 	return (
-		<div className="h-full w-full overflow-y-clip">
-			<Table
-				loading={loading}
-				error={error}
-				data={data?.activity}
-				columnData={cols}
-				enableRowActions={false}
-				sorting={[{ id: "date", desc: true }]}
-			/>
+		<div className="h-full w-full">
+			<div className = "flex flex-row justify-center">
+				<h1 className = "text-xl">Activity</h1>
+			</div>
+			{isMobile ? (
+				data?.activity.map((activity: Activity) => (
+					<ActivityCard
+						key={activity.date}
+						date={activity.date}
+						type={activity.type}
+						description={activity.description}
+						amount={activity.amount}
+					/>
+				))
+			) : (
+				<Table
+					loading={loading}
+					error={error}
+					data={data?.activity}
+					columnData={cols}
+					enableRowActions={false}
+					sorting={[{ id: "date", desc: true }]}
+				/>
+			)}
 		</div>
 	);
 }
