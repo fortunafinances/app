@@ -1,3 +1,4 @@
+import { navItems } from './common';
 import { gql } from "@apollo/client";
 import { InMemoryCache } from "@apollo/client/cache";
 
@@ -144,5 +145,14 @@ export const GET_STOCK_LINE_CHART = gql`
             y
         }
     }
-}
+  }
+`
+
+export const GET_ONE_STOCK = gql`
+  query OneStock($ticker: String!) {
+    oneStock(input: {ticker: $ticker}) {
+      name
+      currPrice
+    }
+  }
 `
