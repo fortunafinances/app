@@ -1,4 +1,9 @@
+import { useLocation } from 'react-router-dom';
+
 export default function StockResults() {
+    const location = useLocation();
+    const parameter = location.state?.parameter;
+    console.log(parameter);
     const res = `Based on the request categories provided, here are 5 tickers from the stock list that fall under at least one of the categories:["AAPL", "GOOGL", "MSFT", "META", "TSLA"]`;
 
     function extractStringArray(inputString: string) {
@@ -14,7 +19,6 @@ export default function StockResults() {
                 }
             } catch (error) {
                 console.error('Invalid string array format.');
-
             }
         }
         return []; // Return an empty array if no valid string array is found
@@ -24,12 +28,10 @@ export default function StockResults() {
     console.log(tickers);
 
     const SuggestionButton = ({ text, ...props }) => {
-        
         return (
             <button
                 className={` w-full focus:bg-[#2a0066] focus:text-gray-50 flex-1 px-5 py-2.5 relative group overflow-hidden font-medium bg-transparent-50 text-gray-600 border border-[#2a0066] hover:border-success-600 hover:bg-neutral-500 hover:bg-opacity-10 hover:text-success-600 inline-block rounded m-1         
                             `}
-                
                 {...props}
             >
                 {text}
@@ -48,12 +50,10 @@ export default function StockResults() {
                 <hr className="h-[2px] my-8 bg-primary border-0"></hr>
                 <div className="App">
                     <center>
-                    {tickers.map((item, index) => (
+                        {tickers.map((item, index) => (
                             <SuggestionButton
                                 key={index}
                                 text={item}
-                                
-                                
                             />
                         ))}
                     </center>
