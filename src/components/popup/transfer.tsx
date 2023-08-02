@@ -64,7 +64,8 @@ export default function Transfer() {
 				query: GET_TOTAL_VALUE,
 				variables: { userId: userInfo()?.userId },
 			},
-			{query: GET_OVERVIEW_LINE_CHART, variables: {accId: currentAccountId()}}
+			{query: GET_OVERVIEW_LINE_CHART, variables: {accId: currentAccountId()}},
+			{query: GET_ACCOUNTS, variables: {userId: userInfo()?.userId}}
 		],
 	});
 
