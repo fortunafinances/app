@@ -60,64 +60,60 @@ export default function Trade() {
 
 	return (
 		<>
-					<TransferSuccessful
-						transfer={false}
-						modalId="trade_successful"
-					/>
-					<ErrorNotification
-						modalId="insufficient_funds"
-						message="Insufficient Funds"
-					/>
-					<ErrorNotification
-						modalId="insufficient_shares"
-						message="Insufficient Shares"
-					/>
-					<div className="h-full flex flex-col md:flex-row">
+			<TransferSuccessful transfer={false} modalId="trade_successful" />
+			<ErrorNotification
+				modalId="insufficient_funds"
+				message="Insufficient Funds"
+			/>
+			<ErrorNotification
+				modalId="insufficient_shares"
+				message="Insufficient Shares"
+			/>
+			<div className="flex flex-col md:flex-row">
+				<div
+					className={twMerge(
+						"overflow-y-auto bg-[#F9E5E5] w-full md:w-[35%]",
+						buy && "bg-success",
+					)}
+				>
+					<div className="relative mt-5">
 						<div
 							className={twMerge(
-								"overflow-y-auto bg-[#F9E5E5] w-full md:w-[35%]",
-								buy && "bg-success",
+								"text-[#920000] font-semibold ml-5",
+								buy && "text-success-content",
 							)}
 						>
-							<div className="relative mt-5">
-								<div
+							<h1 className="text-4xl">{header}</h1>
+							<p className="text-xl">
+								{" "}
+								Cash:{" "}
+								{formatDollars(data?.displayBar.cash ?? 0)}
+							</p>
+
+							<button
+								className="absolute top-0 right-10 text-xl flex flex-row items-center"
+								onClick={() => {
+									setBuy((buy) => !buy);
+								}}
+							>
+								<HiSwitchHorizontal color="black" />
+								<p
 									className={twMerge(
-										"text-[#920000] font-semibold ml-5",
-										buy && "text-success-content",
+										"text-success-content font-medium",
+										buy && "text-[#920000]",
 									)}
 								>
-									<h1 className="text-4xl">{header}</h1>
-									<p className="text-xl">
-										{" "}
-										Cash:{" "}
-										{formatDollars(
-											data?.displayBar.cash ?? 0,
-										)}
-									</p>
-
-									<button
-										className="absolute top-0 right-10 text-xl flex flex-row items-center"
-										onClick={() => {
-											setBuy((buy) => !buy);
-										}}
-									>
-										<HiSwitchHorizontal color="black" />
-										<p
-											className={twMerge(
-												"text-success-content font-medium",
-												buy && "text-[#920000]",
-											)}
-										>
-											{switchButton}
-										</p>
-									</button>
-								</div>
-								<TradeForm buyOrSell={buy} />
-							</div>
+									{switchButton}
+								</p>
+							</button>
 						</div>
-						<div className="flex-1 flex ">
-							<StockInfo />
-						</div>
-			</div></>
+						<TradeForm buyOrSell={buy} />
+					</div>
+				</div>
+				<div className="flex-1 flex ">
+					<StockInfo />
+				</div>
+			</div>
+		</>
 	);
 }
