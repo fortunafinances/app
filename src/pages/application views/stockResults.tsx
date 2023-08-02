@@ -1,5 +1,5 @@
 import { useQuery } from '@apollo/client';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { GET_ONE_STOCK } from '../../utilities/graphQL';
 
 
@@ -50,8 +50,9 @@ export default function StockResults() {
         );
     };
 
+    const navigate = useNavigate();
     function handleBuyStock(item: string) {
-        
+        navigate('/app/trade');
     }
 
     return (
