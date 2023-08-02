@@ -34,9 +34,10 @@ export default function StockResults() {
     const tickers = extractStringArray(parameter);
     console.log(tickers);
 
-    const SuggestionButton = ({ title, symbol, price }: { title: string, symbol: string, price: number }) => {
+    const SuggestionButton = ({ title, symbol, price, onClick }: { title: string, symbol: string, price: number, onClick: () => void }) => {
         return (
-            <button className="w-full focus:bg-[#2a0066] focus:text-gray-50 px-5 py-2.5 relative overflow-hidden font-medium bg-transparent-50 text-gray-600 border border-[#2a0066] hover:border-success-600 hover:bg-neutral-500 hover:bg-opacity-10 hover:text-success-600 rounded m-1">
+            <button className="w-full focus:bg-[#2a0066] focus:text-gray-50 px-5 py-2.5 relative overflow-hidden font-medium bg-transparent-50 text-gray-600 border border-[#2a0066] hover:border-success-600 hover:bg-neutral-500 hover:bg-opacity-10 hover:text-success-600 rounded m-1"
+                    onClick={onClick}    >
                 <div className=" top-1 left">
                     <div className='text-black'>{title}</div>
                     <div>{symbol}</div>
@@ -48,6 +49,10 @@ export default function StockResults() {
 
         );
     };
+
+    function handleBuyStock(item: string) {
+        
+    }
 
     return (
         <div className="h-screen flex [&>div]:w-[50%]">
@@ -79,6 +84,7 @@ export default function StockResults() {
                                     title={data?.oneStock.name}
                                     symbol={item}
                                     price={data?.oneStock.currPrice}
+                                    onClick={() => handleBuyStock(item)}
                                 />
                             );
                         })}
