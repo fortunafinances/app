@@ -28,18 +28,18 @@ export default function Header() {
 				</h1>
 			</div>
 			{isMobile(windowSize.width) && (
-					<div className = "flex flex-row">
-						<h3 className="text-xl font-semibold">
-							<AccountDropdown
-								data={data?.accounts}
-								loading={loading}
-								error={error}
-							/>
-						</h3>
+				<div className="flex flex-row">
+					<h3 className="text-xl font-semibold">
+						<AccountDropdown
+							data={data?.accounts}
+							loading={loading}
+							error={error}
+						/>
+					</h3>
 				</div>
 			)}
 			<div className="flex flex-row gap-3 sm:items-center text-2xl mx-3">
-				<h3 className="hidden lg:inline text-white capitalize">
+				<h3 className="hidden lg:inline text-white">
 					Welcome {user?.firstName + " " + user?.lastName}
 				</h3>
 				<div className="dropdown dropdown-end">
