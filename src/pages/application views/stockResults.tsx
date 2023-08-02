@@ -8,7 +8,7 @@ export default function StockResults() {
         if (match) {
             const arrayString = match[0]; // Extract the first match
             try {
-                const array = JSON.parse(arrayString); // Parse the string as JSON array
+                const array = JSON.parse(arrayString) as string[]; // Parse the string as JSON array
                 if (Array.isArray(array)) {
                     return array;
                 }

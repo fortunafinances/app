@@ -99,7 +99,7 @@ export default function TradeForm({ buyOrSell }: buyProp) {
 				side: buyOrSell ? OrderSide.Buy : OrderSide.Sell,
 				ticker: symbolName,
 				tradeQty: quantity,
-				tradePrice: limitPrice!,
+				tradePrice: limitPrice! ?? 0,
 			},
 		})
 			.then((data) => {
