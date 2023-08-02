@@ -93,7 +93,7 @@ export default function Overview() {
 				<NoInvestments />
 			) : (
 				<div className="flex flex-col md:flex-row h-full gap-3">
-						<DataContainer className="h-full md:max-w-[50%] max-w-full p-8 flex flex-col justify-center items-center">
+						<DataContainer className="h-full md:max-w-[50%] max-w-full p-3 flex flex-col justify-center items-center">
 						<h2 className="text-2xl">Portfolio Sector Breakdown</h2>
 						<PieChart />
 					</DataContainer>

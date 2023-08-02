@@ -4,7 +4,7 @@ import { currentAccountId } from "../../utilities/reactiveVariables";
 import { Account } from "../../utilities/types";
 import { ApolloError } from "@apollo/client";
 import { Link } from "react-router-dom";
-import { capitalize } from "../../utilities/common";
+import { capitalize, isMobile } from "../../utilities/common";
 import { useWindowSize } from "../../utilities/hooks";
 
 export interface DropdownProps {
@@ -14,10 +14,7 @@ export interface DropdownProps {
 }
 
 const AccountDropdown = ({ data, loading, error }: DropdownProps) => {
-	const windowSize = useWindowSize();
-	const isMobile =
-		windowSize.width !== undefined ? windowSize.width <= 600 : false;
-
+	const windowSize = useWindowSize().width;
 	const currentAccountNumber = useReactiveVar(currentAccountId);
 
 	if (loading) return <div>Loading...</div>;
@@ -53,10 +50,8 @@ const AccountDropdown = ({ data, loading, error }: DropdownProps) => {
 						{currentAccount.name}
 					</p>
 				</div>
-				{!isMobile && (
-					<>
-						<BsChevronDown />
-					</>
+				{!isMobile(windowSize) && (
+					<BsChevronDown />
 				)}
 			</label>
 			<ul
