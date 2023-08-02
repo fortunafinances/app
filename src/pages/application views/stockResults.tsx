@@ -4,20 +4,11 @@ import { GET_ONE_STOCK } from '../../utilities/graphQL';
 
 
 interface StockData {
-	name: string;
+    name: string;
     currPrice: GLfloat;
 }
 export default function StockResults() {
-    const { loading, error, data } = useQuery<StockData>(GET_ONE_STOCK, {
-		variables: { ticker: "AAPL" },
-	});
-    
-    if (loading)
-    return <span className="loading loading-infinity loading-lg"></span>;
-	if (error) {
-        return <div>{error?.message}</div>;
-	}
-    console.log(data?.oneStock.currPrice);
+
 
     const location = useLocation();
     const parameter = location.state?.parameter;
@@ -25,8 +16,6 @@ export default function StockResults() {
     console.log("paramString type ", typeof parameterString);
     console.log("param type ", typeof parameter);
     console.log("param: ", parameter);
-
-    const res = `Based on the request categories provided, here are 5 tickers from the stock list that fall under at least one of the categories:["AAPL", "GOOGL", "MSFT", "META", "TSLA"]`;
 
     function extractStringArray(inputString: string) {
         const regex = /\[.*?\]/; // Match anything between square brackets
@@ -49,16 +38,21 @@ export default function StockResults() {
     const tickers = extractStringArray(parameter);
     console.log(tickers);
 
-    const SuggestionButton = ({ text } : {text: string}) => {
+    const SuggestionButton = ({ title, symbol, price }: { title: string, symbol: string, price: number }) => {
         return (
-            <button
-                className={` w-full focus:bg-[#2a0066] focus:text-gray-50 flex-1 px-5 py-2.5 relative group overflow-hidden font-medium bg-transparent-50 text-gray-600 border border-[#2a0066] hover:border-success-600 hover:bg-neutral-500 hover:bg-opacity-10 hover:text-success-600 inline-block rounded m-1         
-                            `}
-            >
-                {text}
+            <button className="w-full focus:bg-[#2a0066] focus:text-gray-50 flex-1 px-5 py-2.5 relative group overflow-hidden font-medium bg-transparent-50 text-gray-600 border border-[#2a0066] hover:border-success-600 hover:bg-neutral-500 hover:bg-opacity-10 hover:text-success-600 inline-flex items-center rounded m-1">
+                <div className="flex-grow">
+                    <div className="...">{title}</div>
+                    <div>{symbol}</div>
+                </div>
+                <div className="absolute top-1 right-1.5 text-neutral-800 py-0.5 px-2 rounded">
+                    ${price}
+                </div>
             </button>
+
         );
     };
+
     return (
         <div className="h-screen flex [&>div]:w-[50%]">
             <div className="flex flex-col gap-5 bg-primary text-accent p-8">
@@ -71,11 +65,28 @@ export default function StockResults() {
                 <hr className="h-[2px] my-8 bg-primary border-0"></hr>
                 <div className="App">
                     <center>
-                        {tickers.map((item) => (
-                            <SuggestionButton                                
-                                text={item}
-                            />
-                        ))}
+                        {tickers.map((item) => {
+                            const { loading, error, data } = useQuery<StockData>(GET_ONE_STOCK, {
+                                variables: { ticker: item },
+                            });
+
+                            if (loading) {
+                                return <span className="loading loading-infinity loading-lg"></span>;
+                            }
+
+                            if (error) {
+                                return <div>{error.message}</div>;
+                            }
+
+                            return (
+                                <SuggestionButton
+                                    title={data?.oneStock.name}
+                                    symbol={item}
+                                    price={data?.oneStock.currPrice}
+                                />
+                            );
+                        })}
+
                     </center>
                 </div>
             </div>
