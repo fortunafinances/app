@@ -104,7 +104,7 @@ export default function CreateProfile() {
 										/\D/g,
 										"",
 									),
-									onboardingComplete: 1,
+									onboarding: 1,
 								},
 							})
 								.then((res) => {
