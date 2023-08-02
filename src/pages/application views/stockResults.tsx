@@ -86,7 +86,13 @@ export default function StockResults() {
                                 onClick={() => handleBuyStock(item)}
                             />
                         })}
-
+                        <button
+                            className={`mt-5 flex bg-[#2a0066] text-white flex-1 px-5 py-2.5 relative group overflow-hidden font-medium bg-transparent-50 border border-[#2a0066] hover:border-success-600 hover:bg-neutral-500 hover:bg-opacity-10 hover:text-black rounded m-2                            
+                            `}
+                            onClick={() => navigate('/app')}
+                        >
+                            Skip
+                        </button>
                     </center>
                 </div>
             </div>
