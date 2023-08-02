@@ -12,6 +12,7 @@ import { OrderType, OrderSide } from "../../utilities/types";
 import {
 	GET_ACTIVITIES,
 	GET_ORDERS,
+	GET_OVERVIEW,
 	GET_PIE_CHART_DATA,
 	GET_STOCK_NAMES,
 	GET_TOTAL_VALUE,
@@ -74,6 +75,7 @@ export default function TradeForm({ buyOrSell }: buyProp) {
 			{ query: GET_PIE_CHART_DATA, variables: { accId: accountId } },
 			{ query: GET_ACTIVITIES, variables: { accId: accountId } },
 			{ query: GET_TOTAL_VALUE, variables: { userId: user!.userId } },
+			{ query: GET_OVERVIEW, variables: { accId: accountId } },
 		],
 	});
 
@@ -258,7 +260,9 @@ export default function TradeForm({ buyOrSell }: buyProp) {
 							onKeyDown={preventMinus}
 							className="input h-9 w-full border-[1px] rounded-[3px] border-[#cccccc] focus:ring-blue-500 focus:border-blue-500 focus:border-[2px] !outline-none"
 							value={limitPrice!}
-							onChange={(val) => setLimitPrice(val.target.valueAsNumber)}
+							onChange={(val) =>
+								setLimitPrice(val.target.valueAsNumber)
+							}
 						/>
 					</div>
 				</span>
@@ -279,6 +283,7 @@ export default function TradeForm({ buyOrSell }: buyProp) {
 					Clear
 				</button>
 				<button
+					disabled={checkQuant}
 					className="border-success-content text-success-content bg-[#E3FDDC] hover:shadow-xl shadow-success-content hover:bg-success-content hover:text-[#e3fddc]"
 					onClick={handleSubmit}
 				>

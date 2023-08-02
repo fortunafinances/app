@@ -56,7 +56,10 @@ export default function Transfer() {
 	});
 
 	const [makeTransfer] = useMutation<TransferReturnData>(MAKE_TRANSFER, {
-		refetchQueries: [{ query: GET_ACTIVITIES, variables: { accId: accountId } }, { query: GET_OVERVIEW, variables: { accId: accountId } }, { query: GET_TOTAL_VALUE, variables: { userId: user?.userId } }],
+		refetchQueries: [
+			{ query: GET_ACTIVITIES, variables: { accId: currentAccountId() } },
+			{ query: GET_OVERVIEW, variables: { accId: currentAccountId() } },
+		],
 	});
 
 	const transferRef = useRef<HTMLDialogElement>(null);
@@ -161,25 +164,29 @@ export default function Transfer() {
 								values.transferType === "OUT"
 									? values.transferOutAccount
 									: values.transferType === "IN"
-										? 0
-										: values.fromAccount,
+									? 0
+									: values.fromAccount,
 							receiveAccId:
 								values.transferType === "OUT"
 									? 0
 									: values.transferType === "IN"
-										? values.transferInAccount
-										: values.toAccount,
+									? values.transferInAccount
+									: values.toAccount,
 							transferAmt: values.amount,
 						},
 					})
 						.then((data) => {
 							if (data.data?.insertTransfer === "Success") {
 								if (values.transferType === "IN") {
-									currentAccountId(Number(values.transferInAccount))
+									currentAccountId(
+										Number(values.transferInAccount),
+									);
 								} else if (values.transferType === "OUT") {
-									currentAccountId(Number(values.transferOutAccount))
+									currentAccountId(
+										Number(values.transferOutAccount),
+									);
 								} else {
-									currentAccountId(Number(values.toAccount))
+									currentAccountId(Number(values.toAccount));
 								}
 								resetForm();
 								successModal.showModal();
