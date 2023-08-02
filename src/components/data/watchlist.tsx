@@ -3,7 +3,7 @@ import { GET_WATCH_LIST } from "../../utilities/graphQL";
 import { Stock } from "../../utilities/types";
 import { currentAccountId } from "../../utilities/reactiveVariables";
 
-export default function WatchlistItem() {
+export default function WatchList() {
 	const { loading, error, data } = useQuery<{
 		watchList: { id: string; stock: Stock }[];
 	}>(GET_WATCH_LIST, { variables: { accId: currentAccountId() } });
@@ -15,8 +15,8 @@ export default function WatchlistItem() {
 		<div className="flex flex-col">
 			{data?.watchList.map((watchListItem) => {
 				return (
-					<div className="card">
-						<div className="card-body">
+					<div className="card bg-gray-200 rounded-none text-primary">
+						<div className="card-body p-1">
 							<div className="flex justify-between">
 								<div className="flex flex-col">
 									<h5 className="card-title">

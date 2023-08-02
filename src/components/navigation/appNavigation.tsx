@@ -33,7 +33,7 @@ export default function AppNavigation() {
 								<Link key={i} to={item}>
 									<p
 										className={twMerge(
-											"inline-block px-2 py-2 underline-offset-4",
+											"inline-block px-2 py-2 underline-offset-4 capitalize",
 											item === getCurrentPath(path) &&
 												"underline font-semibold",
 										)}

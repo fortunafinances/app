@@ -18,7 +18,7 @@ export default function TotalAccountValue() {
 	);
 
 	return (
-		<div className="bg-yellow-400 w-full flex flex-col gap-1 p-2 text-black items-center">
+		<div className="bg-blue-700 w-full flex flex-col gap-1 p-2 text-white items-center">
 			<p>All Accounts</p>
 			<h3 className="text-xl font-bold text-ellipsis">
 				{loading
