@@ -97,8 +97,8 @@ export default function StockRecommendation() {
                         ))}
                         
                         <button
-                            className={`mt-5 flex bg-[#2a0066] text-white flex-1 px-5 py-2.5 relative group overflow-hidden font-medium bg-transparent-50 border border-[#2a0066] hover:border-success-600 hover:bg-neutral-500 hover:bg-opacity-10 hover:text-black rounded m-2                            
-                            ${isDisabled ? 'opacity-20' : ''}`}
+                            className={`mt-5 flex   flex-1 px-5 py-2.5 relative group overflow-hidden font-medium bg-transparent-50 border border-[#2a0066]  rounded m-2                            
+                            ${isDisabled ? 'bg-neutral-500 opacity-10 text-black' : 'bg-[#2a0066] text-white hover:border-success-600 hover:bg-neutral-500 hover:bg-opacity-10 hover:text-black'}`}
                             disabled={isDisabled}
                             onClick={() => getGPTResponse(selections)}
                         >
