@@ -12,6 +12,7 @@ import { OrderType, OrderSide } from "../../utilities/types";
 import {
 	GET_ACTIVITIES,
 	GET_ORDERS,
+	GET_OVERVIEW,
 	GET_PIE_CHART_DATA,
 	GET_STOCK_NAMES,
 	GET_TOTAL_VALUE,
@@ -74,6 +75,7 @@ export default function TradeForm({ buyOrSell }: buyProp) {
 			{ query: GET_PIE_CHART_DATA, variables: { accId: accountId } },
 			{ query: GET_ACTIVITIES, variables: { accId: accountId } },
 			{ query: GET_TOTAL_VALUE, variables: { userId: user!.userId } },
+			{ query: GET_OVERVIEW, variables: { accId: accountId } },
 		],
 	});
 
