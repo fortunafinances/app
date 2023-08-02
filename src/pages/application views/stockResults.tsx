@@ -12,10 +12,6 @@ export default function StockResults() {
 
     const location = useLocation();
     const parameter = location.state?.parameter;
-    const parameterString = JSON.stringify(parameter);
-    console.log("paramString type ", typeof parameterString);
-    console.log("param type ", typeof parameter);
-    console.log("param: ", parameter);
 
     function extractStringArray(inputString: string) {
         const regex = /\[.*?\]/; // Match anything between square brackets
@@ -40,12 +36,12 @@ export default function StockResults() {
 
     const SuggestionButton = ({ title, symbol, price }: { title: string, symbol: string, price: number }) => {
         return (
-            <button className="w-full focus:bg-[#2a0066] focus:text-gray-50 flex-1 px-5 py-2.5 relative group overflow-hidden font-medium bg-transparent-50 text-gray-600 border border-[#2a0066] hover:border-success-600 hover:bg-neutral-500 hover:bg-opacity-10 hover:text-success-600 inline-flex items-center rounded m-1">
-                <div className="flex-grow">
-                    <div className="...">{title}</div>
+            <button className="w-full focus:bg-[#2a0066] focus:text-gray-50 px-5 py-2.5 relative overflow-hidden font-medium bg-transparent-50 text-gray-600 border border-[#2a0066] hover:border-success-600 hover:bg-neutral-500 hover:bg-opacity-10 hover:text-success-600 rounded m-1">
+                <div className=" top-1 left">
+                    <div className='text-black'>{title}</div>
                     <div>{symbol}</div>
                 </div>
-                <div className="absolute top-1 right-1.5 text-neutral-800 py-0.5 px-2 rounded">
+                <div className="absolute top-1 right-1.5 text-green-800 py-0.5 px-2 rounded">
                     ${price}
                 </div>
             </button>

@@ -59,6 +59,7 @@ export default function StockRecommendation() {
             </button>
         );
     };
+    
     const navigate = useNavigate();
     const getGPTResponse = (options: string[]) => {
         
