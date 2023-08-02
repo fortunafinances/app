@@ -7,7 +7,7 @@ export default {
 	content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
 	theme: {
 		fontFamily: {
-			sans: ["PT Sans", "sans-serif"],
+			sans: ["Inter", "PT Sans", "sans-serif"],
 		},
 		extend: {},
 	},

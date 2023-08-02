@@ -41,6 +41,7 @@ export default function TradeForm({ buyOrSell }: buyProp) {
 	const [stockPrice, setStockPrice] = useState(0);
 	const [totalPrice, setTotalPrice] = useState(0);
 	const [checkQuant, setCheckQuant] = useState(true); //true = submit button is disabled
+	const [limitPrice, setLimitPrice] = useState<number | null>();
 
 	const PLACE_ORDER = gql`
 		mutation InsertTrade(
@@ -96,19 +97,17 @@ export default function TradeForm({ buyOrSell }: buyProp) {
 				side: buyOrSell ? OrderSide.Buy : OrderSide.Sell,
 				ticker: symbolName,
 				tradeQty: quantity,
-				tradePrice: stockPrice,
+				tradePrice: limitPrice!,
 			},
 		})
 			.then((data) => {
 				if (data.data?.insertTrade === "Success") {
-					console.log("success");
 					successModal.showModal();
 				} else if (
 					data.data?.insertTrade ===
 					"Error: Not enough funds in account"
 				) {
 					insufficientFundsModal.showModal();
-					console.log("not enough shares");
 				} else if (
 					data.data?.insertTrade ===
 					"Error: Not enough shares to sell"
@@ -203,7 +202,7 @@ export default function TradeForm({ buyOrSell }: buyProp) {
 							/>
 						</div>
 					</div>
-					{!buyOrSell ? (
+					{!buyOrSell && (
 						<button
 							className="ml-2 text-center w-[15%] rounded-sm bg-[#e6e6e6] text-xs px-2 md:text-sm lg:text-lg"
 							onClick={() => {
@@ -212,7 +211,7 @@ export default function TradeForm({ buyOrSell }: buyProp) {
 						>
 							Sell All
 						</button>
-					) : null}
+					)}
 				</div>
 			</div>
 			{/* market limit toggle buttons */}
@@ -238,7 +237,7 @@ export default function TradeForm({ buyOrSell }: buyProp) {
 					Limit
 				</button>
 			</div>
-			{!marketState ? (
+			{!marketState && (
 				<span className="m-4 mt-6 flex flex-col gap-3">
 					<h1 className="font-semibold text-xl">Limit Price</h1>
 					<div className="relative">
@@ -252,10 +251,12 @@ export default function TradeForm({ buyOrSell }: buyProp) {
 							placeholder="Price"
 							onKeyDown={preventMinus}
 							className="input h-9 w-full border-[1px] rounded-[3px] border-[#cccccc] focus:ring-blue-500 focus:border-blue-500 focus:border-[2px] !outline-none"
+							value={limitPrice!}
+							onChange={(val) => setLimitPrice(val.target.valueAsNumber)}
 						/>
 					</div>
 				</span>
-			) : null}
+			)}
 			<div className="m-4 mt-6 flex flex-row gap-3 font-semibold text-xl">
 				<h1>Total Price:</h1>
 				<h1>
