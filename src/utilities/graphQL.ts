@@ -23,6 +23,7 @@ export const GET_HOLDINGS = gql`
 				ticker
 				name
 				currPrice
+				prevClosePrice
 			}
 		}
 	}

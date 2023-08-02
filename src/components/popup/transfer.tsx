@@ -8,6 +8,7 @@ import {
 	GET_ACCOUNTS,
 	GET_ACTIVITIES,
 	GET_OVERVIEW,
+	GET_TOTAL_VALUE,
 	MAKE_TRANSFER,
 } from "../../utilities/graphQL";
 import * as Yup from "yup";
@@ -57,6 +58,10 @@ export default function Transfer() {
 		refetchQueries: [
 			{ query: GET_ACTIVITIES, variables: { accId: currentAccountId() } },
 			{ query: GET_OVERVIEW, variables: { accId: currentAccountId() } },
+			{
+				query: GET_TOTAL_VALUE,
+				variables: { userId: userInfo()?.userId },
+			},
 		],
 	});
 
@@ -65,9 +70,16 @@ export default function Transfer() {
 
 	useEffect(() => {
 		if (accountId !== undefined) {
-			formikRef.current?.resetForm({ values: { ...formikRef.current.values, transferType: "IN", transferInAccount: accountId, transferOutAccount: accountId } });
+			formikRef.current?.resetForm({
+				values: {
+					...formikRef.current.values,
+					transferType: "IN",
+					transferInAccount: accountId,
+					transferOutAccount: accountId,
+				},
+			});
 		}
-	}, [accountId])
+	}, [accountId]);
 
 	const validationSchema = Yup.object().shape({
 		transferType: Yup.string().required("*Required"),
@@ -202,146 +214,150 @@ export default function Transfer() {
 				}}
 			>
 				{({ values, errors, touched, isValid }) => {
+					if (!data) return <></>;
 					return (
-					<Form className="modal-box bg-[#EDEDFE] flex flex-col gap-3 text-primary overflow-y-auto min-h-[15em]">
-						<label htmlFor="transferType">Transfer Type</label>
-						<FormikSelect
-							id="transferType"
-							selectOptions={transferType}
-							formikFieldName="transferType"
-							placeholder="Select..."
-						/>
-						{errors.transferType && touched.transferType && (
-							<p className="text-red-600">
-								{errors.transferType}
-							</p>
-						)}
-						{loading ? (
-							<span className="loading loading-dots loading-md" />
-						) : values.transferType === "" ? (
-							<></>
-						) : values.transferType === "IN" ? (
-							<div>
-								<label htmlFor="transferInAccount">
-									Destination Account
-								</label>
-								<FormikSelect
-									id="transferInAccount"
-									name="transferInAccount"
-									key="transferInAccount"
-									selectOptions={makeAccountList(
-										data!.accounts,
-									)}
-									formikFieldName="transferInAccount"
-									placeholder="Select..."
-								/>
-								{errors.transferInAccount &&
-									touched.transferInAccount && (
-										<p className="text-red-600">
-											{errors.transferInAccount}
-										</p>
-									)}
-							</div>
-						) : values.transferType === "OUT" ? (
-							<div>
-								<label htmlFor="transferOutAccount">
-									Source Account
-								</label>
-								<FormikSelect
-									id="transferOutAccount"
-									name="transferOutAccount"
-									key="transferOutAccount"
-									selectOptions={makeAccountList(
-										data!.accounts,
-									)}
-									formikFieldName="transferOutAccount"
-									placeholder="Select..."
-								/>
-								{errors.transferOutAccount &&
-									touched.transferOutAccount && (
-										<p className="text-red-600">
-											{errors.transferOutAccount}
-										</p>
-									)}
-							</div>
-						) : (
-							<div>
-								<label htmlFor="fromAccount">
-									Source Account
-								</label>
-								<FormikSelect
-									id="fromAccount"
-									name="fromAccount"
-									key="fromAccount"
-									selectOptions={makeAccountList(
-										data!.accounts,
-										Number(values.toAccount),
-									)}
-									formikFieldName="fromAccount"
-									placeholder="Select..."
-								/>
-								{errors.fromAccount && touched.fromAccount && (
-									<p className="text-red-600">
-										{errors.fromAccount}
-									</p>
-								)}
-								<label htmlFor="toAccount">
-									Destination Account
-								</label>
-								<FormikSelect
-									id="toAccount"
-									name="toAccount"
-									key="toAccount"
-									selectOptions={makeAccountList(
-										data!.accounts,
-										Number(values.fromAccount),
-									)}
-									formikFieldName="toAccount"
-									placeholder="Select..."
-								/>
-								{errors.toAccount && touched.toAccount && (
-									<p className="text-red-600">
-										{errors.toAccount}
-									</p>
-								)}
-							</div>
-						)}
-						<div className="flex flex-col">
-							<label htmlFor="amount">Amount</label>
-							<Field
-								type="number"
-								min="0"
-								step="0.01"
-								id="amount"
-								name="amount"
-								placeholder="Enter Amount..."
-								className="p-2 rounded-md outline-secondary outline-1 outline focus:outline-blue-600 focus:outline-2 bg-white"
+						<Form className="modal-box bg-[#EDEDFE] flex flex-col gap-3 text-primary overflow-y-auto min-h-[15em]">
+							<label htmlFor="transferType">Transfer Type</label>
+							<FormikSelect
+								id="transferType"
+								selectOptions={transferType}
+								formikFieldName="transferType"
+								placeholder="Select..."
 							/>
-							{errors.amount && (
-								<p className="text-red-600">{errors.amount}</p>
+							{errors.transferType && touched.transferType && (
+								<p className="text-red-600">
+									{errors.transferType}
+								</p>
 							)}
-						</div>
+							{loading ? (
+								<span className="loading loading-dots loading-md" />
+							) : values.transferType === "" ? (
+								<></>
+							) : values.transferType === "IN" ? (
+								<div>
+									<label htmlFor="transferInAccount">
+										Destination Account
+									</label>
+									<FormikSelect
+										id="transferInAccount"
+										name="transferInAccount"
+										key="transferInAccount"
+										selectOptions={makeAccountList(
+											data.accounts,
+										)}
+										formikFieldName="transferInAccount"
+										placeholder="Select..."
+									/>
+									{errors.transferInAccount &&
+										touched.transferInAccount && (
+											<p className="text-red-600">
+												{errors.transferInAccount}
+											</p>
+										)}
+								</div>
+							) : values.transferType === "OUT" ? (
+								<div>
+									<label htmlFor="transferOutAccount">
+										Source Account
+									</label>
+									<FormikSelect
+										id="transferOutAccount"
+										name="transferOutAccount"
+										key="transferOutAccount"
+										selectOptions={makeAccountList(
+											data.accounts,
+										)}
+										formikFieldName="transferOutAccount"
+										placeholder="Select..."
+									/>
+									{errors.transferOutAccount &&
+										touched.transferOutAccount && (
+											<p className="text-red-600">
+												{errors.transferOutAccount}
+											</p>
+										)}
+								</div>
+							) : (
+								<div>
+									<label htmlFor="fromAccount">
+										Source Account
+									</label>
+									<FormikSelect
+										id="fromAccount"
+										name="fromAccount"
+										key="fromAccount"
+										selectOptions={makeAccountList(
+											data.accounts,
+											Number(values.toAccount),
+										)}
+										formikFieldName="fromAccount"
+										placeholder="Select..."
+									/>
+									{errors.fromAccount &&
+										touched.fromAccount && (
+											<p className="text-red-600">
+												{errors.fromAccount}
+											</p>
+										)}
+									<label htmlFor="toAccount">
+										Destination Account
+									</label>
+									<FormikSelect
+										id="toAccount"
+										name="toAccount"
+										key="toAccount"
+										selectOptions={makeAccountList(
+											data.accounts,
+											Number(values.fromAccount),
+										)}
+										formikFieldName="toAccount"
+										placeholder="Select..."
+									/>
+									{errors.toAccount && touched.toAccount && (
+										<p className="text-red-600">
+											{errors.toAccount}
+										</p>
+									)}
+								</div>
+							)}
+							<div className="flex flex-col">
+								<label htmlFor="amount">Amount</label>
+								<Field
+									type="number"
+									min="0"
+									step="0.01"
+									id="amount"
+									name="amount"
+									placeholder="Enter Amount..."
+									className="p-2 rounded-md outline-secondary outline-1 outline focus:outline-blue-600 focus:outline-2 bg-white"
+								/>
+								{errors.amount && (
+									<p className="text-red-600">
+										{errors.amount}
+									</p>
+								)}
+							</div>
 
-						<div className="modal-action">
-							<button
-								type="button"
-								className="btn outline outline-1 outline-black bg-secondary"
-								onClick={() => {
-									transferRef.current?.close();
-								}}
-							>
-								Close
-							</button>
-							<button
-								type="submit"
-								disabled={!isValid}
-								className="btn outline outline-1 outline-black"
-							>
-								Submit
-							</button>
-						</div>
-					</Form>
-					)
+							<div className="modal-action">
+								<button
+									type="button"
+									className="btn outline outline-1 outline-black bg-secondary"
+									onClick={() => {
+										transferRef.current?.close();
+									}}
+								>
+									Close
+								</button>
+								<button
+									type="submit"
+									disabled={!isValid}
+									className="btn outline outline-1 outline-black"
+								>
+									Submit
+								</button>
+							</div>
+						</Form>
+					);
 				}}
 			</Formik>
 		</dialog>

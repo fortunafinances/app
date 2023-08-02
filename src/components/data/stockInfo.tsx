@@ -26,7 +26,11 @@ export default function StockInfo() {
 		oneStock: Stock;
 	};
 
-	const { loading: stockLoading, error: stockError, data: stockData } = useQuery<StockData>(GET_STOCK, {
+	const {
+		loading: stockLoading,
+		error: stockError,
+		data: stockData,
+	} = useQuery<StockData>(GET_STOCK, {
 		variables: { ticker: symbolName },
 	});
 
@@ -41,7 +45,13 @@ export default function StockInfo() {
 	if (stockLoading)
 		return <span className="loading loading-infinity loading-lg"></span>;
 	if (stockError) {
-		return <div>{stockError?.message}</div>;
+		return (
+			<div className="w-full h-full flex flex-row justify-center items-center">
+				<DataContainer className="m-2 p-2 w-fit h-fit bg-red-600 text-white text-3xl">
+					<h2>{stockError.message}</h2>
+				</DataContainer>
+			</div>
+		);
 	}
 
 	const company = stockData?.oneStock.name;

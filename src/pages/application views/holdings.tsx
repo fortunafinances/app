@@ -7,7 +7,7 @@ import { useMemo } from "react";
 import { currentAccountId } from "../../utilities/reactiveVariables";
 import { GET_HOLDINGS } from "../../utilities/graphQL";
 import NoInvestments from "../../components/data/noInvestments";
-import { filterInclusive, isMobile } from "../../utilities/common";
+import { filterInclusive, isMobile, percentChange } from "../../utilities/common";
 import { useWindowSize } from "../../utilities/hooks";
 import CardComponent from "../../components/data/cards/holdingCard";
 
@@ -73,6 +73,20 @@ export default function Holdings() {
 						filterValue,
 					),
 			},
+			{
+				header: "Daily Change",
+				id: "dailyChange",
+				accessorFn: (row) => {
+					const price = row.stock.currPrice;
+					const prevPrice = row.stock.prevClosePrice;
+					const dollarChange = price! - prevPrice!;
+					let ret = "";
+					dollarChange > 0 ? ret += "+" : ret += "-";
+					ret += formatDollars(Math.abs(dollarChange));
+					ret += " (" + percentChange(price!, prevPrice!) + "%)";
+					return ret;
+				},
+			}
 		],
 		[],
 	);

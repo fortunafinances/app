@@ -96,7 +96,7 @@ export default function Orders() {
 				error={error}
 				data={data?.orders}
 				columnData={cols}
-				enableRowActions={true}
+						enableRowActions={false}
 				sorting={[{ id: "date", desc: true }]}
 			/>
 			)}
