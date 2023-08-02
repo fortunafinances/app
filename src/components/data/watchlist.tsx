@@ -1,9 +1,11 @@
 import { useQuery } from "@apollo/client";
 import { GET_WATCH_LIST } from "../../utilities/graphQL";
 import { Stock } from "../../utilities/types";
-import { currentAccountId } from "../../utilities/reactiveVariables";
+import { currentAccountId, symbol } from "../../utilities/reactiveVariables";
+import { useNavigate } from "react-router-dom";
 
 export default function WatchList() {
+	const navigate = useNavigate();
 	const { loading, error, data } = useQuery<{
 		watchList: { id: string; stock: Stock }[];
 	}>(GET_WATCH_LIST, { variables: { accId: currentAccountId() } });
@@ -11,22 +13,37 @@ export default function WatchList() {
 	if (loading) return <p>Loading...</p>;
 	if (error) return <p>Error :(</p>;
 
+	const handleClick = (ticker: string) => {
+		symbol(ticker);
+		navigate("/app/trade");
+	};
+
 	return (
-		<div className="flex flex-col">
+		<div className="flex flex-col h-full">
+			<h2 className="py-1 font-bold w-full text-center text-lg bg-gray-200 text-black">
+				Watch List
+			</h2>
 			{data?.watchList.map((watchListItem) => {
 				return (
-					<div className="card bg-gray-200 rounded-none text-primary">
+					<button
+						className="card bg-gray-200 rounded-none text-primary border-t-[1px] border-black hover:scale-110 hover:translate-x-3 transition-transform duration-100 ease-in-out"
+						onClick={() => {
+							handleClick(watchListItem.stock.ticker);
+						}}
+					>
 						<div className="card-body p-1">
 							<div className="flex justify-between">
 								<div className="flex flex-col">
-									<h5 className="card-title">
+									<h5 className="card-title text-sm">
 										{watchListItem.stock.ticker}
 									</h5>
-									<p>{watchListItem.stock.name}</p>
+									<p className="text-xs ellipsis max-w-5">
+										{watchListItem.stock.name}
+									</p>
 								</div>
 							</div>
 						</div>
-					</div>
+					</button>
 				);
 			})}
 		</div>
