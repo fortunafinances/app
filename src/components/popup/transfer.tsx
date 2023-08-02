@@ -9,6 +9,7 @@ import {
 	GET_ACCOUNTS,
 	GET_ACTIVITIES,
 	GET_OVERVIEW,
+	GET_TOTAL_VALUE,
 	MAKE_TRANSFER,
 } from "../../utilities/graphQL";
 import * as Yup from "yup";
@@ -58,6 +59,10 @@ export default function Transfer() {
 		refetchQueries: [
 			{ query: GET_ACTIVITIES, variables: { accId: currentAccountId() } },
 			{ query: GET_OVERVIEW, variables: { accId: currentAccountId() } },
+			{
+				query: GET_TOTAL_VALUE,
+				variables: { userId: userInfo()?.userId },
+			},
 		],
 	});
 
@@ -69,6 +74,7 @@ export default function Transfer() {
 			formikRef.current?.resetForm({
 				values: {
 					...formikRef.current.values,
+					transferType: "IN",
 					transferInAccount: accountId,
 					transferOutAccount: accountId,
 				},
@@ -209,6 +215,7 @@ export default function Transfer() {
 				}}
 			>
 				{({ values, errors, touched, isValid }) => {
+					if (!data) return <></>;
 					return (
 						<Form className="modal-box bg-[#EDEDFE] flex flex-col gap-3 text-primary overflow-y-auto min-h-[15em]">
 							<label htmlFor="transferType">Transfer Type</label>
@@ -237,7 +244,7 @@ export default function Transfer() {
 										name="transferInAccount"
 										key="transferInAccount"
 										selectOptions={makeAccountList(
-											data!.accounts,
+											data.accounts,
 										)}
 										formikFieldName="transferInAccount"
 										placeholder="Select..."
@@ -259,7 +266,7 @@ export default function Transfer() {
 										name="transferOutAccount"
 										key="transferOutAccount"
 										selectOptions={makeAccountList(
-											data!.accounts,
+											data.accounts,
 										)}
 										formikFieldName="transferOutAccount"
 										placeholder="Select..."
@@ -281,7 +288,7 @@ export default function Transfer() {
 										name="fromAccount"
 										key="fromAccount"
 										selectOptions={makeAccountList(
-											data!.accounts,
+											data.accounts,
 											Number(values.toAccount),
 										)}
 										formikFieldName="fromAccount"
@@ -301,7 +308,7 @@ export default function Transfer() {
 										name="toAccount"
 										key="toAccount"
 										selectOptions={makeAccountList(
-											data!.accounts,
+											data.accounts,
 											Number(values.fromAccount),
 										)}
 										formikFieldName="toAccount"
@@ -316,7 +323,6 @@ export default function Transfer() {
 							)}
 							<div className="flex flex-col">
 								<label htmlFor="amount">Amount</label>
-
 								<Field
 									type="number"
 									min="0"

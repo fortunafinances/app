@@ -178,7 +178,7 @@ export default function TradeForm({ buyOrSell }: buyProp) {
 	};
 
 	if (loading) return <>Loading</>;
-	if (error) return <p>{error.message}</p>;
+	if (error) return <></>;
 
 	return (
 		<div>

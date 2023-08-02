@@ -95,14 +95,14 @@ export default function Orders() {
 					))}
 				</>
 			) : (
-				<Table
-					loading={loading}
-					error={error}
-					data={data?.orders}
-					columnData={cols}
-					enableRowActions={true}
-					sorting={[{ id: "date", desc: true }]}
-				/>
+			<Table
+				loading={loading}
+				error={error}
+				data={data?.orders}
+				columnData={cols}
+						enableRowActions={false}
+				sorting={[{ id: "date", desc: true }]}
+			/>
 			)}
 		</div>
 	);

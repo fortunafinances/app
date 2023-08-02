@@ -88,7 +88,7 @@ export default function CreateAccount() {
 									.then(() => {
 										postAccount({
 											variables: {
-												name: values.accountName.toLowerCase(),
+												name: values.accountName,
 												userId: user!.userId,
 											},
 										})

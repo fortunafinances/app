@@ -23,7 +23,7 @@ export default function Header() {
 			<div className="flex sm:items-center h-full text-3xl mx-2">
 				<h1 className="inline justify-start">
 					<b className="text-white">
-						<Link to="/">F</Link>
+						<Link to="/app/overview">F</Link>
 					</b>
 				</h1>
 			</div>

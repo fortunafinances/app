@@ -98,8 +98,8 @@ export default function CreateProfile() {
 								variables: {
 									userId: user!.userId,
 									username: values.username,
-									firstName: values.firstName.toLowerCase(),
-									lastName: values.lastName.toLowerCase(),
+									firstName: values.firstName,
+									lastName: values.lastName,
 									phoneNumber: values.phoneNumber.replace(
 										/\D/g,
 										"",
@@ -114,8 +114,8 @@ export default function CreateProfile() {
 										email: user!.email,
 										username: values.username,
 										firstName:
-											values.firstName.toLowerCase(),
-										lastName: values.lastName.toLowerCase(),
+											values.firstName,
+										lastName: values.lastName,
 										phoneNumber: values.phoneNumber.replace(
 											/\D/g,
 											"",

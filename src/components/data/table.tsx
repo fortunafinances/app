@@ -68,12 +68,11 @@ export default function Table<DataType extends GraphQLReturnData>({
 						enableRowActions={enableRowActions ?? true}
 						renderRowActions={({ row }) => {
 							if (
-								row.original.__typename === "Holding" ||
-								row.original.__typename === "Order"
+								row.original.__typename === "Holding"
 							) {
 								const holding =
 									row.original as unknown as Holding &
-										GraphQLReturnData;
+									GraphQLReturnData;
 								const filled = false;
 								return (
 									<div className="flex flex-col flex-nowrap gap-2 w-full justify-evenly [&>button]:min-h-0 [&>button]:h-8">
@@ -99,25 +98,24 @@ export default function Table<DataType extends GraphQLReturnData>({
 										>
 											Sell
 										</button>
-										{row.original.__typename !==
-											"Order" && (
-											<div className="flex flex-row items-center justify-center">
-												<button
-													className="w-fit"
-													onClick={() => {
-														console.log("star");
-													}}
-												>
-													{filled ? (
-														<AiFillStar size={40} />
-													) : (
-														<AiOutlineStar
-															size={40}
-														/>
-													)}
-												</button>
-											</div>
-										)}
+
+										<div className="flex flex-row items-center justify-center">
+											<button
+												className="w-fit"
+												onClick={() => {
+													console.log("star");
+												}}
+											>
+												{filled ? (
+													<AiFillStar size={40} />
+												) : (
+													<AiOutlineStar
+														size={40}
+													/>
+												)}
+											</button>
+										</div>
+
 									</div>
 								);
 							} else {
