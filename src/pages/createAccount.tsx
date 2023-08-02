@@ -108,7 +108,7 @@ export default function CreateAccount() {
 											.catch((err) => {
 												console.error(err);
 											});
-										navigate("/app");
+										navigate("/stockRecommendation");
 									})
 									.catch((err) => {
 										console.log(err);
