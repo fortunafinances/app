@@ -79,19 +79,21 @@ export default function Activity() {
 
 	return (
 		<div className="h-full w-full">
-			<div className = "flex flex-row justify-center">
-				<h1 className = "text-xl">Activity</h1>
-			</div>
 			{isMobile ? (
-				data?.activity.map((activity: Activity) => (
-					<ActivityCard
-						key={activity.date}
-						date={activity.date}
-						type={activity.type}
-						description={activity.description}
-						amount={activity.amount}
-					/>
-				))
+				<>
+					<div className="flex flex-row justify-center py-3">
+						<h1 className="text-2xl font-bold">Activity</h1>
+					</div>
+					{data?.activity.map((activity: Activity) => (
+						<ActivityCard
+							key={activity.date}
+							date={activity.date}
+							type={activity.type}
+							description={activity.description}
+							amount={activity.amount}
+						/>
+					))}
+				</>
 			) : (
 				<Table
 					loading={loading}

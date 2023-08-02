@@ -22,8 +22,8 @@ export default function Header() {
 
 	return (
 		<header className="flex items-center justify-between bg-primary py-1">
-			<div className="flex items-center h-full text-3xl mx-2">
-				<h1 className="inline">
+			<div className="flex sm:items-center h-full text-3xl mx-2">
+				<h1 className="inline justify-start">
 					<b className="text-white">
 						<Link to="/">F</Link>
 					</b>
@@ -42,7 +42,7 @@ export default function Header() {
 					</div>
 				</>
 			)}
-			<div className="flex flex-row gap-3 items-center text-2xl mx-3">
+			<div className="flex flex-row gap-3 sm:items-center text-2xl mx-3">
 				<h3 className="hidden lg:inline text-white capitalize">
 					Welcome {user?.firstName + " " + user?.lastName}
 				</h3>

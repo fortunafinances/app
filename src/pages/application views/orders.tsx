@@ -77,30 +77,34 @@ export default function Orders() {
 
 	return (
 		<div className="h-full w-full">
-			{isMobile ? 
-			(
-				
-				data?.orders.map((order: Order) => (
-					<OrderCard
-						key={order.stock.ticker}
-						ticker={order.stock.ticker}
-						company={order.stock.name!}
-						tradeQty={order.tradeQty}
-						date={order.date}
-						status = {order.status}
-						side = {order.side}
-						type = {order.type}
-					/>
-				))
+			{isMobile ? (
+				<>
+					{" "}
+					<div className="flex flex-row justify-center py-3">
+						<h1 className="text-2xl font-bold">Orders</h1>
+					</div>
+					{data?.orders.map((order: Order) => (
+						<OrderCard
+							key={order.stock.ticker}
+							ticker={order.stock.ticker}
+							company={order.stock.name!}
+							tradeQty={order.tradeQty}
+							date={order.date}
+							status={order.status}
+							side={order.side}
+							type={order.type}
+						/>
+					))}
+				</>
 			) : (
-			<Table
-				loading={loading}
-				error={error}
-				data={data?.orders}
-				columnData={cols}
-				enableRowActions={true}
-				sorting={[{ id: "date", desc: true }]}
-			/>
+				<Table
+					loading={loading}
+					error={error}
+					data={data?.orders}
+					columnData={cols}
+					enableRowActions={true}
+					sorting={[{ id: "date", desc: true }]}
+				/>
 			)}
 		</div>
 	);

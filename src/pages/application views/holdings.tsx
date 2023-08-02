@@ -91,18 +91,21 @@ export default function Holdings() {
 
 	return (
 		<div className="bg-scroll h-full w-full">
-			{isMobile ? 
-			(
-				
-				data?.holdings.map((holding: Holding) => (
-					<CardComponent
-						key={holding.stock.ticker}
-						ticker={holding.stock.ticker}
-						company={holding.stock.name!}
-						tradeQty={holding.stockQuantity}
-						tradePrice={holding.stock.currPrice!}
-					/>
-				))
+			{isMobile ? (
+				<>
+					<div className="flex flex-row justify-center py-3">
+						<h1 className="text-2xl font-bold">Holdings</h1>
+					</div>
+					{data?.holdings.map((holding: Holding) => (
+						<CardComponent
+							key={holding.stock.ticker}
+							ticker={holding.stock.ticker}
+							company={holding.stock.name!}
+							tradeQty={holding.stockQuantity}
+							tradePrice={holding.stock.currPrice!}
+						/>
+					))}
+				</>
 			) : (
 				<Table
 					loading={loading}
