@@ -9,6 +9,7 @@ import {
 	GET_ACCOUNTS,
 	GET_ACTIVITIES,
 	GET_OVERVIEW,
+	GET_OVERVIEW_LINE_CHART,
 	GET_TOTAL_VALUE,
 	MAKE_TRANSFER,
 } from "../../utilities/graphQL";
@@ -63,6 +64,7 @@ export default function Transfer() {
 				query: GET_TOTAL_VALUE,
 				variables: { userId: userInfo()?.userId },
 			},
+			{query: GET_OVERVIEW_LINE_CHART, variables: {accId: currentAccountId()}}
 		],
 	});
 
