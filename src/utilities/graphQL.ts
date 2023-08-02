@@ -157,12 +157,33 @@ export const GET_ONE_STOCK = gql`
   }
 `
 
-export const GET_WATCHLIST = gql`
+export const GET_WATCH_LIST = gql`
 	query WatchList($accId: Int!) {
 		watchList(input: { accId: $accId }) {
 			id
-			accId
-			ticker
+			stock {
+				ticker
+				name
+				currPrice
+				prevClosePrice
+			}
+		}
+	}
+`;
+
+export const TOGGLE_WATCH_LIST = gql`
+	mutation ToggleWatch($accId: Int!, $ticker: String!) {
+		toggleWatch(accId: $accId, ticker: $ticker) {
+			message
+			accountWatch {
+				id
+				stock {
+					ticker
+					name
+					currPrice
+					prevClosePrice
+				}
+			}
 		}
 	}
 `;

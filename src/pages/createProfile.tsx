@@ -5,7 +5,6 @@ import { useNavigate } from "react-router-dom";
 import { userInfo } from "../utilities/reactiveVariables";
 import { useEffect } from "react";
 import { User } from "../utilities/types";
-import { capitalize } from "../utilities/common";
 import * as Yup from "yup";
 
 const phoneRegExp =
@@ -88,10 +87,10 @@ export default function CreateProfile() {
 				<center className="">
 					<Formik
 						initialValues={{
-							firstName: capitalize(user!.firstName) ?? "",
-							lastName: capitalize(user!.lastName) ?? "",
-							username: capitalize(user!.username) ?? "",
-							phoneNumber: capitalize(user!.phoneNumber) ?? "",
+							firstName: user!.firstName ?? "",
+							lastName: user!.lastName ?? "",
+							username: user!.username ?? "",
+							phoneNumber: user!.phoneNumber ?? "",
 						}}
 						onSubmit={(values, { setSubmitting }) => {
 							postUserInfo({
@@ -113,8 +112,7 @@ export default function CreateProfile() {
 										userId: user!.userId,
 										email: user!.email,
 										username: values.username,
-										firstName:
-											values.firstName,
+										firstName: values.firstName,
 										lastName: values.lastName,
 										phoneNumber: values.phoneNumber.replace(
 											/\D/g,
