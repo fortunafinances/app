@@ -1,6 +1,6 @@
 import { gql, useLazyQuery } from "@apollo/client";
 import { useState } from "react";
-import { Navigate } from "react-router";
+import { useNavigate } from "react-router-dom";
 
 const ASK_GPT = gql`
     query GenAIQuery($input: [String]!) {
@@ -51,7 +51,7 @@ export default function StockRecommendation() {
         return (
             <button
                 className={`focus:bg-[#2a0066] focus:text-gray-50 flex-1 px-5 py-2.5 relative group overflow-hidden font-medium bg-transparent-50 text-gray-600 border border-[#2a0066] hover:border-success-600 hover:bg-neutral-500 hover:bg-opacity-10 hover:text-success-600 inline-block rounded m-1 
-                            ${isBtnSelected(text) ? 'bg-[#2a0066] text-gray-50' : ''}
+                            ${isBtnSelected(text) ? 'bg-[#2a0066] text-white' : ''}
                             ${isDisabled ? 'opacity-20' : ''}`}
                 disabled={isDisabled && !isSelected}
                 onClick={onClick}>
@@ -59,15 +59,17 @@ export default function StockRecommendation() {
             </button>
         );
     };
-
+    const isDisabled = selections.length < 1;
+    const navigate = useNavigate();
     const getGPTResponse = (options: string[]) => {
+        
         askGPT({ variables: { input: options } })
         .then((res) => {
             return res.data;
         })
         .then((res) => {
             console.log(res?.genAIQuery);
-            <Navigate to={"/stockResults"} />;
+            navigate('/stockResults', {state: { parameter: res?.genAIQuery}})
         })
         .catch((err) => console.error(err));
     }
@@ -80,7 +82,7 @@ export default function StockRecommendation() {
                 </h1>
             </div>
             <div className="bg-accent overflow-y-auto p-4 text-primary">
-                <h1 className="text-1xl md:text-3xl">Select 5 categories that you're most interested in</h1>
+                <h1 className="text-1xl md:text-3xl">Select up to 5 categories that you're most interested in</h1>
                 <hr className="h-[2px] my-8 bg-primary border-0"></hr>
                 <div className="App">
                     <center>
@@ -93,10 +95,11 @@ export default function StockRecommendation() {
                                 isSelected={isBtnSelected(item)}
                             />
                         ))}
-
+                        
                         <button
-                            className={`mt-5 flex bg-[#2a0066] text-white flex-1 px-5 py-2.5 relative group overflow-hidden font-medium bg-transparent-50 text-gray-600 border border-[#2a0066] hover:border-success-600 hover:bg-neutral-500 hover:bg-opacity-10 hover:text-black inline-block rounded m-2                            
-                            `}
+                            className={`mt-5 flex bg-[#2a0066] text-white flex-1 px-5 py-2.5 relative group overflow-hidden font-medium bg-transparent-50 border border-[#2a0066] hover:border-success-600 hover:bg-neutral-500 hover:bg-opacity-10 hover:text-black rounded m-2                            
+                            ${isDisabled ? 'opacity-20' : ''}`}
+                            disabled={isDisabled}
                             onClick={() => getGPTResponse(selections)}
                         >
                             Get Stocks Recomendattion
