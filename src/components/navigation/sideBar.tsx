@@ -51,6 +51,17 @@ export default function SideBar() {
 									</button>
 								);
 							})}
+							<button
+								onClick={() => {
+									(
+										document.getElementById(
+											"transfer_modal",
+										)! as HTMLDialogElement
+									).showModal();
+								}}
+							>
+								<p>Transfer</p>
+							</button>
 						</div>
 					)}
 				</div>
