@@ -12,6 +12,7 @@ import { OrderType, OrderSide } from "../../utilities/types";
 import {
 	GET_ACTIVITIES,
 	GET_ORDERS,
+	GET_OVERVIEW,
 	GET_PIE_CHART_DATA,
 	GET_STOCK_NAMES,
 	GET_TOTAL_VALUE,
@@ -37,7 +38,7 @@ export default function TradeForm({ buyOrSell }: buyProp) {
 	const user = useReactiveVar(userInfo);
 	const [currStockQuantity, setCurrStockQuantity] = useState(0);
 	const [marketState, setMarketState] = useState(true); //true is BUY
-	const [quantity, setQuantity] = useState(1);
+	const [quantity, setQuantity] = useState(0);
 	const [stockPrice, setStockPrice] = useState(0);
 	const [totalPrice, setTotalPrice] = useState(0);
 	const [checkQuant, setCheckQuant] = useState(true); //true = submit button is disabled
@@ -74,6 +75,7 @@ export default function TradeForm({ buyOrSell }: buyProp) {
 			{ query: GET_PIE_CHART_DATA, variables: { accId: accountId } },
 			{ query: GET_ACTIVITIES, variables: { accId: accountId } },
 			{ query: GET_TOTAL_VALUE, variables: { userId: user!.userId } },
+			{ query: GET_OVERVIEW, variables: { accId: accountId } },
 		],
 	});
 
@@ -97,7 +99,7 @@ export default function TradeForm({ buyOrSell }: buyProp) {
 				side: buyOrSell ? OrderSide.Buy : OrderSide.Sell,
 				ticker: symbolName,
 				tradeQty: quantity,
-				tradePrice: limitPrice!,
+				tradePrice: limitPrice! ?? 0,
 			},
 		})
 			.then((data) => {
@@ -169,6 +171,11 @@ export default function TradeForm({ buyOrSell }: buyProp) {
 	}, [quantity]);
 
 	// if (!loading && data?.holdings.length === 0) return <NoInvestments />;
+	const onClear = () => {
+		setQuantity(0);
+		console.log(quantity);
+		symbol("");
+	};
 
 	if (loading) return <>Loading</>;
 	if (error) return <p>{error.message}</p>;
@@ -183,16 +190,17 @@ export default function TradeForm({ buyOrSell }: buyProp) {
 				<h1 className="font-semibold text-xl">
 					Quantity (Current Holdings: {currStockQuantity})
 				</h1>
-				<div>
-					<h2 className="text-xs text-[#FF0000]">
-						{checkQuant ? "*required" : null}
-					</h2>
-					<div className="flex flex-row justify-between">
-						<div className="border-[0px] rounded-[3px] border-[#cccccc] w-full">
+				<h2 className="text-xs text-[#FF0000]">
+					{checkQuant ? "*required" : null}
+				</h2>
+				<div className="flex flex-row justify-between">
+					<div className="border-[0px] rounded-[3px] border-[#cccccc] w-full">
+						<form id="quantityInput">
 							<input
 								type="number"
 								min={1}
 								step={1}
+								placeholder="0"
 								onKeyDown={preventMinus}
 								onChange={(e) => {
 									setQuantity(Number(e.target.value));
@@ -200,11 +208,11 @@ export default function TradeForm({ buyOrSell }: buyProp) {
 								value={quantity < 1 ? "" : quantity}
 								className="input h-9 w-full border-[1px] rounded-[3px] border-[#cccccc] focus:ring-blue-500 focus:border-blue-500 focus:border-[2px] !outline-none"
 							/>
-						</div>
+						</form>
 					</div>
 					{!buyOrSell && (
 						<button
-							className="ml-2 text-center w-[15%] rounded-sm bg-[#e6e6e6] text-xs px-2 md:text-sm lg:text-lg"
+							className="ml-2 h-9 text-center min-w-[30%] sm:min-w-[20%] rounded-sm bg-[#e6e6e6] px-2 pr-2 max-[768px]:text-lg text-xs xl:text-xl"
 							onClick={() => {
 								setQuantity(currStockQuantity);
 							}}
@@ -252,7 +260,9 @@ export default function TradeForm({ buyOrSell }: buyProp) {
 							onKeyDown={preventMinus}
 							className="input h-9 w-full border-[1px] rounded-[3px] border-[#cccccc] focus:ring-blue-500 focus:border-blue-500 focus:border-[2px] !outline-none"
 							value={limitPrice!}
-							onChange={(val) => setLimitPrice(val.target.valueAsNumber)}
+							onChange={(val) =>
+								setLimitPrice(val.target.valueAsNumber)
+							}
 						/>
 					</div>
 				</span>
@@ -265,11 +275,15 @@ export default function TradeForm({ buyOrSell }: buyProp) {
 				</h1>
 			</div>
 			{/* cancel and submit buttons */}
-			<div className="flex flex-row justify-end m-4 gap-4 text-xl [&>button]:rounded-xl [&>button]:px-3 [&>button]:py-1 [&>button]:border-4 [&>button]:font-bold">
-				<button className="border-[#920000] text-[#920000] bg-[#F9E5E5] hover:shadow-xl shadow-[#920000] hover:bg-[#920000] hover:text-[#f9e5e5]">
-					Cancel
+			<div className="flex flex-row justify-end m-4 gap-4 text-xl [&>button]:rounded-lg [&>button]:px-3 [&>button]:py-1 [&>button]:border-4 [&>button]:font-bold">
+				<button
+					className="border-[#920000] text-[#920000] bg-[#F9E5E5] hover:shadow-xl shadow-[#920000] hover:bg-[#920000] hover:text-[#f9e5e5]"
+					onClick={onClear}
+				>
+					Clear
 				</button>
 				<button
+					disabled={checkQuant}
 					className="border-success-content text-success-content bg-[#E3FDDC] hover:shadow-xl shadow-success-content hover:bg-success-content hover:text-[#e3fddc]"
 					onClick={handleSubmit}
 				>

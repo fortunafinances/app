@@ -8,9 +8,11 @@ import { twMerge } from "tailwind-merge";
 import { useReactiveVar } from "@apollo/client/react/hooks/useReactiveVar";
 import { sidebarClosed } from "../../utilities/reactiveVariables";
 import TotalAccountValue from "../data/totalAccountValue";
-import { getCurrentPath, navItems } from "../../utilities/common";
+import { getCurrentPath, isMobile, navItems } from "../../utilities/common";
+import { useWindowSize } from "../../utilities/hooks";
 
 export default function SideBar() {
+	const windowSize = useWindowSize().width;
 	const collapsed = useReactiveVar(sidebarClosed);
 	const path = useLocation().pathname;
 	const navigate = useNavigate();
@@ -25,12 +27,12 @@ export default function SideBar() {
 			<div
 				className={twMerge(
 					"h-full bg-gray-800 text-white flex flex-col justify-between",
-					collapsed ? "w-6" : "w-screen sm:w-48",
+					collapsed ? "w-6" : "w-screen sm:w-52",
 				)}
 			>
 				<div>
 					{!collapsed && <TotalAccountValue />}
-					{!collapsed && window.screen.width <= 640 && (
+					{!collapsed && isMobile(windowSize) && (
 						<div className="px-2 flex flex-col items-center text-2xl">
 							{navItems.map((item, i) => {
 								return (

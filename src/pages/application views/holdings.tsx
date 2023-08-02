@@ -7,14 +7,12 @@ import { useMemo } from "react";
 import { currentAccountId } from "../../utilities/reactiveVariables";
 import { GET_HOLDINGS } from "../../utilities/graphQL";
 import NoInvestments from "../../components/data/noInvestments";
-import { filterInclusive } from "../../utilities/common";
+import { filterInclusive, isMobile } from "../../utilities/common";
 import { useWindowSize } from "../../utilities/hooks";
 import CardComponent from "../../components/data/cards/holdingCard";
 
 export default function Holdings() {
 	const windowSize = useWindowSize();
-	const isMobile =
-		windowSize.width !== undefined ? windowSize.width <= 600 : false;
 	const accountId = useReactiveVar(currentAccountId);
 	const cols = useMemo<MRT_ColumnDef<Holding>[]>(
 		() => [
@@ -91,7 +89,7 @@ export default function Holdings() {
 
 	return (
 		<div className="bg-scroll h-full w-full">
-			{isMobile ? (
+			{isMobile(windowSize.width) ? (
 				<>
 					<div className="flex flex-row justify-center py-3">
 						<h1 className="text-2xl font-bold">Holdings</h1>

@@ -4,21 +4,19 @@ import { useQuery } from "@apollo/client";
 import { userInfo } from "../../utilities/reactiveVariables";
 import { useReactiveVar } from "@apollo/client/react/hooks/useReactiveVar";
 import { signout } from "../../utilities/auth";
-
 import AccountDropdown from "../input/accountDropdown";
-import { useWindowSize } from "../../utilities/hooks";
 import { Account } from "../../utilities/types";
 import { GET_ACCOUNTS } from "../../utilities/graphQL";
+import { isMobile } from "../../utilities/common";
+import { useWindowSize } from "../../utilities/hooks";
 
 export default function Header() {
+	const windowSize = useWindowSize();
 	const user = useReactiveVar(userInfo);
 	const { loading, error, data } = useQuery<{ accounts: Account[] }>(
 		GET_ACCOUNTS,
 		{ variables: { userId: user?.userId } },
 	);
-	const windowSize = useWindowSize();
-	const isMobile =
-		windowSize.width !== undefined ? windowSize.width <= 600 : false;
 
 	return (
 		<header className="flex items-center justify-between bg-primary py-1">
@@ -29,8 +27,7 @@ export default function Header() {
 					</b>
 				</h1>
 			</div>
-			{isMobile && (
-				<>
+			{isMobile(windowSize.width) && (
 					<div className = "flex flex-row">
 						<h3 className="text-xl font-semibold">
 							<AccountDropdown
@@ -39,8 +36,7 @@ export default function Header() {
 								error={error}
 							/>
 						</h3>
-					</div>
-				</>
+				</div>
 			)}
 			<div className="flex flex-row gap-3 sm:items-center text-2xl mx-3">
 				<h3 className="hidden lg:inline text-white capitalize">
@@ -48,7 +44,7 @@ export default function Header() {
 				</h3>
 				<div className="dropdown dropdown-end">
 					<label tabIndex={0} className="cursor-pointer">
-						{user?.picture ? (
+						{user?.picture && user?.picture !== "picture" ? (
 							<img
 								src={user.picture}
 								alt="Profile Picture"
