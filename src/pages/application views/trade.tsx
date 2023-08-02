@@ -69,7 +69,7 @@ export default function Trade() {
 				modalId="insufficient_shares"
 				message="Insufficient Shares"
 			/>
-			<div className="flex flex-col md:flex-row">
+			<div className="md:h-full flex flex-col md:flex-row">
 				<div
 					className={twMerge(
 						"overflow-y-auto bg-[#F9E5E5] w-full md:w-[35%]",

@@ -212,7 +212,7 @@ export default function TradeForm({ buyOrSell }: buyProp) {
 					</div>
 					{!buyOrSell && (
 						<button
-							className="ml-2 h-9 text-center w-[15%] rounded-sm bg-[#e6e6e6] text-xs px-2 md:text-sm lg:text-lg"
+							className="ml-2 h-9 text-center min-w-[30%] sm:min-w-[20%] [rounded-sm bg-[#e6e6e6] px-2 pr-2 max-[1170px]:text-xs"
 							onClick={() => {
 								setQuantity(currStockQuantity);
 							}}
