@@ -23,7 +23,7 @@ import { currentAccountId } from "./utilities/reactiveVariables";
 import { useEffect } from "react";
 
 const client = new ApolloClient({
-	uri: "http://127.0.0.1:80/graphql",
+	uri: import.meta.env.DEV ? "http://127.0.0.1:80/graphql" : "https://wwapxkpzsg.us-east-1.awsapprunner.com/graphql",
 	cache,
 });
 

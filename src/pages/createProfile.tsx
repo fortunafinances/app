@@ -30,6 +30,7 @@ const POST_USER_INFO = gql`
 		$firstName: String
 		$lastName: String
 		$phoneNumber: String
+		$onboarding: Int
 	) {
 		insertUser(
 			userId: $userId
@@ -37,6 +38,7 @@ const POST_USER_INFO = gql`
 			firstName: $firstName
 			lastName: $lastName
 			phoneNumber: $phoneNumber
+			onboardingComplete: $onboarding
 		) {
 			message
 			user {

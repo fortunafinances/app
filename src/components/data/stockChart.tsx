@@ -9,7 +9,7 @@ import {
     Legend,
     TimeScale
 } from 'chart.js';
-import { Line } from 'react-chartjs-2';
+import { Scatter } from 'react-chartjs-2';
 import "chartjs-adapter-date-fns";
 import { GET_STOCK_LINE_CHART } from '../../utilities/graphQL';
 import { useQuery } from "@apollo/client";
@@ -100,14 +100,14 @@ export function StockChart(props: StockChartProps) {
                 label: 'Price',
                 data: stockData,
                 borderColor: "rgb(255, 99, 132)",
+                showLine: true,
+                lineTension: 0.2,
                 backgroundColor: "rgba(255, 99, 132, 0.5)",
             },
         ],
     };
 
     return (
-        <div>
-            <Line options={chartOptions} data={chartData} />
-        </div >
+        <Scatter options={chartOptions} data={chartData} />
     );
 }
