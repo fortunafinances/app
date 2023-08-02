@@ -65,7 +65,7 @@ export default function Transfer() {
 
 	useEffect(() => {
 		if (accountId !== undefined) {
-			formikRef.current?.resetForm({ values: { ...formikRef.current.values, transferInAccount: accountId, transferOutAccount: accountId } });
+			formikRef.current?.resetForm({ values: { ...formikRef.current.values, transferType: "IN", transferInAccount: accountId, transferOutAccount: accountId } });
 		}
 	}, [accountId])
 

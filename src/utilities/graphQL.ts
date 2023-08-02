@@ -146,3 +146,13 @@ export const GET_STOCK_LINE_CHART = gql`
     }
 }
 `
+
+export const GET_WATCHLIST = gql`
+	query WatchList($accId: Int!) {
+		watchList(input: { accId: $accId }) {
+			id
+			accId
+			ticker
+		}
+	}
+`;

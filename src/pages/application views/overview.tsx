@@ -97,7 +97,7 @@ export default function Overview() {
 						<h2 className="text-2xl">Portfolio Sector Breakdown</h2>
 						<PieChart />
 					</DataContainer>
-						<DataContainer className="h-full md:max-w-[50%] max-w-full p-3 flex flex-col justify-center items-center">
+						<DataContainer className="h-full md:max-w-[50%] max-w-full p-3 flex flex-col justify-center items-center overflow-auto">
 							<h2 className="text-2xl">Historical Account Performance</h2>
 						<LineChart />
 					</DataContainer>
