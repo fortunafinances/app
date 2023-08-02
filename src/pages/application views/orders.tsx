@@ -3,14 +3,16 @@ import Table from "../../components/data/table";
 import { useMemo } from "react";
 import { MRT_ColumnDef } from "material-react-table";
 import { Order, GraphQLReturnData } from "../../utilities/types";
-import { filterInclusive, formatDate, sortDate } from "../../utilities/common";
+import { filterInclusive, formatDate, isMobile, sortDate } from "../../utilities/common";
 import { currentAccountId } from "../../utilities/reactiveVariables";
 import NoInvestments from "../../components/data/noInvestments";
+import { useWindowSize } from "../../utilities/hooks";
+import OrderCard from "../../components/data/cards/orderCard";
 import { GET_ORDERS } from "../../utilities/graphQL";
 
 export default function Orders() {
 	const accountId = useReactiveVar(currentAccountId);
-
+	const windowSize = useWindowSize().width;
 	const cols = useMemo<MRT_ColumnDef<Order>[]>(
 		() => [
 			{
@@ -72,15 +74,36 @@ export default function Orders() {
 	if (!loading && data?.orders.length === 0) return <NoInvestments />;
 
 	return (
-		<div className="h-full w-full overflow-y-clip">
+		<div className="h-full w-full">
+			{isMobile(windowSize) ? (
+				<>
+					{" "}
+					<div className="flex flex-row justify-center py-3">
+						<h1 className="text-2xl font-bold">Orders</h1>
+					</div>
+					{data?.orders.map((order: Order) => (
+						<OrderCard
+							key={order.stock.ticker}
+							ticker={order.stock.ticker}
+							company={order.stock.name!}
+							tradeQty={order.tradeQty}
+							date={order.date}
+							status={order.status}
+							side={order.side}
+							type={order.type}
+						/>
+					))}
+				</>
+			) : (
 			<Table
 				loading={loading}
 				error={error}
 				data={data?.orders}
 				columnData={cols}
-				enableRowActions={true}
+						enableRowActions={false}
 				sorting={[{ id: "date", desc: true }]}
 			/>
+			)}
 		</div>
 	);
 }

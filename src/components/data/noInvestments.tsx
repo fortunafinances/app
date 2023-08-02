@@ -6,7 +6,7 @@ export default function NoInvestments() {
 			<h2 className="text-3xl sm:text-5xl">No Investments Yet...</h2>
 			<Link
 				to="/app/trade"
-				className="hover:underline underline-offset-8 text-primary"
+				className="hover:underline underline-offset-8 text-primary font-montserrat"
 			>
 				Click here to place your first order
 			</Link>

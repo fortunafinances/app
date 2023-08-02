@@ -1,13 +1,21 @@
 // ############# VARIABLES ###############
 
-export const dateOptions = [{ value: 0.7, label: "1 Week" }, { value: 1, label: "1 Month" }, { value: 3, label: "3 Months" }, { value: 6, label: "6 Months" }, { value: 12, label: "1 Year" }]
-export const navItems = ["overview", "trade", "holdings", "orders", "activity",];
-
-export const mobile = window.innerWidth < 640;
-
-
+export const dateOptions = [
+	{ value: 0.7, label: "1 Week" },
+	{ value: 1, label: "1 Month" },
+	{ value: 3, label: "3 Months" },
+	{ value: 6, label: "6 Months" },
+	{ value: 12, label: "1 Year" },
+	{ value: 24, label: "2 Years" },
+];
+export const navItems = ["overview", "trade", "holdings", "orders", "activity"];
 
 // ############# FUNCTIONS ###############
+
+export const isMobile = (windowSize: number | undefined): boolean => {
+	const CUTOFF = 640;
+	return windowSize !== undefined ? windowSize <= CUTOFF : false;
+};
 
 export const preventMinus = (e: React.KeyboardEvent<HTMLInputElement>) => {
 	if (e.code === "Minus") {
@@ -41,17 +49,17 @@ export const sortDate = (a: string, b: string): number => {
 };
 
 export const subtractMonths = (date: Date, months: number) => {
-  // 👇 Make copy with "Date" constructor
-  const dateCopy = new Date(date);
+	// 👇 Make copy with "Date" constructor
+	const dateCopy = new Date(date);
 
-	if(months < 1) {
+	if (months < 1) {
 		dateCopy.setDate(dateCopy.getDay() - months * 10);
 	} else {
 		dateCopy.setMonth(dateCopy.getMonth() - months);
 	}
 
-  return dateCopy;
-}
+	return dateCopy;
+};
 
 export const filterInclusive = (
 	row: { getValue: (id: string) => number },
@@ -71,19 +79,25 @@ export const getCurrentPath = (path: string): string => {
 };
 
 export const capitalize = (str: string | undefined) => {
-	if(!str) return ""
-	return str.charAt(0).toUpperCase()
-  + str.slice(1)}
+	if (!str) return "";
+	return str.charAt(0).toUpperCase() + str.slice(1);
+};
 
-export const convertToRoundedPercentageChange = (dataPoints: { x: string; y: number }[]) => {
-        const firstPrice = dataPoints[0].y;
-        const roundedPercentageChanges: { x: string; y: number }[] = [];
+export const convertToRoundedPercentageChange = (
+	dataPoints: { x: string; y: number }[],
+) => {
+	const firstPrice = dataPoints[0].y;
+	const roundedPercentageChanges: { x: string; y: number }[] = [];
 
-        for (let i = 0; i < dataPoints.length; i++) {
-            const percentageChange = ((dataPoints[i].y - firstPrice) / firstPrice) * 100;
-            const roundedPercentageChange = Number(percentageChange.toFixed(2));
-            roundedPercentageChanges.push({ x: dataPoints[i].x, y: roundedPercentageChange });
-        }
+	for (let i = 0; i < dataPoints.length; i++) {
+		const percentageChange =
+			((dataPoints[i].y - firstPrice) / firstPrice) * 100;
+		const roundedPercentageChange = Number(percentageChange.toFixed(2));
+		roundedPercentageChanges.push({
+			x: dataPoints[i].x,
+			y: roundedPercentageChange,
+		});
+	}
 
-        return roundedPercentageChanges;
-    }
+	return roundedPercentageChanges;
+};

@@ -27,7 +27,7 @@ export default function AppNavigation() {
 							error={error}
 						/>
 					</h3>
-					<div className="px-2 hidden md:block">
+					<div className="px-2 hidden sm:block">
 						{navItems.map((item, i) => {
 							return (
 								<Link key={i} to={item}>
@@ -47,7 +47,7 @@ export default function AppNavigation() {
 				</div>
 				<div className="tracking-narrow">
 					<button
-						className="btn tracking-wider text-white bg-primary hover:bg-purple-800 min-h-[2rem] h-[1rem] mr-3"
+						className="btn tracking-wider rounded-md text-white text-bold border-info bg-info hover:bg-white hover:text-info hover:border-info hover:border-2 min-h-[2rem] h-[1rem] mr-3"
 						onClick={() => {
 							(
 								document.getElementById(
