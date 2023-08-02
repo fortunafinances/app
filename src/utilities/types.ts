@@ -34,6 +34,7 @@ export interface Holding extends GraphQLReturnData {
 }
 
 export interface Activity extends GraphQLReturnData {
+  id: string;
   date: string;
   type: "Trade" | "Transfer";
   description: string;

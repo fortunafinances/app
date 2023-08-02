@@ -83,7 +83,7 @@ export default function Activity() {
 				</div>
 				{data?.activity.map((activity: Activity) => (
 					<ActivityCard
-						key={activity.date}
+						key={activity.id}
 						date={activity.date}
 						type={activity.type}
 						description={activity.description}

@@ -13,7 +13,7 @@ export const navItems = ["overview", "trade", "holdings", "orders", "activity"];
 // ############# FUNCTIONS ###############
 
 export const isMobile = (windowSize: number | undefined): boolean => {
-	const CUTOFF = 640;
+	const CUTOFF = 641;
 	return windowSize !== undefined ? windowSize <= CUTOFF : false;
 };
 

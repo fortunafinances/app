@@ -38,19 +38,22 @@ const AccountDropdown = ({ data, loading, error }: DropdownProps) => {
 
 	return (
 		<div
-			className="dropdown mt-1 text-black min-w-[150px] sm:min-w-[200px] max-w-[220px] lg:max-w-[300px]"
-			title={currentAccount.name}
+			className="flex flex-col items-center dropdown text-black capitalize min-w-[220px] lg:max-w-[300px]"
+			title={capitalize(currentAccount.name)}
 		>
 			<label
 				tabIndex={0}
 				className="btn bg-white outline-none rounded-lg b-0 sm:rounded-b-none normal-case w-full text-xl flex flex-row flex-nowrap justify-center sm:justify-between"
 			>
-				<div className="relative top-[50%] -translate-y-[15px] h-full max-w-[90%] -left-2">
-					<p className="truncate max-w-full h-full">
+				<div className="relative top-[50%] -translate-y-[15px] h-full max-w-[90%]">
+					<p className="truncate max-w-full h-full capitalize">
 						{currentAccount.name}
 					</p>
 				</div>
-				{!isMobile(windowSize) && <BsChevronDown />}
+				<BsChevronDown/>
+				{/* {isMobile(windowSize) && (
+					<BsChevronDown />
+				)} */}
 			</label>
 			<ul
 				tabIndex={0}
