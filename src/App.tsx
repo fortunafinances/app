@@ -19,6 +19,7 @@ import CreateAccount from "./pages/createAccount";
 import StockRecommendation from "./pages/application views/StockRecommendation";
 import ProfileInfo from "./pages/profileInfo";
 import StockResults from "./pages/application views/stockResults";
+import PrivacyPolicy from "./pages/privacyPolicy";
 import { currentAccountId } from "./utilities/reactiveVariables";
 import { useEffect } from "react";
 
@@ -59,6 +60,7 @@ export default function App() {
 					<Route path="/profileInfo" element={<ProfileInfo />} />
 					<Route path="/stockRecommendation" element={<StockRecommendation />} />
 					<Route path="/stockResults" element={<StockResults />} />
+					<Route path="/privacyPolicy" element={<PrivacyPolicy />} />
 				</Routes>
 			</Router>
 		</ApolloProvider>
