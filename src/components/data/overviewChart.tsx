@@ -117,13 +117,13 @@ export function LineChart() {
     return (
         <div className='w-full' >
             <Scatter options={options} data={{ datasets: chartDataSets }} />
-            <div className="flex flex-col md:flex-row gap-1 mt-5 justify-center">
+            <div className="flex flex-col flex-wrap md:flex-row gap-1 mt-5 justify-center">
                 {dateOptions.map((item) => {
                     return <button
                         onClick={() => {
                             setRange(item.value);
                         }}
-                        className={twMerge("w-full flex-1 btn text-primary bg-gray-50", range === item.value && "bg-gray-400")}>{item.label}
+                        className={twMerge("w-full flex-1 basis-[25%]  btn text-primary bg-gray-50", range === item.value && "bg-gray-400")}>{item.label}
                     </button>
                 })}
 

@@ -1,6 +1,13 @@
 // ############# VARIABLES ###############
 
-export const dateOptions = [{ value: 0.7, label: "1 Week" }, { value: 1, label: "1 Month" }, { value: 3, label: "3 Months" }, { value: 6, label: "6 Months" }, { value: 12, label: "1 Year" }]
+export const dateOptions = [
+	{ value: 0.7, label: "1 Week" },
+	{ value: 1, label: "1 Month" },
+	{ value: 3, label: "3 Months" },
+	{ value: 6, label: "6 Months" },
+	{ value: 12, label: "1 Year" },
+	{ value: 24, label: "2 Years" },
+];
 export const navItems = ["overview", "trade", "holdings", "orders", "activity",];
 
 export const mobile = window.innerWidth < 640;
