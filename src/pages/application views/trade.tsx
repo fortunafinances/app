@@ -86,7 +86,7 @@ export default function Trade() {
 							<h1 className="text-4xl">{header}</h1>
 							<p className="text-xl">
 								{" "}
-								Cash:{" "}
+								Cash Available:{" "}
 								{formatDollars(data?.displayBar.cash ?? 0)}
 							</p>
 
