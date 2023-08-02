@@ -1,6 +1,7 @@
-import { useQuery } from '@apollo/client';
+import { useQuery, useReactiveVar } from '@apollo/client';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { GET_ONE_STOCK } from '../../utilities/graphQL';
+import { symbol } from '../../utilities/reactiveVariables';
 
 
 interface StockData {
@@ -8,8 +9,7 @@ interface StockData {
     currPrice: GLfloat;
 }
 export default function StockResults() {
-
-
+    const symbolName = useReactiveVar(symbol);
     const location = useLocation();
     const parameter = location.state?.parameter;
 
@@ -52,6 +52,7 @@ export default function StockResults() {
 
     const navigate = useNavigate();
     function handleBuyStock(item: string) {
+        symbol(item);
         navigate('/app/trade');
     }
 
