@@ -20,22 +20,21 @@ export default function Header() {
 
 	return (
 		<header className="flex items-center justify-between bg-primary py-1">
-			<div className="flex sm:items-center h-full text-3xl mx-2">
-				<h1 className="inline justify-start">
-					<b className="text-white">
-						<Link to="/app/overview">F</Link>
-					</b>
-				</h1>
+			<div className="flex items-center h-full text-3xl mx-2">
+			<Link to="/app/overview"><img src="/Logo_1.2.png" alt="Fortuna Logo" width="50" height="50"></img></Link>
+			{!isMobile(windowSize.width) && (
+				<h1 className="text-white px-3">Fortuna</h1>
+			)}
 			</div>
 			{isMobile(windowSize.width) && (
-					<div className = "flex flex-row">
-						<h3 className="text-xl font-semibold">
-							<AccountDropdown
-								data={data?.accounts}
-								loading={loading}
-								error={error}
-							/>
-						</h3>
+				<div className="flex flex-row">
+					<h3 className="text-lg font-semibold">
+						<AccountDropdown
+							data={data?.accounts}
+							loading={loading}
+							error={error}
+						/>
+					</h3>
 				</div>
 			)}
 			<div className="flex flex-row gap-3 sm:items-center text-2xl mx-3">

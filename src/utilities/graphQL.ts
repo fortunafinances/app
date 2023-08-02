@@ -7,6 +7,7 @@ export default cache;
 export const GET_ACTIVITIES = gql`
 	query Activity($accId: Int!) {
 		activity(input: { accId: $accId }) {
+      id
 			date
 			type
 			description
