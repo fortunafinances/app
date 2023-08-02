@@ -3,7 +3,7 @@ import Table from "../../components/data/table";
 import { useMemo } from "react";
 import { MRT_ColumnDef } from "material-react-table";
 import { Order, GraphQLReturnData } from "../../utilities/types";
-import { filterInclusive, formatDate, sortDate } from "../../utilities/common";
+import { filterInclusive, formatDate, isMobile, sortDate } from "../../utilities/common";
 import { currentAccountId } from "../../utilities/reactiveVariables";
 import NoInvestments from "../../components/data/noInvestments";
 import { useWindowSize } from "../../utilities/hooks";
@@ -12,9 +12,7 @@ import { GET_ORDERS } from "../../utilities/graphQL";
 
 export default function Orders() {
 	const accountId = useReactiveVar(currentAccountId);
-	const windowSize = useWindowSize();
-	const isMobile =
-		windowSize.width !== undefined ? windowSize.width <= 600 : false;
+	const windowSize = useWindowSize().width;
 	const cols = useMemo<MRT_ColumnDef<Order>[]>(
 		() => [
 			{
@@ -77,7 +75,7 @@ export default function Orders() {
 
 	return (
 		<div className="h-full w-full">
-			{isMobile ? 
+			{isMobile(windowSize) ? 
 			(
 				
 				data?.orders.map((order: Order) => (
