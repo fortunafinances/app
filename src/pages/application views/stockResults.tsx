@@ -1,17 +1,18 @@
-import { useQuery, useReactiveVar } from '@apollo/client';
+import { useQuery } from '@apollo/client';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { GET_ONE_STOCK } from '../../utilities/graphQL';
 import { symbol } from '../../utilities/reactiveVariables';
 
-
-interface StockData {
-    name: string;
-    currPrice: GLfloat;
+type StockData = {
+    oneStock: {
+        name: string;
+        currPrice: GLfloat;
+    }
 }
+
 export default function StockResults() {
-    const symbolName = useReactiveVar(symbol);
-    const location = useLocation();
-    const parameter = location.state?.parameter;
+    const state = useLocation().state as { parameter: string };
+    const parameter = state.parameter;
 
     function extractStringArray(inputString: string) {
         const regex = /\[.*?\]/; // Match anything between square brackets
@@ -32,12 +33,24 @@ export default function StockResults() {
     }
 
     const tickers = extractStringArray(parameter);
-    console.log(tickers);
+    // console.log(tickers);
 
-    const SuggestionButton = ({ title, symbol, price, onClick }: { title: string, symbol: string, price: number, onClick: () => void }) => {
+    const SuggestionButton = ({ symbol, onClick }: { symbol: string, onClick: () => void }) => {
+        const { loading, error, data: stockData } = useQuery<StockData>(GET_ONE_STOCK, { variables: { ticker: symbol } })
+        if (loading)
+            return <span className="loading loading-infinity loading-lg"></span>;
+        if (error) {
+            return (
+                <div className="w-full h-full flex flex-row justify-center items-center">
+                    <h2>{error.message}</h2>
+                </div>
+            );
+        }
+        const title = stockData?.oneStock.name as string;
+        const price = stockData?.oneStock.currPrice as number;
         return (
             <button className="w-full focus:bg-[#2a0066] focus:text-gray-50 px-5 py-2.5 relative overflow-hidden font-medium bg-transparent-50 text-gray-600 border border-[#2a0066] hover:border-success-600 hover:bg-neutral-500 hover:bg-opacity-10 hover:text-success-600 rounded m-1"
-                    onClick={onClick}    >
+                onClick={onClick}    >
                 <div className=" top-1 left">
                     <div className='text-black'>{title}</div>
                     <div>{symbol}</div>
@@ -46,7 +59,6 @@ export default function StockResults() {
                     ${price}
                 </div>
             </button>
-
         );
     };
 
@@ -69,26 +81,10 @@ export default function StockResults() {
                 <div className="App">
                     <center>
                         {tickers.map((item) => {
-                            const { loading, error, data } = useQuery<StockData>(GET_ONE_STOCK, {
-                                variables: { ticker: item },
-                            });
-
-                            if (loading) {
-                                return <span className="loading loading-infinity loading-lg"></span>;
-                            }
-
-                            if (error) {
-                                return <div>{error.message}</div>;
-                            }
-
-                            return (
-                                <SuggestionButton
-                                    title={data?.oneStock.name}
-                                    symbol={item}
-                                    price={data?.oneStock.currPrice}
-                                    onClick={() => handleBuyStock(item)}
-                                />
-                            );
+                            return <SuggestionButton
+                                symbol={item}
+                                onClick={() => handleBuyStock(item)}
+                            />
                         })}
 
                     </center>

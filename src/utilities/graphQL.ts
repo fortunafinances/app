@@ -1,4 +1,3 @@
-import { navItems } from './common';
 import { gql } from "@apollo/client";
 import { InMemoryCache } from "@apollo/client/cache";
 
