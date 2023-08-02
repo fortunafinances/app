@@ -39,7 +39,7 @@ const AccountDropdown = ({ data, loading, error }: DropdownProps) => {
 	return (
 		<div
 			className="flex flex-col items-center dropdown text-black capitalize min-w-[220px] lg:max-w-[300px]"
-			title={capitalize(currentAccount.name)}
+			title={currentAccount.name}
 		>
 			<label
 				tabIndex={0}
