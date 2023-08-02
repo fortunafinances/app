@@ -49,14 +49,15 @@ export default function StockResults() {
         const title = stockData?.oneStock.name as string;
         const price = stockData?.oneStock.currPrice as number;
         return (
-            <button className="w-full focus:bg-[#2a0066] focus:text-gray-50 px-5 py-2.5 relative overflow-hidden font-medium bg-transparent-50 text-gray-600 border border-[#2a0066] hover:border-success-600 hover:bg-neutral-500 hover:bg-opacity-10 hover:text-success-600 rounded m-1"
-                onClick={onClick}    >
-                <div className=" top-1 left">
-                    <div className='text-black'>{title}</div>
-                    <div>{symbol}</div>
-                </div>
-                <div className="absolute top-1 right-1.5 text-green-800 py-0.5 px-2 rounded">
-                    ${price}
+            <button className="w-full focus:bg-[#2a0066] focus:text-gray-50 px-5 py-2.5  overflow-hidden font-medium bg-transparent-50 text-gray-600 border border-[#2a0066] hover:border-success-600 hover:bg-neutral-500 hover:bg-opacity-10 hover:text-success-600 rounded m-1"
+                onClick={onClick}   >
+                <div className='flex flex-row justify-between items-center'>
+                    <div className=" top-1 text-left">
+                        <div className='text-black'>{title} | {symbol}</div>
+                    </div>
+                    <div className="align-middle right-1.5 text-green-800 py-0.5 px-2 rounded">
+                        ${price}
+                    </div>
                 </div>
             </button>
         );
