@@ -8,9 +8,11 @@ import { twMerge } from "tailwind-merge";
 import { useReactiveVar } from "@apollo/client/react/hooks/useReactiveVar";
 import { sidebarClosed } from "../../utilities/reactiveVariables";
 import TotalAccountValue from "../data/totalAccountValue";
-import { getCurrentPath, navItems } from "../../utilities/common";
+import { getCurrentPath, isMobile, navItems } from "../../utilities/common";
+import { useWindowSize } from "../../utilities/hooks";
 
 export default function SideBar() {
+	const windowSize = useWindowSize().width;
 	const collapsed = useReactiveVar(sidebarClosed);
 	const path = useLocation().pathname;
 	const navigate = useNavigate();
@@ -21,17 +23,17 @@ export default function SideBar() {
 	};
 
 	return (
-		<div className="relative h-full">
+		<div className={'relative h-full ${collapsed ? "" : "w-4/5"}'}>
 			<div
 				className={twMerge(
 					"h-full bg-gray-800 text-white flex flex-col justify-between",
-					collapsed ? "w-6" : "w-screen sm:w-48",
+					collapsed ? "w-6" : "w-screen sm:w-52",
 				)}
 			>
 				<div>
 					{!collapsed && <TotalAccountValue />}
-					{!collapsed && window.screen.width <= 640 && (
-						<div className="px-2 flex justify-center">
+					{!collapsed && isMobile(windowSize) && (
+						<div className="px-2 flex flex-col items-center text-2xl">
 							{navItems.map((item, i) => {
 								return (
 									<button
@@ -50,12 +52,23 @@ export default function SideBar() {
 									</button>
 								);
 							})}
+							<button
+								onClick={() => {
+									(
+										document.getElementById(
+											"transfer_modal",
+										)! as HTMLDialogElement
+									).showModal();
+								}}
+							>
+								<p>Transfer</p>
+							</button>
 						</div>
 					)}
 				</div>
 				<button
 					onClick={() => sidebarClosed(!collapsed)}
-					className="absolute right-0 bg-gray-200 text-black w-fit py-4 rounded-l-md top-[50%] -translate-y-[50%]"
+					className="absolute right-0 bg-gray-200 text-black w-fit py-4 rounded-l-md top-[50%]  -translate-y-[50%]"
 				>
 					{collapsed ? (
 						<AiOutlineArrowRight size={20} />

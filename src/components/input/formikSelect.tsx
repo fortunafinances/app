@@ -21,18 +21,18 @@ export default function FormikSelect({
 	placeholder = "",
 	...props
 }: Props) {
-	const [field, _, helpers] = useField(formikFieldName);
-	const { setValue } = helpers;
+	const field = useField(formikFieldName);
+	const { setValue } = field[2];
 
 	return (
 		<Select
 			id={props.id}
 			name={props.name}
 			key={props.key}
-			value={selectOptions.find((option) => option.value === field.value)}
+			value={selectOptions.find((option) => option.value === field[0].value)}
 			options={selectOptions}
 			placeholder={placeholder}
-			onBlur={field.onBlur}
+			onBlur={field[0].onBlur}
 			onChange={(option) => setValue(option?.value)}
 			className="rounded-md outline outline-[1px] outline-secondary"
 			styles={{

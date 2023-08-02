@@ -4,7 +4,8 @@ import { currentAccountId } from "../../utilities/reactiveVariables";
 import { Account } from "../../utilities/types";
 import { ApolloError } from "@apollo/client";
 import { Link } from "react-router-dom";
-import { capitalize } from "../../utilities/common";
+import { capitalize, isMobile } from "../../utilities/common";
+import { useWindowSize } from "../../utilities/hooks";
 
 export interface DropdownProps {
 	data: Account[] | undefined;
@@ -13,6 +14,7 @@ export interface DropdownProps {
 }
 
 const AccountDropdown = ({ data, loading, error }: DropdownProps) => {
+	const windowSize = useWindowSize().width;
 	const currentAccountNumber = useReactiveVar(currentAccountId);
 
 	if (loading) return <div>Loading...</div>;
@@ -36,26 +38,32 @@ const AccountDropdown = ({ data, loading, error }: DropdownProps) => {
 
 	return (
 		<div
-			className="dropdown mt-1 text-black capitalize min-w-[200px] max-w-[220px] lg:max-w-[300px]"
+			className="dropdown mt-1 text-black capitalize min-w-[150px] sm:min-w-[200px] max-w-[220px] lg:max-w-[300px]"
 			title={capitalize(currentAccount.name)}
 		>
 			<label
 				tabIndex={0}
-				className="btn bg-white outline-none b-0 rounded-b-none normal-case w-full text-xl flex flex-row flex-nowrap justify-between"
+				className="btn bg-white outline-none rounded-lg b-0 sm:rounded-b-none normal-case w-full text-xl flex flex-row flex-nowrap justify-center sm:justify-between"
 			>
 				<div className="relative top-[50%] -translate-y-[15px] h-full max-w-[90%] -left-2">
-					<p className="truncate max-w-full h-full text-center capitalize">
+					<p className="truncate max-w-full h-full capitalize">
 						{currentAccount.name}
 					</p>
 				</div>
-				<BsChevronDown />
+				{!isMobile(windowSize) && (
+					<BsChevronDown />
+				)}
 			</label>
 			<ul
 				tabIndex={0}
 				className="dropdown-content menu p-2 shadow bg-white rounded-b-box w-full z-50 text-lg"
 			>
 				{data.map((item, i) => (
-					<li key={i} className="w-full" title={capitalize(item.name)}>
+					<li
+						key={i}
+						className="w-full"
+						title={capitalize(item.name)}
+					>
 						<a
 							onClick={() => handleClick(item.accId)}
 							className="truncate max-w-full inline-block"

@@ -8,6 +8,7 @@ export default defineConfig({
 		port: 4040,
 	},
 	preview: {
-		port: 4040,
+		port: 80,
+		host: true,
 	},
 });

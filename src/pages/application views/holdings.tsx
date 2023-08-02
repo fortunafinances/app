@@ -7,9 +7,12 @@ import { useMemo } from "react";
 import { currentAccountId } from "../../utilities/reactiveVariables";
 import { GET_HOLDINGS } from "../../utilities/graphQL";
 import NoInvestments from "../../components/data/noInvestments";
-import { filterInclusive } from "../../utilities/common";
+import { filterInclusive, isMobile, percentChange } from "../../utilities/common";
+import { useWindowSize } from "../../utilities/hooks";
+import CardComponent from "../../components/data/cards/holdingCard";
 
 export default function Holdings() {
+	const windowSize = useWindowSize();
 	const accountId = useReactiveVar(currentAccountId);
 	const cols = useMemo<MRT_ColumnDef<Holding>[]>(
 		() => [
@@ -70,6 +73,20 @@ export default function Holdings() {
 						filterValue,
 					),
 			},
+			{
+				header: "Daily Change",
+				id: "dailyChange",
+				accessorFn: (row) => {
+					const price = row.stock.currPrice;
+					const prevPrice = row.stock.prevClosePrice;
+					const dollarChange = price! - prevPrice!;
+					let ret = "";
+					dollarChange > 0 ? ret += "+" : ret += "-";
+					ret += formatDollars(Math.abs(dollarChange));
+					ret += " (" + percentChange(price!, prevPrice!) + "%)";
+					return ret;
+				},
+			}
 		],
 		[],
 	);
@@ -85,14 +102,31 @@ export default function Holdings() {
 	if (!loading && data?.holdings.length === 0) return <NoInvestments />;
 
 	return (
-		<div className="h-full w-full overflow-y-clip">
-			<Table
-				loading={loading}
-				error={error}
-				data={data?.holdings}
-				columnData={cols}
-				sorting={[{ id: "stock.ticker", desc: false }]}
-			/>
+		<div className="bg-scroll h-full w-full">
+			{isMobile(windowSize.width) ? (
+				<>
+					<div className="flex flex-row justify-center py-3">
+						<h1 className="text-2xl font-bold">Holdings</h1>
+					</div>
+					{data?.holdings.map((holding: Holding) => (
+						<CardComponent
+							key={holding.stock.ticker}
+							ticker={holding.stock.ticker}
+							company={holding.stock.name!}
+							tradeQty={holding.stockQuantity}
+							tradePrice={holding.stock.currPrice!}
+						/>
+					))}
+				</>
+			) : (
+				<Table
+					loading={loading}
+					error={error}
+					data={data?.holdings}
+					columnData={cols}
+					sorting={[{ id: "stock.ticker", desc: false }]}
+				/>
+			)}
 		</div>
 	);
 }

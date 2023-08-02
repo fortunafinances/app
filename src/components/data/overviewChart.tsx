@@ -8,7 +8,8 @@ import {
     Tooltip,
     Legend,
     TimeScale,
-    Filler
+    Filler,
+    TooltipItem
 } from 'chart.js';
 import { Scatter } from 'react-chartjs-2';
 import "chartjs-adapter-date-fns";
@@ -19,6 +20,7 @@ import { useQuery, useReactiveVar } from "@apollo/client";
 import { currentAccountId } from '../../utilities/reactiveVariables';
 import { twMerge } from 'tailwind-merge';
 import { DataPoint } from '../../utilities/types';
+import { format } from 'date-fns';
 
 ChartJS.register(
     Title,
@@ -41,6 +43,11 @@ type LineData = {
     }
 }
 
+interface RawData {
+    x: string;
+    y: number;
+}
+
 export function LineChart() {
     // get historical data
     const currentAccount = useReactiveVar(currentAccountId);
@@ -58,15 +65,26 @@ export function LineChart() {
 
     // initialize the chart
     const options = {
-        type: "scatter",
         responsive: true,
         plugins: {
             legend: {
                 position: 'top' as const,
+                labels: {
+                    usePointStyle: true
+                }
             },
             title: {
                 display: false,
             },
+            tooltip: {
+                callbacks: {
+                    label: (t: TooltipItem<"scatter">) => {
+                        const rawData = t.raw as RawData;
+                        const date = new Date(String(rawData.x));
+                        return [format(date, "eee MMM dd, yyyy"), rawData.y + "%"];
+                    },
+                }
+            }
         },
         scales: {
             x: {
@@ -82,7 +100,12 @@ export function LineChart() {
                 },
                 min: subtractMonths(new Date(), range).toISOString(),
             },
-        }
+            y: {
+                ticks: {
+                    callback: (value: number | string) => value + "%",
+                }
+            }
+        },
     }
 
 
@@ -91,7 +114,7 @@ export function LineChart() {
         data:
             convertToRoundedPercentageChange(data!.stockHistorical.data),
         showLine: true,
-        lineTension: 0.5,
+        lineTension: 0.2,
         borderColor: 'rgb(100, 100, 255)',
         pointRadius: 5,
         pointHoverRadius: 7
@@ -112,13 +135,14 @@ export function LineChart() {
     return (
         <div className='w-full' >
             <Scatter options={options} data={{ datasets: chartDataSets }} />
-            <div className="flex flex-col md:flex-row gap-1 mt-5 justify-center">
-                {dateOptions.map((item) => {
+            <div className="flex flex-col flex-wrap md:flex-row gap-1 mt-5 justify-center">
+                {dateOptions.map((item, i) => {
                     return <button
+                        key={i}
                         onClick={() => {
                             setRange(item.value);
                         }}
-                        className={twMerge("w-full flex-1 btn text-primary bg-gray-50", range === item.value && "bg-gray-400")}>{item.label}
+                        className={twMerge("w-full flex-1 basis-[25%]  btn text-primary bg-gray-50", range === item.value && "bg-gray-400")}>{item.label}
                     </button>
                 })}
 

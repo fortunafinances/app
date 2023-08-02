@@ -24,6 +24,7 @@ export const GET_HOLDINGS = gql`
 				ticker
 				name
 				currPrice
+				prevClosePrice
 			}
 		}
 	}
@@ -156,3 +157,13 @@ export const GET_ONE_STOCK = gql`
     }
   }
 `
+
+export const GET_WATCHLIST = gql`
+	query WatchList($accId: Int!) {
+		watchList(input: { accId: $accId }) {
+			id
+			accId
+			ticker
+		}
+	}
+`;

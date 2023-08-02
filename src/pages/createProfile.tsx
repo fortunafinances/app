@@ -30,6 +30,7 @@ const POST_USER_INFO = gql`
 		$firstName: String
 		$lastName: String
 		$phoneNumber: String
+		$onboarding: Int
 	) {
 		insertUser(
 			userId: $userId
@@ -37,6 +38,7 @@ const POST_USER_INFO = gql`
 			firstName: $firstName
 			lastName: $lastName
 			phoneNumber: $phoneNumber
+			onboardingComplete: $onboarding
 		) {
 			message
 			user {
@@ -96,13 +98,13 @@ export default function CreateProfile() {
 								variables: {
 									userId: user!.userId,
 									username: values.username,
-									firstName: values.firstName.toLowerCase(),
-									lastName: values.lastName.toLowerCase(),
+									firstName: values.firstName,
+									lastName: values.lastName,
 									phoneNumber: values.phoneNumber.replace(
 										/\D/g,
 										"",
 									),
-									onboardingComplete: 1,
+									onboarding: 1,
 								},
 							})
 								.then((res) => {
@@ -112,8 +114,8 @@ export default function CreateProfile() {
 										email: user!.email,
 										username: values.username,
 										firstName:
-											values.firstName.toLowerCase(),
-										lastName: values.lastName.toLowerCase(),
+											values.firstName,
+										lastName: values.lastName,
 										phoneNumber: values.phoneNumber.replace(
 											/\D/g,
 											"",

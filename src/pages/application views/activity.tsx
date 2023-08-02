@@ -4,13 +4,15 @@ import { useMemo } from "react";
 import { MRT_ColumnDef } from "material-react-table";
 import { Activity, GraphQLReturnData } from "../../utilities/types";
 import { filterRange, formatDollars } from "../../utilities/currency";
-import { formatDate, sortDate } from "../../utilities/common";
+import { formatDate, isMobile, sortDate } from "../../utilities/common";
 import { currentAccountId } from "../../utilities/reactiveVariables";
 import { GET_ACTIVITIES } from "../../utilities/graphQL";
+import ActivityCard from "../../components/data/cards/activityCard";
+import { useWindowSize } from "../../utilities/hooks";
 
 export default function Activity() {
 	const accountId = useReactiveVar(currentAccountId);
-
+	const windowSize = useWindowSize().width;
 	const cols = useMemo<MRT_ColumnDef<Activity>[]>(
 		() => [
 			{
@@ -43,7 +45,7 @@ export default function Activity() {
 					filterRange(row.original.amount, _columnIds, filterValue),
 			},
 		],
-		[]
+		[],
 	);
 
 	type ActivitiesQuery = {
@@ -74,15 +76,32 @@ export default function Activity() {
 		);
 
 	return (
-		<div className="h-full w-full overflow-y-clip">
-			<Table
-				loading={loading}
-				error={error}
-				data={data?.activity}
-				columnData={cols}
-				enableRowActions={false}
-				sorting={[{ id: "date", desc: true }]}
-			/>
+		<div className="h-full w-full">
+			{isMobile(windowSize) ? <>
+				<div className="flex flex-row justify-center py-3">
+					<h1 className="text-2xl font-bold">Activity</h1>
+				</div>
+				{data?.activity.map((activity: Activity) => (
+					<ActivityCard
+						key={activity.date}
+						date={activity.date}
+						type={activity.type}
+						description={activity.description}
+						amount={activity.amount}
+					/>
+				))}
+			</>
+
+				: (
+					<Table
+						loading={loading}
+						error={error}
+						data={data?.activity}
+						columnData={cols}
+						enableRowActions={false}
+						sorting={[{ id: "date", desc: true }]}
+					/>
+				)}
 		</div>
 	);
 }
