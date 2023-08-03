@@ -86,9 +86,8 @@ export default function UnauthenticatedHomepage() {
 			</div>
 			<div className="h-[5vh] bg-gradient-to-b from-accent to-white"></div>
 			<footer className="footer py-6 bg-white text-neutral-content flex flex-row justify-evenly">
-				<a className="link link-hover">About</a>
-				<a className="link link-hover">Privacy Policy</a>
-				<a className="link link-hover">Contact Us</a>
+				<a className="link link-hover" href="/privacyPolicy">Privacy Policy</a>
+				<a >Contact Us: hello@fortunafinance.com</a>
 			</footer>
 		</>
 	);
