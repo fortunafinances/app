@@ -23,7 +23,7 @@ export default function AppNavigation() {
 			<div className="flex flex-row justify-between items-center">
 				<div className="text-white flex flex-row items-end">
 					<h3 className="text-xl font-semibold">
-						{windowSize! > 800 && (
+						{windowSize! > 900 && (
 							<AccountDropdown
 								data={data?.accounts}
 								loading={loading}
@@ -31,7 +31,7 @@ export default function AppNavigation() {
 							/>
 						)}
 					</h3>
-					<div className="px-2 hidden sm:block text-transform: capitalize">
+					<div className="hidden sm:block text-transform: capitalize">
 						{navItems.map((item, i) => {
 							return (
 								<Link key={i} to={item}>

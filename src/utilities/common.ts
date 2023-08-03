@@ -94,10 +94,12 @@ export const convertToRoundedPercentageChange = (
 			((dataPoints[i].y - firstPrice) / firstPrice) * 100;
 		const roundedPercentageChange = Number(percentageChange.toFixed(2));
 		roundedPercentageChanges.push({
-			x: dataPoints[i].x,
+			x: dataPoints[i].x + " 08:00:00",
 			y: roundedPercentageChange,
 		});
 	}
+
+	console.log(roundedPercentageChanges);
 
 	return roundedPercentageChanges;
 };
