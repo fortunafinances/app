@@ -83,31 +83,31 @@ export default function Activity() {
 
 	return (
 		<div className="h-full w-full">
-			{isMobile(windowSize) ? <>
-				<div className="flex flex-row justify-center py-3">
-					<h1 className="text-2xl font-bold">Activity</h1>
-				</div>
-				{sortedData.map((activity: Activity) => (
-					<ActivityCard
-						key={activity.id}
-						date={activity.date}
-						type={activity.type}
-						description={activity.description}
-						amount={activity.amount}
-					/>
-				))}
-			</>
-
-				: (
-					<Table
-						loading={loading}
-						error={error}
-						data={data?.activity}
-						columnData={cols}
-						enableRowActions={false}
-						sorting={[{ id: "date", desc: true }]}
-					/>
-				)}
+			{isMobile(windowSize) ? (
+				<>
+					<div className="flex flex-row justify-center py-3">
+						<h1 className="text-2xl font-bold">Activity</h1>
+					</div>
+					{sortedData?.map((activity: Activity, i) => (
+						<ActivityCard
+							key={i}
+							date={activity.date}
+							type={activity.type}
+							description={activity.description}
+							amount={activity.amount}
+						/>
+					))}
+				</>
+			) : (
+				<Table
+					loading={loading}
+					error={error}
+					data={data?.activity}
+					columnData={cols}
+					enableRowActions={false}
+					sorting={[{ id: "date", desc: true }]}
+				/>
+			)}
 		</div>
 	);
 }
