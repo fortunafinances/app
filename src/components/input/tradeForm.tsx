@@ -97,7 +97,7 @@ export default function TradeForm({ buyOrSell }: buyProp) {
 				) {
 					insufficientSharesModal.showModal();
 				} else {
-					console.log("error");
+					console.error("error");
 				}
 			})
 			.catch((error) => console.error(error));
@@ -150,9 +150,9 @@ export default function TradeForm({ buyOrSell }: buyProp) {
 
 	useEffect(() => {
 		refetch()
-			.then(() => console.log("in refetch: ", accountId))
+			.then()
 			.catch((error) => {
-				console.log(error);
+				console.error(error);
 			});
 		const currStock = holdingsData?.holdings.find(
 			(e) => e.stock.ticker === symbolName,
@@ -163,7 +163,6 @@ export default function TradeForm({ buyOrSell }: buyProp) {
 			setCurrStockQuantity(0);
 		}
 	}, [holdingsData?.holdings, symbolName, accountId, refetch]);
-	// console.log(currStockQuantity);
 
 	useEffect(() => {
 		if (quantity < 1) {
@@ -176,7 +175,6 @@ export default function TradeForm({ buyOrSell }: buyProp) {
 	// if (!loading && data?.holdings.length === 0) return <NoInvestments />;
 	const onClear = () => {
 		setQuantity(0);
-		console.log(quantity);
 		symbol("");
 	};
 

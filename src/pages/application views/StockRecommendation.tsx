@@ -38,7 +38,6 @@ export default function StockRecommendation() {
             const updatedSelections = selections.filter((item) => item !== category);
             setSelections(updatedSelections);
         }
-        console.log("selections: ", selections);
     }
 
     const isBtnSelected = (category: string) => {
@@ -68,7 +67,6 @@ export default function StockRecommendation() {
             return res.data;
         })
         .then((res) => {
-            console.log(res?.genAIQuery);
             navigate('/stockResults', {state: { parameter: res?.genAIQuery}})
         })
         .catch((err) => console.error(err));

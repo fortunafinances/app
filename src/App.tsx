@@ -31,7 +31,6 @@ const client = new ApolloClient({
 export default function App() {
 	const currAccount = useReactiveVar(currentAccountId);
 	useEffect(() => {
-		// console.log(currAccount)
 	}, [currAccount]);
 	return (
 		<ApolloProvider client={client}>
