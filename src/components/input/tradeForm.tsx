@@ -122,6 +122,9 @@ export default function TradeForm({ buyOrSell }: buyProp) {
 			data &&
 			limitPrice
 		) {
+			// if (limitPrice > stockPrice) {
+			// 	setLimitPrice(stockPrice);
+			// }
 			setTotalPrice(quantity * limitPrice);
 		}
 	}, [data, quantity, symbolName, stockPrice, marketState, limitPrice]);
@@ -287,6 +290,8 @@ export default function TradeForm({ buyOrSell }: buyProp) {
 						{quantity} x{" "}
 						{limitPrice === null || limitPrice === undefined
 							? formatDollars(0)
+							: limitPrice > stockPrice
+							? formatDollars(stockPrice)
 							: formatDollars(limitPrice)}{" "}
 						= {formatDollars(totalPrice)}
 					</h1>
@@ -298,7 +303,7 @@ export default function TradeForm({ buyOrSell }: buyProp) {
 					className="border-[#920000] bg-[#920000] hover:bg-[#f9e5e5] hover:text-[#920000] text-[#f9e5e5]"
 					onClick={onClear}
 				>
-					Clear
+					CLEAR
 				</button>
 				<button
 					disabled={checkQuant}
