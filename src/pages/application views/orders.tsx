@@ -71,7 +71,12 @@ export default function Orders() {
 		variables: { accId: accountId },
 	});
 
-	if (!loading && data?.orders.length === 0) return <NoInvestments />;
+    let sortedData;
+    if (!loading && data?.orders?.length === 0) {
+        return <NoInvestments />
+    } else if (data && data.orders) {
+        sortedData = [...data.orders].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+    }
 
 	return (
 		<div className="h-full w-full">
@@ -81,7 +86,7 @@ export default function Orders() {
 					<div className="flex flex-row justify-center py-3">
 						<h1 className="text-2xl font-bold">Orders</h1>
 					</div>
-					{data?.orders.map((order: Order) => (
+					{sortedData.map((order: Order) => (
 						<OrderCard
 							key={order.stock.ticker}
 							ticker={order.stock.ticker}

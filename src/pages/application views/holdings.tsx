@@ -102,6 +102,7 @@ export default function Holdings() {
 	if (!loading && data?.holdings.length === 0) return <NoInvestments />;
 
 	return (
+
 		<div className="bg-scroll h-full w-full">
 			{isMobile(windowSize.width) ? (
 				<>
@@ -115,6 +116,7 @@ export default function Holdings() {
 							company={holding.stock.name!}
 							tradeQty={holding.stockQuantity}
 							tradePrice={holding.stock.currPrice!}
+							prevPrice={holding.stock.prevClosePrice}
 						/>
 					))}
 				</>

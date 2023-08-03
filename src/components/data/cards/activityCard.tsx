@@ -22,11 +22,11 @@ const ActivityCard: React.FC<ActivityProps> = ({
 				<div>
 					{" "}
 					<h2 className="card-title text-3xl">{type}</h2>
-					<p className="text-gray-500">{description}</p>
+					<p className="text-gray-500 text-sm">{description}</p>
 				</div>
 				<div className="">
-					<h2 className="text-2xl">{formatDollars(amount)}</h2>
-					<p className= "text-sm">{formatDate(date)}</p>
+					<h2 className="text-3xl">{formatDollars(amount)}</h2>
+					<p className= "text-xs py-3">{formatDate(date)}</p>
 				</div>
 			</div>
 		</div>
