@@ -47,7 +47,7 @@ export default function AppNavigation() {
 				</div>
 				<div className="tracking-narrow">
 					<button
-						className="btn tracking-wider rounded-md text-white text-bold border-info bg-info hover:bg-white hover:text-info hover:border-info hover:border-2 min-h-[2rem] h-[1rem] mr-3"
+						className="btn tracking-wider rounded-md text-primary hover:text-secondary border-info bg-secondary hover:border-secondary hover:bg-primary hover:text-primary hover:border-2 min-h-[2rem] h-[1rem] mr-3"
 						onClick={() => {
 							(
 								document.getElementById(
