@@ -64,7 +64,6 @@ export function StockChart(props: StockChartProps) {
 	stockData?.forEach((stock) => {
 		fixedData.push({ x: stock.x + " 08:00:00", y: stock.y });
 	});
-	console.log(fixedData);
 	const firstDate = fixedData[0].x;
 
 	// initialize the chart
