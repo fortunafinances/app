@@ -11,6 +11,26 @@ export const dateOptions = [
 	{ value: 12, label: "1 Year" },
 ];
 export const navItems = ["overview", "trade", "holdings", "orders", "activity"];
+export const stockSuggestionCategories = [
+	"Technology",
+	"Healthcare",
+	"Energy",
+	"Financial Services",
+	"Consumer Goods",
+	"Real Estate",
+	"Transportation",
+	"Media & Entertainment",
+	"Retail",
+	"Arts & Culture",
+	"Social Responsibility",
+	"Sustainability",
+	"LGBTQ+ Rights",
+	"Diversity, Equity, and Inclusion",
+	"Women in Leadership",
+	"Blockchain",
+	"Metaverse",
+	"AI",
+];
 
 // ############# FUNCTIONS ###############
 

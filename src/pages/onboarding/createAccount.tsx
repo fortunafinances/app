@@ -2,9 +2,9 @@ import { gql, useMutation, useReactiveVar } from "@apollo/client";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { BsArrowLeft, BsArrowRight } from "react-icons/bs";
 import { useLocation, useNavigate } from "react-router-dom";
-import { currentAccountId, userInfo } from "../utilities/reactiveVariables";
-import { Account, User } from "../utilities/types";
-import { CREATE_ACCOUNT, GET_ACCOUNTS } from "../utilities/graphQL";
+import { currentAccountId, userInfo } from "../../utilities/reactiveVariables";
+import { Account, User } from "../../utilities/types";
+import { CREATE_ACCOUNT, GET_ACCOUNTS } from "../../utilities/graphQL";
 
 type ErrorType = {
 	accountName?: string;
@@ -14,16 +14,8 @@ type ErrorType = {
 };
 
 const POST_USER_INFO = gql`
-	mutation InsertUser(
-		$userId: ID!
-		$onboardingComplete: Int
-		$bankName: String
-	) {
-		insertUser(
-			userId: $userId
-			onboardingComplete: $onboardingComplete
-			bankName: $bankName
-		) {
+	mutation InsertUser($userId: ID!, $onboardingComplete: Int) {
+		insertUser(userId: $userId, onboardingComplete: $onboardingComplete) {
 			message
 			user {
 				onboardingComplete
@@ -73,16 +65,12 @@ export default function CreateAccount() {
 						<Formik
 							initialValues={{
 								accountName: "",
-								bank: "",
-								accountNumber: "",
-								routingNumber: "",
 							}}
 							onSubmit={(values, { setSubmitting }) => {
 								postUserInfo({
 									variables: {
 										userId: user!.userId,
 										onboardingComplete: 2,
-										bankName: values.bank,
 									},
 								})
 									.then(() => {
@@ -141,54 +129,6 @@ export default function CreateAccount() {
 											type="text"
 											name="accountName"
 											placeholder="Account Name"
-											className="pl-3 h-14 w-full rounded-md text-xl outline-info"
-										/>
-									</div>
-									<div>
-										<h1 className="text-left text-3xl font-medium pl-1">
-											Bank
-										</h1>
-										<ErrorMessage
-											name="bank"
-											component="div"
-											className="text-left text-[#FF0000]"
-										/>
-										<Field
-											type="text"
-											name="bank"
-											placeholder="Bank"
-											className="pl-3 h-14 w-full rounded-md text-xl outline-info"
-										/>
-									</div>
-									<div>
-										<h1 className="text-left text-3xl font-medium pl-1">
-											Account Number
-										</h1>
-										<ErrorMessage
-											name="accountNumber"
-											component="div"
-											className="text-left text-[#FF0000]"
-										/>
-										<Field
-											type="accountNumber"
-											name="accountNumber"
-											placeholder="Account Number"
-											className="pl-3 h-14 w-full rounded-md text-xl outline-info"
-										/>
-									</div>
-									<div>
-										<h1 className="text-left text-3xl font-medium pl-1">
-											Routing Number
-										</h1>
-										<ErrorMessage
-											name="routingNumber"
-											component="div"
-											className="text-left text-[#FF0000]"
-										/>
-										<Field
-											type="routingNumber"
-											name="routingNumber"
-											placeholder="Routing Number"
 											className="pl-3 h-14 w-full rounded-md text-xl outline-info"
 										/>
 									</div>
