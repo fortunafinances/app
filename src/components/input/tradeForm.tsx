@@ -123,15 +123,27 @@ export default function TradeForm({ buyOrSell }: buyProp) {
 	};
 
 	useEffect(() => {
-		if (symbolName !== "" && symbolName !== "Select..." && data) {
+		if (
+			symbolName !== "" &&
+			symbolName !== "Select..." &&
+			data &&
+			marketState
+		) {
 			const stock = data.stocks.find(
 				(element) => element.ticker === symbolName,
 			);
 			const price = stock!.currPrice;
 			setStockPrice(price!);
 			setTotalPrice(quantity * stockPrice);
+		} else if (
+			symbolName !== "" &&
+			symbolName !== "Select..." &&
+			data &&
+			limitPrice
+		) {
+			setTotalPrice(quantity * limitPrice);
 		}
-	}, [data, quantity, symbolName, stockPrice]);
+	}, [data, quantity, symbolName, stockPrice, marketState, limitPrice]);
 
 	//to get current stock holdings amount
 	interface HoldingsQuery {
@@ -144,6 +156,16 @@ export default function TradeForm({ buyOrSell }: buyProp) {
 			variables: { accId: accountId },
 		},
 	);
+
+	useEffect(() => {
+		if (marketState) {
+			setTotalPrice(stockPrice * quantity);
+		} else if (limitPrice!) {
+			setTotalPrice(limitPrice * quantity);
+		} else {
+			setTotalPrice(0 * quantity);
+		}
+	}, [limitPrice, marketState, quantity, stockPrice]);
 
 	useEffect(() => {
 		refetch()
@@ -269,10 +291,24 @@ export default function TradeForm({ buyOrSell }: buyProp) {
 			)}
 			<div className="m-4 mt-6 flex flex-row gap-3 font-semibold text-xl">
 				<h1>Total Price:</h1>
-				<h1>
+				{/* <h1>
 					{quantity} x {formatDollars(stockPrice)} ={" "}
 					{formatDollars(totalPrice)}
-				</h1>
+				</h1> */}
+				{marketState ? (
+					<h1>
+						{quantity} x {formatDollars(stockPrice)} ={" "}
+						{formatDollars(totalPrice)}
+					</h1>
+				) : (
+					<h1>
+						{quantity} x{" "}
+						{limitPrice === null || limitPrice === undefined
+							? formatDollars(0)
+							: formatDollars(limitPrice)}{" "}
+						= {formatDollars(totalPrice)}
+					</h1>
+				)}
 			</div>
 			{/* cancel and submit buttons */}
 			<div className="flex flex-row justify-end m-4 gap-4 text-xl [&>button]:rounded-lg [&>button]:px-3 [&>button]:py-1 [&>button]:border-4 [&>button]:font-bold">

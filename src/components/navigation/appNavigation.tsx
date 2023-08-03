@@ -17,7 +17,7 @@ export default function AppNavigation() {
 
 	const path = useLocation().pathname;
 	return (
-		<nav className="bg-gray-800">
+		<nav className="bg-[#110029]">
 			<div className="flex flex-row justify-between items-center">
 				<div className="text-white flex flex-row items-end">
 					<h3 className="text-xl font-semibold">
