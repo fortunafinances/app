@@ -27,7 +27,7 @@ export default function AppNavigation() {
 							error={error}
 						/>
 					</h3>
-					<div className="px-2 hidden sm:block">
+					<div className="px-2 hidden sm:block text-transform: capitalize">
 						{navItems.map((item, i) => {
 							return (
 								<Link key={i} to={item}>
