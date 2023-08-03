@@ -93,11 +93,11 @@ export default function Overview() {
 				<NoInvestments />
 			) : (
 				<div className="flex flex-col md:flex-row h-full justify-between [&>*]:border-2 [&>*]:border-primary">
-					<DataContainer className="h-fit xl:h-full md:max-w-[49.5%] max-w-full flex flex-col justify-center items-center p-6 ">
+					<DataContainer className="h-fit md:max-w-[49.5%] max-w-full flex flex-col justify-center items-center p-6 ">
 						<h2 className="text-3xl">Portfolio Sector Breakdown</h2>
 						<PieChart />
 					</DataContainer>
-					<DataContainer className="h-full max-h-[40rem]:h-fit md:max-w-[49.5%] max-w-full flex flex-col justify-center items-center">
+					<DataContainer className="max-h-[40rem] h-fit md:max-w-[49.5%] max-w-full flex flex-col justify-center items-center p-6">
 						<h2 className="text-2xl">
 							Historical Account Performance
 						</h2>
