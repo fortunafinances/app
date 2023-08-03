@@ -41,8 +41,8 @@ export default function WatchList() {
 	}
 
 	return (
-		<div className="flex flex-col overflow-y-auto overflow-x-hidden ">
-			<div className=" w-full [&>*]:w-full">
+		<div className="flex flex-col overflow-y-auto overflow-x-hidden">
+			<div className=" w-full [&>*]:w-full ">
 				{data?.watchList.map((watchListItem, i) => {
 					return (
 						<button

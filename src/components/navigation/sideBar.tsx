@@ -23,14 +23,14 @@ export default function SideBar() {
 		<div className={'relative h-full ${collapsed ? "" : "w-4/5"}'}>
 			<div
 				className={twMerge(
-					"h-full bg-[#110029] text-white flex flex-col justify-between",
+					"h-full bg-[#110029] text-white flex flex-col",
 					collapsed ? "w-10" : "w-screen sm:w-52",
 				)}
 			>
 				<div>
 					{!collapsed && <TotalAccountValue />}
 					{!collapsed && isMobile(windowSize) && (
-						<div className="px-2 flex flex-col items-center text-2xl">
+						<div className="px-2 flex flex-col text-center text-2xl">
 							{navItems.map((item, i) => {
 								return (
 									<button
@@ -72,6 +72,7 @@ export default function SideBar() {
 				)}
 
 				{!collapsed && <WatchList />}
+
 				<div className="flex flex-col items-center gap-2 p-1 text-xs">
 					{!collapsed && (
 						<div className={collapsed ? "absolute bottom-1" : ""}>
