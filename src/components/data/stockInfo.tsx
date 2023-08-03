@@ -6,8 +6,8 @@ import {
 } from "react-icons/ai";
 import { useMutation, useQuery, useReactiveVar } from "@apollo/client";
 import { currentAccountId, symbol } from "../../utilities/reactiveVariables";
-import { Stock } from "../../utilities/types";
-import { formatDollars } from "../../utilities/common";
+import { Stock, WatchList } from "../../utilities/types";
+import { formatDollars, isFav } from "../../utilities/common";
 import { percentChange } from "../../utilities/common";
 import DataContainer from "../container/dataContainer";
 import { StockChart } from "./stockChart";
@@ -35,12 +35,9 @@ export default function StockInfo() {
 		loading: favLoading,
 		error: favError,
 		data: favData,
-	} = useQuery<{ watchList: { id: number; stock: Stock }[] }>(
-		GET_WATCH_LIST,
-		{
-			variables: { accId: currentAccountId() },
-		},
-	);
+	} = useQuery<WatchList>(GET_WATCH_LIST, {
+		variables: { accId: currentAccountId() },
+	});
 
 	const [toggleFav] = useMutation(TOGGLE_WATCH_LIST, {
 		variables: { accId: currentAccountId(), ticker: symbolName },
@@ -75,12 +72,6 @@ export default function StockInfo() {
 	const dollarChange = price! - prevPrice!;
 	const changePercent = percentChange(price, prevPrice);
 	const description = stockData?.oneStock.description;
-	const isFav =
-		favData?.watchList.find(
-			(stock) => stock.stock.ticker === symbolName,
-		) === undefined
-			? false
-			: true;
 
 	return (
 		<div className="flex-1 overflow-y-auto">
@@ -106,7 +97,7 @@ export default function StockInfo() {
 									<AiFillStar size={40} />
 								) : favError ? (
 									<>Watch List Error</>
-								) : isFav ? (
+								) : isFav(favData!.watchList, symbolName) ? (
 									<AiFillStar size={40} />
 								) : (
 									<AiOutlineStar size={40} />

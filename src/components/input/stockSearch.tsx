@@ -3,14 +3,10 @@ import { twMerge } from "tailwind-merge";
 import { symbol } from "../../utilities/reactiveVariables";
 import { useQuery, useReactiveVar } from "@apollo/client";
 import { GET_STOCK_NAMES } from "../../utilities/graphQL";
-import { Stock } from "../../utilities/types";
+import { Dropdown, Stock } from "../../utilities/types";
 import { useNavigate } from "react-router-dom";
 import { useCallback } from "react";
 
-type Dropdown = {
-	label: string;
-	value: string;
-};
 type StockData = {
 	stocks: Stock[];
 };
@@ -79,15 +75,17 @@ export default function StockSearchBar({
 
 const formatOptionLabel = (
 	props: Dropdown,
-	meta: FormatOptionLabelMeta<Dropdown>
+	meta: FormatOptionLabelMeta<Dropdown>,
 ) => {
-	if (props?.label?.length === 0 || props?.value?.length === 0)
+	if (props?.label?.length === 0)
 		return <div className="text-gray-500">Search for a stock</div>;
 	return (
 		<div className="flex flex-row items-center gap-2">
 			<div>{props.label}</div>
 			<p>|</p>
-			<div className={twMerge(meta.context === "value" && "text-gray-500")}>
+			<div
+				className={twMerge(meta.context === "value" && "text-gray-500")}
+			>
 				{props.value}
 			</div>
 		</div>

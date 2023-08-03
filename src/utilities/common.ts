@@ -1,3 +1,5 @@
+import { Stock } from "./types";
+
 // ############# VARIABLES ###############
 
 export const dateOptions = [
@@ -56,7 +58,6 @@ export const formatDollars = (currency: number | undefined): string => {
 	return formatter.format(currency);
 };
 
-
 export const capitalize = (str: string | undefined) => {
 	if (!str) return "";
 	return str.charAt(0).toUpperCase() + str.slice(1);
@@ -81,6 +82,15 @@ export const convertToRoundedPercentageChange = (
 	return roundedPercentageChanges;
 };
 
+export const isFav = (
+	watchList: { id: number; stock: Stock }[],
+	symbol: string,
+) => {
+	return watchList.find((stock) => stock.stock.ticker === symbol) ===
+		undefined
+		? false
+		: true;
+};
 
 // ### DATA MANIPULATION ###
 export function filterRange(
@@ -92,7 +102,6 @@ export function filterRange(
 	const max = filterValue[1] ? filterValue[1] : Number.POSITIVE_INFINITY;
 	return fieldValue >= min && fieldValue <= max;
 }
-
 
 export const sortDate = (a: string, b: string): number => {
 	return new Date(a) >= new Date(b) ? 1 : -1;

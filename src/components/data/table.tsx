@@ -1,11 +1,13 @@
 import MaterialReactTable, { MRT_ColumnDef } from "material-react-table";
-import { ApolloError } from "@apollo/client";
-import { GraphQLReturnData, Holding } from "../../utilities/types";
+import { ApolloError, useMutation, useQuery } from "@apollo/client";
+import { GraphQLReturnData, Holding, WatchList } from "../../utilities/types";
 import DataContainer from "../container/dataContainer";
-import { symbol } from "../../utilities/reactiveVariables";
+import { currentAccountId, symbol } from "../../utilities/reactiveVariables";
 import { useNavigate } from "react-router-dom";
 import AutoSizer, { Size } from "react-virtualized-auto-sizer";
 import { AiFillStar, AiOutlineStar } from "react-icons/ai";
+import { GET_WATCH_LIST, TOGGLE_WATCH_LIST } from "../../utilities/graphQL";
+import { isFav } from "../../utilities/common";
 
 interface TableProps<DataType extends GraphQLReturnData> {
 	loading: boolean;
@@ -26,7 +28,21 @@ export default function Table<DataType extends GraphQLReturnData>({
 }: TableProps<DataType>) {
 	const navigate = useNavigate();
 
-	if (loading)
+	const {
+		loading: favLoading,
+		error: favError,
+		data: favData,
+	} = useQuery<WatchList>(GET_WATCH_LIST, {
+		variables: { accId: currentAccountId() },
+	});
+
+	const [toggleFav] = useMutation(TOGGLE_WATCH_LIST, {
+		refetchQueries: [
+			{ query: GET_WATCH_LIST, variables: { accId: currentAccountId() } },
+		],
+	});
+
+	if (loading || favLoading)
 		return (
 			<span className="loading loading-infinity w-[5em] absolute-center"></span>
 		);
@@ -71,7 +87,12 @@ export default function Table<DataType extends GraphQLReturnData>({
 								const holding =
 									row.original as unknown as Holding &
 										GraphQLReturnData;
-								const filled = false;
+								if (!favData || favError) return <>Error</>;
+
+								const filled = isFav(
+									favData.watchList,
+									holding.stock.ticker,
+								);
 								return (
 									<div className="flex flex-col flex-nowrap gap-2 w-full justify-evenly [&>button]:min-h-0 [&>button]:h-8 [&>button]:rounded-md">
 										<button
@@ -96,12 +117,19 @@ export default function Table<DataType extends GraphQLReturnData>({
 										>
 											Sell
 										</button>
-
 										<div className="flex flex-row items-center justify-center">
 											<button
 												className="w-fit"
 												onClick={() => {
-													console.log("star");
+													toggleFav({
+														variables: {
+															accId: currentAccountId(),
+															ticker: holding
+																.stock.ticker,
+														},
+													}).catch((err) =>
+														console.error(err),
+													);
 												}}
 											>
 												{filled ? (

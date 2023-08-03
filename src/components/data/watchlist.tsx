@@ -1,6 +1,6 @@
 import { useQuery } from "@apollo/client";
 import { GET_WATCH_LIST } from "../../utilities/graphQL";
-import { Stock } from "../../utilities/types";
+import { WatchList } from "../../utilities/types";
 import { currentAccountId, symbol } from "../../utilities/reactiveVariables";
 import { useNavigate } from "react-router-dom";
 import { formatDollars, percentChange } from "../../utilities/common";
@@ -9,9 +9,9 @@ import { twMerge } from "tailwind-merge";
 
 export default function WatchList() {
 	const navigate = useNavigate();
-	const { loading, error, data } = useQuery<{
-		watchList: { id: string; stock: Stock }[];
-	}>(GET_WATCH_LIST, { variables: { accId: currentAccountId() } });
+	const { loading, error, data } = useQuery<WatchList>(GET_WATCH_LIST, {
+		variables: { accId: currentAccountId() },
+	});
 
 	if (loading) return <p>Loading...</p>;
 	if (error) return <p>Error :(</p>;

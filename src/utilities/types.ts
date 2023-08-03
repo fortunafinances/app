@@ -57,22 +57,31 @@ export interface Account extends GraphQLReturnData {
   name: string;
 }
 
+export interface WatchList extends GraphQLReturnData {
+	watchList: { id: number; stock: Stock }[];
+}
+
 export enum OrderType {
-  Market = "Market",
-  Limit = "Limit",
+	Market = "Market",
+	Limit = "Limit",
 }
 
 export enum OrderSide {
-  Buy = "Buy",
-  Sell = "Sell",
+	Buy = "Buy",
+	Sell = "Sell",
 }
 
 export enum OrderStatus {
-  Placed = "Placed",
-  Executed = "Executed",
+	Placed = "Placed",
+	Executed = "Executed",
 }
 
 export type DataPoint = {
-    x: string;
-    y: number;
-}
+	x: string;
+	y: number;
+};
+
+export type Dropdown = {
+	label: string;
+	value: string | number;
+};

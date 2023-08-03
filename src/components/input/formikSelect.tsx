@@ -1,5 +1,7 @@
-import Select from "react-select";
+import Select, { FormatOptionLabelMeta } from "react-select";
 import { useField } from "formik";
+import { Dropdown } from "../../utilities/types";
+import { twMerge } from "tailwind-merge";
 
 type Props = {
 	selectOptions: { label: string; value: string | number }[];
@@ -24,12 +26,36 @@ export default function FormikSelect({
 	const field = useField(formikFieldName);
 	const { setValue } = field[2];
 
+	const formatOptionLabel = (
+		props: Dropdown,
+		meta: FormatOptionLabelMeta<Dropdown>,
+	) => {
+		if (props?.label?.length === 0)
+			return <div className="text-gray-500"></div>;
+		return (
+			<div className="flex flex-row items-center gap-2">
+				<div>{props.label}</div>
+				<p>|</p>
+				<div
+					className={twMerge(
+						meta.context === "value" && "text-gray-500",
+					)}
+				>
+					{props.value}
+				</div>
+			</div>
+		);
+	};
+
 	return (
 		<Select
 			id={props.id}
 			name={props.name}
 			key={props.key}
-			value={selectOptions.find((option) => option.value === field[0].value)}
+			value={selectOptions.find(
+				(option) => option.value === field[0].value,
+			)}
+			formatOptionLabel={(props, meta) => formatOptionLabel(props, meta)}
 			options={selectOptions}
 			placeholder={placeholder}
 			onBlur={field[0].onBlur}
