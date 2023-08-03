@@ -1,12 +1,21 @@
-import { AiFillCaretDown, AiFillCaretUp } from "react-icons/ai";
-import { useQuery, useReactiveVar } from "@apollo/client";
-import { symbol } from "../../utilities/reactiveVariables";
+import {
+	AiFillCaretDown,
+	AiFillCaretUp,
+	AiFillStar,
+	AiOutlineStar,
+} from "react-icons/ai";
+import { useMutation, useQuery, useReactiveVar } from "@apollo/client";
+import { currentAccountId, symbol } from "../../utilities/reactiveVariables";
 import { Stock } from "../../utilities/types";
 import { formatDollars } from "../../utilities/common";
 import { percentChange } from "../../utilities/common";
 import DataContainer from "../container/dataContainer";
 import { StockChart } from "./stockChart";
-import { GET_STOCK } from "../../utilities/graphQL";
+import {
+	GET_STOCK,
+	GET_WATCH_LIST,
+	TOGGLE_WATCH_LIST,
+} from "../../utilities/graphQL";
 type StockData = {
 	oneStock: Stock;
 };
@@ -20,6 +29,24 @@ export default function StockInfo() {
 		data: stockData,
 	} = useQuery<StockData>(GET_STOCK, {
 		variables: { ticker: symbolName },
+	});
+
+	const {
+		loading: favLoading,
+		error: favError,
+		data: favData,
+	} = useQuery<{ watchList: { id: number; stock: Stock }[] }>(
+		GET_WATCH_LIST,
+		{
+			variables: { accId: currentAccountId() },
+		},
+	);
+
+	const [toggleFav] = useMutation(TOGGLE_WATCH_LIST, {
+		variables: { accId: currentAccountId(), ticker: symbolName },
+		refetchQueries: [
+			{ query: GET_WATCH_LIST, variables: { accId: currentAccountId() } },
+		],
 	});
 
 	if (symbolName === "") {
@@ -46,8 +73,14 @@ export default function StockInfo() {
 	const price = stockData?.oneStock.currPrice;
 	const prevPrice = stockData?.oneStock.prevClosePrice;
 	const dollarChange = price! - prevPrice!;
-	const changePercent = percentChange(price!, prevPrice!);
+	const changePercent = percentChange(price, prevPrice);
 	const description = stockData?.oneStock.description;
+	const isFav =
+		favData?.watchList.find(
+			(stock) => stock.stock.ticker === symbolName,
+		) === undefined
+			? false
+			: true;
 
 	return (
 		<div className="flex-1 overflow-y-auto">
@@ -58,9 +91,28 @@ export default function StockInfo() {
 						<h1 className="text-3xl md:text-6xl font-semibold">
 							{company}
 						</h1>
-						<h2 className="text-2xl md:text-4xl text-[#929292]">
-							{symbolName}
-						</h2>
+						<div className="flex gap-2">
+							<h2 className="text-2xl md:text-4xl text-[#929292]">
+								{symbolName}{" "}
+							</h2>
+							<button
+								onClick={() => {
+									toggleFav().catch((err) =>
+										console.error(err),
+									);
+								}}
+							>
+								{favLoading ? (
+									<AiFillStar size={40} />
+								) : favError ? (
+									<>Watch List Error</>
+								) : isFav ? (
+									<AiFillStar size={40} />
+								) : (
+									<AiOutlineStar size={40} />
+								)}
+							</button>
+						</div>
 					</div>
 					<div className="flex flex-col gap-6 items-end md:items-start">
 						<h1 className="text-4xl text-primary font-medium">
