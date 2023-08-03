@@ -61,7 +61,7 @@ export default function StockRecommendation() {
 	const isDisabled = selections.length < 1;
 	const navigate = useNavigate();
 	const getGPTResponse = (options: string[]) => {
-		setLoading(false);
+		setLoading(true);
 		askGPT({ variables: { input: options } })
 			.then((res) => {
 				navigate("/stockResults", {
@@ -79,10 +79,17 @@ export default function StockRecommendation() {
 				</h1>
 			</div>
 			{loading ? (
-				<span className="loading loading-dots loading-lg"></span>
+				<div className="flex justify-center items-center w-full">
+					<div className="flex items-end gap-1">
+						<p className="text-2xl font-bold">
+							Finding Stocks for You
+						</p>
+						<span className="loading loading-dots loading-sm translate-y-[2px]"></span>
+					</div>
+				</div>
 			) : (
 				<div className="bg-accent overflow-y-auto p-4 text-primary">
-					<h1 className="text-1xl md:text-3xl">
+					<h1 className="text-2xl md:text-3xl">
 						Select up to 5 categories that you're most interested in
 					</h1>
 					<hr className="h-[2px] my-8 bg-primary border-0"></hr>
@@ -99,19 +106,28 @@ export default function StockRecommendation() {
 										/>
 									),
 								)}
-
-								<button
-									className={`mt-5 flex flex-1 px-5 py-2.5 relative group overflow-hidden font-medium bg-transparent-50 border border-[#2a0066]  rounded m-2                            
-                            ${
-								isDisabled
-									? "bg-neutral-500 opacity-10 text-black"
-									: "bg-[#2a0066] text-white hover:border-success-600 hover:bg-neutral-500 hover:bg-opacity-10 hover:text-black"
-							}`}
-									disabled={isDisabled}
-									onClick={() => getGPTResponse(selections)}
-								>
-									Get Stock Recommendations
-								</button>
+								<div className="flex gap-2 flex-col md:flex-row text-xl md:text-2xl">
+									<button
+										className={`px-5 py-2.5 relative group overflow-hidden font-medium bg-transparent-50 border border-[#2a0066] rounded
+                                        ${
+											isDisabled
+												? "bg-neutral-500 opacity-10 text-black"
+												: "bg-[#2a0066] text-white hover:border-success-600 hover:bg-neutral-500 hover:bg-opacity-10 hover:text-black"
+										}`}
+										disabled={isDisabled}
+										onClick={() =>
+											getGPTResponse(selections)
+										}
+									>
+										Get Stock Recommendations
+									</button>
+									<button
+										className={`bg-[#2a0066] text-white flex-1 relative group overflow-hidden font-medium bg-transparent-50 border border-[#2a0066] hover:border-success-600 hover:bg-neutral-500 hover:bg-opacity-10 hover:text-black rounded`}
+										onClick={() => navigate("/app")}
+									>
+										Skip
+									</button>
+								</div>
 							</div>
 						</center>
 					</div>

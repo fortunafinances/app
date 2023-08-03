@@ -108,6 +108,7 @@ export function LineChart() {
 					range === 0
 						? new Date(date.getFullYear(), 0, 1).toISOString()
 						: subtractMonths(date, range).toISOString(),
+				max: date.toISOString(),
 			},
 			y: {
 				ticks: {

@@ -7,7 +7,6 @@ import { signout } from "../../utilities/auth";
 import AccountDropdown from "../input/accountDropdown";
 import { Account } from "../../utilities/types";
 import { GET_ACCOUNTS } from "../../utilities/graphQL";
-import { isMobile } from "../../utilities/common";
 import { useWindowSize } from "../../utilities/hooks";
 import { RxHamburgerMenu } from "react-icons/rx";
 
@@ -36,14 +35,14 @@ export default function Header() {
 						height="45"
 					></img>
 
-					{!isMobile(windowSize.width) && (
+					{windowSize.width! > 768 && (
 						<h1 className="text-white translate-y-[2px]">
 							Fortuna
 						</h1>
 					)}
 				</Link>
 			</div>
-			{isMobile(windowSize.width) && (
+			{windowSize.width! <= 800 && (
 				<div className="flex flex-row">
 					<h3 className="text-lg font-semibold">
 						<AccountDropdown

@@ -6,9 +6,11 @@ import AccountDropdown from "../input/accountDropdown";
 import { Account } from "../../utilities/types";
 import { GET_ACCOUNTS } from "../../utilities/graphQL";
 import { getCurrentPath, navItems } from "../../utilities/common";
+import { useWindowSize } from "../../utilities/hooks";
 
 export default function AppNavigation() {
 	const user = useReactiveVar(userInfo);
+	const windowSize = useWindowSize().width;
 
 	const { loading, error, data } = useQuery<{ accounts: Account[] }>(
 		GET_ACCOUNTS,
@@ -21,11 +23,13 @@ export default function AppNavigation() {
 			<div className="flex flex-row justify-between items-center">
 				<div className="text-white flex flex-row items-end">
 					<h3 className="text-xl font-semibold">
-						<AccountDropdown
-							data={data?.accounts}
-							loading={loading}
-							error={error}
-						/>
+						{windowSize! > 800 && (
+							<AccountDropdown
+								data={data?.accounts}
+								loading={loading}
+								error={error}
+							/>
+						)}
 					</h3>
 					<div className="px-2 hidden sm:block text-transform: capitalize">
 						{navItems.map((item, i) => {
@@ -47,7 +51,7 @@ export default function AppNavigation() {
 				</div>
 				<div className="tracking-narrow">
 					<button
-						className="btn tracking-wider rounded-md text-primary hover:text-secondary border-info bg-secondary hover:border-secondary hover:bg-primary hover:text-primary hover:border-2 min-h-[2rem] h-[1rem] mr-3"
+						className="btn tracking-wider rounded-md text-primary hover:text-secondary border-info bg-secondary hover:border-secondary hover:bg-primary min-h-[2rem] h-[1rem] mr-3"
 						onClick={() => {
 							(
 								document.getElementById(

@@ -88,14 +88,14 @@ export default function StockResults() {
 	}
 
 	return (
-		<div className="h-screen flex [&>div]:w-[50%]">
-			<div className="flex flex-col gap-5 bg-primary text-accent p-8">
-				<h1 className=" mt-[30%] font-semibold text-left md:text-7xl text-5xl">
+		<div className="h-screen flex md:[&>div]:w-[50%]">
+			<div className="hidden md:flex flex-col items-center justify-center gap-5 bg-primary text-accent p-8">
+				<h1 className="font-semibold text-left md:text-7xl text-5xl">
 					Your First Investment
 				</h1>
 			</div>
 			<div className="bg-accent overflow-y-auto p-4 text-primary">
-				<h1 className="text-1xl md:text-3xl">Buy A Stock</h1>
+				<h1 className="text-3xl">Buy A Stock</h1>
 				<hr className="h-[2px] my-8 bg-primary border-0"></hr>
 				<div className="App">
 					<center>
@@ -108,8 +108,7 @@ export default function StockResults() {
 							);
 						})}
 						<button
-							className={`mt-5 flex bg-[#2a0066] text-white flex-1 px-5 py-2.5 relative group overflow-hidden font-medium bg-transparent-50 border border-[#2a0066] hover:border-success-600 hover:bg-neutral-500 hover:bg-opacity-10 hover:text-black rounded m-2                            
-                            `}
+							className={`mt-5 text-xl md:text-2xl flex bg-[#2a0066] text-white flex-1 px-5 py-2.5 relative group overflow-hidden font-medium bg-transparent-50 border border-[#2a0066] hover:border-success-600 hover:bg-neutral-500 hover:bg-opacity-10 hover:text-black rounded m-2`}
 							onClick={() => navigate("/app")}
 						>
 							Skip
