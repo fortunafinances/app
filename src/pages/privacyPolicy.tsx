@@ -190,7 +190,7 @@ export default function PrivacyPolicy() {
                     <p className="my-2">We will let You know via email and/or a prominent notice on Our Service, prior to the change becoming effective and update the "Last updated" date at the top of this Privacy Policy.</p>
                     <p className="my-2">You are advised to review this Privacy Policy periodically for any changes. Changes to this Privacy Policy are effective when they are posted on this page.</p>
                     <h1 className="text-3xl font-bold mb-4">Contact Us</h1>
-                    <p className="my-2">If you have any questions about this Privacy Policy, You can contact us by email: hello@fortuna.dev</p>
+                    <p className="my-2">If you have any questions about this Privacy Policy, You can contact us by email: hello@fortunafinance.com</p>
                     
                 </div>
             </div>
