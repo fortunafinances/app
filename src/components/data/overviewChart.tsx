@@ -48,6 +48,7 @@ type LineData = {
 };
 
 export function LineChart() {
+	const date = new Date();
 	// get historical data
 	const currentAccount = useReactiveVar(currentAccountId);
 	const { loading, error, data } = useQuery<LineData>(
@@ -102,11 +103,15 @@ export function LineChart() {
 				ticks: {
 					maxTicksLimit: 5,
 				},
-				min: subtractMonths(new Date(), range).toISOString(),
+				min:
+					range === 0
+						? new Date(date.getFullYear(), 0, 1).toISOString()
+						: subtractMonths(date, range).toISOString(),
 			},
 			y: {
 				ticks: {
 					callback: (value: number | string) => value + "%",
+					maxTicksLimit: 10,
 				},
 			},
 		},

@@ -5,8 +5,8 @@ export const dateOptions = [
 	{ value: 1, label: "1 Month" },
 	{ value: 3, label: "3 Months" },
 	{ value: 6, label: "6 Months" },
+	{ value: 0, label: "YTD" },
 	{ value: 12, label: "1 Year" },
-	{ value: 24, label: "2 Years" },
 ];
 export const navItems = ["overview", "trade", "holdings", "orders", "activity"];
 
