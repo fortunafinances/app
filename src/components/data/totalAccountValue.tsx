@@ -18,7 +18,7 @@ export default function TotalAccountValue() {
 	);
 
 	return (
-		<div className="bg-blue-700 w-full flex flex-col gap-1 p-2 text-white items-center">
+		<div className="bg-primary w-full flex flex-col gap-1 p-2 text-white items-center rounded-tr-md">
 			<p>All Accounts</p>
 			<h3 className="text-xl font-bold text-ellipsis">
 				{loading
@@ -27,7 +27,7 @@ export default function TotalAccountValue() {
 					? "Error"
 					: formatDollars(data!.allAccValue)}
 			</h3>
-			<p className="text-xs">As of {formatDate(date.toDateString())}</p>
+			<p className="text-xs">As of {formatDate(date.toISOString())}</p>
 		</div>
 	);
 }

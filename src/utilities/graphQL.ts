@@ -4,6 +4,8 @@ import { InMemoryCache } from "@apollo/client/cache";
 const cache = new InMemoryCache();
 export default cache;
 
+// ############## QUERIES #################
+
 export const GET_ACTIVITIES = gql`
 	query Activity($accId: Int!) {
 		activity(input: { accId: $accId }) {
@@ -47,24 +49,22 @@ export const GET_ORDERS = gql`
 	}
 `;
 
+export const GET_STOCK = gql`
+	query OneStock($ticker: String!) {
+		oneStock(input: { ticker: $ticker }) {
+			name
+			currPrice
+			prevClosePrice
+			description
+			ticker
+		}
+	}
+`;
+
 export const GET_TOTAL_VALUE = gql`
 	query AllAccValue($userId: String!) {
 		allAccValue(input: { userId: $userId })
 	}
-`;
-
-export const MAKE_TRANSFER = gql`
-  mutation InsertTransfer(
-    $sendAccId: Int!
-    $receiveAccId: Int!
-    $transferAmt: Float!
-  ) {
-    insertTransfer(
-      sendAccId: $sendAccId
-      receiveAccId: $receiveAccId
-      transferAmt: $transferAmt
-    )
-  }
 `;
 
 export const GET_ACCOUNTS = gql`
@@ -87,18 +87,6 @@ export const GET_STOCK_NAMES = gql`
   }
 `;
 
-export const CREATE_ACCOUNT = gql`
-  mutation InsertAccount($name: String!, $userId: ID!) {
-    insertAccount(name: $name, userId: $userId) {
-      message
-      account {
-        accId
-        name
-        cash
-      }
-    }
-  }
-`;
 
 export const GET_OVERVIEW = gql`
   query DisplayBar($accId: Int!) {
@@ -162,6 +150,9 @@ export const GET_WATCH_LIST = gql`
 	}
 `;
 
+// ############## MUTATIONS #################
+
+
 export const TOGGLE_WATCH_LIST = gql`
 	mutation ToggleWatch($accId: Int!, $ticker: String!) {
 		toggleWatch(accId: $accId, ticker: $ticker) {
@@ -176,5 +167,52 @@ export const TOGGLE_WATCH_LIST = gql`
 				}
 			}
 		}
+	}
+`;
+
+export const CREATE_ACCOUNT = gql`
+  mutation InsertAccount($name: String!, $userId: ID!) {
+    insertAccount(name: $name, userId: $userId) {
+      message
+      account {
+        accId
+        name
+        cash
+      }
+    }
+  }
+`;
+
+export const MAKE_TRANSFER = gql`
+	mutation InsertTransfer(
+		$sendAccId: Int!
+		$receiveAccId: Int!
+		$transferAmt: Float!
+	) {
+		insertTransfer(
+			sendAccId: $sendAccId
+			receiveAccId: $receiveAccId
+			transferAmt: $transferAmt
+		)
+	}
+`;
+
+export const MAKE_TRADE = gql`
+	mutation InsertTrade(
+		$accID: Int!
+		$type: OrderType!
+		$side: OrderSide!
+		$ticker: String!
+		$tradeQty: Int!
+		$tradePrice: Float!
+	) {
+		insertTrade(
+			accID: $accID
+			type: $type
+			side: $side
+			ticker: $ticker
+			tradeQty: $tradeQty
+			tradePrice: $tradePrice
+		)
 	}
 `;

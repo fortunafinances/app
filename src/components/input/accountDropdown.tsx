@@ -38,7 +38,7 @@ const AccountDropdown = ({ data, loading, error }: DropdownProps) => {
 
 	return (
 		<div
-			className="dropdown mt-1 text-black min-w-[150px] sm:min-w-[200px] max-w-[220px] lg:max-w-[300px]"
+			className="dropdown text-black min-w-[150px] sm:min-w-[200px] max-w-[220px] lg:max-w-[300px]"
 			title={currentAccount.name}
 		>
 			<label

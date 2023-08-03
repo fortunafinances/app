@@ -24,12 +24,12 @@ export const preventMinus = (e: React.KeyboardEvent<HTMLInputElement>) => {
 };
 
 // ## FORMATTING ##
-export const percentChange = (curr: number, prev: number): string => {
+export const percentChange = (curr?: number, prev?: number): string => {
 	const formatter = new Intl.NumberFormat("en-US", {
 		maximumSignificantDigits: 2,
 	});
 
-	return formatter.format(((curr - prev) / prev) * 100);
+	return formatter.format(((curr! - prev!) / prev!) * 100);
 };
 
 export const formatDate = (dateString: string): string => {
@@ -45,7 +45,8 @@ export const formatDate = (dateString: string): string => {
 	return formatter.format(date);
 };
 
-export const formatDollars = (currency: number): string => {
+export const formatDollars = (currency: number | undefined): string => {
+	if (!currency) return "$0.00";
 	const formatter = new Intl.NumberFormat("en-US", {
 		style: "currency",
 		currency: "USD",

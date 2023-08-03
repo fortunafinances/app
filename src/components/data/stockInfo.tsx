@@ -1,30 +1,18 @@
 import { AiFillCaretDown, AiFillCaretUp } from "react-icons/ai";
-import { gql, useQuery, useReactiveVar } from "@apollo/client";
+import { useQuery, useReactiveVar } from "@apollo/client";
 import { symbol } from "../../utilities/reactiveVariables";
 import { Stock } from "../../utilities/types";
 import { formatDollars } from "../../utilities/common";
 import { percentChange } from "../../utilities/common";
 import DataContainer from "../container/dataContainer";
 import { StockChart } from "./stockChart";
+import { GET_STOCK } from "../../utilities/graphQL";
+type StockData = {
+	oneStock: Stock;
+};
 
 export default function StockInfo() {
 	const symbolName = useReactiveVar(symbol);
-
-	const GET_STOCK = gql`
-		query OneStock($ticker: String!) {
-			oneStock(input: { ticker: $ticker }) {
-				name
-				currPrice
-				prevClosePrice
-				description
-				ticker
-			}
-		}
-	`;
-
-	type StockData = {
-		oneStock: Stock;
-	};
 
 	const {
 		loading: stockLoading,
@@ -76,7 +64,7 @@ export default function StockInfo() {
 					</div>
 					<div className="flex flex-col gap-6 items-end md:items-start">
 						<h1 className="text-4xl text-primary font-medium">
-							{formatDollars(price!)}
+							{formatDollars(price)}
 						</h1>
 						<div className="flex flex-row text-primary font-semibold text-xl items-center w-fit">
 							{dollarChange > 0 ? (
