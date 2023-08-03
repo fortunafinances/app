@@ -22,9 +22,7 @@ export default function ApplicationLayout() {
 				<SideBar />
 				{!(isMobile(windowSize) && !collapsed) && (
 					<div className="flex flex-col grow h-full">
-						{!isMobile(windowSize) && (
-							<AppNavigation />
-						)}
+						{!isMobile(windowSize) && <AppNavigation />}
 						<main className="relative h-full">
 							<AutoSizer>
 								{({ height, width }: Size) => {
@@ -47,7 +45,10 @@ export default function ApplicationLayout() {
 			</div>
 			<Transfer />
 			<TransferSuccessful transfer={true} modalId="transfer_successful" />
-			<ErrorNotification modalId="transfer_error" message="Transfer Error" />
+			<ErrorNotification
+				modalId="transfer_error"
+				message="Transfer Error"
+			/>
 		</div>
 	);
 }

@@ -75,7 +75,7 @@ export default function Overview() {
 
 	return (
 		<div className="p-3 flex flex-col gap-3 h-full">
-			<DataContainer className="font-semibold px-3 flex flex-row md:justify-start justify-between md:gap-20">
+			<DataContainer className="font-semibold px-3 flex flex-row md:justify-start justify-between md:gap-20 border-2 border-primary">
 				<DataComponent
 					title="Net Worth"
 					dollars={data?.displayBar.total ?? 0}
@@ -92,13 +92,15 @@ export default function Overview() {
 			{holdingsData?.holdings.length === 0 ? (
 				<NoInvestments />
 			) : (
-				<div className="flex flex-col md:flex-row h-full gap-3">
-						<DataContainer className="h-full md:max-w-[50%] max-w-full p-3 flex flex-col justify-center items-center">
-						<h2 className="text-2xl">Portfolio Sector Breakdown</h2>
+				<div className="flex flex-col md:flex-row h-full justify-between [&>*]:border-2 [&>*]:border-primary">
+					<DataContainer className="h-fit xl:h-full md:max-w-[49.5%] max-w-full flex flex-col justify-center items-center p-6 ">
+						<h2 className="text-3xl">Portfolio Sector Breakdown</h2>
 						<PieChart />
 					</DataContainer>
-						<DataContainer className="h-full md:max-w-[50%] max-w-full p-3 flex flex-col justify-center items-center overflow-auto">
-							<h2 className="text-2xl">Historical Account Performance</h2>
+					<DataContainer className="h-full max-h-[40rem]:h-fit md:max-w-[49.5%] max-w-full flex flex-col justify-center items-center">
+						<h2 className="text-3xl">
+							Historical Account Performance
+						</h2>
 						<LineChart />
 					</DataContainer>
 				</div>
