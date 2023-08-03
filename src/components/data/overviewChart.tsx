@@ -68,6 +68,7 @@ export function LineChart() {
 	// initialize the chart
 	const options = {
 		responsive: true,
+		maintainAspectRatio: false,
 		plugins: {
 			legend: {
 				position: "top" as const,
@@ -142,9 +143,11 @@ export function LineChart() {
 	];
 
 	return (
-		<div className="w-full">
-			<Scatter options={options} data={{ datasets: chartDataSets }} />
-			<div className="flex flex-col flex-wrap md:flex-row gap-1 mt-5 justify-center rounded-md">
+		<div className="w-full h-fit">
+			<div className="min-h-[250px]">
+				<Scatter options={options} data={{ datasets: chartDataSets }} />
+			</div>
+			<div className="grid grid-cols-2 sm:grid-cols-3 gap-1 mt-5 justify-center rounded-md">
 				{dateOptions.map((item, i) => {
 					return (
 						<button
@@ -153,7 +156,7 @@ export function LineChart() {
 								setRange(item.value);
 							}}
 							className={twMerge(
-								"w-full flex-1 basis-[25%]  btn text-primary hover:border-2 hover:border-primary hover:bg-white bg-white",
+								"w-full btn text-primary hover:border-2 hover:border-primary hover:bg-white bg-white",
 								range === item.value &&
 									"border-4 border-primary",
 							)}

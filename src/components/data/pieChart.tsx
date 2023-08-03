@@ -70,7 +70,7 @@ export default function PieChart() {
 							minimumFractionDigits: 0,
 							maximumFractionDigits: 2,
 						});
-						return `${context.label}: ${formatter.format(
+						return `${formatter.format(
 							(Number(context.parsed) / sum) * 100,
 						)}%`;
 					},

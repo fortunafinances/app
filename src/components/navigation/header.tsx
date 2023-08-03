@@ -55,7 +55,7 @@ export default function Header() {
 				</div>
 			)}
 			<div className="flex flex-row gap-3 sm:items-center text-2xl mx-3">
-				<h3 className="hidden lg:inline text-white">
+				<h3 className="hidden md:inline text-white">
 					Welcome {user?.firstName + " " + user?.lastName}
 				</h3>
 				<div className="dropdown dropdown-end">

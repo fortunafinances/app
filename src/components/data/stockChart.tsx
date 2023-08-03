@@ -65,6 +65,7 @@ export function StockChart(props: StockChartProps) {
 	// initialize the chart
 	const chartOptions = {
 		responsive: true,
+		maintainAspectRatio: false,
 		plugins: {
 			legend: {
 				position: "top" as const,
@@ -125,5 +126,9 @@ export function StockChart(props: StockChartProps) {
 		],
 	};
 
-	return <Scatter options={chartOptions} data={chartData} />;
+	return (
+		<div className="w-full min-h-[300px]">
+			<Scatter options={chartOptions} data={chartData} />
+		</div>
+	);
 }
