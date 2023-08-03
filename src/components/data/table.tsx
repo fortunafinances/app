@@ -67,17 +67,15 @@ export default function Table<DataType extends GraphQLReturnData>({
 						}}
 						enableRowActions={enableRowActions ?? true}
 						renderRowActions={({ row }) => {
-							if (
-								row.original.__typename === "Holding"
-							) {
+							if (row.original.__typename === "Holding") {
 								const holding =
 									row.original as unknown as Holding &
-									GraphQLReturnData;
+										GraphQLReturnData;
 								const filled = false;
 								return (
-									<div className="flex flex-col flex-nowrap gap-2 w-full justify-evenly [&>button]:min-h-0 [&>button]:h-8">
+									<div className="flex flex-col flex-nowrap gap-2 w-full justify-evenly [&>button]:min-h-0 [&>button]:h-8 [&>button]:rounded-md">
 										<button
-											className="btn btn-primary"
+											className="btn btn-primary  text-white hover:text-primary hover:bg-white hover:border-primary border-2"
 											onClick={() => {
 												symbol(holding.stock.ticker);
 												navigate("/app/trade", {
@@ -88,7 +86,7 @@ export default function Table<DataType extends GraphQLReturnData>({
 											Buy
 										</button>
 										<button
-											className="btn btn-secondary"
+											className="btn btn-primary text-white hover:text-primary hover:bg-white hover:border-primary border-2"
 											onClick={() => {
 												symbol(holding.stock.ticker);
 												navigate("/app/trade", {
@@ -109,13 +107,10 @@ export default function Table<DataType extends GraphQLReturnData>({
 												{filled ? (
 													<AiFillStar size={40} />
 												) : (
-													<AiOutlineStar
-														size={40}
-													/>
+													<AiOutlineStar size={40} />
 												)}
 											</button>
 										</div>
-
 									</div>
 								);
 							} else {
@@ -132,7 +127,7 @@ export default function Table<DataType extends GraphQLReturnData>({
 						muiTableBodyProps={{
 							sx: () => ({
 								"& tr:nth-of-type(odd)": {
-									backgroundColor: "#ddd",
+									backgroundColor: "#F2EEFB",
 								},
 							}),
 						}}
