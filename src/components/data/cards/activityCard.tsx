@@ -1,6 +1,6 @@
 import React from "react";
 import { formatDate } from "../../../utilities/common";
-import { formatDollars } from "../../../utilities/currency";
+import { formatDollars } from "../../../utilities/common";
 
 interface ActivityProps {
 	date: string;

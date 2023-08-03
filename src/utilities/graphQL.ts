@@ -4,10 +4,12 @@ import { InMemoryCache } from "@apollo/client/cache";
 const cache = new InMemoryCache();
 export default cache;
 
+// ############## QUERIES #################
+
 export const GET_ACTIVITIES = gql`
 	query Activity($accId: Int!) {
 		activity(input: { accId: $accId }) {
-      id
+			id
 			date
 			type
 			description
@@ -48,115 +50,100 @@ export const GET_ORDERS = gql`
 	}
 `;
 
+export const GET_STOCK = gql`
+	query OneStock($ticker: String!) {
+		oneStock(input: { ticker: $ticker }) {
+			name
+			currPrice
+			prevClosePrice
+			description
+			ticker
+		}
+	}
+`;
+
 export const GET_TOTAL_VALUE = gql`
 	query AllAccValue($userId: String!) {
 		allAccValue(input: { userId: $userId })
 	}
 `;
 
-export const MAKE_TRANSFER = gql`
-  mutation InsertTransfer(
-    $sendAccId: Int!
-    $receiveAccId: Int!
-    $transferAmt: Float!
-  ) {
-    insertTransfer(
-      sendAccId: $sendAccId
-      receiveAccId: $receiveAccId
-      transferAmt: $transferAmt
-    )
-  }
-`;
-
 export const GET_ACCOUNTS = gql`
-  query Accounts($userId: String!) {
-    accounts(input: { userId: $userId }) {
-      accId
-      name
-      cash
-    }
-  }
+	query Accounts($userId: String!) {
+		accounts(input: { userId: $userId }) {
+			accId
+			name
+			cash
+		}
+	}
 `;
 
 export const GET_STOCK_NAMES = gql`
-  query Stocks {
-    stocks {
-      name
-      ticker
-      currPrice
-    }
-  }
-`;
-
-export const CREATE_ACCOUNT = gql`
-  mutation InsertAccount($name: String!, $userId: ID!) {
-    insertAccount(name: $name, userId: $userId) {
-      message
-      account {
-        accId
-        name
-        cash
-      }
-    }
-  }
+	query Stocks {
+		stocks {
+			name
+			ticker
+			currPrice
+		}
+	}
 `;
 
 export const GET_OVERVIEW = gql`
-  query DisplayBar($accId: Int!) {
-    displayBar(input: { accId: $accId }) {
-      total
-      invest
-      cash
-    }
-  }
+	query DisplayBar($accId: Int!) {
+		displayBar(input: { accId: $accId }) {
+			total
+			invest
+			cash
+		}
+	}
 `;
 
 export const GET_PIE_CHART_DATA = gql`
-  query PieData($accId: Int!) {
-    pieData(input: { accId: $accId }) {
-      labels
-      values
-      message
-    }
-  }
+	query PieData($accId: Int!) {
+		pieData(input: { accId: $accId }) {
+			labels
+			values
+			message
+		}
+	}
 `;
 
 export const GET_OVERVIEW_LINE_CHART = gql`
 	query StockHistorical($accId: Int!) {
-    stockHistorical(input: {ticker: "^GSPC"}) {
-        data {
-            x
-            y
-        }
-    }
-    accountHistorical(input: {accId: $accId}) {
-        data {
-            x
-            y
-        }
-    }
-}
+		stockHistorical(input: { ticker: "^GSPC" }) {
+			data {
+				x
+				y
+			}
+		}
+		accountHistorical(input: { accId: $accId }) {
+			data {
+				x
+				y
+			}
+		}
+	}
 `;
 
 export const GET_STOCK_LINE_CHART = gql`
-  query StockHistorical($ticker: String!) {
-    stockHistorical(input: {ticker: $ticker}) {
-        data {
-            x
-            y
-        }
-    }
-  }
-`
+	query StockHistorical($ticker: String!) {
+		stockHistorical(input: { ticker: $ticker }) {
+			data {
+				x
+				y
+			}
+		}
+	}
+`;
 
 export const GET_ONE_STOCK = gql`
-  query OneStock($ticker: String!) {
-    oneStock(input: {ticker: $ticker}) {
-      name
-      currPrice
-    }
-  }
-`
+	query OneStock($ticker: String!) {
+		oneStock(input: { ticker: $ticker }) {
+			name
+			currPrice
+		}
+	}
+`;
 
 export const GET_WATCH_LIST = gql`
 	query WatchList($accId: Int!) {
@@ -172,6 +159,8 @@ export const GET_WATCH_LIST = gql`
 	}
 `;
 
+// ############## MUTATIONS #################
+
 export const TOGGLE_WATCH_LIST = gql`
 	mutation ToggleWatch($accId: Int!, $ticker: String!) {
 		toggleWatch(accId: $accId, ticker: $ticker) {
@@ -186,5 +175,52 @@ export const TOGGLE_WATCH_LIST = gql`
 				}
 			}
 		}
+	}
+`;
+
+export const CREATE_ACCOUNT = gql`
+	mutation InsertAccount($name: String!, $userId: ID!) {
+		insertAccount(name: $name, userId: $userId) {
+			message
+			account {
+				accId
+				name
+				cash
+			}
+		}
+	}
+`;
+
+export const MAKE_TRANSFER = gql`
+	mutation InsertTransfer(
+		$sendAccId: Int!
+		$receiveAccId: Int!
+		$transferAmt: Float!
+	) {
+		insertTransfer(
+			sendAccId: $sendAccId
+			receiveAccId: $receiveAccId
+			transferAmt: $transferAmt
+		)
+	}
+`;
+
+export const MAKE_TRADE = gql`
+	mutation InsertTrade(
+		$accID: Int!
+		$type: OrderType!
+		$side: OrderSide!
+		$ticker: String!
+		$tradeQty: Int!
+		$tradePrice: Float!
+	) {
+		insertTrade(
+			accID: $accID
+			type: $type
+			side: $side
+			ticker: $ticker
+			tradeQty: $tradeQty
+			tradePrice: $tradePrice
+		)
 	}
 `;

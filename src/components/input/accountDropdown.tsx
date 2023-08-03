@@ -4,8 +4,6 @@ import { currentAccountId } from "../../utilities/reactiveVariables";
 import { Account } from "../../utilities/types";
 import { ApolloError } from "@apollo/client";
 import { Link } from "react-router-dom";
-import { isMobile } from "../../utilities/common";
-import { useWindowSize } from "../../utilities/hooks";
 
 export interface DropdownProps {
 	data: Account[] | undefined;
@@ -14,7 +12,6 @@ export interface DropdownProps {
 }
 
 const AccountDropdown = ({ data, loading, error }: DropdownProps) => {
-	const windowSize = useWindowSize().width;
 	const currentAccountNumber = useReactiveVar(currentAccountId);
 
 	if (loading) return <div>Loading...</div>;
@@ -38,7 +35,7 @@ const AccountDropdown = ({ data, loading, error }: DropdownProps) => {
 
 	return (
 		<div
-			className="flex flex-col items-center dropdown text-black capitalize min-w-[220px] lg:max-w-[300px]"
+			className="flex flex-col items-center dropdown text-black min-w-[220px] lg:max-w-[300px]"
 			title={currentAccount.name}
 		>
 			<label
@@ -46,14 +43,11 @@ const AccountDropdown = ({ data, loading, error }: DropdownProps) => {
 				className="btn bg-white outline-none rounded-lg b-0 sm:rounded-b-none normal-case w-full text-xl flex flex-row flex-nowrap justify-center sm:justify-between"
 			>
 				<div className="relative top-[50%] -translate-y-[15px] h-full max-w-[90%]">
-					<p className="truncate max-w-full h-full capitalize">
+					<p className="truncate max-w-full h-full">
 						{currentAccount.name}
 					</p>
 				</div>
-				<BsChevronDown/>
-				{/* {isMobile(windowSize) && (
-					<BsChevronDown />
-				)} */}
+				<BsChevronDown />
 			</label>
 			<ul
 				tabIndex={0}

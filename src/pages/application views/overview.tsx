@@ -2,7 +2,7 @@ import { useQuery, useReactiveVar } from "@apollo/client";
 import DataContainer from "../../components/container/dataContainer";
 import PieChart from "../../components/data/pieChart";
 import { LineChart } from "../../components/data/overviewChart";
-import { formatDollars } from "../../utilities/currency";
+import { formatDollars } from "../../utilities/common";
 import {
 	currentAccountId,
 	sidebarClosed,
@@ -98,7 +98,7 @@ export default function Overview() {
 						<PieChart />
 					</DataContainer>
 					<DataContainer className="h-full max-h-[40rem]:h-fit md:max-w-[49.5%] max-w-full flex flex-col justify-center items-center">
-						<h2 className="text-3xl">
+						<h2 className="text-2xl">
 							Historical Account Performance
 						</h2>
 						<LineChart />

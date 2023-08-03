@@ -80,7 +80,7 @@ export function LineChart() {
 			tooltip: {
 				callbacks: {
 					label: (t: TooltipItem<"scatter">) => {
-						const rawData = t.raw as RawData;
+						const rawData = t.raw as DataPoint;
 						const date = new Date(String(rawData.x));
 						return [
 							format(date, "eee MMM dd, yyyy"),

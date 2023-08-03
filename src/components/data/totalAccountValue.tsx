@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { formatDollars } from "../../utilities/currency";
+import { formatDollars } from "../../utilities/common";
 import { formatDate } from "../../utilities/common";
 import { useQuery, useReactiveVar } from "@apollo/client";
 import { userInfo } from "../../utilities/reactiveVariables";
@@ -18,7 +18,7 @@ export default function TotalAccountValue() {
 	);
 
 	return (
-		<div className="bg-yellow-400 w-full flex flex-col gap-1 p-2 text-black items-center">
+		<div className="bg-primary w-full flex flex-col gap-1 p-2 text-white items-center rounded-tr-md">
 			<p>All Accounts</p>
 			<h3 className="text-xl font-bold text-ellipsis">
 				{loading
@@ -27,7 +27,7 @@ export default function TotalAccountValue() {
 					? "Error"
 					: formatDollars(data!.allAccValue)}
 			</h3>
-			<p className="text-xs">As of {formatDate(date.toDateString())}</p>
+			<p className="text-xs">As of {formatDate(date.toISOString())}</p>
 		</div>
 	);
 }

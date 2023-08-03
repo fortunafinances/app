@@ -6,7 +6,7 @@ import { twMerge } from "tailwind-merge";
 import StockInfo from "../../components/data/stockInfo";
 import TransferSuccessful from "../../components/popup/successfulNotification";
 import ErrorNotification from "../../components/popup/errorNotification";
-import { formatDollars } from "../../utilities/currency";
+import { formatDollars } from "../../utilities/common";
 import { useQuery, useReactiveVar } from "@apollo/client";
 import { currentAccountId } from "../../utilities/reactiveVariables";
 import { GET_OVERVIEW } from "../../utilities/graphQL";

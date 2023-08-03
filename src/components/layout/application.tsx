@@ -23,7 +23,7 @@ export default function ApplicationLayout() {
 				{!(isMobile(windowSize) && !collapsed) && (
 					<div className="flex flex-col grow h-full">
 						{!isMobile(windowSize) && <AppNavigation />}
-						<main className="relative h-full">
+						<main className="relative h-full z-20 bg-white">
 							<AutoSizer>
 								{({ height, width }: Size) => {
 									return (

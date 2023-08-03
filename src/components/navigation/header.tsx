@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { CgProfile } from "react-icons/cg";
 import { useQuery } from "@apollo/client";
-import { userInfo } from "../../utilities/reactiveVariables";
+import { sidebarClosed, userInfo } from "../../utilities/reactiveVariables";
 import { useReactiveVar } from "@apollo/client/react/hooks/useReactiveVar";
 import { signout } from "../../utilities/auth";
 import AccountDropdown from "../input/accountDropdown";
@@ -9,6 +9,7 @@ import { Account } from "../../utilities/types";
 import { GET_ACCOUNTS } from "../../utilities/graphQL";
 import { isMobile } from "../../utilities/common";
 import { useWindowSize } from "../../utilities/hooks";
+import { RxHamburgerMenu } from "react-icons/rx";
 
 export default function Header() {
 	const windowSize = useWindowSize();
@@ -19,12 +20,28 @@ export default function Header() {
 	);
 
 	return (
-		<header className="flex items-center justify-between bg-primary py-1">
-			<div className="flex items-center h-full text-3xl mx-2">
-			<Link to="/app/overview"><img src="/Logo_1.2.png" alt="Fortuna Logo" width="50" height="50"></img></Link>
-			{!isMobile(windowSize.width) && (
-				<h1 className="text-white px-3">Fortuna</h1>
-			)}
+		<header className="flex justify-between bg-primary py-1">
+			<div className="flex gap-3 items-center h-full text-3xl mx-2">
+				<button
+					className="cursor-pointer hover:scale-110 transition-all duration-200 ease-in-out"
+					onClick={() => sidebarClosed(!sidebarClosed())}
+				>
+					<RxHamburgerMenu color="white" size={35} />
+				</button>
+				<Link to="/app/overview" className="flex gap-2 items-center">
+					<img
+						src="/Logo_1.2.png"
+						alt="Fortuna Logo"
+						width="45"
+						height="45"
+					></img>
+
+					{!isMobile(windowSize.width) && (
+						<h1 className="text-white translate-y-[2px]">
+							Fortuna
+						</h1>
+					)}
+				</Link>
 			</div>
 			{isMobile(windowSize.width) && (
 				<div className="flex flex-row">
@@ -55,7 +72,7 @@ export default function Header() {
 					</label>
 					<div
 						tabIndex={0}
-						className="dropdown-content z-[20] card card-compact w-64 p-2 shadow bg-primary text-primary-content"
+						className="dropdown-content z-[500] card card-compact w-64 p-2 shadow bg-primary text-primary-content"
 					>
 						<div className="card-body">
 							<div className="flex flex-col justify-between">

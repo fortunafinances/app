@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { BiDollar } from "react-icons/bi";
-import { gql, useMutation, useQuery, useReactiveVar } from "@apollo/client";
+import { useMutation, useQuery, useReactiveVar } from "@apollo/client";
 import { Stock } from "../../utilities/types";
-import { formatDollars } from "../../utilities/currency";
+import { formatDollars } from "../../utilities/common";
 import {
 	currentAccountId,
 	symbol,
@@ -16,6 +16,7 @@ import {
 	GET_PIE_CHART_DATA,
 	GET_STOCK_NAMES,
 	GET_TOTAL_VALUE,
+	MAKE_TRADE,
 } from "../../utilities/graphQL";
 import StockSearchBar from "./stockSearch";
 import { preventMinus } from "../../utilities/common";
@@ -44,31 +45,11 @@ export default function TradeForm({ buyOrSell }: buyProp) {
 	const [checkQuant, setCheckQuant] = useState(true); //true = submit button is disabled
 	const [limitPrice, setLimitPrice] = useState<number | null>();
 
-	const PLACE_ORDER = gql`
-		mutation InsertTrade(
-			$accID: Int!
-			$type: OrderType!
-			$side: OrderSide!
-			$ticker: String!
-			$tradeQty: Int!
-			$tradePrice: Float!
-		) {
-			insertTrade(
-				accID: $accID
-				type: $type
-				side: $side
-				ticker: $ticker
-				tradeQty: $tradeQty
-				tradePrice: $tradePrice
-			)
-		}
-	`;
-
 	type TransferReturnData = {
 		insertTrade: string;
 	};
 
-	const [placeOrder] = useMutation<TransferReturnData>(PLACE_ORDER, {
+	const [placeOrder] = useMutation<TransferReturnData>(MAKE_TRADE, {
 		refetchQueries: [
 			{ query: GET_HOLDINGS, variables: { accId: accountId } },
 			{ query: GET_ORDERS, variables: { accId: accountId } },

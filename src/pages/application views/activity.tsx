@@ -3,7 +3,7 @@ import Table from "../../components/data/table";
 import { useMemo } from "react";
 import { MRT_ColumnDef } from "material-react-table";
 import { Activity, GraphQLReturnData } from "../../utilities/types";
-import { filterRange, formatDollars } from "../../utilities/currency";
+import { filterRange, formatDollars } from "../../utilities/common";
 import { formatDate, isMobile, sortDate } from "../../utilities/common";
 import { currentAccountId } from "../../utilities/reactiveVariables";
 import { GET_ACTIVITIES } from "../../utilities/graphQL";
