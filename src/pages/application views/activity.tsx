@@ -56,6 +56,12 @@ export default function Activity() {
 		variables: { accId: accountId },
 	});
 
+    let sortedData;
+	
+    if (data && data.activity) {
+        sortedData = [...data.activity].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+    }
+
 	if (data?.activity.length === 0)
 		return (
 			<div className="h-full w-full flex flex-col justify-center items-center text-2xl">
@@ -81,7 +87,7 @@ export default function Activity() {
 				<div className="flex flex-row justify-center py-3">
 					<h1 className="text-2xl font-bold">Activity</h1>
 				</div>
-				{data?.activity.map((activity: Activity) => (
+				{sortedData.map((activity: Activity) => (
 					<ActivityCard
 						key={activity.id}
 						date={activity.date}
