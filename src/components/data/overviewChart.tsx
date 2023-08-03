@@ -43,11 +43,6 @@ type LineData = {
     }
 }
 
-interface RawData {
-    x: string;
-    y: number;
-}
-
 export function LineChart() {
     // get historical data
     const currentAccount = useReactiveVar(currentAccountId);
@@ -79,7 +74,7 @@ export function LineChart() {
             tooltip: {
                 callbacks: {
                     label: (t: TooltipItem<"scatter">) => {
-                        const rawData = t.raw as RawData;
+                        const rawData = t.raw as DataPoint;
                         const date = new Date(String(rawData.x));
                         return [format(date, "eee MMM dd, yyyy"), rawData.y + "%"];
                     },
