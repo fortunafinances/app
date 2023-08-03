@@ -107,7 +107,6 @@ export default function CreateProfile() {
 								},
 							})
 								.then((res) => {
-									console.log("setting user info");
 									userInfo({
 										userId: user!.userId,
 										email: user!.email,
@@ -129,7 +128,6 @@ export default function CreateProfile() {
 									console.error(err);
 								})
 								.finally(() => {
-									console.log(userInfo());
 									setSubmitting(false);
 								});
 						}}

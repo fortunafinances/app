@@ -33,7 +33,6 @@ export default function StockResults() {
     }
 
     const tickers = extractStringArray(parameter);
-    // console.log(tickers);
 
     const SuggestionButton = ({ symbol, onClick }: { symbol: string, onClick: () => void }) => {
         const { loading, error, data: stockData } = useQuery<StockData>(GET_ONE_STOCK, { variables: { ticker: symbol } })

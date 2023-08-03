@@ -12,8 +12,6 @@ export default function ProfileInfo() {
 	const user = useReactiveVar(userInfo);
 
 	const handleSave = (newVal: string, fieldName: string) => {
-		console.log(newVal);
-		console.log(fieldName);
 
 		insertUser({
 			variables: {
@@ -60,18 +58,11 @@ export default function ProfileInfo() {
 	};
 
 	function createField(label: string, name: string | undefined) {
-		// const handleSave = (label: string) => {
-		// 	console.log("Edited Value -> ", val);
-		// 	setVal(value);
-		// };
-
 		return (
 			<EdiText
 				className="w-full"
 				type="text"
 				value={name === undefined ? "" : name}
-				// value={name}
-				// onSave={(label) => handleSave(label)}
 				onSave={(newVal: string) => handleSave(newVal, label)}
 				validation={(newVal: string) => handleValidation(newVal, label)}
 				onValidationFail={(newVal: string) =>
@@ -170,7 +161,7 @@ export default function ProfileInfo() {
 			variables: {
 				userId: user?.userId,
 			},
-		}).catch((err) => console.log(err));
+		}).catch((err) => console.error(err));
 	}, [insertUser, user?.userId]);
 
 	if (loading) return <>Loading</>;
