@@ -1,16 +1,5 @@
 import auth0 from 'auth0-js';
-// import jwtDecode from 'jwt-decode';
 import { userInfo } from "./reactiveVariables";
-
-// interface DecodedToken {
-// 	openid: string;
-// 	email: string;
-// 	sub: string;
-// 	nickname: string;
-// 	profile: string;
-// 	exp: number;
-// 	// add other claims as needed
-// }
 
 // WebAuth will redirect user to the login page
 const auth0Client = new auth0.WebAuth({
@@ -57,9 +46,6 @@ export function handleAuthentication() {
 			auth0Client.client.userInfo(
 				authResult.accessToken,
 				function (_err, userData) {
-					console.log("\nUser info... ", userData);
-					console.log("\nUser id... ", userData.sub);
-
 					userInfo({
 						userId: userData.sub,
 						email: userData.email!,
@@ -68,42 +54,7 @@ export function handleAuthentication() {
 				}
 			);
 		} else if (err) {
-			console.log("Error in handle auth: ", err);
+			console.error(err);
 		}
 	});
 }
-
-/** sending user data to backend */
-// function sendUserData(data: string) {
-// 	return fetch(`http://localhost:5000/add_user`, {
-// 		method: "POST",
-// 		headers: {
-// 			"Content-Type": "application/json",
-// 		},
-// 		body: JSON.stringify(data),
-// 	})
-// 		.then((response) => response.json())
-// 		.then((response) => {
-// 			console.log("Sending data to backend... ", response);
-// 		})
-// 		.catch((error) => console.log(error));
-// }
-
-// /** function that will print out the info id token contains */
-// function printDecodedToken(token: string) {
-// 	if (token) {
-// 		const decodedToken: DecodedToken = jwtDecode(token);
-
-// 		console.log(`\nUser email: ${decodedToken.email}`);
-// 		console.log(`User nickname: ${decodedToken.nickname}`);
-//         localStorage.setItem("---- user", decodedToken.nickname);
-// 		console.log(`User sub: ${decodedToken.sub}`);
-// 		if (decodedToken.exp < Date.now() / 1000) {
-// 			console.log("Token has expired");
-// 		} else {
-// 			console.log("Token is still valid");
-// 		}
-// 	}
-// }
-
-

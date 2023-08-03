@@ -97,7 +97,7 @@ export default function TradeForm({ buyOrSell }: buyProp) {
 				) {
 					insufficientSharesModal.showModal();
 				} else {
-					console.log("error");
+					console.error("error");
 				}
 			})
 			.catch((error) => console.error(error));
@@ -122,6 +122,9 @@ export default function TradeForm({ buyOrSell }: buyProp) {
 			data &&
 			limitPrice
 		) {
+			// if (limitPrice > stockPrice) {
+			// 	setLimitPrice(stockPrice);
+			// }
 			setTotalPrice(quantity * limitPrice);
 		}
 	}, [data, quantity, symbolName, stockPrice, marketState, limitPrice]);
@@ -150,9 +153,9 @@ export default function TradeForm({ buyOrSell }: buyProp) {
 
 	useEffect(() => {
 		refetch()
-			.then(() => console.log("in refetch: ", accountId))
+			.then()
 			.catch((error) => {
-				console.log(error);
+				console.error(error);
 			});
 		const currStock = holdingsData?.holdings.find(
 			(e) => e.stock.ticker === symbolName,
@@ -163,7 +166,6 @@ export default function TradeForm({ buyOrSell }: buyProp) {
 			setCurrStockQuantity(0);
 		}
 	}, [holdingsData?.holdings, symbolName, accountId, refetch]);
-	// console.log(currStockQuantity);
 
 	useEffect(() => {
 		if (quantity < 1) {
@@ -176,7 +178,6 @@ export default function TradeForm({ buyOrSell }: buyProp) {
 	// if (!loading && data?.holdings.length === 0) return <NoInvestments />;
 	const onClear = () => {
 		setQuantity(0);
-		console.log(quantity);
 		symbol("");
 	};
 
@@ -195,6 +196,9 @@ export default function TradeForm({ buyOrSell }: buyProp) {
 				</h1>
 				<h2 className="text-xs text-[#FF0000]">
 					{checkQuant ? "*required" : null}
+					{quantity > 1000000
+						? "Maximum Stock Quantity Reached: 1,000,000"
+						: null}
 				</h2>
 				<div className="flex flex-row justify-between">
 					<div className="border-[0px] rounded-[3px] border-[#cccccc] w-full">
@@ -286,22 +290,24 @@ export default function TradeForm({ buyOrSell }: buyProp) {
 						{quantity} x{" "}
 						{limitPrice === null || limitPrice === undefined
 							? formatDollars(0)
+							: limitPrice > stockPrice
+							? formatDollars(stockPrice)
 							: formatDollars(limitPrice)}{" "}
 						= {formatDollars(totalPrice)}
 					</h1>
 				)}
 			</div>
 			{/* cancel and submit buttons */}
-			<div className="flex flex-row justify-end m-4 gap-4 text-xl [&>button]:rounded-lg [&>button]:px-3 [&>button]:py-1 [&>button]:border-4 [&>button]:font-bold">
+			<div className="flex flex-row justify-end m-4 gap-4 text-xl [&>button]:rounded-md [&>button]:px-3 [&>button]:border-4 [&>button]:font-bold">
 				<button
-					className="border-[#920000] text-[#920000] bg-[#F9E5E5] hover:shadow-xl shadow-[#920000] hover:bg-[#920000] hover:text-[#f9e5e5]"
+					className="border-[#920000] bg-[#920000] hover:bg-[#f9e5e5] hover:text-[#920000] text-[#f9e5e5]"
 					onClick={onClear}
 				>
-					Clear
+					CLEAR
 				</button>
 				<button
 					disabled={checkQuant}
-					className="border-success-content text-success-content bg-[#E3FDDC] hover:shadow-xl shadow-success-content hover:bg-success-content hover:text-[#e3fddc]"
+					className="border-success-content text-[#E3FDDC] bg-success-content hover:bg-[#e3fddc] hover:text-success-content"
 					onClick={handleSubmit}
 				>
 					{buyOrSell ? "BUY" : "SELL"}

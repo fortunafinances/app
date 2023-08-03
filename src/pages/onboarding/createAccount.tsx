@@ -99,7 +99,7 @@ export default function CreateAccount() {
 										navigate("/stockRecommendation");
 									})
 									.catch((err) => {
-										console.log(err);
+										console.error(err);
 									})
 									.finally(() => {
 										setSubmitting(false);

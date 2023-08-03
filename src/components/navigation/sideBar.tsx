@@ -15,7 +15,7 @@ export default function SideBar() {
 	const navigate = useNavigate();
 
 	const handleNavClick = (name: string) => {
-		if (window.screen.width < 640) sidebarClosed(true);
+		if (windowSize! < 640) sidebarClosed(true);
 		navigate("/app/" + name.toLowerCase().replace(" ", "-"));
 	};
 
@@ -36,10 +36,11 @@ export default function SideBar() {
 									<button
 										key={i}
 										onClick={() => handleNavClick(item)}
+										className="w-full"
 									>
 										<p
 											className={twMerge(
-												"inline-block px-2 py-2 capitalize underline-offset-4",
+												"inline-block capitalize underline-offset-4",
 												item === getCurrentPath(path) &&
 													"underline font-semibold",
 											)}
@@ -50,6 +51,7 @@ export default function SideBar() {
 								);
 							})}
 							<button
+								className="w-full"
 								onClick={() => {
 									(
 										document.getElementById(
@@ -63,6 +65,12 @@ export default function SideBar() {
 						</div>
 					)}
 				</div>
+				{!collapsed && (
+					<h2 className="py-1 font-bold w-full text-center text-lg bg-white text-black">
+						Watch List
+					</h2>
+				)}
+
 				{!collapsed && <WatchList />}
 				<div className="flex flex-col items-center gap-2 p-1 text-xs">
 					{!collapsed && (
