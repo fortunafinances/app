@@ -1,5 +1,5 @@
 import React from "react";
-import { formatDollars } from "../../../utilities/currency";
+import { formatDollars } from "../../../utilities/common";
 
 interface CardProps {
 	ticker: string;

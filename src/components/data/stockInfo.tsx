@@ -2,7 +2,7 @@ import { AiFillCaretDown, AiFillCaretUp } from "react-icons/ai";
 import { gql, useQuery, useReactiveVar } from "@apollo/client";
 import { symbol } from "../../utilities/reactiveVariables";
 import { Stock } from "../../utilities/types";
-import { formatDollars } from "../../utilities/currency";
+import { formatDollars } from "../../utilities/common";
 import { percentChange } from "../../utilities/common";
 import DataContainer from "../container/dataContainer";
 import { StockChart } from "./stockChart";

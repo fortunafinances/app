@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { formatDollars } from "../../utilities/currency";
+import { formatDollars } from "../../utilities/common";
 import { formatDate } from "../../utilities/common";
 import { useQuery, useReactiveVar } from "@apollo/client";
 import { userInfo } from "../../utilities/reactiveVariables";

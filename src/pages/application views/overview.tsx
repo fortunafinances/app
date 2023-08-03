@@ -2,7 +2,7 @@ import { useQuery, useReactiveVar } from "@apollo/client";
 import DataContainer from "../../components/container/dataContainer";
 import PieChart from "../../components/data/pieChart";
 import { LineChart } from "../../components/data/overviewChart";
-import { formatDollars } from "../../utilities/currency";
+import { formatDollars } from "../../utilities/common";
 import {
 	currentAccountId,
 	sidebarClosed,

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { BiDollar } from "react-icons/bi";
 import { gql, useMutation, useQuery, useReactiveVar } from "@apollo/client";
 import { Stock } from "../../utilities/types";
-import { formatDollars } from "../../utilities/currency";
+import { formatDollars } from "../../utilities/common";
 import {
 	currentAccountId,
 	symbol,

@@ -23,6 +23,7 @@ export const preventMinus = (e: React.KeyboardEvent<HTMLInputElement>) => {
 	}
 };
 
+// ## FORMATTING ##
 export const percentChange = (curr: number, prev: number): string => {
 	const formatter = new Intl.NumberFormat("en-US", {
 		maximumSignificantDigits: 2,
@@ -44,39 +45,16 @@ export const formatDate = (dateString: string): string => {
 	return formatter.format(date);
 };
 
-export const sortDate = (a: string, b: string): number => {
-	return new Date(a) >= new Date(b) ? 1 : -1;
+export const formatDollars = (currency: number): string => {
+	const formatter = new Intl.NumberFormat("en-US", {
+		style: "currency",
+		currency: "USD",
+		notation: currency < 10_000_000 ? "standard" : "compact",
+	});
+
+	return formatter.format(currency);
 };
 
-export const subtractMonths = (date: Date, months: number) => {
-	// 👇 Make copy with "Date" constructor
-	const dateCopy = new Date(date);
-
-	if (months < 1) {
-		dateCopy.setDate(dateCopy.getDay() - months * 10);
-	} else {
-		dateCopy.setMonth(dateCopy.getMonth() - months);
-	}
-
-	return dateCopy;
-};
-
-export const filterInclusive = (
-	row: { getValue: (id: string) => number },
-	id: string,
-	filterValue: number[] | string[],
-) => {
-	const value = row.getValue(id);
-	let [min, max] = filterValue;
-	if (min === undefined || min === "") min = Number.NEGATIVE_INFINITY;
-	if (max === undefined || max === "") max = Number.POSITIVE_INFINITY;
-
-	return value >= Number(min) && value <= Number(max);
-};
-
-export const getCurrentPath = (path: string): string => {
-	return path.split("/")[path.split("/").length - 1];
-};
 
 export const capitalize = (str: string | undefined) => {
 	if (!str) return "";
@@ -100,4 +78,51 @@ export const convertToRoundedPercentageChange = (
 	}
 
 	return roundedPercentageChanges;
+};
+
+
+// ### DATA MANIPULATION ###
+export function filterRange(
+	fieldValue: number,
+	_columnIds: string,
+	filterValue: number[],
+): boolean {
+	const min = filterValue[0] ? filterValue[0] : Number.NEGATIVE_INFINITY;
+	const max = filterValue[1] ? filterValue[1] : Number.POSITIVE_INFINITY;
+	return fieldValue >= min && fieldValue <= max;
+}
+
+
+export const sortDate = (a: string, b: string): number => {
+	return new Date(a) >= new Date(b) ? 1 : -1;
+};
+
+export const filterInclusive = (
+	row: { getValue: (id: string) => number },
+	id: string,
+	filterValue: number[] | string[],
+) => {
+	const value = row.getValue(id);
+	let [min, max] = filterValue;
+	if (min === undefined || min === "") min = Number.NEGATIVE_INFINITY;
+	if (max === undefined || max === "") max = Number.POSITIVE_INFINITY;
+
+	return value >= Number(min) && value <= Number(max);
+};
+
+export const getCurrentPath = (path: string): string => {
+	return path.split("/")[path.split("/").length - 1];
+};
+
+export const subtractMonths = (date: Date, months: number) => {
+	// 👇 Make copy with "Date" constructor
+	const dateCopy = new Date(date);
+
+	if (months < 1) {
+		dateCopy.setDate(dateCopy.getDay() - months * 10);
+	} else {
+		dateCopy.setMonth(dateCopy.getMonth() - months);
+	}
+
+	return dateCopy;
 };

@@ -1,7 +1,7 @@
 import { MRT_ColumnDef } from "material-react-table";
 import Table from "../../components/data/table";
 import { useQuery, useReactiveVar } from "@apollo/client";
-import { filterRange, formatDollars } from "../../utilities/currency";
+import { filterRange, formatDollars } from "../../utilities/common";
 import { GraphQLReturnData, Holding } from "../../utilities/types";
 import { useMemo } from "react";
 import { currentAccountId } from "../../utilities/reactiveVariables";

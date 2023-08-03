@@ -15,7 +15,7 @@ import "chartjs-adapter-date-fns";
 import { GET_STOCK_LINE_CHART } from "../../utilities/graphQL";
 import { useQuery } from "@apollo/client";
 import { DataPoint } from "../../utilities/types";
-import { formatDollars } from "../../utilities/currency";
+import { formatDollars } from "../../utilities/common";
 import format from "date-fns/format";
 
 ChartJS.register(
