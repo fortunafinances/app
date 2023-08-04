@@ -122,9 +122,6 @@ export default function TradeForm({ buyOrSell }: buyProp) {
 			data &&
 			limitPrice
 		) {
-			// if (limitPrice > stockPrice) {
-			// 	setLimitPrice(stockPrice);
-			// }
 			setTotalPrice(quantity * limitPrice);
 		}
 	}, [data, quantity, symbolName, stockPrice, marketState, limitPrice]);
@@ -179,7 +176,6 @@ export default function TradeForm({ buyOrSell }: buyProp) {
 		}
 	}, [quantity]);
 
-	// if (!loading && data?.holdings.length === 0) return <NoInvestments />;
 	const onClear = () => {
 		setQuantity(0);
 		symbol("");
@@ -203,9 +199,8 @@ export default function TradeForm({ buyOrSell }: buyProp) {
 				</div>
 				<h2 className="text-xs text-[#FF0000]">
 					{checkQuant ? "*required" : null}
-					{quantity > 1000000
-						? "Maximum Stock Quantity Reached: 1,000,000"
-						: null}
+					{quantity > 1000000 &&
+						"Maximum Stock Quantity Reached: 1,000,000"}
 				</h2>
 				<div className="flex flex-row justify-between">
 					<div className="border-[0px] rounded-[3px] border-[#cccccc] w-full">

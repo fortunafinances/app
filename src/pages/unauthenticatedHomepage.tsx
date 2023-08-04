@@ -2,16 +2,28 @@ import { BsStopwatch, BsChevronCompactDown } from "react-icons/bs";
 import { LiaHandshakeSolid } from "react-icons/lia";
 import { BiPopsicle } from "react-icons/bi";
 import { login, signup } from "../utilities/auth";
+import { useWindowSize } from "../utilities/hooks";
+import { isMobile } from "../utilities/common";
 
 export default function UnauthenticatedHomepage() {
+	const windowSize = useWindowSize().width;
 	return (
 		<>
 			<div className="hero min-h-[85vh] bg-primary">
 				<div className="hero-content text-center">
-					<div className="w-md">
-						<h1 className="text-6xl md:text-9xl font-bold text-accent">Fortuna</h1>
+					<div className="w-md flex flex-col justify-center items-center gap-2">
+						<img
+							src="/Logo_1.2.webp"
+							alt="Fortuna Logo"
+							width={isMobile(windowSize) ? "128" : "222"}
+							height={isMobile(windowSize) ? "128" : "222"}
+						/>
+						<h1 className="text-6xl md:text-9xl font-bold text-accent">
+							Fortuna
+						</h1>
 						<p className="py-2 md:py-6 text-lg md:text-3xl text-secondary">
-							Get better results with Fortuna at the helm of your portfolio
+							Get better results with Fortuna at the helm of your
+							portfolio
 						</p>
 						<div className="flex flex-row gap-4 justify-center [&>button]:bg-[#F2EEFB] [&>button]:text-xl hover:[&>button]:bg-[#2a0066] hover:[&>button]:text-[#F2EEFB] [&>button]:border-current">
 							<button
@@ -86,8 +98,10 @@ export default function UnauthenticatedHomepage() {
 			</div>
 			<div className="h-[5vh] bg-gradient-to-b from-accent to-white"></div>
 			<footer className="footer py-6 bg-white text-neutral-content flex flex-row justify-evenly">
-				<a className="link link-hover" href="/privacyPolicy">Privacy Policy</a>
-				<a >Contact Us: hello@fortunafinance.com</a>
+				<a className="link link-hover" href="/privacyPolicy">
+					Privacy Policy
+				</a>
+				<a>Contact Us: hello@fortunafinance.com</a>
 			</footer>
 		</>
 	);

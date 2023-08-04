@@ -19,7 +19,7 @@ export default function Header() {
 	);
 
 	return (
-		<header className="flex justify-between bg-primary py-1 border-b-2 border-white">
+		<header className="flex justify-between bg-primary py-1">
 			<div className="flex gap-3 items-center h-full text-3xl mx-2">
 				<button
 					className="cursor-pointer hover:scale-110 transition-all duration-200 ease-in-out"
@@ -30,7 +30,7 @@ export default function Header() {
 				<Link to="/app/overview" className="flex gap-2 items-center">
 					{windowSize.width! > 900 && (
 						<img
-							src="/Logo_1.2.png"
+							src="/Logo_1.2.webp"
 							alt="Fortuna Logo"
 							width="45"
 							height="45"

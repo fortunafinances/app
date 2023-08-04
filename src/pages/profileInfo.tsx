@@ -169,7 +169,7 @@ export default function ProfileInfo() {
 	return (
 		<div className="h-screen flex">
 			<div className="hidden bg-primary w-[50%] h-full md:flex flex-col gap-9 justify-center">
-				<div className="text-secondary text-4xl md:text-6xl lg:text-9xl items-left ml-[5%] font-medium flex md:flex-row flex-col">
+				<div className="text-secondary text-4xl md:text-6xl lg:text-8xl items-left ml-[5%] font-medium flex flex-col">
 					<h1>Hello,</h1>
 					<h1 className="bg-info px-2 w-fit">
 						{data?.insertUser.user.firstName}
@@ -194,12 +194,16 @@ export default function ProfileInfo() {
 				<h2 className="py-4">Bank Information</h2>
 				<h3>Bank</h3>
 				{createField("bankName", data?.insertUser.user.bankName)}
-				<div className="p-3 flex flex-row justify-end">
-					<BsCheckLg
-						size={60}
-						className="transition duration:500 hover:scale-125 hover:fill-[#7c1fff]"
+				<div className="flex flex-row justify-end w-full">
+					<button
+						className="p-3 "
 						onClick={() => navigate("/app/overview")}
-					/>
+					>
+						<BsCheckLg
+							size={60}
+							className="transition duration:500 hover:scale-125 hover:fill-[#7c1fff]"
+						/>
+					</button>
 				</div>
 			</div>
 		</div>
