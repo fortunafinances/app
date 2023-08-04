@@ -1,17 +1,24 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useWindowSize } from "../../utilities/hooks";
+import { sidebarClosed } from "../../utilities/reactiveVariables";
+import { isMobile } from "../../utilities/common";
 
 export interface tradeProp {
 	transfer: boolean;
 	modalId: string;
 }
 
-export default function SuccessfulNotification({ transfer, modalId }: tradeProp) {
+export default function SuccessfulNotification({
+	transfer,
+	modalId,
+}: tradeProp) {
 	//   const [messageType, setMessageType] = useState(transfer); //false shpws ORDERS; true shows TRANSFERS
 	const [message, setMessage] = useState("Your transfer was successful.");
 	const [buttonName, setButtonName] = useState("View Transactions");
 	const [path, setPath] = useState("/app/activity");
 	const navigate = useNavigate();
+	const windowSize = useWindowSize();
 
 	useEffect(() => {
 		if (!transfer) {
@@ -36,9 +43,12 @@ export default function SuccessfulNotification({ transfer, modalId }: tradeProp)
 						</button>
 						<button
 							className="btn btn-sm bg-white hover:bg-primary hover:text-white"
-							onClick={() =>
-								navigate(path)
-							}
+							onClick={() => {
+								navigate(path);
+								if (isMobile(windowSize.width)) {
+									sidebarClosed(true);
+								}
+							}}
 						>
 							{buttonName}
 						</button>
