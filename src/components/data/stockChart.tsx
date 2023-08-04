@@ -60,7 +60,11 @@ export function StockChart(props: StockChartProps) {
 
 	// get date and price from query
 	const stockData = lineData?.stockHistorical.data;
-	const firstDate = stockData![0].x;
+	const fixedData: DataPoint[] = [];
+	stockData?.forEach((stock) => {
+		fixedData.push({ x: stock.x + " 08:00:00", y: stock.y });
+	});
+	const firstDate = fixedData[0].x;
 
 	// initialize the chart
 	const chartOptions = {
@@ -117,7 +121,7 @@ export function StockChart(props: StockChartProps) {
 		datasets: [
 			{
 				label: "Price",
-				data: stockData,
+				data: fixedData,
 				borderColor: "rgb(255, 99, 132)",
 				showLine: true,
 				lineTension: 0.2,

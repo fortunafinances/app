@@ -19,7 +19,7 @@ export default function Header() {
 	);
 
 	return (
-		<header className="flex justify-between bg-primary py-1">
+		<header className="flex justify-between bg-primary py-1 border-b-2 border-white">
 			<div className="flex gap-3 items-center h-full text-3xl mx-2">
 				<button
 					className="cursor-pointer hover:scale-110 transition-all duration-200 ease-in-out"
@@ -42,7 +42,7 @@ export default function Header() {
 					)}
 				</Link>
 			</div>
-			{windowSize.width! <= 800 && (
+			{windowSize.width! <= 900 && (
 				<div className="flex flex-row">
 					<h3 className="text-lg font-semibold">
 						<AccountDropdown
