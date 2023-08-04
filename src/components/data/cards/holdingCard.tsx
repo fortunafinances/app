@@ -23,7 +23,7 @@ const CardComponent: React.FC<CardProps> = ({
 		<div className="card card-bordered bg-base-100 selection:shadow-xl">
 			<div className="flex flex-row justify-between card-body">
 				<div>
-					<button
+					{/* <button
 						onClick={() => {
 							symbol(ticker);
 							navigate("/app/trade");
@@ -31,14 +31,21 @@ const CardComponent: React.FC<CardProps> = ({
 						className="btn text-4xl drop-shadow-md bg-base-100"
 					>
 						{ticker}
-					</button>
-					{/* <h2 className="card-title text-4xl">{ticker}</h2> */}
+					</button> */}
+					<h2 className="card-title text-4xl">{ticker}</h2>
 					<p className="text-gray-400 font-bold">{company}</p>
 					<h2 className="text-sm">{tradeQty} Shares</h2>
 				</div>
-				<div className="">
+				<div className="flex flex-col justify-center items-center">
 					<h2 className="text-3xl">{formatDollars(tradePrice)}</h2>
-					<p>{percentChange(tradePrice, prevPrice)}</p>
+					<p className="text-xl">{percentChange(tradePrice, prevPrice)}%</p>
+					<button
+						onClick={() => {
+							symbol(ticker);
+							navigate("/app/trade");
+						}}
+						className="btn text-lg rounded-lg"
+					>TRADE</button>
 				</div>
 			</div>
 		</div>
