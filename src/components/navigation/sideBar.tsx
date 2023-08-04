@@ -20,11 +20,15 @@ export default function SideBar() {
 	};
 
 	return (
-		<div className={'relative h-full ${collapsed ? "" : "w-4/5"}'}>
+		<div className={"relative h-full"}>
 			<div
 				className={twMerge(
 					"h-full bg-[#110029] text-white flex flex-col",
-					collapsed ? "w-10" : "w-screen sm:w-52",
+					collapsed
+						? isMobile(windowSize)
+							? "w-0"
+							: "w-10"
+						: "w-screen sm:w-52",
 				)}
 			>
 				<div>
@@ -65,11 +69,6 @@ export default function SideBar() {
 						</div>
 					)}
 				</div>
-				{!collapsed && (
-					<h2 className="py-1 font-bold w-full text-center text-lg bg-white text-black">
-						Watch List
-					</h2>
-				)}
 
 				{!collapsed && <WatchList />}
 

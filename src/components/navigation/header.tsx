@@ -28,12 +28,14 @@ export default function Header() {
 					<RxHamburgerMenu color="white" size={35} />
 				</button>
 				<Link to="/app/overview" className="flex gap-2 items-center">
-					<img
-						src="/Logo_1.2.png"
-						alt="Fortuna Logo"
-						width="45"
-						height="45"
-					></img>
+					{windowSize.width! > 900 && (
+						<img
+							src="/Logo_1.2.png"
+							alt="Fortuna Logo"
+							width="45"
+							height="45"
+						/>
+					)}
 
 					{windowSize.width! > 768 && (
 						<h1 className="text-white translate-y-[2px]">
