@@ -108,24 +108,24 @@ export default function StockRecommendation() {
 								)}
 								<div className="flex pt-4 gap-2 flex-row justify-center md:flex-row text-xl md:text-2xl">
 									<button
-										className={`px-5 py-2.5 relative group overflow-hidden font-medium border-4 border-black bg-black rounded-md
+										className={`px-5 py-2.5 relative group overflow-hidden font-medium border-4 border-primary bg-primary rounded-md
                                         ${
 											isDisabled
-												? "bg-neutral-500 opacity-10 text-black"
-												: "bg-[#2a0066] text-white hover:border-success-600 hover:bg-white hover: hover:text-black"
+												? "bg-neutral-500 opacity-10 text-white"
+												: "bg-[#2a0066] text-white hover:border-primary hover:bg-accent hover:text-primary"
 										}`}
 										disabled={isDisabled}
 										onClick={() =>
 											getGPTResponse(selections)
 										}
 									>
-										Get Stock Recommendations
+										GET STOCK RECOMMENDATIONS
 									</button>
 									<button
-										className={`bg-black  text-white flex-1 relative group overflow-hidden font-medium border-black  border-4 hover:border-black hover:bg-white hover:text-black rounded-md w-fit min-w-[18%] max-w-[25%]`}
+										className={`bg-primary  text-white flex-1 relative group overflow-hidden font-medium border-primary  border-4 hover:border-primary hover:bg-accent hover:text-primary rounded-md w-fit min-w-[18%] max-w-[25%]`}
 										onClick={() => navigate("/app")}
 									>
-										Skip
+										SKIP
 									</button>
 								</div>
 							</div>

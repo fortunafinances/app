@@ -2,6 +2,7 @@ import { useQuery } from "@apollo/client";
 import { useLocation, useNavigate } from "react-router-dom";
 import { GET_ONE_STOCK } from "../../utilities/graphQL";
 import { symbol } from "../../utilities/reactiveVariables";
+import { formatDollars } from "../../utilities/common";
 
 type StockData = {
 	oneStock: {
@@ -67,17 +68,17 @@ export default function StockResults() {
 		return (
 			<button
 				key={key}
-				className="w-full focus:bg-[#2a0066] focus:text-gray-50 px-5 py-2.5  overflow-hidden font-medium bg-transparent-50 text-gray-600 border border-[#2a0066] hover:border-success-600 hover:bg-neutral-500 hover:bg-opacity-10 hover:text-success-600 rounded m-1"
+				className="w-full px-5 py-2.5  overflow-hidden font-medium bg-transparent-50 text-gray-600 border-2 border-[#2a0066] hover:border-primary hover:bg-secondary hover:bg-opacity-40 hover:text-success-600 rounded-md m-1"
 				onClick={onClick}
 			>
-				<div className="flex flex-row justify-between items-center">
+				<div className="flex flex-row justify-between items-center font-bold text-xl">
 					<div className=" top-1 text-left">
-						<div className="text-black">
+						<div className="text-primary ">
 							{title} | {symbol}
 						</div>
 					</div>
 					<div className="align-middle right-1.5 text-green-800 py-0.5 px-2 rounded">
-						${price}
+						{formatDollars(price)}
 					</div>
 				</div>
 			</button>
@@ -93,12 +94,12 @@ export default function StockResults() {
 	return (
 		<div className="h-screen flex md:[&>div]:w-[50%]">
 			<div className="hidden md:flex flex-col items-center justify-center gap-5 bg-primary text-accent p-8">
-				<h1 className="font-semibold text-left md:text-7xl text-5xl">
+				<h1 className="font-semibold text-left md:text-8xl text-5xl">
 					Your First Investment
 				</h1>
 			</div>
 			<div className="bg-accent overflow-y-auto p-4 text-primary">
-				<h1 className="text-3xl">Buy A Stock</h1>
+				<h1 className="text-6xl font-bold">Buy A Stock</h1>
 				<hr className="h-[2px] my-8 bg-primary border-0"></hr>
 				<div className="App">
 					<center>
