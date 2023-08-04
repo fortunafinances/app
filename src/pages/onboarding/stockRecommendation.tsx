@@ -43,7 +43,7 @@ export default function StockRecommendation() {
 		const isDisabled = selections.length >= 5 && !selections.includes(text);
 		return (
 			<button
-				className={`focus:bg-[#2a0066] focus:text-gray-50 flex-1 px-5 py-2.5 relative group overflow-hidden font-medium bg-transparent-50 text-gray-600 border border-[#2a0066] hover:border-success-600 hover:bg-secondary hover:bg-opacity-40 hover:text-success-600 inline-block rounded m-1 
+				className={`focus:bg-[#2a0066] focus:text-gray-50 flex-1 px-5 py-2.5 relative group overflow-hidden font-medium border-2 border-[#2a0066] hover:border-success-600 hover:bg-secondary hover:bg-opacity-40 hover:text-success-600 inline-block rounded m-1 
                             ${
 								isBtnSelected(text)
 									? "bg-[#2a0066] hover:text-black text-white"
@@ -106,13 +106,13 @@ export default function StockRecommendation() {
 										/>
 									),
 								)}
-								<div className="flex gap-2 flex-col md:flex-row text-xl md:text-2xl">
+								<div className="flex pt-4 gap-2 flex-row justify-center md:flex-row text-xl md:text-2xl">
 									<button
-										className={`px-5 py-2.5 relative group overflow-hidden font-medium bg-transparent-50 border border-[#2a0066] rounded
+										className={`px-5 py-2.5 relative group overflow-hidden font-medium border-4 border-black bg-black rounded-md
                                         ${
 											isDisabled
 												? "bg-neutral-500 opacity-10 text-black"
-												: "bg-[#2a0066] text-white hover:border-success-600 hover:bg-neutral-500 hover:bg-opacity-10 hover:text-black"
+												: "bg-[#2a0066] text-white hover:border-success-600 hover:bg-white hover: hover:text-black"
 										}`}
 										disabled={isDisabled}
 										onClick={() =>
@@ -122,7 +122,7 @@ export default function StockRecommendation() {
 										Get Stock Recommendations
 									</button>
 									<button
-										className={`bg-[#2a0066] text-white flex-1 relative group overflow-hidden font-medium bg-transparent-50 border border-[#2a0066] hover:border-success-600 hover:bg-neutral-500 hover:bg-opacity-10 hover:text-black rounded`}
+										className={`bg-black  text-white flex-1 relative group overflow-hidden font-medium border-black  border-4 hover:border-black hover:bg-white hover:text-black rounded-md max-w-[10%]`}
 										onClick={() => navigate("/app")}
 									>
 										Skip

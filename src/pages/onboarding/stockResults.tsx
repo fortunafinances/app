@@ -38,9 +38,11 @@ export default function StockResults() {
 	const SuggestionButton = ({
 		symbol,
 		onClick,
+		key,
 	}: {
 		symbol: string;
 		onClick: () => void;
+		key: string | number;
 	}) => {
 		const {
 			loading,
@@ -64,6 +66,7 @@ export default function StockResults() {
 		const price = stockData?.oneStock.currPrice as number;
 		return (
 			<button
+				key={key}
 				className="w-full focus:bg-[#2a0066] focus:text-gray-50 px-5 py-2.5  overflow-hidden font-medium bg-transparent-50 text-gray-600 border border-[#2a0066] hover:border-success-600 hover:bg-neutral-500 hover:bg-opacity-10 hover:text-success-600 rounded m-1"
 				onClick={onClick}
 			>
@@ -99,19 +102,20 @@ export default function StockResults() {
 				<hr className="h-[2px] my-8 bg-primary border-0"></hr>
 				<div className="App">
 					<center>
-						{tickers.map((item) => {
+						{tickers.map((item, i) => {
 							return (
 								<SuggestionButton
 									symbol={item}
 									onClick={() => handleBuyStock(item)}
+									key={i}
 								/>
 							);
 						})}
 						<button
-							className={`mt-5 text-xl md:text-2xl flex bg-[#2a0066] text-white flex-1 px-5 py-2.5 relative group overflow-hidden font-medium bg-transparent-50 border border-[#2a0066] hover:border-success-600 hover:bg-neutral-500 hover:bg-opacity-10 hover:text-black rounded m-2`}
+							className={`mt-5 text-xl md:text-2xl flex bg-[#2a0066] text-white flex-1 px-5 py-1 relative group overflow-hidden font-medium border border-[#2a0066] hover:border-primary hover:border-4 hover:bg-white hover:py-0 hover:text-primary rounded m-2`}
 							onClick={() => navigate("/app")}
 						>
-							Skip
+							SKIP
 						</button>
 					</center>
 				</div>
