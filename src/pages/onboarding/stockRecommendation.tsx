@@ -108,7 +108,7 @@ export default function StockRecommendation() {
 								)}
 								<div className="flex pt-4 gap-2 flex-row justify-center md:flex-row text-xl md:text-2xl">
 									<button
-										className={`px-5 py-2.5 relative group overflow-hidden font-medium border-4 border-black bg-black rounded-md 
+										className={`px-5 py-2.5 relative group overflow-hidden font-medium border-4 border-black bg-black rounded-md
                                         ${
 											isDisabled
 												? "bg-neutral-500 opacity-10 text-black"
@@ -122,7 +122,7 @@ export default function StockRecommendation() {
 										Get Stock Recommendations
 									</button>
 									<button
-										className={`bg-black  text-white flex-1 relative group overflow-hidden font-medium border-black  border-4 hover:border-black hover:bg-white hover:text-black rounded-md max-w-[10%]`}
+										className={`bg-black  text-white flex-1 relative group overflow-hidden font-medium border-black  border-4 hover:border-black hover:bg-white hover:text-black rounded-md w-fit min-w-[18%] max-w-[25%]`}
 										onClick={() => navigate("/app")}
 									>
 										Skip
