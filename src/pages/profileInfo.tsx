@@ -12,7 +12,6 @@ export default function ProfileInfo() {
 	const user = useReactiveVar(userInfo);
 
 	const handleSave = (newVal: string, fieldName: string) => {
-
 		insertUser({
 			variables: {
 				// username: data?.insertUser.user.username,
@@ -43,7 +42,7 @@ export default function ProfileInfo() {
 						: data?.insertUser.user.username,
 			},
 		})
-			// .then((data) => data.data?.insertUser.lastName)
+			.then((data) => userInfo(data.data?.insertUser.user))
 			.catch((error) => console.error(error));
 	};
 	const handleValidation = (newVal: string, fieldName: string) => {
@@ -169,16 +168,16 @@ export default function ProfileInfo() {
 
 	return (
 		<div className="h-screen flex">
-			<div className="bg-primary w-[50%] h-full flex flex-col gap-9 justify-center">
-				<div className="text-secondary text-4xl  md:text-6xl xl:text-9xl items-left  ml-[5%] font-medium md:flex-row sm:flex-col">
-					<h1 className="">Hello,</h1>
+			<div className="hidden bg-primary w-[50%] h-full md:flex flex-col gap-9 justify-center">
+				<div className="text-secondary text-4xl md:text-6xl lg:text-9xl items-left ml-[5%] font-medium flex md:flex-row flex-col">
+					<h1>Hello,</h1>
 					<h1 className="bg-info px-2 w-fit">
 						{data?.insertUser.user.firstName}
 					</h1>
 				</div>
 				<h2 className="ml-[5%] text-info text-5xl">Edit Profile</h2>
 			</div>
-			<div className="w-[50%] overflow-y-auto flex-col p-6 bg-accent text-primary [&>h3]:text-2xl [&>h3]:py-2 [&>h2]:text-5xl [&>h2]:py-4 ">
+			<div className="md:w-[50%] overflow-y-auto flex-col p-6 bg-accent text-primary [&>h3]:text-2xl [&>h3]:py-2 [&>h2]:text-5xl [&>h2]:py-4 ">
 				<h1 className="text-8xl">Profile</h1>
 				<hr className="h-[2px] mt-8 bg-primary border-0"></hr>
 				<h2>Personal Information</h2>
