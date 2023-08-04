@@ -144,8 +144,12 @@ export default function TradeForm({ buyOrSell }: buyProp) {
 	useEffect(() => {
 		if (marketState) {
 			setTotalPrice(stockPrice * quantity);
-		} else if (limitPrice!) {
-			setTotalPrice(limitPrice * quantity);
+		} else if (limitPrice !== null && limitPrice !== undefined) {
+			if (limitPrice > stockPrice) {
+				setTotalPrice(stockPrice * quantity);
+			} else {
+				setTotalPrice(limitPrice * quantity);
+			}
 		} else {
 			setTotalPrice(0 * quantity);
 		}
