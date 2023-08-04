@@ -191,9 +191,12 @@ export default function TradeForm({ buyOrSell }: buyProp) {
 				<StockSearchBar className="z-40 w-full" tradeType={buyOrSell} />
 			</div>
 			<div className="m-4 mt-6 flex flex-col gap-3">
-				<h1 className="font-semibold text-xl">
-					Quantity (Current Holdings: {currStockQuantity})
-				</h1>
+				<div>
+					<h1 className="font-semibold text-xl">Quantity</h1>
+					<p className="text-gray-700">
+						Current Holdings: {currStockQuantity}
+					</p>
+				</div>
 				<h2 className="text-xs text-[#FF0000]">
 					{checkQuant ? "*required" : null}
 					{quantity > 1000000

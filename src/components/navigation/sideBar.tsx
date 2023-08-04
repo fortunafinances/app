@@ -24,7 +24,11 @@ export default function SideBar() {
 			<div
 				className={twMerge(
 					"h-full bg-[#110029] text-white flex flex-col",
-					collapsed ? "w-10" : "w-screen sm:w-52",
+					collapsed
+						? isMobile(windowSize)
+							? "w-0"
+							: "w-10"
+						: "w-screen sm:w-52",
 				)}
 			>
 				<div>
