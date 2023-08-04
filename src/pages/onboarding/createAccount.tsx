@@ -39,8 +39,7 @@ const POST_USER_INFO = gql`
 `;
 const SignupSchema = Yup.object().shape({
 	amount: Yup.number()
-		.required("*Required")
-		.moreThan(0, "Must be greater than 0")
+		// .moreThan(0, "Must be greater than 0")
 		.when("transferType", {
 			is: "IN",
 			then: (schema) => schema.max(1_000_000, "Exceeded maximum deposit"),
