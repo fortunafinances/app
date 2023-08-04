@@ -77,10 +77,13 @@ export default function Header() {
 					>
 						<div className="card-body">
 							<div className="flex flex-col justify-between">
-								<h3 className="card-title text-lg ellipsis">
+								<h3 className="card-title ellipsis text-3xl">
 									{user?.username}
 								</h3>
-								<Link to={`/profileInfo`} className="w-fit">
+								<Link
+									to={`/profileInfo`}
+									className="w-fit hover:underline"
+								>
 									Edit profile
 								</Link>
 							</div>
