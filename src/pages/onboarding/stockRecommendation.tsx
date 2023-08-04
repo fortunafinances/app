@@ -43,7 +43,7 @@ export default function StockRecommendation() {
 		const isDisabled = selections.length >= 5 && !selections.includes(text);
 		return (
 			<button
-				className={`focus:bg-[#2a0066] focus:text-gray-50 flex-1 px-5 py-2.5 relative group overflow-hidden font-medium border-2 border-[#2a0066] hover:border-success-600 hover:bg-secondary hover:bg-opacity-40 hover:text-success-600 inline-block rounded m-1 
+				className={`focus:bg-[#2a0066] focus:text-gray-50 flex-1 px-5 py-2.5 relative group overflow-hidden font-medium bg-transparent-50 text-primary  border-[#2a0066] border-2 hover:border-success-600 hover:bg-secondary hover:bg-opacity-40 hover:text-success-600 inline-block rounded-md m-1 
                             ${
 								isBtnSelected(text)
 									? "bg-[#2a0066] hover:text-black text-white"
@@ -108,7 +108,7 @@ export default function StockRecommendation() {
 								)}
 								<div className="flex pt-4 gap-2 flex-row justify-center md:flex-row text-xl md:text-2xl">
 									<button
-										className={`px-5 py-2.5 relative group overflow-hidden font-medium border-4 border-black bg-black rounded-md
+										className={`px-5 py-2.5 relative group overflow-hidden font-medium border-4 border-black bg-black rounded-md 
                                         ${
 											isDisabled
 												? "bg-neutral-500 opacity-10 text-black"
