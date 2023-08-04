@@ -133,7 +133,12 @@ export default function Table<DataType extends GraphQLReturnData>({
 												}}
 											>
 												{filled ? (
-													<AiFillStar size={40} />
+													<AiFillStar
+														size={40}
+														style={{
+															fill: "#2A0066",
+														}}
+													/>
 												) : (
 													<AiOutlineStar size={40} />
 												)}

@@ -94,19 +94,29 @@ export default function StockInfo() {
 								}}
 							>
 								{favLoading ? (
-									<AiFillStar size={40} />
+									<AiFillStar
+										size={40}
+										style={{
+											fill: "#2A0066",
+										}}
+									/>
 								) : favError ? (
 									<>Watch List Error</>
 								) : isFav(favData!.watchList, symbolName) ? (
-									<AiFillStar size={40} />
+									<AiFillStar
+										size={40}
+										style={{
+											fill: "#2A0066",
+										}}
+									/>
 								) : (
 									<AiOutlineStar size={40} />
 								)}
 							</button>
 						</div>
 					</div>
-					<div className="flex flex-col gap-6 items-end md:items-start">
-						<h1 className="text-4xl text-primary font-medium">
+					<div className="flex flex-col gap-4 items-end md:items-start">
+						<h1 className="text-6xl text-primary font-medium">
 							{formatDollars(price)}
 						</h1>
 						<div className="flex flex-row text-primary font-semibold text-xl items-center w-fit">
