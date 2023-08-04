@@ -12,6 +12,7 @@ import { useWindowSize } from "../../utilities/hooks";
 import CardComponent from "../../components/data/cards/holdingCard";
 
 export default function Holdings() {
+	const windowSize = useWindowSize();
  	const accountId = useReactiveVar(currentAccountId);
 	const cols = useMemo<MRT_ColumnDef<Holding>[]>(
 		() => [
