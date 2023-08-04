@@ -65,7 +65,7 @@ export default function FormikSelect({
 	};
 
 	const handleSelectChange = (option: SingleValue<Dropdown>) => {
-		setValue(option?.value).catch((err) => console.error(err));
+		setValue(option?.value);
 		field[0].onChange(option?.value);
 	};
 
