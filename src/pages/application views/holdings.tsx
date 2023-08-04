@@ -1,7 +1,7 @@
 import { MRT_ColumnDef } from "material-react-table";
 import Table from "../../components/data/table";
 import { useQuery, useReactiveVar } from "@apollo/client";
-import { filterRange, formatDollars } from "../../utilities/currency";
+import { filterRange, formatDollars } from "../../utilities/common";
 import { GraphQLReturnData, Holding } from "../../utilities/types";
 import { useMemo } from "react";
 import { currentAccountId } from "../../utilities/reactiveVariables";
@@ -13,7 +13,7 @@ import CardComponent from "../../components/data/cards/holdingCard";
 
 export default function Holdings() {
 	const windowSize = useWindowSize();
-	const accountId = useReactiveVar(currentAccountId);
+ 	const accountId = useReactiveVar(currentAccountId);
 	const cols = useMemo<MRT_ColumnDef<Holding>[]>(
 		() => [
 			{
@@ -36,7 +36,7 @@ export default function Holdings() {
 				id: "stock.currPrice",
 				filterVariant: "range",
 				size: 55,
-				accessorFn: (row) => `${formatDollars(row.stock.currPrice!)}`,
+				accessorFn: (row) => `${formatDollars(row.stock.currPrice)}`,
 				sortingFn: (a, b) => {
 					return (
 						a.original.stock.currPrice! -
@@ -81,12 +81,12 @@ export default function Holdings() {
 					const prevPrice = row.stock.prevClosePrice;
 					const dollarChange = price! - prevPrice!;
 					let ret = "";
-					dollarChange > 0 ? ret += "+" : ret += "-";
+					dollarChange > 0 ? (ret += "+") : (ret += "-");
 					ret += formatDollars(Math.abs(dollarChange));
-					ret += " (" + percentChange(price!, prevPrice!) + "%)";
+					ret += " (" + percentChange(price, prevPrice) + "%)";
 					return ret;
 				},
-			}
+			},
 		],
 		[],
 	);
@@ -108,13 +108,14 @@ export default function Holdings() {
 					<div className="flex flex-row justify-center py-3">
 						<h1 className="text-2xl font-bold">Holdings</h1>
 					</div>
-					{data?.holdings.map((holding: Holding) => (
+					{data?.holdings.map((holding: Holding, i) => (
 						<CardComponent
-							key={holding.stock.ticker}
+							key={i}
 							ticker={holding.stock.ticker}
 							company={holding.stock.name!}
 							tradeQty={holding.stockQuantity}
 							tradePrice={holding.stock.currPrice!}
+							prevPrice={holding.stock.prevClosePrice!}
 						/>
 					))}
 				</>

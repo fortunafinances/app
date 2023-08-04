@@ -1,6 +1,6 @@
 import React from "react";
 import { formatDate } from "../../../utilities/common";
-import { formatDollars } from "../../../utilities/currency";
+import { formatDollars } from "../../../utilities/common";
 
 interface ActivityProps {
 	date: string;
@@ -21,12 +21,12 @@ const ActivityCard: React.FC<ActivityProps> = ({
 			<div className="flex flex-row justify-between card-body">
 				<div>
 					{" "}
-					<h2 className="card-title">{type}</h2>
-					<p>{description}</p>
+					<h2 className="card-title text-3xl">{type}</h2>
+					<p className="text-gray-500 text-sm">{description}</p>
 				</div>
 				<div className="">
-					<h2 className="text-2xl">{formatDollars(amount)}</h2>
-					<p>{formatDate(date)}</p>
+					<h2 className="text-3xl">{formatDollars(amount)}</h2>
+					<p className= "text-xs py-3">{formatDate(date)}</p>
 				</div>
 			</div>
 		</div>

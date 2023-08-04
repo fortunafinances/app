@@ -12,9 +12,6 @@ export default function ProfileInfo() {
 	const user = useReactiveVar(userInfo);
 
 	const handleSave = (newVal: string, fieldName: string) => {
-		console.log(newVal);
-		console.log(fieldName);
-
 		insertUser({
 			variables: {
 				// username: data?.insertUser.user.username,
@@ -45,7 +42,7 @@ export default function ProfileInfo() {
 						: data?.insertUser.user.username,
 			},
 		})
-			// .then((data) => data.data?.insertUser.lastName)
+			.then((data) => userInfo(data.data?.insertUser.user))
 			.catch((error) => console.error(error));
 	};
 	const handleValidation = (newVal: string, fieldName: string) => {
@@ -60,18 +57,11 @@ export default function ProfileInfo() {
 	};
 
 	function createField(label: string, name: string | undefined) {
-		// const handleSave = (label: string) => {
-		// 	console.log("Edited Value -> ", val);
-		// 	setVal(value);
-		// };
-
 		return (
 			<EdiText
 				className="w-full"
 				type="text"
 				value={name === undefined ? "" : name}
-				// value={name}
-				// onSave={(label) => handleSave(label)}
 				onSave={(newVal: string) => handleSave(newVal, label)}
 				validation={(newVal: string) => handleValidation(newVal, label)}
 				onValidationFail={(newVal: string) =>
@@ -170,7 +160,7 @@ export default function ProfileInfo() {
 			variables: {
 				userId: user?.userId,
 			},
-		}).catch((err) => console.log(err));
+		}).catch((err) => console.error(err));
 	}, [insertUser, user?.userId]);
 
 	if (loading) return <>Loading</>;
@@ -178,16 +168,16 @@ export default function ProfileInfo() {
 
 	return (
 		<div className="h-screen flex">
-			<div className="bg-primary w-[50%] h-full flex flex-col gap-9 justify-center">
-				<div className="text-secondary text-4xl  md:text-6xl xl:text-9xl items-left  ml-[5%] font-medium md:flex-row sm:flex-col">
-					<h1 className="">Hello,</h1>
+			<div className="hidden bg-primary w-[50%] h-full md:flex flex-col gap-9 justify-center">
+				<div className="text-secondary text-4xl md:text-6xl lg:text-8xl items-left ml-[5%] font-medium flex flex-col">
+					<h1>Hello,</h1>
 					<h1 className="bg-info px-2 w-fit">
 						{data?.insertUser.user.firstName}
 					</h1>
 				</div>
 				<h2 className="ml-[5%] text-info text-5xl">Edit Profile</h2>
 			</div>
-			<div className="w-[50%] overflow-y-auto flex-col p-6 bg-accent text-primary [&>h3]:text-2xl [&>h3]:py-2 [&>h2]:text-5xl [&>h2]:py-4 ">
+			<div className="md:w-[50%] overflow-y-auto flex-col p-6 bg-accent text-primary [&>h3]:text-2xl [&>h3]:py-2 [&>h2]:text-5xl [&>h2]:py-4 ">
 				<h1 className="text-8xl">Profile</h1>
 				<hr className="h-[2px] mt-8 bg-primary border-0"></hr>
 				<h2>Personal Information</h2>
@@ -204,12 +194,16 @@ export default function ProfileInfo() {
 				<h2 className="py-4">Bank Information</h2>
 				<h3>Bank</h3>
 				{createField("bankName", data?.insertUser.user.bankName)}
-				<div className="p-3 flex flex-row justify-end">
-					<BsCheckLg
-						size={60}
-						className="transition duration:500 hover:scale-125 hover:fill-[#7c1fff]"
+				<div className="flex flex-row justify-end w-full">
+					<button
+						className="p-3 "
 						onClick={() => navigate("/app/overview")}
-					/>
+					>
+						<BsCheckLg
+							size={60}
+							className="transition duration:500 hover:scale-125 hover:fill-[#7c1fff]"
+						/>
+					</button>
 				</div>
 			</div>
 		</div>

@@ -14,11 +14,12 @@ import Callback from "./pages/callback";
 import Trade from "./pages/application views/trade";
 import cache from "./utilities/graphQL";
 import Orders from "./pages/application views/orders";
-import CreateProfile from "./pages/createProfile";
-import CreateAccount from "./pages/createAccount";
-import StockRecommendation from "./pages/application views/StockRecommendation";
+import CreateProfile from "./pages/onboarding/createProfile";
+import CreateAccount from "./pages/onboarding/createAccount";
+import StockRecommendation from "./pages/onboarding/stockRecommendation";
 import ProfileInfo from "./pages/profileInfo";
-import StockResults from "./pages/application views/stockResults";
+import StockResults from "./pages/onboarding/stockResults";
+import PrivacyPolicy from "./pages/privacyPolicy";
 import { currentAccountId } from "./utilities/reactiveVariables";
 import { useEffect } from "react";
 
@@ -30,7 +31,6 @@ const client = new ApolloClient({
 export default function App() {
 	const currAccount = useReactiveVar(currentAccountId);
 	useEffect(() => {
-		// console.log(currAccount)
 	}, [currAccount]);
 	return (
 		<ApolloProvider client={client}>
@@ -59,6 +59,7 @@ export default function App() {
 					<Route path="/profileInfo" element={<ProfileInfo />} />
 					<Route path="/stockRecommendation" element={<StockRecommendation />} />
 					<Route path="/stockResults" element={<StockResults />} />
+					<Route path="/privacyPolicy" element={<PrivacyPolicy />} />
 				</Routes>
 			</Router>
 		</ApolloProvider>

@@ -3,7 +3,7 @@ import Table from "../../components/data/table";
 import { useMemo } from "react";
 import { MRT_ColumnDef } from "material-react-table";
 import { Activity, GraphQLReturnData } from "../../utilities/types";
-import { filterRange, formatDollars } from "../../utilities/currency";
+import { filterRange, formatDollars } from "../../utilities/common";
 import { formatDate, isMobile, sortDate } from "../../utilities/common";
 import { currentAccountId } from "../../utilities/reactiveVariables";
 import { GET_ACTIVITIES } from "../../utilities/graphQL";
@@ -56,6 +56,12 @@ export default function Activity() {
 		variables: { accId: accountId },
 	});
 
+    let sortedData;
+	
+    if (data && data.activity) {
+        sortedData = [...data.activity].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+    }
+
 	if (data?.activity.length === 0)
 		return (
 			<div className="h-full w-full flex flex-col justify-center items-center text-2xl">
@@ -77,31 +83,31 @@ export default function Activity() {
 
 	return (
 		<div className="h-full w-full">
-			{isMobile(windowSize) ? <>
-				<div className="flex flex-row justify-center py-3">
-					<h1 className="text-2xl font-bold">Activity</h1>
-				</div>
-				{data?.activity.map((activity: Activity) => (
-					<ActivityCard
-						key={activity.date}
-						date={activity.date}
-						type={activity.type}
-						description={activity.description}
-						amount={activity.amount}
-					/>
-				))}
-			</>
-
-				: (
-					<Table
-						loading={loading}
-						error={error}
-						data={data?.activity}
-						columnData={cols}
-						enableRowActions={false}
-						sorting={[{ id: "date", desc: true }]}
-					/>
-				)}
+			{isMobile(windowSize) ? (
+				<>
+					<div className="flex flex-row justify-center py-3">
+						<h1 className="text-2xl font-bold">Activity</h1>
+					</div>
+					{sortedData?.map((activity: Activity, i) => (
+						<ActivityCard
+							key={i}
+							date={activity.date}
+							type={activity.type}
+							description={activity.description}
+							amount={activity.amount}
+						/>
+					))}
+				</>
+			) : (
+				<Table
+					loading={loading}
+					error={error}
+					data={data?.activity}
+					columnData={cols}
+					enableRowActions={false}
+					sorting={[{ id: "date", desc: true }]}
+				/>
+			)}
 		</div>
 	);
 }

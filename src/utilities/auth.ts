@@ -1,16 +1,5 @@
 import auth0 from 'auth0-js';
-// import jwtDecode from 'jwt-decode';
 import { userInfo } from "./reactiveVariables";
-
-// interface DecodedToken {
-// 	openid: string;
-// 	email: string;
-// 	sub: string;
-// 	nickname: string;
-// 	profile: string;
-// 	exp: number;
-// 	// add other claims as needed
-// }
 
 // WebAuth will redirect user to the login page
 const auth0Client = new auth0.WebAuth({
@@ -19,7 +8,7 @@ const auth0Client = new auth0.WebAuth({
 	domain: "dev-wpc8kymxzmepqxl5.us.auth0.com",
 	clientID: "OxQxuofsPZXSFzTqbVtKgErT2xrl3VfZ",
 	audience: "http://127.0.0.1:5000/",
-	redirectUri: "http://localhost:4040/callback",
+	redirectUri: import.meta.env.DEV ? "http://localhost:4040/callback" : "https://cvppf9v39y.us-east-1.awsapprunner.com/callback",
 	responseType: "token id_token",
 	scope: "openid email sub nickname profile read:user", // what we want the token to include
 });
@@ -39,7 +28,7 @@ export function signout() {
 	localStorage.removeItem("accounts");
 	localStorage.removeItem("currentAccountId");
 	auth0Client.logout({
-		returnTo: "http://localhost:4040/",
+		returnTo: import.meta.env.DEV ? "http://localhost:4040/" : "https://cvppf9v39y.us-east-1.awsapprunner.com/",
 		clientID: "OxQxuofsPZXSFzTqbVtKgErT2xrl3VfZ",
 	});
 }
@@ -57,9 +46,6 @@ export function handleAuthentication() {
 			auth0Client.client.userInfo(
 				authResult.accessToken,
 				function (_err, userData) {
-					console.log("\nUser info... ", userData);
-					console.log("\nUser id... ", userData.sub);
-
 					userInfo({
 						userId: userData.sub,
 						email: userData.email!,
@@ -68,42 +54,7 @@ export function handleAuthentication() {
 				}
 			);
 		} else if (err) {
-			console.log("Error in handle auth: ", err);
+			console.error(err);
 		}
 	});
 }
-
-/** sending user data to backend */
-// function sendUserData(data: string) {
-// 	return fetch(`http://localhost:5000/add_user`, {
-// 		method: "POST",
-// 		headers: {
-// 			"Content-Type": "application/json",
-// 		},
-// 		body: JSON.stringify(data),
-// 	})
-// 		.then((response) => response.json())
-// 		.then((response) => {
-// 			console.log("Sending data to backend... ", response);
-// 		})
-// 		.catch((error) => console.log(error));
-// }
-
-// /** function that will print out the info id token contains */
-// function printDecodedToken(token: string) {
-// 	if (token) {
-// 		const decodedToken: DecodedToken = jwtDecode(token);
-
-// 		console.log(`\nUser email: ${decodedToken.email}`);
-// 		console.log(`User nickname: ${decodedToken.nickname}`);
-//         localStorage.setItem("---- user", decodedToken.nickname);
-// 		console.log(`User sub: ${decodedToken.sub}`);
-// 		if (decodedToken.exp < Date.now() / 1000) {
-// 			console.log("Token has expired");
-// 		} else {
-// 			console.log("Token is still valid");
-// 		}
-// 	}
-// }
-
-

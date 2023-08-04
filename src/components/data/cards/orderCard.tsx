@@ -22,15 +22,17 @@ const OrderCard: React.FC<OrderProps> = ({
 }) => (
 	<div className="card card-bordered bg-base-100 selection:shadow-xl">
 		<div className="flex flex-row justify-between card-body">
-			<div>
-				{" "}
-				<h2 className="card-title">{tradeQty} x {ticker}</h2>
-				<p>{company}</p>
+			<div className = "">
+				<h2 className="card-title text-4xl">{ticker}</h2>
+				<p className="text-gray-400 font-bold">{company}</p>
+				<h2 className="text-sm">{tradeQty} Shares</h2>
+
 			</div>
-			<div className="">
+			<div className="flex flex-col">
 				<h2 className="text-2xl">{side} {type}</h2>
-                <p>{status}</p>
-				<p>{formatDate(date)}</p>
+                <p className="font-extrabold">{status}</p>
+				<p className="text-sm">{formatDate(date)}</p>
+
 			</div>
 		</div>
 	</div>

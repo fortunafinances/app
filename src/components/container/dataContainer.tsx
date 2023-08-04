@@ -12,7 +12,7 @@ export default function DataContainer({
 		<div
 			className={twMerge(
 				"bg-gray-200 rounded-md border-black border w-full p-1",
-				className
+				className,
 			)}
 		>
 			{children}

@@ -2,7 +2,7 @@ import { useQuery, useReactiveVar } from "@apollo/client";
 import DataContainer from "../../components/container/dataContainer";
 import PieChart from "../../components/data/pieChart";
 import { LineChart } from "../../components/data/overviewChart";
-import { formatDollars } from "../../utilities/currency";
+import { formatDollars } from "../../utilities/common";
 import {
 	currentAccountId,
 	sidebarClosed,
@@ -68,14 +68,16 @@ export default function Overview() {
 			) : error ? (
 				<p>Error accessing backend</p>
 			) : (
-				<p className="text-md md:text-lg">{formatDollars(dollars)}</p>
+				<p className="text-xs md:text-lg font-normal">
+					{formatDollars(dollars)}
+				</p>
 			)}
 		</div>
 	);
 
 	return (
 		<div className="p-3 flex flex-col gap-3 h-full">
-			<DataContainer className="font-semibold px-3 flex flex-row md:justify-start justify-between md:gap-20">
+			<DataContainer className="font-semibold px-3 flex flex-row md:justify-start justify-between md:gap-20 border-primary">
 				<DataComponent
 					title="Net Worth"
 					dollars={data?.displayBar.total ?? 0}
@@ -92,13 +94,17 @@ export default function Overview() {
 			{holdingsData?.holdings.length === 0 ? (
 				<NoInvestments />
 			) : (
-				<div className="flex flex-col md:flex-row h-full gap-3">
-						<DataContainer className="h-full md:max-w-[50%] max-w-full p-3 flex flex-col justify-center items-center">
-						<h2 className="text-2xl">Portfolio Sector Breakdown</h2>
+				<div className="flex flex-col gap-3 sm:gap-0 md:flex-row h-full justify-between [&>*]:border-primary">
+					<DataContainer className="h-fit md:max-w-[49.5%] max-w-full flex flex-col justify-center items-center p-6">
+						<h2 className="text-2xl font-bold">
+							Portfolio Sector Breakdown
+						</h2>
 						<PieChart />
 					</DataContainer>
-						<DataContainer className="h-full md:max-w-[50%] max-w-full p-3 flex flex-col justify-center items-center overflow-auto">
-							<h2 className="text-2xl">Historical Account Performance</h2>
+					<DataContainer className="h-fit md:max-w-[49.5%] max-w-full flex flex-col justify-center items-center p-6">
+						<h2 className="text-2xl font-bold">
+							Historical Account Performance
+						</h2>
 						<LineChart />
 					</DataContainer>
 				</div>

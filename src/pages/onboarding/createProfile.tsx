@@ -2,10 +2,9 @@ import { gql, useMutation, useReactiveVar } from "@apollo/client";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { BsArrowRight } from "react-icons/bs";
 import { useNavigate } from "react-router-dom";
-import { userInfo } from "../utilities/reactiveVariables";
+import { userInfo } from "../../utilities/reactiveVariables";
 import { useEffect } from "react";
-import { User } from "../utilities/types";
-import { capitalize } from "../utilities/common";
+import { User } from "../../utilities/types";
 import * as Yup from "yup";
 
 const phoneRegExp =
@@ -30,6 +29,7 @@ const POST_USER_INFO = gql`
 		$firstName: String
 		$lastName: String
 		$phoneNumber: String
+		$bankName: String
 		$onboarding: Int
 	) {
 		insertUser(
@@ -38,6 +38,7 @@ const POST_USER_INFO = gql`
 			firstName: $firstName
 			lastName: $lastName
 			phoneNumber: $phoneNumber
+			bankName: $bankName
 			onboardingComplete: $onboarding
 		) {
 			message
@@ -85,13 +86,16 @@ export default function CreateProfile() {
 			<section className="bg-accent p-4 text-primary h-full overflow-y-auto">
 				<h1 className="text-3xl md:text-7xl">Create Profile</h1>
 				<hr className="h-[2px] my-1 md:my-8 bg-primary border-0"></hr>
-				<center className="">
+				<center>
 					<Formik
 						initialValues={{
-							firstName: capitalize(user!.firstName) ?? "",
-							lastName: capitalize(user!.lastName) ?? "",
-							username: capitalize(user!.username) ?? "",
-							phoneNumber: capitalize(user!.phoneNumber) ?? "",
+							firstName: user!.firstName ?? "",
+							lastName: user!.lastName ?? "",
+							username: user!.username ?? "",
+							phoneNumber: user!.phoneNumber ?? "",
+							bank: "",
+							accountNumber: "",
+							routingNumber: "",
 						}}
 						onSubmit={(values, { setSubmitting }) => {
 							postUserInfo({
@@ -104,17 +108,16 @@ export default function CreateProfile() {
 										/\D/g,
 										"",
 									),
+									bankName: values.bank,
 									onboarding: 1,
 								},
 							})
 								.then((res) => {
-									console.log("setting user info");
 									userInfo({
 										userId: user!.userId,
 										email: user!.email,
 										username: values.username,
-										firstName:
-											values.firstName,
+										firstName: values.firstName,
 										lastName: values.lastName,
 										phoneNumber: values.phoneNumber.replace(
 											/\D/g,
@@ -131,7 +134,6 @@ export default function CreateProfile() {
 									console.error(err);
 								})
 								.finally(() => {
-									console.log(userInfo());
 									setSubmitting(false);
 								});
 						}}
@@ -216,16 +218,66 @@ export default function CreateProfile() {
 										className="pl-3 h-14 w-full rounded-md text-xl outline-info"
 									/>
 								</div>
-								<button
-									type="submit"
-									disabled={isSubmitting}
-									className="flex flex-row justify-end"
-								>
-									<BsArrowRight
-										size={60}
-										className="transition duration:500 hover:scale-125 hover:fill-[#7c1fff]"
+								<div>
+									<h1 className="text-left text-3xl font-medium pl-1">
+										Bank
+									</h1>
+									<ErrorMessage
+										name="bank"
+										component="div"
+										className="text-left text-[#FF0000]"
 									/>
-								</button>
+									<Field
+										type="text"
+										name="bank"
+										placeholder="Bank"
+										className="pl-3 h-14 w-full rounded-md text-xl outline-info"
+									/>
+								</div>
+								<div>
+									<h1 className="text-left text-3xl font-medium pl-1">
+										Account Number
+									</h1>
+									<ErrorMessage
+										name="accountNumber"
+										component="div"
+										className="text-left text-[#FF0000]"
+									/>
+									<Field
+										type="accountNumber"
+										name="accountNumber"
+										placeholder="Account Number"
+										className="pl-3 h-14 w-full rounded-md text-xl outline-info"
+									/>
+								</div>
+								<div>
+									<h1 className="text-left text-3xl font-medium pl-1">
+										Routing Number
+									</h1>
+									<ErrorMessage
+										name="routingNumber"
+										component="div"
+										className="text-left text-[#FF0000]"
+									/>
+									<Field
+										type="routingNumber"
+										name="routingNumber"
+										placeholder="Routing Number"
+										className="pl-3 h-14 w-full rounded-md text-xl outline-info"
+									/>
+								</div>
+								<div className="flex flex-row justify-end">
+									<button
+										type="submit"
+										disabled={isSubmitting}
+										className="w-fit"
+									>
+										<BsArrowRight
+											size={60}
+											className="transition duration:500 hover:scale-125 hover:fill-[#7c1fff]"
+										/>
+									</button>
+								</div>
 							</Form>
 						)}
 					</Formik>

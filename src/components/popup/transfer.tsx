@@ -9,6 +9,7 @@ import {
 	GET_ACCOUNTS,
 	GET_ACTIVITIES,
 	GET_OVERVIEW,
+	GET_OVERVIEW_LINE_CHART,
 	GET_TOTAL_VALUE,
 	MAKE_TRANSFER,
 } from "../../utilities/graphQL";
@@ -63,6 +64,11 @@ export default function Transfer() {
 				query: GET_TOTAL_VALUE,
 				variables: { userId: userInfo()?.userId },
 			},
+			{
+				query: GET_OVERVIEW_LINE_CHART,
+				variables: { accId: currentAccountId() },
+			},
+			{ query: GET_ACCOUNTS, variables: { userId: userInfo()?.userId } },
 		],
 	});
 
@@ -217,8 +223,10 @@ export default function Transfer() {
 				{({ values, errors, touched, isValid }) => {
 					if (!data) return <></>;
 					return (
-						<Form className="modal-box bg-[#EDEDFE] flex flex-col gap-3 text-primary overflow-y-auto min-h-[15em]">
-							<label htmlFor="transferType">Transfer Type</label>
+						<Form className="modal-box bg-[#EDEDFE] flex flex-col text-primary overflow-y-auto min-h-[15em]">
+							<label className="text-xl" htmlFor="transferType">
+								Transfer Type
+							</label>
 							<FormikSelect
 								id="transferType"
 								selectOptions={transferType}
@@ -235,8 +243,11 @@ export default function Transfer() {
 							) : values.transferType === "" ? (
 								<></>
 							) : values.transferType === "IN" ? (
-								<div>
-									<label htmlFor="transferInAccount">
+								<div className="pt-3">
+									<label
+										htmlFor="transferInAccount"
+										className="text-xl"
+									>
 										Destination Account
 									</label>
 									<FormikSelect
@@ -257,8 +268,11 @@ export default function Transfer() {
 										)}
 								</div>
 							) : values.transferType === "OUT" ? (
-								<div>
-									<label htmlFor="transferOutAccount">
+								<div className="pt-3">
+									<label
+										htmlFor="transferOutAccount"
+										className="text-xl"
+									>
 										Source Account
 									</label>
 									<FormikSelect
@@ -279,8 +293,11 @@ export default function Transfer() {
 										)}
 								</div>
 							) : (
-								<div>
-									<label htmlFor="fromAccount">
+								<div className="pt-3">
+									<label
+										htmlFor="fromAccount"
+										className="text-xl"
+									>
 										Source Account
 									</label>
 									<FormikSelect
@@ -300,7 +317,11 @@ export default function Transfer() {
 												{errors.fromAccount}
 											</p>
 										)}
-									<label htmlFor="toAccount">
+
+									<label
+										htmlFor="toAccount"
+										className="text-xl pt-3"
+									>
 										Destination Account
 									</label>
 									<FormikSelect
@@ -321,8 +342,11 @@ export default function Transfer() {
 									)}
 								</div>
 							)}
-							<div className="flex flex-col">
-								<label htmlFor="amount">Amount</label>
+
+							<div className="flex flex-col pt-3">
+								<label htmlFor="amount" className="text-xl">
+									Amount
+								</label>
 								<Field
 									type="number"
 									min="0"

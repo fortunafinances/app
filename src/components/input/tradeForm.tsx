@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { BiDollar } from "react-icons/bi";
-import { gql, useMutation, useQuery, useReactiveVar } from "@apollo/client";
+import { useMutation, useQuery, useReactiveVar } from "@apollo/client";
 import { Stock } from "../../utilities/types";
-import { formatDollars } from "../../utilities/currency";
+import { formatDollars } from "../../utilities/common";
 import {
 	currentAccountId,
 	symbol,
@@ -16,6 +16,7 @@ import {
 	GET_PIE_CHART_DATA,
 	GET_STOCK_NAMES,
 	GET_TOTAL_VALUE,
+	MAKE_TRADE,
 } from "../../utilities/graphQL";
 import StockSearchBar from "./stockSearch";
 import { preventMinus } from "../../utilities/common";
@@ -44,31 +45,11 @@ export default function TradeForm({ buyOrSell }: buyProp) {
 	const [checkQuant, setCheckQuant] = useState(true); //true = submit button is disabled
 	const [limitPrice, setLimitPrice] = useState<number | null>();
 
-	const PLACE_ORDER = gql`
-		mutation InsertTrade(
-			$accID: Int!
-			$type: OrderType!
-			$side: OrderSide!
-			$ticker: String!
-			$tradeQty: Int!
-			$tradePrice: Float!
-		) {
-			insertTrade(
-				accID: $accID
-				type: $type
-				side: $side
-				ticker: $ticker
-				tradeQty: $tradeQty
-				tradePrice: $tradePrice
-			)
-		}
-	`;
-
 	type TransferReturnData = {
 		insertTrade: string;
 	};
 
-	const [placeOrder] = useMutation<TransferReturnData>(PLACE_ORDER, {
+	const [placeOrder] = useMutation<TransferReturnData>(MAKE_TRADE, {
 		refetchQueries: [
 			{ query: GET_HOLDINGS, variables: { accId: accountId } },
 			{ query: GET_ORDERS, variables: { accId: accountId } },
@@ -116,22 +97,34 @@ export default function TradeForm({ buyOrSell }: buyProp) {
 				) {
 					insufficientSharesModal.showModal();
 				} else {
-					console.log("error");
+					console.error("error");
 				}
 			})
 			.catch((error) => console.error(error));
 	};
 
 	useEffect(() => {
-		if (symbolName !== "" && symbolName !== "Select..." && data) {
+		if (
+			symbolName !== "" &&
+			symbolName !== "Select..." &&
+			data &&
+			marketState
+		) {
 			const stock = data.stocks.find(
 				(element) => element.ticker === symbolName,
 			);
 			const price = stock!.currPrice;
 			setStockPrice(price!);
 			setTotalPrice(quantity * stockPrice);
+		} else if (
+			symbolName !== "" &&
+			symbolName !== "Select..." &&
+			data &&
+			limitPrice
+		) {
+			setTotalPrice(quantity * limitPrice);
 		}
-	}, [data, quantity, symbolName, stockPrice]);
+	}, [data, quantity, symbolName, stockPrice, marketState, limitPrice]);
 
 	//to get current stock holdings amount
 	interface HoldingsQuery {
@@ -146,10 +139,24 @@ export default function TradeForm({ buyOrSell }: buyProp) {
 	);
 
 	useEffect(() => {
+		if (marketState) {
+			setTotalPrice(stockPrice * quantity);
+		} else if (limitPrice !== null && limitPrice !== undefined) {
+			if (limitPrice > stockPrice) {
+				setTotalPrice(stockPrice * quantity);
+			} else {
+				setTotalPrice(limitPrice * quantity);
+			}
+		} else {
+			setTotalPrice(0 * quantity);
+		}
+	}, [limitPrice, marketState, quantity, stockPrice]);
+
+	useEffect(() => {
 		refetch()
-			.then(() => console.log("in refetch: ", accountId))
+			.then()
 			.catch((error) => {
-				console.log(error);
+				console.error(error);
 			});
 		const currStock = holdingsData?.holdings.find(
 			(e) => e.stock.ticker === symbolName,
@@ -160,7 +167,6 @@ export default function TradeForm({ buyOrSell }: buyProp) {
 			setCurrStockQuantity(0);
 		}
 	}, [holdingsData?.holdings, symbolName, accountId, refetch]);
-	// console.log(currStockQuantity);
 
 	useEffect(() => {
 		if (quantity < 1) {
@@ -170,10 +176,8 @@ export default function TradeForm({ buyOrSell }: buyProp) {
 		}
 	}, [quantity]);
 
-	// if (!loading && data?.holdings.length === 0) return <NoInvestments />;
 	const onClear = () => {
 		setQuantity(0);
-		console.log(quantity);
 		symbol("");
 	};
 
@@ -187,11 +191,16 @@ export default function TradeForm({ buyOrSell }: buyProp) {
 				<StockSearchBar className="z-40 w-full" tradeType={buyOrSell} />
 			</div>
 			<div className="m-4 mt-6 flex flex-col gap-3">
-				<h1 className="font-semibold text-xl">
-					Quantity (Current Holdings: {currStockQuantity})
-				</h1>
+				<div>
+					<h1 className="font-semibold text-xl">Quantity</h1>
+					<p className="text-gray-700">
+						Current Holdings: {currStockQuantity}
+					</p>
+				</div>
 				<h2 className="text-xs text-[#FF0000]">
 					{checkQuant ? "*required" : null}
+					{quantity > 1000000 &&
+						"Maximum Stock Quantity Reached: 1,000,000"}
 				</h2>
 				<div className="flex flex-row justify-between">
 					<div className="border-[0px] rounded-[3px] border-[#cccccc] w-full">
@@ -269,25 +278,41 @@ export default function TradeForm({ buyOrSell }: buyProp) {
 			)}
 			<div className="m-4 mt-6 flex flex-row gap-3 font-semibold text-xl">
 				<h1>Total Price:</h1>
-				<h1>
+				{/* <h1>
 					{quantity} x {formatDollars(stockPrice)} ={" "}
 					{formatDollars(totalPrice)}
-				</h1>
+				</h1> */}
+				{marketState ? (
+					<h1>
+						{quantity} x {formatDollars(stockPrice)} ={" "}
+						{formatDollars(totalPrice)}
+					</h1>
+				) : (
+					<h1>
+						{quantity} x{" "}
+						{limitPrice === null || limitPrice === undefined
+							? formatDollars(0)
+							: limitPrice > stockPrice
+							? formatDollars(stockPrice)
+							: formatDollars(limitPrice)}{" "}
+						= {formatDollars(totalPrice)}
+					</h1>
+				)}
 			</div>
 			{/* cancel and submit buttons */}
-			<div className="flex flex-row justify-end m-4 gap-4 text-xl [&>button]:rounded-lg [&>button]:px-3 [&>button]:py-1 [&>button]:border-4 [&>button]:font-bold">
+			<div className="flex flex-row justify-end m-4 gap-4 text-xl [&>button]:rounded-md [&>button]:px-3 [&>button]:border-4 [&>button]:font-bold">
 				<button
-					className="border-[#920000] text-[#920000] bg-[#F9E5E5] hover:shadow-xl shadow-[#920000] hover:bg-[#920000] hover:text-[#f9e5e5]"
+					className="border-[#920000] bg-[#920000] hover:bg-[#f9e5e5] hover:text-[#920000] text-[#f9e5e5]"
 					onClick={onClear}
 				>
-					Clear
+					CLEAR
 				</button>
 				<button
 					disabled={checkQuant}
-					className="border-success-content text-success-content bg-[#E3FDDC] hover:shadow-xl shadow-success-content hover:bg-success-content hover:text-[#e3fddc]"
+					className="border-success-content text-[#E3FDDC] bg-success-content hover:bg-[#e3fddc] hover:text-success-content"
 					onClick={handleSubmit}
 				>
-					Submit
+					{buyOrSell ? "BUY" : "SELL"}
 				</button>
 			</div>
 		</div>
