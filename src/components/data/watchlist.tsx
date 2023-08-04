@@ -41,9 +41,11 @@ export default function WatchList() {
 		return toret;
 	}
 
+	if (data?.watchList.length === 0) return <></>;
+
 	return (
 		<>
-			<h2 className="py-1 font-bold w-full text-center text-lg bg-white text-black">
+			<h2 className="py-1 font-bold w-full text-center text-lg bg-[#110029] text-white border-t-[2px] sm:border-none">
 				Watch List
 			</h2>
 			<div
@@ -56,7 +58,7 @@ export default function WatchList() {
 								className="w-full [&>*]:w-full"
 								style={{
 									minHeight: height - 1,
-									width: width - 1,
+									width: width,
 								}}
 							>
 								{data?.watchList.map((watchListItem, i) => {

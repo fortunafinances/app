@@ -20,10 +20,10 @@ export default function SideBar() {
 	};
 
 	return (
-		<div className={"relative h-full"}>
+		<div className={"relative h-full -r border-[#110029]"}>
 			<div
 				className={twMerge(
-					"h-full bg-[#110029] text-white flex flex-col",
+					"h-full bg-[#110029] text-white flex flex-col justify-between",
 					collapsed
 						? isMobile(windowSize)
 							? "w-0"
