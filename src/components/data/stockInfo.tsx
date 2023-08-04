@@ -116,7 +116,7 @@ export default function StockInfo() {
 						</div>
 					</div>
 					<div className="flex flex-col gap-4 items-end md:items-start">
-						<h1 className="text-6xl text-primary font-medium">
+						<h1 className="text-5xl sm:text-6xl text-primary font-medium">
 							{formatDollars(price)}
 						</h1>
 						<div className="flex flex-row text-primary font-semibold text-xl items-center w-fit whitespace-nowrap">
