@@ -28,10 +28,10 @@ const OrderCard: React.FC<OrderProps> = ({
 				<h2 className="text-sm">{tradeQty} Shares</h2>
 
 			</div>
-			<div className="flex flex-col">
+			<div className="flex flex-col items-end">
 				<h2 className="text-2xl">{side} {type}</h2>
                 <p className="font-extrabold">{status}</p>
-				<p className="text-sm">{formatDate(date)}</p>
+				<p className="text-sm whitespace-nowrap">{formatDate(date)}</p>
 
 			</div>
 		</div>

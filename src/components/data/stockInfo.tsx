@@ -109,7 +109,7 @@ export default function StockInfo() {
 						<h1 className="text-4xl text-primary font-medium">
 							{formatDollars(price)}
 						</h1>
-						<div className="flex flex-row text-primary font-semibold text-xl items-center w-fit">
+						<div className="flex flex-row text-primary font-semibold text-xl items-center w-fit whitespace-nowrap">
 							{dollarChange > 0 ? (
 								<AiFillCaretUp />
 							) : (
@@ -117,7 +117,7 @@ export default function StockInfo() {
 							)}
 							<p className="w-fit">
 								{formatDollars(dollarChange)} ({changePercent}%)
-								Today
+
 							</p>
 						</div>
 					</div>

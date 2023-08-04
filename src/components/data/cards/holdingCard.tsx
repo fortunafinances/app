@@ -25,7 +25,7 @@ const CardComponent: React.FC<CardProps> = ({
 	return (
 		<div className="card card-bordered bg-base-100 selection:shadow-xl">
 			<div className="flex flex-row justify-between card-body">
-				<div>
+				<div className="">
 					{/* <button
 						onClick={() => {
 							symbol(ticker);
@@ -36,12 +36,12 @@ const CardComponent: React.FC<CardProps> = ({
 						{ticker}
 					</button> */}
 					<h2 className="card-title text-4xl">{ticker}</h2>
-					<p className="text-gray-400 font-bold">{company}</p>
-					<h2 className="text-sm">{tradeQty} Shares</h2>
+					<p className="text-gray-400 font-bold pt-1">{company}</p>
+					<h2 className="text-sm pt-1">{tradeQty} Shares</h2>
 				</div>
-				<div className="flex flex-col justify-center items-center">
+				<div className="flex flex-col justify-center items-end">
 					<h2 className="text-3xl">{formatDollars(tradePrice)}</h2>
-					<div className = "flex flex-row items-center">
+					<div className = "flex flex-row items-center whitespace-nowrap pb-1">
 						{dollarChange > 0 ? (
 							<AiFillCaretUp/>
 						) : (
@@ -49,13 +49,12 @@ const CardComponent: React.FC<CardProps> = ({
 						)}
 						<p>{formatDollars(dollarChange)} ({changePercent}%)</p>
 					</div>
-					{/* <p className="text-xl">{percentChange(tradePrice, prevPrice)}%</p> */}
 					<button
 						onClick={() => {
 							symbol(ticker);
 							navigate("/app/trade");
 						}}
-						className="btn text-lg rounded-lg"
+						className="btn btn-sm text-med rounded-lg"
 					>TRADE</button>
 				</div>
 			</div>
