@@ -38,12 +38,7 @@ const POST_USER_INFO = gql`
 	}
 `;
 const SignupSchema = Yup.object().shape({
-	amount: Yup.number()
-		// .moreThan(0, "Must be greater than 0")
-		.when("transferType", {
-			is: "IN",
-			then: (schema) => schema.max(1_000_000, "Exceeded maximum deposit"),
-		}),
+	amount: Yup.number().lessThan(1000000, "Exceeded maximum deposit"),
 });
 
 type TransferReturnData = {
@@ -88,7 +83,7 @@ export default function CreateAccount() {
 						<Formik
 							initialValues={{
 								accountName: "",
-								amount: 0,
+								amount: "",
 							}}
 							validationSchema={SignupSchema}
 							onSubmit={(values, { setSubmitting }) => {
@@ -169,15 +164,18 @@ export default function CreateAccount() {
 										/>
 									</div>
 									<div>
-										<h1 className="text-left text-3xl font-medium pl-1">
-											Transfer In
-										</h1>
+										<div className="pl-1">
+											<h1 className="text-left text-3xl font-medium">
+												Transfer In
+											</h1>
 
-										{errors.amount && (
-											<p className="text-[#FF0000] text-left">
-												{errors.amount}
-											</p>
-										)}
+											{errors.amount && (
+												<p className="text-[#FF0000] text-left">
+													{errors.amount}
+												</p>
+											)}
+										</div>
+
 										<div className="flex flex-row justify-center items-center">
 											<h1 className="text-3xl pr-3">$</h1>
 											<Field
