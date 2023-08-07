@@ -268,9 +268,9 @@ export default function TradeForm({ buyOrSell }: buyProp) {
 							placeholder="Price"
 							onKeyDown={preventMinus}
 							className="input h-9 w-full border-[1px] rounded-[3px] border-[#cccccc] focus:ring-blue-500 focus:border-blue-500 focus:border-[2px] !outline-none"
-							value={limitPrice!}
-							onChange={(val) =>
-								setLimitPrice(val.target.valueAsNumber)
+							inputMode="decimal"
+							onChange={(newVal) =>
+								setLimitPrice(Number(newVal.target.value))
 							}
 						/>
 					</div>
@@ -278,10 +278,6 @@ export default function TradeForm({ buyOrSell }: buyProp) {
 			)}
 			<div className="m-4 mt-6 flex flex-row gap-3 font-semibold text-xl">
 				<h1>Total Price:</h1>
-				{/* <h1>
-					{quantity} x {formatDollars(stockPrice)} ={" "}
-					{formatDollars(totalPrice)}
-				</h1> */}
 				{marketState ? (
 					<h1>
 						{quantity} x {formatDollars(stockPrice)} ={" "}
