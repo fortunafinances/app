@@ -10,6 +10,7 @@ import {
 } from "../../utilities/reactiveVariables";
 import { OrderType, OrderSide } from "../../utilities/types";
 import {
+	GET_ACCOUNTS,
 	GET_ACTIVITIES,
 	GET_ORDERS,
 	GET_OVERVIEW,
@@ -58,6 +59,7 @@ export default function TradeForm({ buyOrSell }: buyProp) {
 			{ query: GET_ACTIVITIES, variables: { accId: accountId } },
 			{ query: GET_TOTAL_VALUE, variables: { userId: user!.userId } },
 			{ query: GET_OVERVIEW, variables: { accId: accountId } },
+			{ query: GET_ACCOUNTS, variables: { userId: user!.userId } },
 		],
 	});
 
