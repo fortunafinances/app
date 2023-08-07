@@ -5,7 +5,7 @@ import { twMerge } from "tailwind-merge";
 import { userInfo } from "../../utilities/reactiveVariables";
 import { GET_ACCOUNTS } from "../../utilities/graphQL";
 import { useQuery } from "@apollo/client";
-import { formatDollars } from "../../utilities/common";
+import { formatDollars, makeEllipsis } from "../../utilities/common";
 
 type Props = {
 	selectOptions: { label: string; value: string | number }[];
@@ -43,7 +43,7 @@ export default function FormikSelect({
 			return <div className="text-gray-500"></div>;
 		return (
 			<div className="flex flex-row items-center gap-2">
-				<div>{props.label}</div>
+				<div>{makeEllipsis(props.label, 32)}</div>
 				<p>|</p>
 				<div
 					className={twMerge(
@@ -65,7 +65,7 @@ export default function FormikSelect({
 	};
 
 	const handleSelectChange = (option: SingleValue<Dropdown>) => {
-		setValue(option?.value);
+		void setValue(option?.value);
 		field[0].onChange(option?.value);
 	};
 
@@ -83,6 +83,7 @@ export default function FormikSelect({
 			onBlur={field[0].onBlur}
 			onChange={handleSelectChange}
 			className="rounded-md outline outline-[1px] outline-secondary"
+			maxMenuHeight={180}
 			styles={{
 				control: (base) => ({
 					...base,
@@ -90,9 +91,13 @@ export default function FormikSelect({
 					// This line disable the blue border
 					boxShadow: "none",
 				}),
-				option: (styles) => ({
-					...styles,
+				option: (base) => ({
+					...base,
 					minHeight: "40px",
+				}),
+				valueContainer: (base) => ({
+					...base,
+					overflow: "auto",
 				}),
 			}}
 		/>

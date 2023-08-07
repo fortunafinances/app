@@ -7,7 +7,11 @@ import {
 	symbol,
 } from "../../utilities/reactiveVariables";
 import { useNavigate } from "react-router-dom";
-import { formatDollars, percentChange } from "../../utilities/common";
+import {
+	formatDollars,
+	makeEllipsis,
+	percentChange,
+} from "../../utilities/common";
 import { AiFillCaretDown, AiFillCaretUp } from "react-icons/ai";
 import { twMerge } from "tailwind-merge";
 import { useWindowSize } from "../../utilities/hooks";
@@ -20,7 +24,7 @@ export default function WatchList() {
 		variables: { accId: currentAccountId() },
 	});
 
-	if (loading) return <p>Loading...</p>;
+	if (loading) return <></>;
 	if (error) return <p>Error :(</p>;
 
 	const handleClick = (ticker: string) => {
@@ -30,16 +34,6 @@ export default function WatchList() {
 		}
 		navigate("/app/trade");
 	};
-
-	function makeSubstring(name: string | undefined) {
-		let toret = "";
-		if (name !== undefined && name.length > 15 && windowWidth! > 640) {
-			toret = name.substring(0, 16) + "...";
-		} else {
-			return name;
-		}
-		return toret;
-	}
 
 	if (data?.watchList.length === 0) return <></>;
 
@@ -90,10 +84,16 @@ export default function WatchList() {
 															}
 														</h5>
 														<p className="text-xs ellipsis max-w-5">
-															{makeSubstring(
-																watchListItem
-																	.stock.name,
-															)}
+															{windowWidth! > 640
+																? watchListItem
+																		.stock
+																		.name
+																: makeEllipsis(
+																		watchListItem
+																			.stock
+																			.name,
+																		15,
+																  )}
 														</p>
 													</div>
 													<div className="flex flex-col group-hover:-translate-x-5 transition-transform duration-100 ease-in-out text-right">

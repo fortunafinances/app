@@ -62,6 +62,19 @@ export const percentChange = (curr?: number, prev?: number): string => {
 	return formatter.format(((curr! - prev!) / prev!) * 100);
 };
 
+export const makeEllipsis = (
+	name: string | undefined,
+	limit: number,
+): string => {
+	let ret = "";
+	if (name!.length > limit) {
+		ret = name!.substring(0, limit + 1) + "...";
+	} else {
+		return name ?? "";
+	}
+	return ret;
+};
+
 export const formatDate = (dateString: string): string => {
 	const date = new Date(dateString);
 	const formatter = new Intl.DateTimeFormat("en-US", {
