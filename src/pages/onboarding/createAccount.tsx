@@ -148,9 +148,14 @@ export default function CreateAccount() {
 							{({ isSubmitting, errors }) => (
 								<Form className="flex flex-col gap-4 ">
 									<div>
-										<h1 className="text-left text-3xl font-medium pl-1">
-											Account Name
-										</h1>
+										<div className="flex flex-row gap-1">
+											<h1 className="text-left text-3xl font-medium pl-1">
+												Account Name
+											</h1>
+											<h1 className="text-left text-3xl font-medium text-[#FF0000]">
+												*
+											</h1>
+										</div>
 										<ErrorMessage
 											name="accountName"
 											component="div"
