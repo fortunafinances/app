@@ -86,6 +86,15 @@ export default function Holdings() {
 					ret += " (" + percentChange(price, prevPrice) + "%)";
 					return ret;
 				},
+				sortingFn: (a, b) => {
+					const aDiff =
+						a.original.stock.currPrice! -
+						a.original.stock.prevClosePrice!;
+					const bDiff =
+						b.original.stock.currPrice! -
+						b.original.stock.prevClosePrice!;
+					return aDiff - bDiff;
+				},
 			},
 		],
 		[],
