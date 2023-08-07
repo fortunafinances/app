@@ -29,6 +29,8 @@ export default function StockSearchBar({
 		[data?.stocks],
 	);
 
+	const arrayForSort = [...data!.stocks];
+
 	if (loading)
 		return (
 			<div className="grow flex flex-row items-center justify-center">
@@ -49,13 +51,15 @@ export default function StockSearchBar({
 			<Select
 				className="cursor-text"
 				options={
-					data
-						? data.stocks.map((stock) => {
-								return {
-									label: stock.name!,
-									value: stock.ticker,
-								};
-						  })
+					arrayForSort
+						? arrayForSort
+								.sort((a, b) => (a.ticker > b.ticker ? 1 : -1))
+								.map((stock) => {
+									return {
+										label: stock.name!,
+										value: stock.ticker,
+									};
+								})
 						: []
 				}
 				formatOptionLabel={formatOptionLabel}

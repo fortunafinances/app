@@ -10,6 +10,7 @@ import {
 } from "../../utilities/reactiveVariables";
 import { OrderType, OrderSide } from "../../utilities/types";
 import {
+	GET_ACCOUNTS,
 	GET_ACTIVITIES,
 	GET_ORDERS,
 	GET_OVERVIEW,
@@ -22,6 +23,7 @@ import StockSearchBar from "./stockSearch";
 import { preventMinus } from "../../utilities/common";
 import { GraphQLReturnData, Holding } from "../../utilities/types";
 import { GET_HOLDINGS } from "../../utilities/graphQL";
+import { twMerge } from "tailwind-merge";
 
 interface StockData {
 	stocks: Stock[];
@@ -57,6 +59,7 @@ export default function TradeForm({ buyOrSell }: buyProp) {
 			{ query: GET_ACTIVITIES, variables: { accId: accountId } },
 			{ query: GET_TOTAL_VALUE, variables: { userId: user!.userId } },
 			{ query: GET_OVERVIEW, variables: { accId: accountId } },
+			{ query: GET_ACCOUNTS, variables: { userId: user!.userId } },
 		],
 	});
 
@@ -197,39 +200,51 @@ export default function TradeForm({ buyOrSell }: buyProp) {
 						Current Holdings: {currStockQuantity}
 					</p>
 				</div>
-				<h2 className="text-xs text-[#FF0000]">
-					{checkQuant ? "*required" : null}
-					{quantity > 1000000 &&
-						"Maximum Stock Quantity Reached: 1,000,000"}
-				</h2>
-				<div className="flex flex-row justify-between">
-					<div className="border-[0px] rounded-[3px] border-[#cccccc] w-full">
-						<form id="quantityInput">
-							<input
-								type="number"
-								inputMode="decimal"
-								min={1}
-								step={1}
-								placeholder="0"
-								onKeyDown={preventMinus}
-								onChange={(e) => {
-									setQuantity(Number(e.target.value));
-								}}
-								value={quantity < 1 ? "" : quantity}
-								className="input h-9 w-full border-[1px] rounded-[3px] border-[#cccccc] focus:ring-blue-500 focus:border-blue-500 focus:border-[2px] !outline-none"
-							/>
-						</form>
-					</div>
-					{!buyOrSell && (
-						<button
-							className="ml-2 h-9 text-center min-w-[30%] sm:min-w-[20%] rounded-sm bg-[#e6e6e6] px-2 pr-2 max-[768px]:text-lg text-xs xl:text-xl"
-							onClick={() => {
-								setQuantity(currStockQuantity);
-							}}
-						>
-							Sell All
-						</button>
+				<div>
+					{checkQuant || quantity > 1000000 ? (
+						checkQuant ? (
+							<h1 className="text-xs text-[#FF0000]">
+								*required
+							</h1>
+						) : (
+							<h1 className="text-xs text-[#FF0000]">
+								Maximum Stock Quantity Reached: 1,000,000
+							</h1>
+						)
+					) : (
+						<h1 className="invisible text-xs text-[#FF0000]">
+							this should be hiden
+						</h1>
 					)}
+					<div className="flex flex-row justify-between">
+						<div className="border-[0px] rounded-[3px] border-[#cccccc] w-full">
+							<form id="quantityInput">
+								<input
+									type="number"
+									inputMode="decimal"
+									min={1}
+									step={1}
+									placeholder="0"
+									onKeyDown={preventMinus}
+									onChange={(e) => {
+										setQuantity(Number(e.target.value));
+									}}
+									value={quantity < 1 ? "" : quantity}
+									className="peer input h-9 w-full border-[1px] rounded-[3px] border-[#cccccc] focus:ring-blue-500 focus:border-blue-500 focus:border-[2px] !outline-none"
+								/>
+							</form>
+						</div>
+						{!buyOrSell && (
+							<button
+								className="text-xs ml-2 h-9 text-center min-w-[30%] sm:min-w-[20%] rounded-sm bg-[#e6e6e6] px-2 pr-2 max-[768px]:text-lg"
+								onClick={() => {
+									setQuantity(currStockQuantity);
+								}}
+							>
+								Sell All
+							</button>
+						)}
+					</div>
 				</div>
 			</div>
 			{/* market limit toggle buttons */}
@@ -306,7 +321,12 @@ export default function TradeForm({ buyOrSell }: buyProp) {
 				</button>
 				<button
 					disabled={checkQuant}
-					className="border-success-content text-[#E3FDDC] bg-success-content hover:bg-[#e3fddc] hover:text-success-content"
+					className={twMerge(
+						"border-success-content text-[#E3FDDC] bg-success-content",
+						!checkQuant &&
+							"hover:bg-[#e3fddc] hover:text-success-content",
+						checkQuant && "opacity-40",
+					)}
 					onClick={handleSubmit}
 				>
 					{buyOrSell ? "BUY" : "SELL"}

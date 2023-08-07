@@ -119,7 +119,7 @@ export default function Transfer() {
 				then: (schema) =>
 					schema.test({
 						name: "balance",
-						message: "${path} exceeds account balance",
+						message: "you must have at least $0.01 in your account",
 						test: (value, context) => {
 							const account = data!.accounts.find(
 								(acc) =>
@@ -128,7 +128,7 @@ export default function Transfer() {
 										Yup.ref("transferOutAccount"),
 									),
 							);
-							return value <= account!.cash;
+							return value <= account!.cash - 0.005;
 						},
 					}),
 			})
@@ -137,7 +137,7 @@ export default function Transfer() {
 				then: (schema) =>
 					schema.test({
 						name: "balance",
-						message: "${path} exceeds account balance",
+						message: "you must have at least $0.01 in your account",
 						test: (value, context) => {
 							const account = data!.accounts.find(
 								(acc) =>
@@ -145,7 +145,7 @@ export default function Transfer() {
 									context.resolve(Yup.ref("fromAccount")),
 							);
 							if (!account) return false;
-							return value <= account.cash;
+							return value <= account.cash - 0.005;
 						},
 					}),
 			}),
@@ -223,7 +223,7 @@ export default function Transfer() {
 				{({ values, errors, touched, isValid }) => {
 					if (!data) return <></>;
 					return (
-						<Form className="modal-box bg-[#EDEDFE] flex flex-col text-primary overflow-y-auto min-h-[15em]">
+						<Form className="modal-box bg-[#EDEDFE] flex flex-col text-primary min-h-[15em] overflow-hidden">
 							<label className="text-xl" htmlFor="transferType">
 								Transfer Type
 							</label>

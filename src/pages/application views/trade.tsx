@@ -72,7 +72,7 @@ export default function Trade() {
 			<div className="md:h-full flex flex-col md:flex-row">
 				<div
 					className={twMerge(
-						"overflow-y-auto bg-[#F9E5E5] w-full md:w-[35%]",
+						"overflow-y-auto bg-[#F9E5E5] w-full md:max-w-[40%]",
 						buy && "bg-success",
 					)}
 				>
@@ -85,7 +85,6 @@ export default function Trade() {
 						>
 							<h1 className="text-4xl">{header}</h1>
 							<p className="text-xl">
-								{" "}
 								Cash Available:{" "}
 								{formatDollars(data?.displayBar.cash ?? 0)}
 							</p>
@@ -110,7 +109,7 @@ export default function Trade() {
 						<TradeForm buyOrSell={buy} />
 					</div>
 				</div>
-				<div className="flex-1 flex ">
+				<div className="md:w-[60%] h-full overflow-y-auto">
 					<StockInfo />
 				</div>
 			</div>

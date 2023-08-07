@@ -65,7 +65,11 @@ export default function CreateAccount() {
 		},
 	);
 	const [makeTransfer] = useMutation<TransferReturnData>(MAKE_TRANSFER, {
-		refetchQueries: [{ query: GET_ACTIVITIES }, { query: GET_OVERVIEW }],
+		refetchQueries: [
+			{ query: GET_ACTIVITIES, variables: { accId: currentAccountId() } },
+			{ query: GET_OVERVIEW, variables: { accId: currentAccountId() } },
+			{ query: GET_ACCOUNTS, variables: { userId: userInfo()?.userId } },
+		],
 	});
 
 	return (
