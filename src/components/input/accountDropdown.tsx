@@ -35,7 +35,7 @@ const AccountDropdown = ({ data, loading, error }: DropdownProps) => {
 
 	return (
 		<div
-			className="flex flex-col items-center dropdown text-black w-full sm:w-[200px]"
+			className="flex flex-col items-center dropdown text-black max-w-[60%] sm:w-[200px]"
 			title={currentAccount.name}
 		>
 			<label
