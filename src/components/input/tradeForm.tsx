@@ -22,6 +22,7 @@ import StockSearchBar from "./stockSearch";
 import { preventMinus } from "../../utilities/common";
 import { GraphQLReturnData, Holding } from "../../utilities/types";
 import { GET_HOLDINGS } from "../../utilities/graphQL";
+import { twMerge } from "tailwind-merge";
 
 interface StockData {
 	stocks: Stock[];
@@ -306,7 +307,12 @@ export default function TradeForm({ buyOrSell }: buyProp) {
 				</button>
 				<button
 					disabled={checkQuant}
-					className="border-success-content text-[#E3FDDC] bg-success-content hover:bg-[#e3fddc] hover:text-success-content"
+					className={twMerge(
+						"border-success-content text-[#E3FDDC] bg-success-content",
+						!checkQuant &&
+							"hover:bg-[#e3fddc] hover:text-success-content",
+						checkQuant && "opacity-40",
+					)}
 					onClick={handleSubmit}
 				>
 					{buyOrSell ? "BUY" : "SELL"}
