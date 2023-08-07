@@ -27,6 +27,7 @@ export function signout() {
 	localStorage.removeItem("user");
 	localStorage.removeItem("accounts");
 	localStorage.removeItem("currentAccountId");
+	localStorage.removeItem("symbol");
 	auth0Client.logout({
 		returnTo: import.meta.env.DEV ? "http://localhost:4040/" : "https://fortunafinances.com/",
 		clientID: "OxQxuofsPZXSFzTqbVtKgErT2xrl3VfZ",
