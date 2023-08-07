@@ -8,7 +8,7 @@ import ApplicationLayout from "./components/layout/application";
 import Overview from "./pages/application views/overview";
 import Holdings from "./pages/application views/holdings";
 import UnauthenticatedHomepage from "./pages/unauthenticatedHomepage";
-import { ApolloClient, ApolloProvider, useReactiveVar } from "@apollo/client";
+import { ApolloClient, ApolloProvider } from "@apollo/client";
 import Activity from "./pages/application views/activity";
 import Callback from "./pages/callback";
 import Trade from "./pages/application views/trade";
@@ -20,18 +20,15 @@ import StockRecommendation from "./pages/onboarding/stockRecommendation";
 import ProfileInfo from "./pages/profileInfo";
 import StockResults from "./pages/onboarding/stockResults";
 import PrivacyPolicy from "./pages/privacyPolicy";
-import { currentAccountId } from "./utilities/reactiveVariables";
-import { useEffect } from "react";
 
 const client = new ApolloClient({
-	uri: import.meta.env.DEV ? "http://127.0.0.1:80/graphql" : "https://wwapxkpzsg.us-east-1.awsapprunner.com/graphql",
+	uri: import.meta.env.DEV
+		? "http://127.0.0.1:80/graphql"
+		: "https://wwapxkpzsg.us-east-1.awsapprunner.com/graphql",
 	cache,
 });
 
 export default function App() {
-	const currAccount = useReactiveVar(currentAccountId);
-	useEffect(() => {
-	}, [currAccount]);
 	return (
 		<ApolloProvider client={client}>
 			<Router>
@@ -57,7 +54,10 @@ export default function App() {
 					<Route path="/createProfile" element={<CreateProfile />} />
 					<Route path="/createAccount" element={<CreateAccount />} />
 					<Route path="/profileInfo" element={<ProfileInfo />} />
-					<Route path="/stockRecommendation" element={<StockRecommendation />} />
+					<Route
+						path="/stockRecommendation"
+						element={<StockRecommendation />}
+					/>
 					<Route path="/stockResults" element={<StockResults />} />
 					<Route path="/privacyPolicy" element={<PrivacyPolicy />} />
 				</Routes>

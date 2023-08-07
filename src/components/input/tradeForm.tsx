@@ -207,6 +207,7 @@ export default function TradeForm({ buyOrSell }: buyProp) {
 						<form id="quantityInput">
 							<input
 								type="number"
+								inputMode="decimal"
 								min={1}
 								step={1}
 								placeholder="0"
@@ -263,12 +264,12 @@ export default function TradeForm({ buyOrSell }: buyProp) {
 						</i>
 						<input
 							type="number"
+							inputMode="decimal"
 							min={0}
 							step="0.01"
 							placeholder="Price"
 							onKeyDown={preventMinus}
 							className="input h-9 w-full border-[1px] rounded-[3px] border-[#cccccc] focus:ring-blue-500 focus:border-blue-500 focus:border-[2px] !outline-none"
-							inputMode="decimal"
 							onChange={(newVal) =>
 								setLimitPrice(Number(newVal.target.value))
 							}

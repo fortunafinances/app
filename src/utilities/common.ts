@@ -39,6 +39,14 @@ export const isMobile = (windowSize: number | undefined): boolean => {
 	return windowSize !== undefined ? windowSize <= CUTOFF : false;
 };
 
+export const isIos = () => {
+	return (
+		navigator.userAgent.toLowerCase().match(/mobile/i) &&
+		navigator.userAgent.match(/ipad|ipod|iphone/i) &&
+		"ontouchend" in document
+	);
+};
+
 export const preventMinus = (e: React.KeyboardEvent<HTMLInputElement>) => {
 	if (e.code === "Minus") {
 		e.preventDefault();
