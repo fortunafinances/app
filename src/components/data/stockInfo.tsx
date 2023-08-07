@@ -80,74 +80,70 @@ export default function StockInfo() {
 	const description = stockData?.oneStock.description;
 
 	return (
-		<div className="flex-1 overflow-y-auto">
-			<div className="flex flex-col">
-				{/* heading: Company name, symbol, stock price */}
-				<div className="flex justify-between md:flex-row lg:gap-20 m-2 lg:m-3">
-					<div className="flex flex-col gap-2">
-						<h1 className="text-2xl md:text-6xl font-semibold">
-							{company}
-						</h1>
-						<div className="flex items-center gap-2">
-							<h2 className="text-xl md:text-4xl text-[#929292]">
-								{symbolName}
-							</h2>
-							<button
-								onClick={() => {
-									toggleFav().catch((err) =>
-										console.error(err),
-									);
-								}}
-							>
-								{favLoading ? (
-									<AiOutlineStar
-										size={isMobile(windowSize) ? 30 : 40}
-										style={{
-											fill: "#2A0066",
-										}}
-									/>
-								) : favError ? (
-									<>Watch List Error</>
-								) : isFav(favData!.watchList, symbolName) ? (
-									<AiFillStar
-										size={isMobile(windowSize) ? 30 : 40}
-										style={{
-											fill: "#2A0066",
-										}}
-									/>
-								) : (
-									<AiOutlineStar
-										size={isMobile(windowSize) ? 30 : 40}
-									/>
-								)}
-							</button>
-						</div>
-					</div>
-					<div className="flex flex-col gap-4 items-end md:items-start">
-						<h1 className="text-3xl md:text-6xl text-primary font-medium">
-							{formatDollars(price)}
-						</h1>
-						<div className="flex flex-row text-primary font-semibold text-xl items-center w-fit whitespace-nowrap">
-							{dollarChange > 0 ? (
-								<AiFillCaretUp />
+		<div className="flex flex-col">
+			{/* heading: Company name, symbol, stock price */}
+			<div className="flex justify-between md:flex-row m-2 lg:m-3">
+				<div className="flex flex-col gap-2">
+					<h1 className="text-2xl md:text-5xl font-semibold">
+						{company}
+					</h1>
+					<div className="flex items-center gap-2">
+						<h2 className="text-xl md:text-4xl text-[#929292]">
+							{symbolName}
+						</h2>
+						<button
+							onClick={() => {
+								toggleFav().catch((err) => console.error(err));
+							}}
+						>
+							{favLoading ? (
+								<AiOutlineStar
+									size={isMobile(windowSize) ? 30 : 40}
+									style={{
+										fill: "#2A0066",
+									}}
+								/>
+							) : favError ? (
+								<>Watch List Error</>
+							) : isFav(favData!.watchList, symbolName) ? (
+								<AiFillStar
+									size={isMobile(windowSize) ? 30 : 40}
+									style={{
+										fill: "#2A0066",
+									}}
+								/>
 							) : (
-								<AiFillCaretDown />
+								<AiOutlineStar
+									size={isMobile(windowSize) ? 30 : 40}
+								/>
 							)}
-							<p className="w-fit text-[18px]">
-								{formatDollars(dollarChange)} ({changePercent}%)
-							</p>
-						</div>
+						</button>
 					</div>
 				</div>
-				{/* Graph */}
-				<div className="m-6 flex flex-col gap-3">
-					<DataContainer className=" h-full w-full flex flex-col justify-center border-0 bg-transparent mb-7">
-						<StockChart stockName={symbolName} />
-					</DataContainer>
-					{/* About the Company */}
-					<div className="text-4xl font-medium">About {company}</div>
-					<p>{description}</p>
+				<div className="flex flex-col gap-4 items-end md:items-start md:text-right">
+					<h1 className="text-3xl md:text-5xl text-primary font-medium w-full">
+						{formatDollars(price)}
+					</h1>
+					<div className="flex flex-row text-primary font-semibold text-xl justify-end items-center whitespace-nowrap w-full">
+						{dollarChange > 0 ? (
+							<AiFillCaretUp />
+						) : (
+							<AiFillCaretDown />
+						)}
+						<p className="w-fit text-[18px]">
+							{formatDollars(dollarChange)} ({changePercent}%)
+						</p>
+					</div>
 				</div>
+			</div>
+			{/* Graph */}
+			<div className="m-6 flex flex-col gap-3">
+				<DataContainer className=" h-full w-full flex flex-col justify-center border-0 bg-transparent mb-7">
+					<StockChart stockName={symbolName} />
+				</DataContainer>
+				{/* About the Company */}
+				<div className="text-4xl font-medium">About {company}</div>
+				<p>{description}</p>
 			</div>
 		</div>
 	);

@@ -84,7 +84,7 @@ export default function WatchList() {
 															}
 														</h5>
 														<p className="text-xs ellipsis max-w-5">
-															{windowWidth! > 640
+															{windowWidth! < 640
 																? watchListItem
 																		.stock
 																		.name
