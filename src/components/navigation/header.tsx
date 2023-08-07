@@ -20,7 +20,7 @@ export default function Header() {
 
 	return (
 		<header className="flex justify-between items-center bg-primary py-1">
-			<div className="flex gap-0 items-center h-full text-3xl mx-2">
+			<div className="flex gap-2 items-center h-full text-3xl ml-2 md:mx-2">
 				<button
 					className="cursor-pointer hover:scale-110 transition-all duration-200 ease-in-out"
 					onClick={() => sidebarClosed(!sidebarClosed())}
