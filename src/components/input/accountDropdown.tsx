@@ -15,7 +15,8 @@ const AccountDropdown = ({ data, loading, error }: DropdownProps) => {
 	const currentAccountNumber = useReactiveVar(currentAccountId);
 
 	if (loading) return <div>Loading...</div>;
-	if (error) return <div>Error</div>;
+	if (error)
+		return <div className="text-red-400">Error accessing accounts...</div>;
 
 	const currentAccount = data?.find(
 		(a) => Number(a.accId) === Number(currentAccountNumber),

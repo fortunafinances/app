@@ -110,7 +110,7 @@ export default function Trade() {
 						<TradeForm buyOrSell={buy} />
 					</div>
 				</div>
-				<div className="flex-1 flex ">
+				<div className="flex-1 flex">
 					<StockInfo />
 				</div>
 			</div>

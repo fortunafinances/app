@@ -57,7 +57,11 @@ export default function StockInfo() {
 	}
 
 	if (stockLoading)
-		return <span className="loading loading-infinity loading-lg"></span>;
+		return (
+			<div className="flex w-full h-full justify-center items-center">
+				<span className="loading loading-infinity w-[5em]"></span>
+			</div>
+		);
 	if (stockError) {
 		return (
 			<div className="w-full h-full flex flex-row justify-center items-center">
@@ -86,7 +90,7 @@ export default function StockInfo() {
 						</h1>
 						<div className="flex items-center gap-2">
 							<h2 className="text-xl md:text-4xl text-[#929292]">
-								{symbolName}{" "}
+								{symbolName}
 							</h2>
 							<button
 								onClick={() => {
@@ -141,7 +145,7 @@ export default function StockInfo() {
 						<StockChart stockName={symbolName} />
 					</DataContainer>
 					{/* About the Company */}
-					<div className="text-4xl font-medium ">About {company}</div>
+					<div className="text-4xl font-medium">About {company}</div>
 					<p>{description}</p>
 				</div>
 			</div>
