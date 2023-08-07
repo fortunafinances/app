@@ -35,12 +35,12 @@ const AccountDropdown = ({ data, loading, error }: DropdownProps) => {
 
 	return (
 		<div
-			className="flex flex-col items-center dropdown text-black w-full sm:w-[200px]"
+			className="dropdown text-black max-w-[60%] sm:w-[200px] xl:max-w-[350px] xl:w-fit"
 			title={currentAccount.name}
 		>
 			<label
 				tabIndex={0}
-				className="btn bg-white outline-none lg:rounded-tl-none rounded-tl-lg rounded-tr-lg b-0 lg:rounded-b-none normal-case w-full text-xl flex flex-row flex-nowrap justify-center sm:justify-between"
+				className="btn bg-white outline-none lg:rounded-tl-none rounded-tl-lg rounded-tr-lg b-0 lg:rounded-b-none normal-case text-xl flex flex-row w-56 sm:w-full flex-nowrap justify-center sm:justify-between"
 			>
 				<div className="relative top-[50%] -translate-y-[15px] h-full max-w-[90%]">
 					<p className="truncate max-w-full h-full">

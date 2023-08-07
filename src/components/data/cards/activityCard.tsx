@@ -24,9 +24,9 @@ const ActivityCard: React.FC<ActivityProps> = ({
 					<h2 className="card-title text-3xl">{type}</h2>
 					<p className="text-gray-500 text-sm">{description}</p>
 				</div>
-				<div className="">
+				<div className="flex flex-col items-end">
 					<h2 className="text-3xl">{formatDollars(amount)}</h2>
-					<p className= "text-xs py-3">{formatDate(date)}</p>
+					<p className= "text-xs py-3 whitespace-nowrap">{formatDate(date)}</p>
 				</div>
 			</div>
 		</div>

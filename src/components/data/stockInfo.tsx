@@ -7,7 +7,7 @@ import {
 import { useMutation, useQuery, useReactiveVar } from "@apollo/client";
 import { currentAccountId, symbol } from "../../utilities/reactiveVariables";
 import { Stock, WatchList } from "../../utilities/types";
-import { formatDollars, isFav } from "../../utilities/common";
+import { formatDollars, isFav, isMobile } from "../../utilities/common";
 import { percentChange } from "../../utilities/common";
 import DataContainer from "../container/dataContainer";
 import { StockChart } from "./stockChart";
@@ -16,12 +16,14 @@ import {
 	GET_WATCH_LIST,
 	TOGGLE_WATCH_LIST,
 } from "../../utilities/graphQL";
+import { useWindowSize } from "../../utilities/hooks";
 type StockData = {
 	oneStock: Stock;
 };
 
 export default function StockInfo() {
 	const symbolName = useReactiveVar(symbol);
+	const windowSize = useWindowSize().width;
 
 	const {
 		loading: stockLoading,
@@ -77,13 +79,13 @@ export default function StockInfo() {
 		<div className="flex-1 overflow-y-auto">
 			<div className="flex flex-col">
 				{/* heading: Company name, symbol, stock price */}
-				<div className="flex justify-between md:flex-row lg:gap-20 m-3">
+				<div className="flex justify-between md:flex-row lg:gap-20 m-2 lg:m-3">
 					<div className="flex flex-col gap-2">
-						<h1 className="text-3xl md:text-6xl font-semibold">
+						<h1 className="text-2xl md:text-6xl font-semibold">
 							{company}
 						</h1>
-						<div className="flex gap-2">
-							<h2 className="text-2xl md:text-4xl text-[#929292]">
+						<div className="flex items-center gap-2">
+							<h2 className="text-xl md:text-4xl text-[#929292]">
 								{symbolName}{" "}
 							</h2>
 							<button
@@ -94,30 +96,41 @@ export default function StockInfo() {
 								}}
 							>
 								{favLoading ? (
-									<AiFillStar size={40} />
+									<AiOutlineStar
+										size={isMobile(windowSize) ? 30 : 40}
+										style={{
+											fill: "#2A0066",
+										}}
+									/>
 								) : favError ? (
 									<>Watch List Error</>
 								) : isFav(favData!.watchList, symbolName) ? (
-									<AiFillStar size={40} />
+									<AiFillStar
+										size={isMobile(windowSize) ? 30 : 40}
+										style={{
+											fill: "#2A0066",
+										}}
+									/>
 								) : (
-									<AiOutlineStar size={40} />
+									<AiOutlineStar
+										size={isMobile(windowSize) ? 30 : 40}
+									/>
 								)}
 							</button>
 						</div>
 					</div>
-					<div className="flex flex-col gap-6 items-end md:items-start">
-						<h1 className="text-4xl text-primary font-medium">
+					<div className="flex flex-col gap-4 items-end md:items-start">
+						<h1 className="text-3xl md:text-6xl text-primary font-medium">
 							{formatDollars(price)}
 						</h1>
-						<div className="flex flex-row text-primary font-semibold text-xl items-center w-fit">
+						<div className="flex flex-row text-primary font-semibold text-xl items-center w-fit whitespace-nowrap">
 							{dollarChange > 0 ? (
 								<AiFillCaretUp />
 							) : (
 								<AiFillCaretDown />
 							)}
-							<p className="w-fit">
+							<p className="w-fit text-[18px]">
 								{formatDollars(dollarChange)} ({changePercent}%)
-								Today
 							</p>
 						</div>
 					</div>

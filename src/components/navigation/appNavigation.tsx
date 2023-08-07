@@ -22,15 +22,13 @@ export default function AppNavigation() {
 		<nav className="bg-[#110029]">
 			<div className="flex flex-row justify-between items-center">
 				<div className="text-white flex flex-row items-end">
-					<h3 className="text-xl font-semibold">
-						{windowSize! > 900 && (
-							<AccountDropdown
-								data={data?.accounts}
-								loading={loading}
-								error={error}
-							/>
-						)}
-					</h3>
+					{windowSize! > 900 && (
+						<AccountDropdown
+							data={data?.accounts}
+							loading={loading}
+							error={error}
+						/>
+					)}
 					<div className="hidden sm:block text-transform: capitalize">
 						{navItems.map((item, i) => {
 							return (

@@ -177,7 +177,7 @@ export default function ProfileInfo() {
 				</div>
 				<h2 className="ml-[5%] text-info text-5xl">Edit Profile</h2>
 			</div>
-			<div className="md:w-[50%] overflow-y-auto flex-col p-6 bg-accent text-primary [&>h3]:text-2xl [&>h3]:py-2 [&>h2]:text-5xl [&>h2]:py-4 ">
+			<div className="md:w-[50%] w-full overflow-y-auto flex-col p-6 bg-accent text-primary [&>h3]:text-2xl [&>h3]:py-2 [&>h2]:text-5xl [&>h2]:py-4 ">
 				<h1 className="text-8xl">Profile</h1>
 				<hr className="h-[2px] mt-8 bg-primary border-0"></hr>
 				<h2>Personal Information</h2>

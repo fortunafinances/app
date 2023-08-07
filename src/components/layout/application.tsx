@@ -10,13 +10,15 @@ import { useReactiveVar } from "@apollo/client";
 import { sidebarClosed } from "../../utilities/reactiveVariables";
 import { isMobile } from "../../utilities/common";
 import { useWindowSize } from "../../utilities/hooks";
+import { useRef } from "react";
 
 export default function ApplicationLayout() {
 	const windowSize = useWindowSize().width;
 	const collapsed = useReactiveVar(sidebarClosed);
+	const containerRef = useRef<HTMLDivElement>(null);
 
 	return (
-		<div className="flex flex-col h-screen">
+		<div className="flex flex-col h-screen-responsive" ref={containerRef}>
 			<Header />
 			<div className="flex flex-row grow h-full">
 				<SideBar />

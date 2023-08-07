@@ -142,12 +142,17 @@ export default function CreateProfile() {
 						{({ isSubmitting }) => (
 							<Form className="flex flex-col gap-4 text-left">
 								<div>
-									<label
-										htmlFor="firstName"
-										className="text-left text-3xl font-medium pl-1"
-									>
-										First Name
-									</label>
+									<div className="flex flex-row gap-1">
+										<label
+											htmlFor="firstName"
+											className="text-left text-3xl font-medium pl-1"
+										>
+											First Name
+										</label>
+										<h1 className="text-left text-3xl font-medium text-[#FF0000]">
+											*
+										</h1>
+									</div>
 									<ErrorMessage
 										name="firstName"
 										component="div"
@@ -162,12 +167,17 @@ export default function CreateProfile() {
 									/>
 								</div>
 								<div>
-									<label
-										htmlFor="lastName"
-										className="text-left text-3xl font-medium pl-1"
-									>
-										Last Name
-									</label>
+									<div className="flex flex-row gap-1">
+										<label
+											htmlFor="lastName"
+											className="text-left text-3xl font-medium pl-1"
+										>
+											Last Name
+										</label>
+										<h1 className="text-left text-3xl font-medium text-[#FF0000]">
+											*
+										</h1>
+									</div>
 									<ErrorMessage
 										name="lastName"
 										component="div"
@@ -182,12 +192,17 @@ export default function CreateProfile() {
 									/>
 								</div>
 								<div>
-									<label
-										htmlFor="phoneNumber"
-										className="text-left text-3xl font-medium pl-1"
-									>
-										Phone Number
-									</label>
+									<div className="flex flex-row gap-1">
+										<label
+											htmlFor="phoneNumber"
+											className="text-left text-3xl font-medium pl-1"
+										>
+											Phone Number
+										</label>
+										<h1 className="text-left text-3xl font-medium text-[#FF0000]">
+											*
+										</h1>
+									</div>
 									<ErrorMessage
 										name="phoneNumber"
 										component="div"
@@ -202,9 +217,14 @@ export default function CreateProfile() {
 									/>
 								</div>
 								<div>
-									<label className="text-left text-3xl font-medium pl-1">
-										Username
-									</label>
+									<div className="flex flex-row gap-1">
+										<label className="text-left text-3xl font-medium pl-1">
+											Username
+										</label>
+										<h1 className="text-left text-3xl font-medium text-[#FF0000]">
+											*
+										</h1>
+									</div>
 									<ErrorMessage
 										name="username"
 										component="div"

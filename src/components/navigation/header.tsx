@@ -19,8 +19,8 @@ export default function Header() {
 	);
 
 	return (
-		<header className="flex justify-between bg-primary py-1">
-			<div className="flex gap-3 items-center h-full text-3xl mx-2">
+		<header className="flex justify-between items-center bg-primary py-1">
+			<div className="flex gap-2 items-center h-full text-3xl ml-2 md:mx-2">
 				<button
 					className="cursor-pointer hover:scale-110 transition-all duration-200 ease-in-out"
 					onClick={() => sidebarClosed(!sidebarClosed())}
@@ -45,17 +45,13 @@ export default function Header() {
 				</Link>
 			</div>
 			{windowSize.width! <= 900 && (
-				<div className="flex flex-row">
-					<h3 className="text-lg font-semibold">
-						<AccountDropdown
-							data={data?.accounts}
-							loading={loading}
-							error={error}
-						/>
-					</h3>
-				</div>
+				<AccountDropdown
+					data={data?.accounts}
+					loading={loading}
+					error={error}
+				/>
 			)}
-			<div className="flex flex-row gap-3 sm:items-center text-2xl mx-3">
+			<div className="flex flex-row gap-3 sm:items-center text-2xl mr-1 sm:mx-3">
 				<h3 className="hidden md:inline text-white">
 					Welcome, {user?.firstName + " " + user?.lastName}
 				</h3>
@@ -65,7 +61,7 @@ export default function Header() {
 							<img
 								src={user.picture}
 								alt="Profile Picture"
-								className="w-10 h-10 rounded-full"
+								className="max-w-10 max-h-10 w-auto h-auto rounded-full"
 							/>
 						) : (
 							<CgProfile size={40} color="white" />
