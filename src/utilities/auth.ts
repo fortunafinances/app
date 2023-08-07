@@ -8,7 +8,7 @@ const auth0Client = new auth0.WebAuth({
 	domain: "dev-wpc8kymxzmepqxl5.us.auth0.com",
 	clientID: "OxQxuofsPZXSFzTqbVtKgErT2xrl3VfZ",
 	audience: "http://127.0.0.1:5000/",
-	redirectUri: import.meta.env.DEV ? "http://localhost:4040/callback" : "https://cvppf9v39y.us-east-1.awsapprunner.com/callback",
+	redirectUri: import.meta.env.DEV ? "http://localhost:4040/callback" : "https://fortunafinances.com/callback",
 	responseType: "token id_token",
 	scope: "openid email sub nickname profile read:user", // what we want the token to include
 });
@@ -28,7 +28,7 @@ export function signout() {
 	localStorage.removeItem("accounts");
 	localStorage.removeItem("currentAccountId");
 	auth0Client.logout({
-		returnTo: import.meta.env.DEV ? "http://localhost:4040/" : "https://cvppf9v39y.us-east-1.awsapprunner.com/",
+		returnTo: import.meta.env.DEV ? "http://localhost:4040/" : "https://fortunafinances.com/",
 		clientID: "OxQxuofsPZXSFzTqbVtKgErT2xrl3VfZ",
 	});
 }

@@ -26,7 +26,14 @@ export default function SuccessfulNotification({
 			setButtonName("View Orders");
 			setPath("/app/orders");
 		}
-	}, [transfer]);
+		const scrollToTop = () => {
+			if (isMobile(windowSize.width)) {
+				window.scrollTo(0,0);
+			}
+		};
+
+		scrollToTop();
+	}, [transfer, windowSize.width]);
 
 	return (
 		<dialog id={modalId} className="modal flex items-center justify-center">
