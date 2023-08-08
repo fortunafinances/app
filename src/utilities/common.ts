@@ -62,15 +62,12 @@ export const percentChange = (curr?: number, prev?: number): string => {
 	return formatter.format(((curr! - prev!) / prev!) * 100);
 };
 
-export const makeEllipsis = (
-	name: string | undefined,
-	limit: number,
-): string => {
+export const makeEllipsis = (limit: number, text?: string): string => {
 	let ret = "";
-	if (name!.length > limit) {
-		ret = name!.substring(0, limit + 1) + "...";
+	if (text!.length > limit) {
+		ret = text!.substring(0, limit + 1) + "...";
 	} else {
-		return name ?? "";
+		return text ?? "";
 	}
 	return ret;
 };

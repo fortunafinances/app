@@ -1,4 +1,4 @@
-import { useQuery } from "@apollo/client";
+import { useQuery, useReactiveVar } from "@apollo/client";
 import { GET_WATCH_LIST } from "../../utilities/graphQL";
 import { WatchList } from "../../utilities/types";
 import {
@@ -16,13 +16,24 @@ import { AiFillCaretDown, AiFillCaretUp } from "react-icons/ai";
 import { twMerge } from "tailwind-merge";
 import { useWindowSize } from "../../utilities/hooks";
 import AutoSizer, { Size } from "react-virtualized-auto-sizer";
+import { useEffect } from "react";
 
 export default function WatchList() {
 	const windowWidth = useWindowSize().width;
 	const navigate = useNavigate();
-	const { loading, error, data } = useQuery<WatchList>(GET_WATCH_LIST, {
-		variables: { accId: currentAccountId() },
-	});
+	const accountId = useReactiveVar(currentAccountId);
+	const { loading, error, data, refetch } = useQuery<WatchList>(
+		GET_WATCH_LIST,
+		{
+			variables: { accId: accountId },
+		},
+	);
+
+	useEffect(() => {
+		refetch().catch((err) => {
+			console.error(err);
+		});
+	}, [accountId, refetch]);
 
 	if (loading) return <></>;
 	if (error) return <p>Error :(</p>;
@@ -89,10 +100,10 @@ export default function WatchList() {
 																		.stock
 																		.name
 																: makeEllipsis(
+																		15,
 																		watchListItem
 																			.stock
 																			.name,
-																		15,
 																  )}
 														</p>
 													</div>
