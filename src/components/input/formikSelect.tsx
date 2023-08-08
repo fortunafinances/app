@@ -43,7 +43,7 @@ export default function FormikSelect({
 			return <div className="text-gray-500"></div>;
 		return (
 			<div className="flex flex-row items-center gap-2">
-				<div>{makeEllipsis(props.label, 32)}</div>
+				<div>{makeEllipsis(32, props.label)}</div>
 				<p>|</p>
 				<div
 					className={twMerge(
