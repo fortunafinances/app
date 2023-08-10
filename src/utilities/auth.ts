@@ -7,7 +7,7 @@ const auth0Client = new auth0.WebAuth({
 	// https://dev-wpc8kymxzmepqxl5.us.auth0.com/api/v2/
 	domain: "dev-x4clr8ssigb1k3ok.us.auth0.com",
 	clientID: "8GfA02pHpCVxqZC4qXPS8sycPhyZtjAB",
-	audience: "http://127.0.0.1:5000/",
+	// audience: "http://127.0.0.1:5000/",
 	redirectUri: import.meta.env.DEV ? "http://localhost:4040/callback" : "https://fortunafinances.com/callback",
 	responseType: "token id_token",
 	scope: "openid email sub nickname profile read:user", // what we want the token to include
