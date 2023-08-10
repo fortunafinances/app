@@ -1,12 +1,12 @@
 import auth0 from 'auth0-js';
-import { userInfo } from "./reactiveVariables";
+import { currentAccountId, userInfo } from "./reactiveVariables";
 
 // WebAuth will redirect user to the login page
 const auth0Client = new auth0.WebAuth({
 	// feed in the data
 	// https://dev-wpc8kymxzmepqxl5.us.auth0.com/api/v2/
-	domain: "dev-wpc8kymxzmepqxl5.us.auth0.com",
-	clientID: "OxQxuofsPZXSFzTqbVtKgErT2xrl3VfZ",
+	domain: "dev-x4clr8ssigb1k3ok.us.auth0.com",
+	clientID: "8GfA02pHpCVxqZC4qXPS8sycPhyZtjAB",
 	audience: "http://127.0.0.1:5000/",
 	redirectUri: import.meta.env.DEV ? "http://localhost:4040/callback" : "https://fortunafinances.com/callback",
 	responseType: "token id_token",
@@ -14,10 +14,12 @@ const auth0Client = new auth0.WebAuth({
 });
 
 export function login() {
+	currentAccountId(1);
 	auth0Client.authorize();
 }
 
 export function signup() {
+	currentAccountId(0);
 	auth0Client.authorize({ screen_hint: "signup" });
 }
 
@@ -30,7 +32,7 @@ export function signout() {
 	localStorage.removeItem("symbol");
 	auth0Client.logout({
 		returnTo: import.meta.env.DEV ? "http://localhost:4040/" : "https://fortunafinances.com/",
-		clientID: "OxQxuofsPZXSFzTqbVtKgErT2xrl3VfZ",
+		clientID: "8GfA02pHpCVxqZC4qXPS8sycPhyZtjAB",
 	});
 }
 
